@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_view_menu_my_trip"
+        android:icon="@drawable/icon_trips"
+        android:title="@string/my_trip"/>
+    <item
+        android:id="@+id/nav_view_menu_my_profile"
+        android:icon="@drawable/icon_my_profile"
+        android:title="@string/my_profile"/>
+    <item
+        android:id="@+id/nav_view_menu_notification"
+        android:icon="@drawable/icon_notifications"
+        android:title="@string/notifications"/>
+    <item
+        android:id="@+id/nav_view_menu_logout"
+        android:icon="@drawable/icon_logout"
+        android:title="@string/logout"/>
+
+</menu>

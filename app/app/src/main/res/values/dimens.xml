@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="toolbar_text_size">20sp</dimen>
+    <dimen name="normal_elevation">10dp</dimen>
+    <dimen name="margin_big">30dp</dimen>
+    <dimen name="margin_medium">20dp</dimen>
+    <dimen name="nav_header_size">100dp</dimen>
+    <dimen name="nav_header_image">40dp</dimen>
+    <dimen name="nav_header_username">15sp</dimen>
+    <dimen name="nav_header_email">12sp</dimen>
+</resources>

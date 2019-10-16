@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Watch My Back</string>
+    <string name="menu_title">Map</string>
+    <string name="trips_title">Trips</string>
+    <string name="friends_title">Friends</string>
+    <string name="check_list_title">Check List</string>
+    <string name="my_trip">My trip</string>
+    <string name="my_profile">My Profile</string>
+    <string name="notifications">Notifications</string>
+    <string name="logout">Logout</string>
+    <string name="open_nav_drawer">Open navigation drawer</string>
+    <string name="close_nav_drawer">Close navigation drawer</string>
 </resources>

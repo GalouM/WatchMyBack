@@ -1,11 +1,57 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="WatchMyBackTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Color -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryLight</item>
+        <item name="colorSecondary">@color/colorAccent</item>
+        <item name="colorSecondaryVariant">@color/colorAccentDark</item>
+        <item name="colorError">@color/colorAccentDark</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorOnSecondary">@color/colorOnAccent</item>
+        <item name="colorOnError">@color/colorOnAccent</item>
+
+        <!-- Text -->
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:fontFamily">@font/roboto</item>
+
+        <!-- component default style -->
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.WatchMyBackTheme.LargeComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.WatchMyBackTheme.MediumComponent</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.WatchMyBackTheme.SmallComponent</item>
+    </style>
+
+    <!-- TOOLBAR THEME -->
+    <style name="ToolBarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">@color/colorOnPrimary</item>
+    </style>
+    <!-- TOOLBAR TITLE THEME -->
+    <style name="ToolBarTheme.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">@dimen/toolbar_text_size</item>
+    </style>
+
+    <!-- Shapes -->
+    <style name="ShapeAppearance.WatchMyBackTheme.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">6dp</item>
+    </style>
+
+    <style name="ShapeAppearance.WatchMyBackTheme.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
+    </style>
+
+    <style name="ShapeAppearance.WatchMyBackTheme.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+    </style>
+
+    <!-- Button -->
+    <style name="WatchMyBackFloatingButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="elevation">@dimen/normal_elevation</item>
     </style>
 
 </resources>

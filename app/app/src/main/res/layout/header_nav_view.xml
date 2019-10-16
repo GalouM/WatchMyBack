@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_header_size"
+    android:background="@color/colorAccent">
+
+    <ImageView
+        android:id="@+id/header_nav_profile_image"
+        android:layout_width="@dimen/nav_header_image"
+        android:layout_height="@dimen/nav_header_image"
+        app:srcCompat="@drawable/icon_my_profile"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="@dimen/margin_big"
+        android:tint="@color/colorOnAccent"/>
+
+    <TextView
+        android:id="@+id/header_nav_username"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Gaelle Minisini"
+        app:layout_constraintStart_toEndOf="@id/header_nav_profile_image"
+        app:layout_constraintTop_toTopOf="@id/header_nav_profile_image"
+        app:layout_constraintBottom_toTopOf="@id/header_nav_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:textSize="@dimen/nav_header_username"
+        android:textStyle="bold"
+        android:textColor="@color/colorOnAccent"/>
+
+    <TextView
+        android:id="@+id/header_nav_email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="galou.minisini@gmail.com"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:textSize="@dimen/nav_header_email"
+        app:layout_constraintStart_toEndOf="@id/header_nav_profile_image"
+        app:layout_constraintTop_toBottomOf="@id/header_nav_username"
+        app:layout_constraintBottom_toBottomOf="@id/header_nav_profile_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/colorOnAccentAlpha"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

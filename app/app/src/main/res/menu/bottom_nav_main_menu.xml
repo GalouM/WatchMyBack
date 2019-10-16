@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/bottom_nav_menu_map"
+        android:icon="@drawable/icon_map"
+        android:title="@string/menu_title"/>
+    <item
+        android:id="@+id/bottom_nav_menu_trips"
+        android:icon="@drawable/icon_trips"
+        android:title="@string/trips_title"/>
+    <item
+        android:id="@+id/bottom_nav_menu_friends"
+        android:icon="@drawable/icon_friends"
+        android:title="@string/friends_title"/>
+    <item
+        android:id="@+id/bottom_nav_menu_checklist"
+        android:icon="@drawable/icon_check_list"
+        android:title="@string/check_list_title"/>
+
+</menu>
