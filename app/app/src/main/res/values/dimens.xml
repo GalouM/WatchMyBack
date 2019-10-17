@@ -8,4 +8,8 @@
     <dimen name="nav_header_image">40dp</dimen>
     <dimen name="nav_header_username">15sp</dimen>
     <dimen name="nav_header_email">12sp</dimen>
+    <dimen name="marging_small">15dp</dimen>
+    <dimen name="cardview_friend">80dp</dimen>
+    <dimen name="cardview_trips">110dp</dimen>
+    <dimen name="cardview_checklist">70dp</dimen>
 </resources>

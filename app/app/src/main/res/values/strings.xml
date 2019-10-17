@@ -10,4 +10,9 @@
     <string name="logout">Logout</string>
     <string name="open_nav_drawer">Open navigation drawer</string>
     <string name="close_nav_drawer">Close navigation drawer</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="is_in">&#032;is in&#032;</string>
+    <string name="trip_type">trip type:&#032;</string>
 </resources>
