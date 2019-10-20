@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/details_trip_global_scrollview">
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -17,7 +22,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="@dimen/margin_small"
-            android:layout_marginTop="@dimen/margin_big">
+            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginEnd="@dimen/margin_small">
 
             <TextView
                 android:id="@+id/detail_trip_view_details_title"
@@ -90,7 +96,8 @@
             app:layout_constraintTop_toBottomOf="@id/detail_trip_view_details_group"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/margin_small"
-            android:layout_marginTop="@dimen/margin_big">
+            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginEnd="@dimen/margin_small">
 
             <TextView
                 android:id="@+id/details_trip_view_time_title"
@@ -152,7 +159,8 @@
             app:layout_constraintTop_toBottomOf="@id/detail_trip_view_time_group"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/margin_small"
-            android:layout_marginTop="@dimen/margin_big">
+            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginEnd="@dimen/margin_small">
 
             <TextView
                 android:id="@+id/details_trip_view_status_title"
@@ -245,7 +253,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/details_trip_view_status_group"
             android:layout_marginStart="@dimen/margin_small"
-            android:layout_marginTop="@dimen/margin_big">
+            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginEnd="@dimen/margin_small">
 
             <include
                 layout="@layout/weather"/>
@@ -253,11 +262,41 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/details_trip_global_view_watchers_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/details_trip_view_weather_group"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small">
+
+            <TextView
+                android:id="@+id/details_trip_global_view_watchers_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TitleWatchMyBack"
+                android:text="@string/watchers"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/details_trip_global_view_watchers_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/details_trip_global_view_watchers_title"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:listitem="@layout/watcher_trip_details_rv_item"
+                tools:itemCount="1"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/detail_trip_view_call_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/details_trip_view_weather_group"
+            app:layout_constraintTop_toBottomOf="@id/details_trip_global_view_watchers_group"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/detail_trip_view_call_emergency"
             app:icon="@drawable/icon_phone"
@@ -273,10 +312,9 @@
             app:layout_constraintStart_toEndOf="@id/detail_trip_view_call_user"
             app:layout_constraintEnd_toEndOf="parent"
             app:icon="@drawable/icon_phone"
-            android:text="Call Emergency"/>
-
-
+            android:text="@string/call_emergency"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.core.widget.NestedScrollView>

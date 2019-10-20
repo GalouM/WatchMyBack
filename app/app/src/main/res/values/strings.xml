@@ -56,4 +56,17 @@
     <string name="friend_update">Notify when a friend update is location</string>
     <string name="friend_emergency">Notify when a friend is in emergency</string>
     <string name="add_trip">Add Trip</string>
+    <string name="trip_main_location">Trip main location</string>
+    <string name="send_location_every">Send location every&#8230;</string>
+    <string name="add_watchers">Add watchers</string>
+    <string name="call_emergency">Call Emergency</string>
+    <string name="watchers">Watchers</string>
+    <string name="start_point">Start Point</string>
+    <string name="use_my_location">Use my location</string>
+    <string name="pick_on_map">Pick on map</string>
+    <string name="schedule_time">Schedule time</string>
+    <string name="pick_a_check_list">Pick a check list</string>
+    <string name="end_point">End Point</string>
+    <string name="stages">Stages</string>
+    <string name="add_stage">Add Stage</string>
 </resources>

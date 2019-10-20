@@ -1,9 +1,360 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    android:id="@+id/add_trip_scrollview"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".AddTripActivity">
+    android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddModifyCheckListActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/add_trip_toolbar"
+            layout="@layout/toolbar"/>
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/add_trip_progressbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            app:layout_constraintTop_toBottomOf="@id/add_trip_toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            android:indeterminate="true"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/add_trip_main_location_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_trip_progressbar"
+            android:hint="@string/trip_main_location"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_big">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/add_trip_main_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/add_trip_type_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_trip_main_location_layout"
+            android:layout_margin="@dimen/margin_small"
+            android:hint="@string/trip_type_title">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/add_trip_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.Spinner"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/add_trip_hz_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_trip_type_layout"
+            android:layout_margin="@dimen/margin_small"
+            android:hint="@string/send_location_every">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/add_trip_hz"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.Spinner"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/add_trip_details_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_trip_hz_layout"
+            android:layout_margin="@dimen/margin_small"
+            android:hint="@string/details">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/add_trip_details"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:inputType="textMultiLine"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/add_trip_watchers_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_trip_details_layout"
+            android:layout_margin="@dimen/margin_small"
+            android:hint="@string/add_watchers">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/add_trip_watchers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.Spinner"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_trip_pick_checklist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/add_trip_watchers_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_small"
+            android:text="@string/pick_a_check_list"
+            app:icon="@drawable/icon_check_list"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/add_trip_checklist_item_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/add_trip_pick_checklist"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:itemCount="1"
+            tools:listitem="@layout/add_trip_checklist_item"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/add_trip_start_point_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/add_trip_checklist_item_rv"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small">
+
+            <TextView
+                android:id="@+id/add_trip_start_point_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TitleWatchMyBack"
+                android:text="@string/start_point"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/add_trip_start_point_user_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/add_trip_start_point_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/add_trip_start_point_pick"
+                android:text="@string/use_my_location"
+                app:icon="@drawable/icon_my_location"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/add_trip_start_point_pick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/add_trip_start_point_user_location"
+                app:layout_constraintBottom_toBottomOf="@id/add_trip_start_point_user_location"
+                app:layout_constraintStart_toEndOf="@id/add_trip_start_point_user_location"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/pick_on_map"
+                app:icon="@drawable/icon_point_map"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_trip_start_point_lat_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/add_trip_start_point_user_location"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/add_trip_start_point_long_layout"
+                android:hint="@string/latitude">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/add_trip_start_point_lat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_trip_start_point_long_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/add_trip_start_point_lat_layout"
+                app:layout_constraintBottom_toBottomOf="@id/add_trip_start_point_lat_layout"
+                app:layout_constraintStart_toEndOf="@id/add_trip_start_point_lat_layout"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:hint="@string/longitude">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/add_trip_start_point_long"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_trip_start_point_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/add_trip_start_point_lat_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                android:hint="@string/schedule_time">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.Spinner"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/add_trip_end_point_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/add_trip_start_point_group"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small">
+
+            <TextView
+                android:id="@+id/add_trip_end_point_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TitleWatchMyBack"
+                android:text="@string/end_point"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/add_trip_end_point_user_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/add_trip_end_point_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/add_trip_end_point_pick"
+                android:text="@string/use_my_location"
+                app:icon="@drawable/icon_my_location"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/add_trip_end_point_pick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/add_trip_end_point_user_location"
+                app:layout_constraintBottom_toBottomOf="@id/add_trip_end_point_user_location"
+                app:layout_constraintStart_toEndOf="@id/add_trip_end_point_user_location"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/pick_on_map"
+                app:icon="@drawable/icon_point_map"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_trip_end_point_lat_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/add_trip_end_point_user_location"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/add_trip_end_point_long_layout"
+                android:hint="@string/latitude">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/add_trip_end_point_lat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_trip_end_point_long_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/add_trip_end_point_lat_layout"
+                app:layout_constraintBottom_toBottomOf="@id/add_trip_end_point_lat_layout"
+                app:layout_constraintStart_toEndOf="@id/add_trip_end_point_lat_layout"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:hint="@string/longitude">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/add_trip_end_point_long"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_trip_end_point_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/add_trip_end_point_lat_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                android:hint="@string/schedule_time">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.Spinner"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/add_trip_stage_points_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/add_trip_start_point_group"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/margin_big"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small">
+
+        <TextView
+            android:id="@+id/add_trip_stages_points_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TitleWatchMyBack"
+            android:text="@string/stages"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_trip_stages_points_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/add_trip_stages_points_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/add_stage"
+            app:icon="@drawable/icon_add"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/add_trip_stages_points_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/add_trip_stages_points_add"
+            app:layout_constraintStart_toStartOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.core.widget.NestedScrollView>
