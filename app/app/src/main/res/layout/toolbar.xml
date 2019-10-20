@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.appcompat.widget.Toolbar
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
+<com.google.android.material.appbar.AppBarLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:minHeight="?attr/actionBarSize"
-    app:titleTextColor="@color/colorOnPrimary"
-    android:theme="@style/ToolBarTheme"
-    app:titleTextAppearance="@style/ToolBarTheme.TitleText"
-    android:elevation="@dimen/normal_elevation"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_activity_toolbar_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:minHeight="?attr/actionBarSize"
+        app:titleTextColor="@color/colorOnPrimary"
+        android:theme="@style/ToolBarTheme"
+        app:titleTextAppearance="@style/ToolBarTheme.TitleText"
+        android:elevation="@dimen/normal_elevation" />
+</com.google.android.material.appbar.AppBarLayout>

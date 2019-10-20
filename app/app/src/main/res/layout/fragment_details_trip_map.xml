@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".DetailsTripMap">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/details_trip_map_picture_user"
+            android:layout_width="@dimen/image_medium"
+            android:layout_height="@dimen/image_medium"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/icon_my_profile"
+            android:layout_marginStart="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_medium" />
+
+        <TextView
+            android:id="@+id/details_trip_map_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/details_trip_map_picture_user"
+            app:layout_constraintBottom_toBottomOf="@id/details_trip_map_picture_user"
+            app:layout_constraintStart_toEndOf="@id/details_trip_map_picture_user"
+            android:layout_marginStart="@dimen/margin_small"
+            android:textSize="@dimen/text_medium"
+            android:text="Gaelle Minisini"/>
+
+        <ImageView
+            android:id="@+id/details_trip_map_type_trip"
+            android:layout_width="@dimen/image_small"
+            android:layout_height="@dimen/image_small"
+            app:srcCompat="@drawable/icon_motorcycle"
+            app:layout_constraintTop_toTopOf="@id/details_trip_map_picture_user"
+            app:layout_constraintBottom_toBottomOf="@id/details_trip_map_picture_user"
+            app:layout_constraintStart_toEndOf="@id/details_trip_map_username"
+            android:layout_marginStart="@dimen/margin_medium"/>
+
+        <TextView
+            android:id="@+id/details_trip_map_status_trip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/details_trip_map_picture_user"
+            app:layout_constraintBottom_toBottomOf="@id/details_trip_map_picture_user"
+            app:layout_constraintStart_toEndOf="@id/details_trip_map_type_trip"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:textSize="@dimen/text_medium"
+            android:text="On Schedule"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/icon_center_gps"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="@dimen/margin_big"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

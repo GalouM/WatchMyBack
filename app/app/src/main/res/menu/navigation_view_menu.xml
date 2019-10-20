@@ -9,9 +9,9 @@
         android:icon="@drawable/icon_my_profile"
         android:title="@string/my_profile"/>
     <item
-        android:id="@+id/nav_view_menu_notification"
-        android:icon="@drawable/icon_notifications"
-        android:title="@string/notifications"/>
+        android:id="@+id/nav_view_menu_settings"
+        android:icon="@drawable/icon_settings"
+        android:title="@string/settings"/>
     <item
         android:id="@+id/nav_view_menu_logout"
         android:icon="@drawable/icon_logout"

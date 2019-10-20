@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/weather_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/weather"
+        style="@style/TitleWatchMyBack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:layout_marginBottom="@dimen/margin_medium"/>
+
+    <TextView
+        android:id="@+id/weather_time_one"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/weather_image_one"
+        app:layout_constraintEnd_toEndOf="@id/weather_image_one"
+        app:layout_constraintTop_toBottomOf="@id/weather_title"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_small"
+        android:layout_marginTop="@dimen/text_medium"
+        android:text="06:00 a.m"/>
+
+    <ImageView
+        android:id="@+id/weather_image_one"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:srcCompat="@drawable/icon_rain"
+        app:layout_constraintTop_toBottomOf="@id/weather_time_one"
+        app:layout_constraintStart_toStartOf="@id/weather_title"
+        app:layout_constraintEnd_toStartOf="@id/weather_image_two"/>
+    <TextView
+        android:id="@+id/weather_condition_one"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/weather_image_one"
+        app:layout_constraintEnd_toEndOf="@id/weather_image_one"
+        app:layout_constraintTop_toBottomOf="@id/weather_image_one"
+        android:text="Rain"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_medium"/>
+    <TextView
+        android:id="@+id/weather_temperature_one"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/weather_image_one"
+        app:layout_constraintEnd_toEndOf="@id/weather_image_one"
+        app:layout_constraintTop_toBottomOf="@id/weather_condition_one"
+        android:text="13°C"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_medium"/>
+
+    <TextView
+        android:id="@+id/weather_time_two"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/weather_image_two"
+        app:layout_constraintEnd_toEndOf="@id/weather_image_two"
+        app:layout_constraintTop_toBottomOf="@id/weather_title"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_small"
+        android:layout_marginTop="@dimen/text_medium"
+        android:text="08:00 a.m"/>
+
+    <ImageView
+        android:id="@+id/weather_image_two"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:srcCompat="@drawable/icon_clear_sky"
+        app:layout_constraintTop_toBottomOf="@id/weather_time_one"
+        app:layout_constraintStart_toEndOf="@id/weather_image_one"
+        app:layout_constraintEnd_toStartOf="@id/weather_image_three"/>
+    <TextView
+        android:id="@+id/details_trip_view_weather_condition_two"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/weather_image_two"
+        app:layout_constraintEnd_toEndOf="@id/weather_image_two"
+        app:layout_constraintTop_toBottomOf="@id/weather_image_two"
+        android:text="Clear Sky"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_medium"/>
+    <TextView
+        android:id="@+id/weather_temperature_two"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/weather_image_two"
+        app:layout_constraintEnd_toEndOf="@id/weather_image_two"
+        app:layout_constraintTop_toBottomOf="@id/details_trip_view_weather_condition_two"
+        android:text="14°C"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_medium"/>
+
+    <TextView
+        android:id="@+id/weather_time_three"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/weather_image_three"
+        app:layout_constraintEnd_toEndOf="@id/weather_image_three"
+        app:layout_constraintTop_toBottomOf="@id/weather_title"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_small"
+        android:layout_marginTop="@dimen/text_medium"
+        android:text="10:00 a.m"/>
+
+    <ImageView
+        android:id="@+id/weather_image_three"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:srcCompat="@drawable/icon_snow"
+        app:layout_constraintTop_toBottomOf="@id/weather_time_three"
+        app:layout_constraintStart_toEndOf="@id/weather_image_two"
+        app:layout_constraintEnd_toEndOf="parent"/>
+    <TextView
+        android:id="@+id/weather_condition_three"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/weather_image_three"
+        app:layout_constraintEnd_toEndOf="@id/weather_image_three"
+        app:layout_constraintTop_toBottomOf="@id/weather_image_three"
+        android:text="Anow"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_medium"/>
+    <TextView
+        android:id="@+id/weather_temperature_three"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/weather_image_three"
+        app:layout_constraintEnd_toEndOf="@id/weather_image_three"
+        app:layout_constraintTop_toBottomOf="@id/weather_condition_three"
+        android:text="0°C"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_medium"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

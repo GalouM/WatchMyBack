@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun configureToolbar(){
-        val toolbar = findViewById<Toolbar>(R.id.main_activity_toolbar)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         val drawerLayout = findViewById<DrawerLayout>(R.id.main_activity_drawer_layout)
         setSupportActionBar(toolbar)
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar,

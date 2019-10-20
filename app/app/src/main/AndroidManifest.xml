@@ -9,6 +9,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/WatchMyBackTheme">
+        <activity android:name=".AddTripActivity"
+            android:label="@string/add_trip"
+            android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".SettingsActivity"
+            android:label="@string/settings"
+            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".ProfileActivity"
+            android:label="@string/my_profile"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".AddModifyCheckListActivity" />
+        <activity
+            android:name=".DetailsTripActivity"
+            android:label="@string/details_trip"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

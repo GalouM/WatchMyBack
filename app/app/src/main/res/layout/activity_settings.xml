@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/settings_view_toolbar"
+            layout="@layout/toolbar"/>
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/settings_view_progressbar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            app:layout_constraintTop_toBottomOf="@id/settings_view_toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            android:indeterminate="true"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/settings_view_notification_group"
+            app:layout_constraintTop_toBottomOf="@id/settings_view_progressbar"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small">
+
+            <TextView
+                android:id="@+id/settings_view_notification_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TitleWatchMyBack"
+                android:text="@string/notifications"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/settings_view_notification_emergency_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/settings_view_notification_emergency_switch"
+                app:layout_constraintBottom_toBottomOf="@id/settings_view_notification_emergency_switch"
+                app:layout_constraintEnd_toEndOf="@id/settings_view_notification_emergency_switch"
+                android:text="@string/friend_emergency"
+                android:textSize="@dimen/text_title_rv"/>
+
+            <Switch
+                android:id="@+id/settings_view_notification_emergency_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                app:layout_constraintTop_toBottomOf="@id/settings_view_notification_title"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/settings_view_notification_back_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/settings_view_notification_back_switch"
+                app:layout_constraintBottom_toBottomOf="@id/settings_view_notification_back_switch"
+                app:layout_constraintEnd_toEndOf="@id/settings_view_notification_back_switch"
+                android:text="@string/friend_back"
+                android:textSize="@dimen/text_title_rv"/>
+
+            <Switch
+                android:id="@+id/settings_view_notification_back_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                app:layout_constraintTop_toBottomOf="@id/settings_view_notification_emergency_switch"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/settings_view_notification_late_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/settings_view_notification_late_switch"
+                app:layout_constraintBottom_toBottomOf="@id/settings_view_notification_late_switch"
+                app:layout_constraintEnd_toEndOf="@id/settings_view_notification_late_switch"
+                android:text="@string/friend_late"
+                android:textSize="@dimen/text_title_rv"/>
+
+            <Switch
+                android:id="@+id/settings_view_notification_late_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                app:layout_constraintTop_toBottomOf="@id/settings_view_notification_back_switch"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/settings_view_notification_update_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/settings_view_notification_update_switch"
+                app:layout_constraintBottom_toBottomOf="@id/settings_view_notification_update_switch"
+                app:layout_constraintEnd_toEndOf="@id/settings_view_notification_update_switch"
+                android:text="@string/friend_update"
+                android:textSize="@dimen/text_title_rv"/>
+
+            <Switch
+                android:id="@+id/settings_view_notification_update_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                app:layout_constraintTop_toBottomOf="@id/settings_view_notification_late_switch"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settings_view_emergency_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/settings_view_notification_group"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small">
+
+            <TextView
+                android:id="@+id/settings_view_emergency_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                style="@style/TitleWatchMyBack"
+                android:text="@string/emergency"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/settings_view_emergency_number_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/local_emergency_phone_number"
+                app:layout_constraintTop_toBottomOf="@id/settings_view_emergency_title">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/settings_view_emergency_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settings_view_unit_system_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/settings_view_emergency_group"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginEnd="@dimen/margin_small">
+
+            <TextView
+                android:id="@+id/settings_view_unit_system_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TitleWatchMyBack"
+                android:text="@string/unit_system"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <RadioGroup
+                android:id="@+id/settings_view_unit_system_unit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/settings_view_unit_system_title"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/settings_view_unit_system_unit_metric"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/metric"
+                    android:layout_weight="1"/>
+                <RadioButton
+                    android:id="@+id/settings_view_unit_system_unit_imperial"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/imperial"
+                    android:layout_weight="1"/>
+
+            </RadioGroup>
+
+
+            <RadioGroup
+                android:id="@+id/settings_view_unit_system_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/settings_view_unit_system_unit"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/settings_view_unit_system_time_12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/am_pm"
+                    android:layout_weight="1"/>
+                <RadioButton
+                    android:id="@+id/settings_view_unit_system_time_24"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_24h"
+                    android:layout_weight="1"/>
+
+            </RadioGroup>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settings_view_data_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/settings_view_unit_system_group"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small">
+
+            <TextView
+                android:id="@+id/settings_view_data_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TitleWatchMyBack"
+                android:text="@string/data"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/settings_view_data_delete_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/settings_view_data_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/delete_all_my_data"
+                app:icon="@drawable/icon_delete"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

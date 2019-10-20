@@ -13,6 +13,8 @@
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
         <item name="colorOnSecondary">@color/colorOnAccent</item>
         <item name="colorOnError">@color/colorOnAccent</item>
+        <item name="textInputStyle">@style/TextInputLayoutWatchMyBack</item>
+        <item name="materialButtonStyle">@style/ButtonWatchMyBack</item>
 
         <!-- Text -->
         <item name="fontFamily">@font/roboto</item>
@@ -52,6 +54,25 @@
     <!-- Button -->
     <style name="WatchMyBackFloatingButton" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="elevation">@dimen/normal_elevation</item>
+    </style>
+
+    <style name="ButtonWatchMyBack" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeWidth">2dp</item>
+        <item name="strokeColor">?attr/colorSecondary</item>
+        <item name="android:textColor">?attr/colorSecondary</item>
+        <item name="iconTint">?attr/colorSecondary</item>
+        <item name="rippleColor">?attr/colorOnSecondary</item>
+    </style>
+
+    <!-- Text -->
+    <style name="TitleWatchMyBack">
+        <item name="android:textSize">@dimen/text_title</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextInputLayoutWatchMyBack" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundMode">filled</item>
+        <item name="boxBackgroundColor">@android:color/transparent</item>
     </style>
 
 </resources>

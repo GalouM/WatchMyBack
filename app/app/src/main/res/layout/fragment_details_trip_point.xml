@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".DetailsTripPoint">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_big">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/details_trip_view_time_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="@dimen/margin_small">
+
+            <TextView
+                android:id="@+id/details_trip_view_time_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TitleWatchMyBack"
+                android:text="@string/time"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/details_trip_view_time_pass_by_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_medium"
+                android:layout_marginStart="@dimen/margin_big"
+                android:text="@string/pass_by_planned_time"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/details_trip_view_time_title"/>
+
+            <TextView
+                android:id="@+id/details_trip_view_time_pass_by_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_medium"
+                android:text="08:00 a.m"
+                app:layout_constraintStart_toEndOf="@id/details_trip_view_time_pass_by_title"
+                app:layout_constraintTop_toTopOf="@id/details_trip_view_time_pass_by_title"
+                app:layout_constraintBottom_toBottomOf="@id/details_trip_view_time_pass_by_title"/>
+
+            <TextView
+                android:id="@+id/details_trip_view_time_status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_medium"
+                android:text="LATE"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintTop_toBottomOf="@id/details_trip_view_time_pass_by_title"
+                app:layout_constraintStart_toStartOf="@id/details_trip_view_time_pass_by_title"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/details_trip_view_location_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/details_trip_view_time_group"
+            android:layout_marginStart="@dimen/margin_small">
+
+            <TextView
+                android:id="@+id/details_trip_view_location_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                style="@style/TitleWatchMyBack"
+                android:text="@string/location"/>
+
+            <TextView
+                android:id="@+id/details_trip_view_location_latitude_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/details_trip_view_location_title"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="@dimen/text_medium"
+                android:layout_marginStart="@dimen/margin_big"
+                android:text="@string/latitude"/>
+
+            <TextView
+                android:id="@+id/details_trip_view_location_latitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/details_trip_view_location_title"
+                app:layout_constraintStart_toEndOf="@id/details_trip_view_location_latitude_title"
+                android:textSize="@dimen/text_medium"
+                android:layout_marginEnd="@dimen/margin_big"
+                android:text="123.456"/>
+
+            <TextView
+                android:id="@+id/details_trip_view_location_longitude_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/details_trip_view_location_title"
+                app:layout_constraintStart_toEndOf="@id/details_trip_view_location_latitude"
+                android:textSize="@dimen/text_medium"
+                android:layout_marginStart="@dimen/margin_big"
+                android:text="@string/longitude"/>
+
+            <TextView
+                android:id="@+id/details_trip_view_location_longitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/details_trip_view_location_title"
+                app:layout_constraintStart_toEndOf="@id/details_trip_view_location_longitude_title"
+                android:textSize="@dimen/text_medium"
+                android:text="-156.789"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/details_trip_view_weather_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/details_trip_view_location_group"
+            android:layout_marginStart="@dimen/margin_small">
+
+            <include
+                layout="@layout/weather"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
