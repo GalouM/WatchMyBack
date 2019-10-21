@@ -4,7 +4,7 @@ package com.galou.watchmyback.data.api
 import com.google.gson.annotations.SerializedName
 
 /**
- * API response from https://openweathermap.org/"
+ * API response from "https://openweathermap.org/"
  *
  * @property city
  * @property list list of weather data
@@ -30,7 +30,7 @@ data class DataWeatherFromAPI(
 /**
  * City information
  *
- * API response from https://openweathermap.org/"
+ * API response from "https://openweathermap.org/"
  *
  * @property country
  * @property name name of the city
@@ -43,7 +43,7 @@ data class City(
 )
 
 /**
- * API response from https://openweathermap.org/"
+ * API response from "https://openweathermap.org/"
  *
  * @property temp temperature in Kelvin
  */
@@ -53,7 +53,7 @@ data class Main(
 )
 
 /**
- * API response from https://openweathermap.org/"
+ * API response from "https://openweathermap.org/"
  *
  * @property conditionName description of the weather condition
  * @property icon

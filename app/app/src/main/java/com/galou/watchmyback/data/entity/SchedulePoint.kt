@@ -54,8 +54,8 @@ data class SchedulePoint (
  *
  * @author Galou Minisini
  */
-enum class TypePoint {
-    START,
-    END,
-    STAGE
+enum class TypePoint(val typeName: String) {
+    START("start"),
+    END("end"),
+    STAGE("stage")
 }
