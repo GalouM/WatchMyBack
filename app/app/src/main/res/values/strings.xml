@@ -69,4 +69,16 @@
     <string name="end_point">End Point</string>
     <string name="stages">Stages</string>
     <string name="add_stage">Add Stage</string>
+    <string name="biking">Biking</string>
+    <string name="mountain_biking">Mountain biking</string>
+    <string name="hiking">Hiking</string>
+    <string name="running">Running</string>
+    <string name="skiing">Skiing</string>
+    <string name="motorcycle">Motorcycle</string>
+    <string name="on_schedule">On Schedule</string>
+    <string name="no_updates">No updates</string>
+    <string name="back_home">Back home</string>
+    <string name="late">Late</string>
+    <string name="late_no_news">Late and no updates</string>
+    <string name="really_late">Really late</string>
 </resources>
