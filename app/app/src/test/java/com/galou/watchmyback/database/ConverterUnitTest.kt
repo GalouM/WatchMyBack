@@ -2,6 +2,7 @@ package com.galou.watchmyback.database
 
 import com.galou.watchmyback.data.database.Converters
 import com.galou.watchmyback.data.entity.*
+import com.galou.watchmyback.utils.todaysDate
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -25,6 +26,9 @@ class ConverterUnitTest{
 
     private val weatherType = WeatherCondition.MIST
     private val weatherConditionId = weatherType.conditionNameId
+
+    private val date = todaysDate
+    private val dateInMilli = date.time
 
     @Test
     fun checkConverterTripType_fromId(){
@@ -74,5 +78,15 @@ class ConverterUnitTest{
     @Test
     fun checkConverterId_toWeatherCondition(){
         assertEquals(weatherType, Converters.toWeatherCondition(weatherConditionId))
+    }
+
+    @Test
+    fun checkConvertDate_fromMilli(){
+        assertEquals(dateInMilli, Converters.dateToTimeStamp(date))
+    }
+
+    @Test
+    fun checkConvertMilli_toDate(){
+        assertEquals(date, Converters.fromTimeStamp(dateInMilli))
     }
 }

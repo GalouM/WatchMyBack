@@ -5,9 +5,12 @@ import com.galou.watchmyback.data.entity.*
 import java.util.*
 
 /**
- * Created by galou on 2019-10-21
+ * Converter for Room DB
+ *
+ * Convert enum and Date to data Room can understand
+ *
+ *
  */
-
 class Converters {
     companion object {
 
