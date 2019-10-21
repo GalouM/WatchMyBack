@@ -9,7 +9,7 @@ import com.galou.watchmyback.utils.*
  * A [User] can create, modify and delete a check list and it's items.
  * Each check list is assigned to a specific [User] and to a [TripType]
  *
- * @property uuid unique id generated randomly use to identify a check list
+ * @property id unique id generated randomly use to identify a check list
  * @property userId Id of the [User] who own the check list
  * @property tripType Type of [Trip] for which this check list was created
  *
@@ -32,7 +32,7 @@ import com.galou.watchmyback.utils.*
     )]
 )
 data class CheckList(
-    @ColumnInfo(name = CHECK_LIST_TABLE_UUID) @PrimaryKey var uuid: String = idGenerated,
+    @ColumnInfo(name = CHECK_LIST_TABLE_UUID) @PrimaryKey var id: String = idGenerated,
     @ColumnInfo(name = CHECK_LIST_TABLE_USER_UUID) var userId: String = "",
     @ColumnInfo(name = CHECK_LIST_TABLE_TRIP_TYPE) var tripType: TripType? = null
 )

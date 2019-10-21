@@ -82,4 +82,12 @@
     <string name="late_no_news">Late and no updates</string>
     <string name="really_late">Really late</string>
     <string name="distress">Distress</string>
+    <string name="clear_sky">Clear sky</string>
+    <string name="few_clouds">Few clouds</string>
+    <string name="scattered_clouds">Scattered clouds</string>
+    <string name="broken_clouds">Broken clouds</string>
+    <string name="shower_rain">Shower rain</string>
+    <string name="thunerstorm">Thunderstorm</string>
+    <string name="snow">Snow</string>
+    <string name="mist">Mist</string>
 </resources>

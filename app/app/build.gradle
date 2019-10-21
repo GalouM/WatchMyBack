@@ -81,4 +81,10 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
     kapt "androidx.room:room-compiler:$rootProject.roomVersion"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
+
+    //GLIDE
+    implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+
+    //GSON
+    implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
 }

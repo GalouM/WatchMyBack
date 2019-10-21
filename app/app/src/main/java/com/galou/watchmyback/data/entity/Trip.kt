@@ -13,7 +13,7 @@ import com.galou.watchmyback.utils.*
  * A [User] can create a trip with different information and assign watchers to it
  * so they will be notify he he'she doesn't come home on time
  *
- * @property uuid uuid unique id generated randomly use to identify a trip
+ * @property id id unique id generated randomly use to identify a trip
  * @property userId ID of the [User] who is doing or did the trip
  * @property checkListId ID of the [CheckList] assigned to this trip
  * @property status status of the trip
@@ -50,7 +50,7 @@ import com.galou.watchmyback.utils.*
 )
 
 data class Trip (
-    @ColumnInfo(name = TRIP_TABLE_UUID) @PrimaryKey var uuid: String = idGenerated,
+    @ColumnInfo(name = TRIP_TABLE_UUID) @PrimaryKey var id: String = idGenerated,
     @ColumnInfo(name = TRIP_TABLE_USER_UUID) var userId: String = "",
     @ColumnInfo(name = TRIP_TABLE_CHECK_LIST_UUID) var checkListId: String? = "",
     @ColumnInfo(name = TRIP_TABLE_STATUS) var status: TripStatus = ON_GOING,

@@ -11,10 +11,11 @@ import com.galou.watchmyback.utils.*
  *
  * Used to specify the Location of a [StagePoint] or a [SchedulePoint] on the map.
  *
- * @property uuid unique id generated randomly use to identify an location
+ * @property pointId id of the [TripPoint]
  * @property latitude latitude of the location
  * @property longitude longitude of the location
- * @property weatherDataId ID of the [WeatherData] attached to this location
+ * @property city name of the city where the [TripPoint] is located
+ * @property country name of the country where the [TripPoint] is located
  *
  * @see StagePoint
  * @see SchedulePoint
@@ -25,17 +26,19 @@ import com.galou.watchmyback.utils.*
 @Entity(
     tableName = LOCATION_TABLE_NAME,
     foreignKeys = [
-    ForeignKey(
-        entity = WeatherData::class,
-        parentColumns = [WEATHER_DATA_TABLE_UUID],
-        childColumns = [LOCATION_TABLE_WEATHER_DATA],
-        onDelete = ForeignKey.SET_NULL
-    )]
+        ForeignKey(
+            entity = TripPoint::class,
+            parentColumns = [POINT_TRIP_UUID],
+            childColumns = [LOCATION_TABLE_UUID],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
 )
 data class Location(
-    @ColumnInfo(name = LOCATION_TABLE_UUID) @PrimaryKey var uuid: String = idGenerated,
+    @ColumnInfo(name = LOCATION_TABLE_UUID) @PrimaryKey var pointId: String = "",
     @ColumnInfo(name = LOCATION_TABLE_LATITUDE) var latitude: Double = 0.0,
     @ColumnInfo(name = LOCATION_TABLE_LONGITUDE) var longitude: Double = 0.0,
-    @ColumnInfo(name = LOCATION_TABLE_WEATHER_DATA) var weatherDataId: String? = ""
+    @ColumnInfo(name = LOCATION_TABLE_CITY) var city: String = "",
+    @ColumnInfo(name = LOCATION_TABLE_COUNTRY) var country: String = ""
 
 )

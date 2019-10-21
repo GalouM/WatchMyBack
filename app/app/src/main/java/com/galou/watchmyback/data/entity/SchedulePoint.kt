@@ -32,12 +32,6 @@ import java.util.*
         parentColumns = [TRIP_TABLE_UUID],
         childColumns = [POINT_TRIP_TRIP],
         onDelete = ForeignKey.CASCADE
-    ),
-    ForeignKey(
-        entity = Location::class,
-        parentColumns = [LOCATION_TABLE_UUID],
-        childColumns = [POINT_TRIP_LOCATION],
-        onDelete = ForeignKey.CASCADE
     )
     ]
 )

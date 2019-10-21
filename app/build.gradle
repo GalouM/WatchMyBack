@@ -30,4 +30,6 @@ task clean(type: Delete) {
 
 ext {
     roomVersion = '2.2.0'
+    glideVersion = '4.8.0'
+    gsonVersion = '2.8.5'
 }
