@@ -7,7 +7,14 @@ import androidx.room.PrimaryKey
 import com.galou.watchmyback.utils.*
 
 /**
- * Created by galou on 2019-10-20
+ * Represent a User of the application
+ *
+ * @property uuid unique id generated randomly use to identify a user
+ * @property email the user's email
+ * @property username the user's name in the application
+ * @property phoneNumber the user's phone number
+ *
+ * @author Galou minisini
  */
 @Entity(
     tableName = USER_TABLE_NAME,

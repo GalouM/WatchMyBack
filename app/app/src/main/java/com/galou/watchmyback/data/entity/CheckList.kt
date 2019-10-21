@@ -4,7 +4,21 @@ import androidx.room.*
 import com.galou.watchmyback.utils.*
 
 /**
- * Created by galou on 2019-10-20
+ * Represent a [User]'s Check List
+ *
+ * A [User] can create, modify and delete a check list and it's items.
+ * Each check list is assigned to a specific [User] and to a [TripType]
+ *
+ * @property uuid unique id generated randomly use to identify a check list
+ * @property userId Id of the [User] who own the check list
+ * @property tripType Type of [Trip] for which this check list was created
+ *
+ * @see TripType
+ * @see User
+ * @see Trip
+ * @see [ItemCheckList]
+ *
+ * @author Galou Minisini
  */
 @Entity(
     tableName = CHECK_LIST_TABLE_NAME,

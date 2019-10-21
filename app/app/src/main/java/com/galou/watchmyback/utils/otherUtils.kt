@@ -3,11 +3,13 @@ package com.galou.watchmyback.utils
 import java.util.*
 
 /**
- * Created by galou on 2019-10-20
+ * Utils class use to generate data
+ *
+ * @author Galou Minisini
  */
 
 /**
- * Generate a unique and random string using the class UUID
+ * Generate a unique and random [String] using the class [UUID]
  */
 var idGenerated: String = ""
     get() {
@@ -17,6 +19,6 @@ var idGenerated: String = ""
 
 
 /**
- * Generate todays date as Date using the class Calendar
+ * Generate todays date as [Date] using the class [Calendar]
  */
 var todaysDate: Date = Calendar.getInstance(Locale.CANADA).time

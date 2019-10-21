@@ -7,7 +7,20 @@ import androidx.room.PrimaryKey
 import com.galou.watchmyback.utils.*
 
 /**
- * Created by galou on 2019-10-20
+ * Represent an Item in a [CheckList]
+ *
+ * Each [CheckList] contains a certain numbers of items.
+ * Items can be added, deleted and modify
+ * A [User] can specify if he/she took this item with him/her or not by checking it
+ *
+ * @property uuid unique id generated randomly use to identify an item
+ * @property listId ID of the [CheckList] that contains this item
+ * @property name name of the item
+ * @property checked tells if the [User] took this item with him/her or not
+ *
+ * @see CheckList
+ *
+ * @author Galou Minisini
  */
 
 @Entity(

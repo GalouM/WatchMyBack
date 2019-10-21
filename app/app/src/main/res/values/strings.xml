@@ -81,4 +81,5 @@
     <string name="late">Late</string>
     <string name="late_no_news">Late and no updates</string>
     <string name="really_late">Really late</string>
+    <string name="distress">Distress</string>
 </resources>

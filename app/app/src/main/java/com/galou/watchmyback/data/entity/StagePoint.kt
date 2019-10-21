@@ -8,7 +8,17 @@ import com.galou.watchmyback.utils.*
 import java.util.*
 
 /**
- * Created by galou on 2019-10-20
+ * Represent a point on the map by which the user went through.
+ *
+ * Inherit from [TripPoint]
+ *
+ * @property timeWentThrough time at which the [User] went through this point
+ *
+ * @see TripPoint
+ * @see User
+ * @see TypePoint
+ *
+ * @author Galou Minisini
  */
 @Entity(
     tableName = STAGE_POINT_TABLE_NAME,

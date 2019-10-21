@@ -9,7 +9,19 @@ import com.galou.watchmyback.utils.*
 import java.util.*
 
 /**
- * Created by galou on 2019-10-20
+ * Represent a point on the map by which the user planned to go through.
+ *
+ * Inherit from [TripPoint]
+ *
+ *
+ * @property typePoint type of point, Start Point, End Point or Stage
+ * @property scheduleTime time the [User] thinks he/she will go through this point
+ *
+ * @see TripPoint
+ * @see User
+ * @see TypePoint
+ *
+ * @author Galou Minisini
  */
 @Entity(
     tableName = SCHEDULE_POINT_TABLE_NAME,
@@ -29,12 +41,25 @@ import java.util.*
     )
     ]
 )
-data class SchedulePoints (
+data class SchedulePoint (
     @ColumnInfo(name = SCHEDULE_POINT_TYPE) var typePoint: TypePoint = STAGE,
     @ColumnInfo(name = SCHEDULE_POINT_SCHEDULE_TIME) var scheduleTime: Date = todaysDate
 
 ) : TripPoint()
 
+
+/**
+ * Represent the different types of [SchedulePoint] possible
+ *
+ * @property START Start point of the trip
+ * @property END End point of the trip
+ * @property STAGE a stage point of the trip
+ *
+ * @see Trip
+ * @see SchedulePoint
+ *
+ * @author Galou Minisini
+ */
 enum class TypePoint {
     START,
     END,

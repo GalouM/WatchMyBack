@@ -9,7 +9,17 @@ import com.galou.watchmyback.utils.FRIEND_TABLE_USER_UUID
 import com.galou.watchmyback.utils.USER_TABLE_UUID
 
 /**
- * Created by galou on 2019-10-20
+ * Represent a Friend of a [User]
+ *
+ * A [User] can be friend with another [User]
+ * This is Ad Hoc table to connect two [User]
+ *
+ * @property userId ID of the [User] to whom the friend belongs
+ * @property friendId ID of the friend.
+ *
+ * @see User
+ *
+ * @author Galou Minisini
  */
 @Entity(
     tableName = FRIEND_TABLE_NAME,

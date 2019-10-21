@@ -7,7 +7,20 @@ import androidx.room.PrimaryKey
 import com.galou.watchmyback.utils.*
 
 /**
- * Created by galou on 2019-10-20
+ * Represent a specific Location with its longitude and latitude
+ *
+ * Used to specify the Location of a [StagePoint] or a [SchedulePoint] on the map.
+ *
+ * @property uuid unique id generated randomly use to identify an location
+ * @property latitude latitude of the location
+ * @property longitude longitude of the location
+ * @property weatherDataId ID of the [WeatherData] attached to this location
+ *
+ * @see StagePoint
+ * @see SchedulePoint
+ * @see WeatherData
+ *
+ * @author Galou Minisini
  */
 @Entity(
     tableName = LOCATION_TABLE_NAME,
