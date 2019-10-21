@@ -41,6 +41,7 @@ before_install:
   - touch $HOME/.android/repositories.cfg
   - yes | sdkmanager "platforms;android-28"
   - yes | sdkmanager "build-tools;28.0.3"
+  - pip install --user codecov
 
 before_script:
   - cd app
@@ -52,4 +53,8 @@ script:
   - ./gradlew test
 
 after_success:
+  - codecov
   - bash <(curl -s https://codecov.io/bash)
+
+after_failure: 
+  - "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml"
