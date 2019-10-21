@@ -5,21 +5,35 @@ sudo: false
 env:
   matrix:
     - ANDROID_TARGET=android-19 ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-23 ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-28 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
+  global:
+    - ADB_INSTALL_TIMEOUT=10  
 
-android:
-  components:
-    - tools
-    - platform-tools
-    - build-tools-19.0.3
-    - build-tools-23.0.1
-    - build-tools-28.0.2
-    - android-19
-    - android-23
-    - android-25
-    - extra-android-m2repository
-    - sys-img-armeabi-v7a
+  android:
+    update_sdk: true  #Check for the updates each time you run the build.
+    components:
+        - platform-tools
+        - tools
+        - build-tools-25.0.0    #Build tool version
+        - android-25            #targate api version
+
+        # Additional components
+        - extra-google-google_play_services
+        - extra-google-m2repository
+        - extra-android-m2repository
+
+        #system images for emulator
+        - sys-img-armeabi-v7a-android-19
+        - sys-img-armeabi-v7a-android-21
+        
+before_cache:
+    - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+
+cache:
+  directories:      #Cache all dirs under .gradle folder
+    - $HOME/.gradle/daemon      #Cache daemon logs
+    - $HOME/.gradle/native      #Cache library downloaded from the gradle dependency
+    - $HOME/.gradle/wrapper     #Cache the gradle
 
 licenses:
   - android-sdk-preview-license-.+
@@ -33,6 +47,7 @@ before_install:
 before_script:
   - cd app
   - chmod +x gradlew
+  - android list targets
   - ./gradlew build jacocoTestReport assembleAndroidTest
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
   - emulator -avd test -no-skin -no-audio -no-window &
