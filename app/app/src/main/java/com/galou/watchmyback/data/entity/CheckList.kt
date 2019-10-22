@@ -22,7 +22,10 @@ import com.galou.watchmyback.utils.*
  */
 @Entity(
     tableName = CHECK_LIST_TABLE_NAME,
-    indices = [Index(value = [CHECK_LIST_TABLE_TRIP_TYPE], unique = false)],
+    indices = [
+        Index(value = [CHECK_LIST_TABLE_TRIP_TYPE], unique = false),
+        Index(value = [CHECK_LIST_TABLE_USER_UUID], unique = false)
+    ],
     foreignKeys = [
     ForeignKey(
         entity = User::class,
@@ -34,5 +37,6 @@ import com.galou.watchmyback.utils.*
 data class CheckList(
     @ColumnInfo(name = CHECK_LIST_TABLE_UUID) @PrimaryKey var id: String = idGenerated,
     @ColumnInfo(name = CHECK_LIST_TABLE_USER_UUID) var userId: String = "",
-    @ColumnInfo(name = CHECK_LIST_TABLE_TRIP_TYPE) var tripType: TripType? = null
+    @ColumnInfo(name = CHECK_LIST_TABLE_TRIP_TYPE) var tripType: TripType? = null,
+    @ColumnInfo(name = CHECK_LIST_TABLE_LIST_NAME) var name: String = ""
 )

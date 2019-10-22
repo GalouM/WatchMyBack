@@ -87,4 +87,18 @@ dependencies {
 
     //GSON
     implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
+
+    //TEST
+    androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoCoreVersion"
+    testImplementation "junit:junit:$rootProject.jUnitVersion"
+    testImplementation "androidx.test:core:$rootProject.testCoreVersion"
+    testImplementation "androidx.test.ext:junit:$rootProject.testJUnitVersion"
+    testImplementation "androidx.test:runner:$rootProject.testRunnerVersion"
+    androidTestImplementation "androidx.test:rules:$rootProject.ruleVersion"
+
+    // Lifecycle components
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
+    kapt "androidx.lifecycle:lifecycle-compiler:$rootProject.archLifecycleVersion"
+    androidTestImplementation "androidx.arch.core:core-testing:$rootProject.androidxArchVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.archLifecycleVersion"
 }

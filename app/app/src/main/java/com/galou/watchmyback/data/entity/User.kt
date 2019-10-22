@@ -21,7 +21,7 @@ import com.galou.watchmyback.utils.*
     indices = [Index(value = [USER_TABLE_USERNAME], unique = false), Index(value = [USER_TABLE_EMAIL], unique = true)]
 )
 data class User (
-    @ColumnInfo(name = USER_TABLE_USERNAME) @PrimaryKey var id: String = idGenerated,
+    @ColumnInfo(name = USER_TABLE_UUID) @PrimaryKey var id: String = idGenerated,
     @ColumnInfo(name = USER_TABLE_EMAIL) var email: String = "",
     @ColumnInfo(name = USER_TABLE_USERNAME) var username: String = "",
     @ColumnInfo(name = USER_TABLE_PHONE_NUMBER) var phoneNumber: String = ""

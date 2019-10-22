@@ -3,6 +3,7 @@ package com.galou.watchmyback.data.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import com.galou.watchmyback.utils.FRIEND_TABLE_NAME
 import com.galou.watchmyback.utils.FRIEND_TABLE_USER_FRIEND_UUID
 import com.galou.watchmyback.utils.FRIEND_TABLE_USER_UUID
@@ -23,6 +24,7 @@ import com.galou.watchmyback.utils.USER_TABLE_UUID
  */
 @Entity(
     tableName = FRIEND_TABLE_NAME,
+    indices = [Index(value = [FRIEND_TABLE_USER_UUID, FRIEND_TABLE_USER_FRIEND_UUID], unique = true)],
     foreignKeys = [
     ForeignKey(
         entity = User::class,

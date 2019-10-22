@@ -21,6 +21,7 @@ import com.galou.watchmyback.utils.*
  * @property updateFrequency frequency at which the app will send location update during the trip
  * @property mainLocation main location of the trip
  * @property type type of trip
+ * @property active trip is active or not
  *
  * @see User
  * @see TripStatus
@@ -32,7 +33,10 @@ import com.galou.watchmyback.utils.*
  */
 @Entity(
     tableName = TRIP_TABLE_NAME,
-    indices = [Index(value = [TRIP_TABLE_STATUS], unique = false)],
+    indices = [
+        Index(value = [TRIP_TABLE_STATUS], unique = false),
+        Index(value = [TRIP_TABLE_USER_UUID, TRIP_TABLE_ACTIVE], unique = true)
+    ],
     foreignKeys = [
     ForeignKey(
         entity = User::class,
@@ -57,7 +61,8 @@ data class Trip (
     @ColumnInfo(name = TRIP_TABLE_DETAILS) var details: String = "",
     @ColumnInfo(name = TRIP_TABLE_FREQUENCY) var updateFrequency:TripUpdateFrequency = FIFTEEN_MINUTES,
     @ColumnInfo(name = TRIP_TABLE_MAIN_LOCATION) var mainLocation: String = "",
-    @ColumnInfo(name = TRIP_TABLE_TYPE) var type: TripType = BIKING
+    @ColumnInfo(name = TRIP_TABLE_TYPE) var type: TripType = BIKING,
+    @ColumnInfo(name = TRIP_TABLE_ACTIVE) var active: Boolean = true
 )
 
 /**

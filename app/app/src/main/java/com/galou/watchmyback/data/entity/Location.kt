@@ -1,24 +1,20 @@
 package com.galou.watchmyback.data.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.galou.watchmyback.utils.*
 
 /**
  * Represent a specific Location with its longitude and latitude
  *
- * Used to specify the Location of a [StagePoint] or a [SchedulePoint] on the map.
+ * Used to specify the Location of a [PointTrip] on the map.
  *
- * @property pointId id of the [TripPoint]
+ * @property pointId id of the [PointTrip]
  * @property latitude latitude of the location
  * @property longitude longitude of the location
- * @property city name of the city where the [TripPoint] is located
- * @property country name of the country where the [TripPoint] is located
+ * @property city name of the city where the [PointTrip] is located
+ * @property country name of the country where the [PointTrip] is located
  *
- * @see StagePoint
- * @see SchedulePoint
+ * @see PointTrip
  * @see WeatherData
  *
  * @author Galou Minisini
@@ -27,7 +23,7 @@ import com.galou.watchmyback.utils.*
     tableName = LOCATION_TABLE_NAME,
     foreignKeys = [
         ForeignKey(
-            entity = TripPoint::class,
+            entity = PointTrip::class,
             parentColumns = [POINT_TRIP_UUID],
             childColumns = [LOCATION_TABLE_UUID],
             onDelete = ForeignKey.CASCADE

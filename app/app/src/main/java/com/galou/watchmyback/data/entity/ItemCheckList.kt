@@ -1,9 +1,6 @@
 package com.galou.watchmyback.data.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.galou.watchmyback.utils.*
 
 /**
@@ -25,6 +22,7 @@ import com.galou.watchmyback.utils.*
 
 @Entity(
     tableName = ITEM_LIST_TABLE_NAME,
+    indices = [Index(value = [ITEM_TABLE_LIST_ID], unique = false)],
     foreignKeys = [
     ForeignKey(
         entity = CheckList::class,

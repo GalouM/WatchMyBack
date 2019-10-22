@@ -3,6 +3,7 @@ package com.galou.watchmyback.data.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import com.galou.watchmyback.utils.*
 
 /**
@@ -22,6 +23,7 @@ import com.galou.watchmyback.utils.*
  */
 @Entity(
     tableName = WATCHER_TABLE_NAME,
+    indices = [Index(value = [WATCHER_TABLE_WATCHER_UUID, WATCHER_TABLE_TRIP_UUID], unique = true)],
     foreignKeys = [
         ForeignKey(
             entity = User::class,
@@ -30,7 +32,7 @@ import com.galou.watchmyback.utils.*
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity = User::class,
+            entity = Trip::class,
             parentColumns = [TRIP_TABLE_UUID],
             childColumns = [WATCHER_TABLE_TRIP_UUID],
             onDelete = ForeignKey.CASCADE
