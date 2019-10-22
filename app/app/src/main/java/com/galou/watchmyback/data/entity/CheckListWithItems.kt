@@ -6,7 +6,19 @@ import com.galou.watchmyback.utils.CHECK_LIST_TABLE_UUID
 import com.galou.watchmyback.utils.ITEM_TABLE_LIST_ID
 
 /**
- * Created by galou on 2019-10-21
+ * Represent a [CheckList] and its [ItemCheckList]
+ *
+ * [Embedded] object with its [Relation] so Room can return a [CheckList] with all the data connected to it
+ *
+ * @property checkList
+ * @property items items of the check list
+ *
+ * @see CheckList
+ * @see ItemCheckList
+ * @see Embedded
+ * @see Relation
+ *
+ * @author Galou Minisini
  */
 data class CheckListWithItems(
     @Embedded val checkList: CheckList,

@@ -9,6 +9,9 @@ import java.util.*
  *
  * Convert enum and Date to data Room can understand
  *
+ * @see TypeConverter
+ *
+ * @author Galou Minisini
  *
  */
 class Converters {

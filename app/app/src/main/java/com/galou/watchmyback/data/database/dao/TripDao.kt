@@ -7,16 +7,39 @@ import com.galou.watchmyback.utils.*
 import java.util.*
 
 /**
- * Created by galou on 2019-10-21
+ * List all the actions possible on the [Trip] table
+ *
+ * @property database reference to the database of the application
+ *
+ * @see Dao
+ * @see Trip
  */
 @Dao
 abstract class TripDao(private val database: WatchMyBackDatabase) {
 
+    /**
+     * Query all the active [Trip] of a specific [User]
+     *
+     * @param userId ID of the user to query
+     * @return List of the active [Trip] of the [User]
+     *
+     * @see Query
+     */
     @Query("SELECT * FROM $TRIP_TABLE_NAME " +
             "WHERE $TRIP_TABLE_USER_UUID = :userId " +
-            "AND $TRIP_TABLE_ACTIVE = :active")
-    abstract suspend fun getUserActiveTrip(userId: String, active: Boolean): List<Trip>
+            "AND $TRIP_TABLE_ACTIVE = 1")
+    abstract suspend fun getUserActiveTrip(userId: String): List<Trip>
 
+    /**
+     * Create an object [Trip] in the database
+     *
+     * If an object with the same Primary key exist in the database, it will be replace by this one
+     *
+     * @param trip [Trip to create]
+     *
+     * @see Insert
+     * @see OnConflictStrategy.REPLACE
+     */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun createTrip(trip: Trip)
 
@@ -27,6 +50,27 @@ abstract class TripDao(private val database: WatchMyBackDatabase) {
 
      */
 
+    /**
+     * Create a [Trip] and all its data in the database
+     *
+     * @param trip [Trip] to create
+     * @param pointTrip List of all the [PointTrip] of the [Trip]
+     * @param pointLocations List of the [Location] of the [PointTrip]
+     * @param weatherData List of the [WeatherData] of the [PointTrip]
+     * @param watchers List of the [Watcher] of the [Trip]
+     * @param items List of the [ItemCheckList] took in this [Trip]
+     *
+     * @see Transaction
+     * @see PointTripDao
+     * @see LocationDao
+     * @see WeatherDataDao
+     * @see ItemCheckListDao
+     * @see WatcherDao
+     * @see ItemCheckListDao.updateItems
+     * @see TripDao.createTrip
+     * @see WatcherDao.addWatchers
+     * @see PointTripDao.createPointsAndData
+     */
     @Transaction
     open suspend fun createTripAndData(
         trip: Trip, pointTrip: List<PointTrip>, pointLocations: List<Location>,

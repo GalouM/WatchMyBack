@@ -69,7 +69,7 @@ class TripDaoTest {
     @Test
     @Throws(Exception::class)
     fun createAndGetTrip() = runBlocking {
-        val tripFromDb = tripDao.getUserActiveTrip(mainUser.id, true)
+        val tripFromDb = tripDao.getUserActiveTrip(mainUser.id)
         assertThat(tripFromDb, hasItem(trip1))
 
     }

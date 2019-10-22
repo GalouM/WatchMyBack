@@ -36,7 +36,7 @@ import java.util.*
     )
     ]
 )
-class PointTrip (
+data class PointTrip (
     @ColumnInfo(name = POINT_TRIP_UUID) @PrimaryKey var id: String = idGenerated,
     @ColumnInfo(name = POINT_TRIP_TRIP_UUID) var tripId: String = "",
     @ColumnInfo(name = POINT_TRIP_TYPE) var typePoint: TypePoint = SCHEDULE_STAGE,

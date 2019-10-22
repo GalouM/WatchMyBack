@@ -7,7 +7,21 @@ import com.galou.watchmyback.utils.POINT_TRIP_UUID
 import com.galou.watchmyback.utils.WEATHER_DATA_TABLE_POINT_UUID
 
 /**
- * Created by galou on 2019-10-22
+ * Represent a [PointTrip] and its data
+ *
+ * [Embedded] object with its [Relation] so Room can return a [PointTrip] with all the data connected to it
+ *
+ * @property pointTrip [PointTrip] queried
+ * @property location [Location] of the point
+ * @property weatherData [WeatherData] of the point
+ *
+ * @see PointTrip
+ * @see Location
+ * @see WeatherData
+ * @see Embedded
+ * @see Relation
+ *
+ * @author Galou Minisini
  */
 data class PointTripWithData(
     @Embedded val pointTrip: PointTrip,

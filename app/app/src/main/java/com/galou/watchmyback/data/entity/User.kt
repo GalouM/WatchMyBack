@@ -14,7 +14,7 @@ import com.galou.watchmyback.utils.*
  * @property username the user's name in the application
  * @property phoneNumber the user's phone number
  *
- * @author Galou minisini
+ * @author Galou Minisini
  */
 @Entity(
     tableName = USER_TABLE_NAME,

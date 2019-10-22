@@ -1,15 +1,24 @@
 package com.galou.watchmyback.data.database
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
+import androidx.room.*
 import com.galou.watchmyback.data.database.dao.*
 import com.galou.watchmyback.data.entity.*
 
 /**
- * Created by galou on 2019-10-21
+ * Represent the Database of the application
+ *
+ * Inherit from [RoomDatabase]
+ *
+ * Contain all the [Dao]
+ *
+ * Contain a companion object to create a single instance the database
+ *
+ * @see Database
+ * @see RoomDatabase
+ * @see TypeConverters
+ * @see Dao
+ *
  */
 @Database(
     entities = [
@@ -36,6 +45,13 @@ abstract class WatchMyBackDatabase : RoomDatabase() {
     companion object{
         @Volatile
         private var INSTANCE: WatchMyBackDatabase? = null
+
+        /**
+         * Create a single Instance of the database
+         *
+         * @param context the application's context
+         * @return unique instance of the database
+         */
         fun getDatabase(context: Context): WatchMyBackDatabase {
             return INSTANCE
                 ?: synchronized(this){

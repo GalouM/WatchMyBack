@@ -12,6 +12,7 @@ import com.galou.watchmyback.utils.*
  * @property id unique id generated randomly use to identify a check list
  * @property userId Id of the [User] who own the check list
  * @property tripType Type of [Trip] for which this check list was created
+ * @property name name of the check list
  *
  * @see TripType
  * @see User
