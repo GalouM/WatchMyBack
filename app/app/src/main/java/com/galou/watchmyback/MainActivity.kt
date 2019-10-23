@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
@@ -14,6 +15,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +32,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun configureToolbar(){
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        val drawerLayout = findViewById<DrawerLayout>(R.id.main_activity_drawer_layout)
+        drawerLayout = findViewById(R.id.main_activity_drawer_layout)
         setSupportActionBar(toolbar)
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar,
             R.string.open_nav_drawer, R.string.close_nav_drawer)
@@ -49,6 +52,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationView.setNavigationItemSelectedListener(this)
     }
 
+
+    //-------------------------
+    //  NAVIGATION VIEW ACTIONS
+    //-------------------------
+
+    override fun onBackPressed() {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         item.isChecked = false
         displayData(item.itemId.toString())
@@ -58,6 +74,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_view_menu_my_trip -> openMyTripActivity()
             R.id.nav_view_menu_logout -> logOutAction()
         }
+        drawerLayout.closeDrawer(GravityCompat.START)
 
         return true
 

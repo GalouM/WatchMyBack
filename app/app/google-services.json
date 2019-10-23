@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1049846919556",
+    "firebase_url": "https://watch-my-back-fbb33.firebaseio.com",
+    "project_id": "watch-my-back-fbb33",
+    "storage_bucket": "watch-my-back-fbb33.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1049846919556:android:eb039f35a8691514b32dd1",
+        "android_client_info": {
+          "package_name": "com.galou.watchmyback"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1049846919556-ektvc30p4f19r2jj1p1u8chg47a9uguu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.galou.watchmyback",
+            "certificate_hash": "a7f7f326ec27049b994d3fd4607c90628bfdd1c3"
+          }
+        },
+        {
+          "client_id": "1049846919556-q20rlnnnpmo05bbugvs1dnftrglq0lkm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmZbzjaWKKC1n37xaXtct3XEDvhh_4ZLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1049846919556-q20rlnnnpmo05bbugvs1dnftrglq0lkm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
