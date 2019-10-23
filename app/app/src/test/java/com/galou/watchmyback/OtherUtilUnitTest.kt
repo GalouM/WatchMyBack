@@ -6,6 +6,7 @@ import org.hamcrest.CoreMatchers.not
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThat
 import org.junit.Test
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -22,7 +23,8 @@ class OtherUtilUnitTest {
 
     @Test
     fun todayDate_isToday(){
-        val today = Calendar.getInstance(Locale.CANADA).time.toString()
-        assertEquals(today, todaysDate.toString())
+        val today = Calendar.getInstance(Locale.CANADA).time
+        val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.CANADA)
+        assertEquals(formatter.format(today), formatter.format(todaysDate))
     }
 }

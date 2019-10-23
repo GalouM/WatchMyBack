@@ -105,7 +105,7 @@ class MainActivityTest {
         onView(withContentDescription(R.string.open_nav_drawer)).check(matches(isClosed()))
 
     }
-    
+
      */
 
 
