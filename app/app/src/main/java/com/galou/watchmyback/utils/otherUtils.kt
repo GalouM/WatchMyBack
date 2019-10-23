@@ -1,5 +1,6 @@
 package com.galou.watchmyback.utils
 
+import android.util.Log
 import java.util.*
 
 /**
@@ -22,3 +23,5 @@ var idGenerated: String = ""
  * Generate todays date as [Date] using the class [Calendar]
  */
 var todaysDate: Date = Calendar.getInstance(Locale.CANADA).time
+
+fun displayData(message: String) = Log.e("WMT DATA", message)

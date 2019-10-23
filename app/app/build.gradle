@@ -90,6 +90,7 @@ dependencies {
 
     //TEST
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoCoreVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.espressoCoreVersion"
     testImplementation "junit:junit:$rootProject.jUnitVersion"
     testImplementation "androidx.test:core:$rootProject.testCoreVersion"
     testImplementation "androidx.test.ext:junit:$rootProject.testJUnitVersion"

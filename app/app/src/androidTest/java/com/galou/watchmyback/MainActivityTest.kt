@@ -3,6 +3,7 @@ package com.galou.watchmyback
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.NavigationViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
@@ -55,6 +56,30 @@ class MainActivityTest {
     fun onClickBurgerMenu_showNavigationDrawer(){
         onView(withContentDescription(R.string.open_nav_drawer)).perform(click())
         onView(withId(R.id.main_activity_navigation_view)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun onClickSettingsMenu_openSettingsActivity(){
+        onView(withContentDescription(R.string.open_nav_drawer)).perform(click())
+        onView(withId(R.id.main_activity_navigation_view)).perform(NavigationViewActions.navigateTo(R.id.nav_view_menu_settings))
+        onView(withId(R.id.activity_settings_container)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun onClickMyProfileMenu_openProfileActivity(){
+        onView(withContentDescription(R.string.open_nav_drawer)).perform(click())
+        onView(withId(R.id.main_activity_navigation_view)).perform(NavigationViewActions.navigateTo(R.id.nav_view_menu_my_profile))
+        onView(withId(R.id.activity_profile_container)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun onClickMyTripMenu_openTripActivity(){
+        onView(withContentDescription(R.string.open_nav_drawer)).perform(click())
+        onView(withId(R.id.main_activity_navigation_view)).perform(NavigationViewActions.navigateTo(R.id.nav_view_menu_my_trip))
+        onView(withId(R.id.detail_trip_activity_container)).check(matches(isDisplayed()))
     }
 
 
