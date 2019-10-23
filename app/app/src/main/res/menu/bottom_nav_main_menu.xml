@@ -3,19 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/bottom_nav_menu_map"
+        android:id="@+id/mapView"
         android:icon="@drawable/icon_map"
         android:title="@string/menu_title"/>
     <item
-        android:id="@+id/bottom_nav_menu_trips"
+        android:id="@+id/tripsView"
         android:icon="@drawable/icon_trips"
         android:title="@string/trips_title"/>
     <item
-        android:id="@+id/bottom_nav_menu_friends"
+        android:id="@+id/friendsView"
         android:icon="@drawable/icon_friends"
         android:title="@string/friends_title"/>
     <item
-        android:id="@+id/bottom_nav_menu_checklist"
+        android:id="@+id/checkListView"
         android:icon="@drawable/icon_check_list"
         android:title="@string/check_list_title"/>
 

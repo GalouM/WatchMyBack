@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mapView">
 
+    <fragment
+        android:id="@+id/checkListView"
+        android:name="com.galou.watchmyback.CheckListView"
+        android:label="fragment_check_list_view"
+        tools:layout="@layout/fragment_check_list_view" />
+    <fragment
+        android:id="@+id/friendsView"
+        android:name="com.galou.watchmyback.FriendsView"
+        android:label="fragment_friends_view"
+        tools:layout="@layout/fragment_friends_view" />
+    <fragment
+        android:id="@+id/tripsView"
+        android:name="com.galou.watchmyback.TripsView"
+        android:label="fragment_trips_view"
+        tools:layout="@layout/fragment_trips_view" />
+    <fragment
+        android:id="@+id/mapView"
+        android:name="com.galou.watchmyback.MapView"
+        android:label="fragment_map_view"
+        tools:layout="@layout/fragment_map_view" />
 </navigation>

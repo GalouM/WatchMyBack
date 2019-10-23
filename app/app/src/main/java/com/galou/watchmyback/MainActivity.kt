@@ -5,6 +5,9 @@ import android.os.Bundle
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.Navigation
+import androidx.navigation.ui.NavigationUI
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,6 +15,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         configureToolbar()
+        configureBottomNavigation()
     }
 
     private fun configureToolbar(){
@@ -22,5 +26,12 @@ class MainActivity : AppCompatActivity() {
             R.string.open_nav_drawer, R.string.close_nav_drawer)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+    }
+
+    private fun configureBottomNavigation(){
+        val bottomNavigation = findViewById<BottomNavigationView>(R.id.main_activity_bottom_nav)
+        val navController = Navigation.findNavController(this, R.id.main_activity_nav_host)
+        NavigationUI.setupWithNavController(bottomNavigation, navController)
+
     }
 }
