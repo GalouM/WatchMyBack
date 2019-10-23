@@ -40,4 +40,5 @@ ext {
     ruleVersion = '1.2.0'
     archLifecycleVersion = '2.2.0-beta01'
     androidxArchVersion = '2.0.0'
+    navVersion = "2.1.0"
 }
