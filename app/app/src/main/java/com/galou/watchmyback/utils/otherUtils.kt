@@ -24,4 +24,4 @@ var idGenerated: String = ""
  */
 var todaysDate: Date = Calendar.getInstance(Locale.CANADA).time
 
-fun displayData(message: String) = Log.e("WMT DATA", message)
+fun displayData(message: String) = Log.d("WMT DATA", message)

@@ -27,7 +27,7 @@ interface UserDao {
      * @see Query
      */
     @Query("SELECT * FROM $USER_TABLE_NAME WHERE $USER_TABLE_UUID = :userId")
-    suspend fun getUser(userId: String): List<User>
+    suspend fun getUser(userId: String): User?
 
     /**
      * Query a list of [User] who have a specific chain of character in their username

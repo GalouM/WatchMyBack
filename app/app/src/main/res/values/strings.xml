@@ -90,4 +90,12 @@
     <string name="thunerstorm">Thunderstorm</string>
     <string name="snow">Snow</string>
     <string name="mist">Mist</string>
+    <string name="error_fetching">Error while fetching user</string>
+    <string name="error_creatng_user_remote">Error while creating user remotely</string>
+    <string name="welcome">Welcome!</string>
+    <string name="no_internet">No Internet access</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="authentification_cancelled">Authentification was cancelled</string>
+    <string name="failed_signout">Failed to sign out</string>
+    <string name="welcome_back">Welcome back</string>
 </resources>

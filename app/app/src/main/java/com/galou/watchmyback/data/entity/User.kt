@@ -22,7 +22,8 @@ import com.galou.watchmyback.utils.*
 )
 data class User (
     @ColumnInfo(name = USER_TABLE_UUID) @PrimaryKey var id: String = idGenerated,
-    @ColumnInfo(name = USER_TABLE_EMAIL) var email: String = "",
-    @ColumnInfo(name = USER_TABLE_USERNAME) var username: String = "",
-    @ColumnInfo(name = USER_TABLE_PHONE_NUMBER) var phoneNumber: String = ""
+    @ColumnInfo(name = USER_TABLE_EMAIL) var email: String? = "",
+    @ColumnInfo(name = USER_TABLE_USERNAME) var username: String? = "",
+    @ColumnInfo(name = USER_TABLE_PHONE_NUMBER) var phoneNumber: String? = "",
+    @ColumnInfo(name = USER_TABLE_PICTURE_URL) var pictureUrl: String? = ""
 )

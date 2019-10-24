@@ -22,6 +22,10 @@ import com.galou.watchmyback.utils.ITEM_TABLE_LIST_ID
  */
 data class CheckListWithItems(
     @Embedded val checkList: CheckList,
-    @Relation(parentColumn = CHECK_LIST_TABLE_UUID, entityColumn = ITEM_TABLE_LIST_ID, entity = ItemCheckList::class)
+    @Relation(
+        parentColumn = CHECK_LIST_TABLE_UUID,
+        entityColumn = ITEM_TABLE_LIST_ID,
+        entity = ItemCheckList::class
+    )
     val items: List<ItemCheckList>
 )

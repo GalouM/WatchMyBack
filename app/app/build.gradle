@@ -65,6 +65,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.firebase:firebase-storage:16.0.4'
     implementation 'com.google.firebase:firebase-auth:16.0.5'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
@@ -99,6 +100,12 @@ dependencies {
     testImplementation "androidx.test.ext:junit:$rootProject.testJUnitVersion"
     testImplementation "androidx.test:runner:$rootProject.testRunnerVersion"
     androidTestImplementation "androidx.test:rules:$rootProject.ruleVersion"
+    testImplementation "org.mockito:mockito-core:$rootProject.mockitoVersion"
+    androidTestImplementation "org.mockito:mockito-core:$rootProject.mockitoVersion"
+    androidTestImplementation "org.mockito:mockito-android:$rootProject.mockitoVersion"
+    testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC3'
+    testImplementation "com.google.truth:truth:$rootProject.truthVersion"
+    testImplementation "androidx.arch.core:core-testing:$rootProject.archTestingVersion"
 
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
@@ -114,4 +121,12 @@ dependencies {
 
     //MULTIDEX
     implementation "androidx.multidex:multidex:$rootProject.multidexVersion"
+
+    //KOIN
+    implementation "org.koin:koin-android-viewmodel:$rootProject.koinVersion"
+
+    //FIREBASE
+    implementation "com.google.firebase:firebase-auth:$rootProject.firebaseAuthVersion"
+    implementation "com.firebaseui:firebase-ui-auth:$rootProject.authUIVersion"
+    implementation "com.google.firebase:firebase-firestore:$rootProject.firestoreVersion"
 }

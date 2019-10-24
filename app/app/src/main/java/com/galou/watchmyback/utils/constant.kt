@@ -21,6 +21,7 @@ const val USER_TABLE_UUID = "user_uuid"
 const val USER_TABLE_USERNAME = "username"
 const val USER_TABLE_EMAIL = "email"
 const val USER_TABLE_PHONE_NUMBER = "phone_number"
+const val USER_TABLE_PICTURE_URL = "picture_url"
 // trip
 const val TRIP_TABLE_UUID = "trip_uuid"
 const val TRIP_TABLE_TYPE = "trip_type"
@@ -65,3 +66,13 @@ const val POINT_TRIP_UUID = "point_uuid"
 const val POINT_TRIP_TRIP_UUID = "trip_id"
 const val POINT_TRIP_TIME = "time"
 const val POINT_TRIP_TYPE = "point_type"
+
+
+// ------ COLLECTION FIRESTORE -------
+const val USER_COLLECTION_NAME = "userCollection"
+
+// ------ STORAGE REFERENCE -------
+const val USER_PICTURE_REFERENCE = "images/userPicture/"
+
+// ------ RESULT CODE ACTIVITIES -------
+const val RC_SIGN_IN = 100

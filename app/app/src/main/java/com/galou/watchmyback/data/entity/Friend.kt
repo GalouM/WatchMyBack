@@ -13,7 +13,7 @@ import com.galou.watchmyback.utils.USER_TABLE_UUID
  * Represent a Friend of a [User]
  *
  * A [User] can be friend with another [User]
- * This is Ad Hoc table to connect two [User]
+ * This is junction table to connect two [User]
  *
  * @property userId ID of the [User] to whom the friend belongs
  * @property friendId ID of the friend.

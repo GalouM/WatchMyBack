@@ -25,8 +25,16 @@ import com.galou.watchmyback.utils.WEATHER_DATA_TABLE_POINT_UUID
  */
 data class PointTripWithData(
     @Embedded val pointTrip: PointTrip,
-    @Relation(parentColumn = POINT_TRIP_UUID, entityColumn = LOCATION_TABLE_UUID, entity = Location::class)
+    @Relation(
+        parentColumn = POINT_TRIP_UUID,
+        entityColumn = LOCATION_TABLE_UUID,
+        entity = Location::class
+    )
     val location: List<Location>,
-    @Relation(parentColumn = POINT_TRIP_UUID, entityColumn = WEATHER_DATA_TABLE_POINT_UUID, entity = WeatherData::class)
+    @Relation(
+        parentColumn = POINT_TRIP_UUID,
+        entityColumn = WEATHER_DATA_TABLE_POINT_UUID,
+        entity = WeatherData::class
+    )
     val weatherData: List<WeatherData>
 )

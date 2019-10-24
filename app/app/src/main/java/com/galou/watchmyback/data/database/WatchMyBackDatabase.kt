@@ -42,27 +42,4 @@ abstract class WatchMyBackDatabase : RoomDatabase() {
     abstract fun pointTripDao(): PointTripDao
     abstract fun tripDao(): TripDao
 
-    companion object{
-        @Volatile
-        private var INSTANCE: WatchMyBackDatabase? = null
-
-        /**
-         * Create a single Instance of the database
-         *
-         * @param context the application's context
-         * @return unique instance of the database
-         */
-        fun getDatabase(context: Context): WatchMyBackDatabase {
-            return INSTANCE
-                ?: synchronized(this){
-                    val instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        WatchMyBackDatabase::class.java,
-                        "WatchMyBack_database.db")
-                        .build()
-                    INSTANCE = instance
-                    return instance
-                }
-        }
-    }
 }

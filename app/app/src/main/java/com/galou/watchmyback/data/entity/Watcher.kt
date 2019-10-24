@@ -11,7 +11,7 @@ import com.galou.watchmyback.utils.*
  *
  * A Watcher is a [User] who can see the [Trip]'s information of a another user and is notify if something happen
  *
- * This is Ad Hoc table to connect a [User] to a [Trip]
+ * This is Junction table to connect a [User] to a [Trip]
  *
  * @property watcherId ID of the [User] watching the trip
  * @property tripId ID of the [Trip] the watcher is watching
