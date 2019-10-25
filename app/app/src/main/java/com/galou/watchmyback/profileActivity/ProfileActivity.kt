@@ -1,7 +1,8 @@
-package com.galou.watchmyback
+package com.galou.watchmyback.profileActivity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.galou.watchmyback.R
 
 class ProfileActivity : AppCompatActivity() {
 

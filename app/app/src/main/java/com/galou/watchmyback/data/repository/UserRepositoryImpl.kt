@@ -72,6 +72,19 @@ class UserRepositoryImpl : UserRepository {
     override fun deleteUserFromCloudDB(userId: String) = userCollection.document(userId).delete()
 
     /**
+     * Update a [User] in the remote database
+     *
+     * @param user [User] to update
+     * @return Update [Task] to observe
+     */
+    override fun updateUserInRemoteDB(user: User): Task<Void> {
+        return userCollection.document(user.id).update(
+            "username", user.username, "email", user.email, "phoneNumber", user.phoneNumber,
+            "pictureUrl", user.pictureUrl
+        )
+    }
+
+    /**
      * Get the reference of a [User] profile picture file from Firebase Storage
      *
      * @param userId ID of the user requested

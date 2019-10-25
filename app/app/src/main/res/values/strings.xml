@@ -98,4 +98,9 @@
     <string name="authentification_cancelled">Authentification was cancelled</string>
     <string name="failed_signout">Failed to sign out</string>
     <string name="welcome_back">Welcome back</string>
+    <string name="info_updated">Your informations were updated</string>
+    <string name="fail_not_saved">Something wrong happened, changes were not saved</string>
+    <string name="incorrect_username">Incorrect username</string>
+    <string name="incorrect_email">Incorrect Email</string>
+    <string name="incorrect_phone_number">Incorrect phone number</string>
 </resources>

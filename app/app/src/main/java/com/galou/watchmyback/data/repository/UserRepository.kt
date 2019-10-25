@@ -15,5 +15,6 @@ interface UserRepository {
     fun getUserFromRemoteDB(userId: String): Task<User>
     fun createUserInRemoteDB(user: User): Task<Void>
     fun deleteUserFromCloudDB(userId: String): Task<Void>
+    fun updateUserInRemoteDB(user: User): Task<Void>
     fun uploadUserPicture(urlPicture: String, userId: String): UploadTask?
 }

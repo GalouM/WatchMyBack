@@ -22,5 +22,7 @@ class UserRepositoryMocked : UserRepository{
 
     override fun deleteUserFromCloudDB(userId: String): Task<Void> = MockTask(null, true)
 
+    override fun updateUserInRemoteDB(user: User): Task<Void> = MockTask(null, true)
+
     override fun uploadUserPicture(urlPicture: String, userId: String): UploadTask? = null
 }

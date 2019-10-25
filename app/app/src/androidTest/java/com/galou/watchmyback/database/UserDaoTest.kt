@@ -10,6 +10,8 @@ import com.galou.watchmyback.data.database.dao.UserDao
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -49,7 +51,8 @@ class UserDaoTest {
     fun createAndGetUser() = runBlocking {
         userDao.createUser(mainUser)
         val userFromDB = userDao.getUser(mainUser.id)
-        assertEquals(mainUser.id, userFromDB[0].id)
+        assertNotNull(userFromDB)
+        assertEquals(mainUser.id, userFromDB?.id)
     }
 
     @Test
@@ -57,10 +60,10 @@ class UserDaoTest {
     fun deleteUser() = runBlocking {
         userDao.createUser(mainUser)
         val userFromDB = userDao.getUser(mainUser.id)
-        assertEquals(userFromDB.size, 1)
+        assertNotNull(userFromDB)
         userDao.deleteUser(mainUser.id)
         val userDeleted = userDao.getUser(mainUser.id)
-        assertEquals(userDeleted.size, 0)
+        assertNull(userDeleted)
     }
 
 
