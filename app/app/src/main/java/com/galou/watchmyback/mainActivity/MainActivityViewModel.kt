@@ -13,8 +13,8 @@ import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.repository.UserRepository
+import com.galou.watchmyback.data.repository.UserRepositoryImpl
 import com.galou.watchmyback.utils.displayData
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
 /**
@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseUser
  *
  *
  *
- * @property userRepository [UserRepository] reference
+ * @property userRepository [UserRepositoryImpl] reference
  */
 class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
 
@@ -58,7 +58,8 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
      */
     fun checkIfUserIsConnected(firebaseUser: FirebaseUser?){
         if(firebaseUser != null){
-            fetchCurrentUserInformation(firebaseUser)
+            createUserToRemoteDB(firebaseUser)
+            //fetchCurrentUserInformation(firebaseUser)
         } else{
             showSignInActivity()
         }
@@ -113,7 +114,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
      * Create a user in the remote database if it doesn't already exist
      *
      * @see createUserToRemoteDB
-     * @see UserRepository.getUserFromRemoteDB
+     * @see UserRepositoryImpl.getUserFromRemoteDB
      *
      * @param firebaseUser user connected to the app through Firebase Authentification
      */
@@ -121,10 +122,9 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
         userRepository.getUserFromRemoteDB(firebaseUser.uid)
             .addOnCompleteListener { task ->
                 if(task.isSuccessful){
-                    val user = task.result?.toObject(User::class.java)
+                    val user = task.result
                     if(user != null) {
-                        userRepository.currentUser = user
-                        showSnackBarMessage(R.string.welcome_back)
+                        setupUserInformation(user)
                     } else {
                         createUserToRemoteDB(firebaseUser)
                     }
@@ -138,7 +138,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
     /**
      * Create a user in the remote databse
      *
-     * @see UserRepository.createUserInRemoteDB
+     * @see UserRepositoryImpl.createUserInRemoteDB
      *
      * @param firebaseUser user connected to the app through Firebase Authentification
      */
@@ -147,15 +147,21 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
         val user = User(firebaseUser.uid, firebaseUser.email, firebaseUser.displayName, firebaseUser.phoneNumber, urlPhoto)
         userRepository.createUserInRemoteDB(user).addOnCompleteListener { task -> 
             if(task.isSuccessful){
-                setupUserInformation(user)
+                fetchCurrentUserInformation(firebaseUser)
             } else {
                 showSnackBarMessage(R.string.error_creatng_user_remote)
             }
         }
     }
 
+    /**
+     * Emit LiveData with the [User] information
+     *
+     * @param user [User] fetched from the database
+     */
     private fun setupUserInformation(user: User){
         userRepository.currentUser = user
+        displayData("USER: $user")
         _usernameLD.value = user.username
         user.pictureUrl?.let { _pictureUrlLD.value = it }
         user.email?.let{ _emailLD.value = it }

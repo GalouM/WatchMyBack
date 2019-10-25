@@ -1,10 +1,8 @@
 package com.galou.watchmyback.di
 
-import androidx.room.Room
-import com.galou.watchmyback.data.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.repository.UserRepository
+import com.galou.watchmyback.data.repository.UserRepositoryImpl
 import com.galou.watchmyback.mainActivity.MainActivityViewModel
-import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -16,6 +14,6 @@ import org.koin.dsl.module
 
 val appModules = module {
 
-    single { UserRepository() }
+    single<UserRepository> { UserRepositoryImpl() }
     viewModel { MainActivityViewModel(userRepository = get()) }
 }

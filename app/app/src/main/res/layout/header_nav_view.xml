@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.galou.watchmyback.mainActivity.MainActivityViewModel" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_size"
@@ -10,17 +19,17 @@
         android:id="@+id/header_nav_profile_image"
         android:layout_width="@dimen/nav_header_image"
         android:layout_height="@dimen/nav_header_image"
-        app:srcCompat="@drawable/icon_my_profile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="@dimen/margin_big"
-        android:tint="@color/colorOnAccent"/>
+        android:tint="@color/colorOnAccent"
+        app:loadUrlInCircle="@{viewmodel.pictureUrlLD}"/>
 
     <TextView
         android:id="@+id/header_nav_username"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Gaelle Minisini"
+        android:text="@{viewmodel.usernameLD}"
         app:layout_constraintStart_toEndOf="@id/header_nav_profile_image"
         app:layout_constraintTop_toTopOf="@id/header_nav_profile_image"
         app:layout_constraintBottom_toTopOf="@id/header_nav_email"
@@ -34,7 +43,7 @@
         android:id="@+id/header_nav_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="galou.minisini@gmail.com"
+        android:text="@{viewmodel.emailLD}"
         android:layout_marginStart="@dimen/margin_medium"
         android:textSize="@dimen/nav_header_email"
         app:layout_constraintStart_toEndOf="@id/header_nav_profile_image"
@@ -44,3 +53,4 @@
         android:textColor="@color/colorOnAccentAlpha"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

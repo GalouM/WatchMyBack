@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
@@ -15,6 +16,8 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.galou.watchmyback.*
+import com.galou.watchmyback.databinding.ActivityMainBinding
+import com.galou.watchmyback.databinding.HeaderNavViewBinding
 import com.galou.watchmyback.utils.RC_SIGN_IN
 import com.galou.watchmyback.utils.displayData
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,6 +29,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var binding: ActivityMainBinding
 
     private lateinit var authFirebase: FirebaseAuth
     private val providers = arrayListOf(
@@ -37,7 +41,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        configureBinding()
         setupObserverViewModel()
         configureFirebase()
         configureToolbar()
@@ -50,6 +54,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(requestCode){
             RC_SIGN_IN -> viewModel.handleSignIngActivityResult(resultCode, data, authFirebase.currentUser)
         }
+    }
+
+    private fun configureBinding(){
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.viewmodel = viewModel
+        binding.lifecycleOwner = this
     }
 
     //-------------------------
@@ -76,7 +86,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun configureToolbar(){
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        drawerLayout = findViewById(R.id.main_activity_drawer_layout)
+        drawerLayout = binding.mainActivityDrawerLayout
         setSupportActionBar(toolbar)
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar,
             R.string.open_nav_drawer,
@@ -87,7 +97,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun configureBottomNavigation(){
-        val bottomNavigation = findViewById<BottomNavigationView>(R.id.main_activity_bottom_nav)
+        val bottomNavigation = binding.mainActivityBottomNav
         val navController = Navigation.findNavController(this,
             R.id.main_activity_nav_host
         )
@@ -96,7 +106,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun configureNavigationView(){
-        val navigationView = findViewById<NavigationView>(R.id.main_activity_navigation_view)
+        val navigationView = binding.mainActivityNavigationView
+        val navViewBinding = DataBindingUtil.inflate<HeaderNavViewBinding>(
+            layoutInflater, R.layout.header_nav_view, navigationView, false
+        )
+        navViewBinding.viewmodel = viewModel
+        navViewBinding.lifecycleOwner = this
+        binding.mainActivityNavigationView.addHeaderView(navViewBinding.root)
         navigationView.setNavigationItemSelectedListener(this)
     }
 

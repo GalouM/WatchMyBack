@@ -1,7 +1,6 @@
 package com.galou.watchmyback.testHelpers
 
 import android.os.Parcel
-import androidx.core.net.toUri
 import com.google.firebase.auth.AdditionalUserInfo
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
@@ -21,7 +20,7 @@ object FakeAuthResult : AuthResult {
     }
 
     override fun getUser(): FirebaseUser {
-        return getMockUser()
+        return getMockFirebaseUser()
     }
 
     override fun describeContents(): Int = 0
@@ -44,13 +43,14 @@ object FakeAdditionalUserInfo : AdditionalUserInfo {
     override fun isNewUser(): Boolean = false
 }
 
-fun getMockUser(): FirebaseUser{
+fun getMockFirebaseUser(): FirebaseUser{
     val user = Mockito.mock(FirebaseUser::class.java)
-    Mockito.`when`(user.uid).thenReturn(TEST_UID)
-    Mockito.`when`(user.email).thenReturn(TEST_EMAIL)
-    Mockito.`when`(user.displayName).thenReturn(TEST_NAME)
+    val testUser = generateTestUser(TEST_UID)
+    Mockito.`when`(user.uid).thenReturn(testUser.id)
+    Mockito.`when`(user.email).thenReturn(testUser.email)
+    Mockito.`when`(user.displayName).thenReturn(testUser.username)
     Mockito.`when`(user.photoUrl).thenReturn(null)
-    Mockito.`when`(user.phoneNumber).thenReturn(TEST_PHONE_NUMBER)
+    Mockito.`when`(user.phoneNumber).thenReturn(testUser.phoneNumber)
     return user
 }
 
@@ -59,4 +59,5 @@ const val TEST_EMAIL = "test@example.com"
 const val TEST_NAME = "John Doe"
 const val TEST_PHOTO_URI = "http://example.com/profile.png"
 const val TEST_PHONE_NUMBER = "555-456-3454"
+
 
