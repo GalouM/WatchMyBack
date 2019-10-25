@@ -1,11 +1,9 @@
 package com.galou.watchmyback.data.repository
 
 import androidx.core.net.toUri
-import com.galou.watchmyback.data.database.dao.UserDao
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.utils.USER_COLLECTION_NAME
 import com.galou.watchmyback.utils.USER_PICTURE_REFERENCE
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 
@@ -28,15 +26,15 @@ class UserRepository {
     /**
      * Instance of the Cloud Firestore database
      */
-    private val instanceRemoteDB = FirebaseFirestore.getInstance()
+    private val remoteDB = FirebaseFirestore.getInstance()
     /**
      * Instance of the Firebase Storage file storage
      */
-    private val storageInstance = FirebaseStorage.getInstance()
+    private val remoteStorage = FirebaseStorage.getInstance()
     /**
      * Instance to the [User] collection in Cloud Firestore database
      */
-    private val userCollection = instanceRemoteDB.collection(USER_COLLECTION_NAME)
+    private val userCollection = remoteDB.collection(USER_COLLECTION_NAME)
 
     /**
      * Get the specified [User] from the Cloud Firestore database
@@ -64,7 +62,7 @@ class UserRepository {
      *
      * @param userId ID of the user requested
      */
-    fun getReferenceUserPictureStorage(userId: String) = storageInstance.reference
+    fun getReferenceUserPictureStorage(userId: String) = remoteStorage.reference
         .child("${USER_PICTURE_REFERENCE}$userId")
 
     /**

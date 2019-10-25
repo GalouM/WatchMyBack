@@ -51,4 +51,5 @@ ext {
     mockitoVersion = "2.27.0"
     truthVersion = '0.44'
     archTestingVersion = '2.0.0'
+    robolectricVersion = "4.3"
 }

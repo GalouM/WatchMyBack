@@ -33,6 +33,15 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
     private val _openSignInActivityEvent = MutableLiveData<Event<Unit>>()
     val openSignInActivityEvent: LiveData<Event<Unit>> = _openSignInActivityEvent
 
+    private val _usernameLD = MutableLiveData<String>()
+    val usernameLD: LiveData<String> = _usernameLD
+
+    private val _emailLD = MutableLiveData<String>()
+    val emailLD: LiveData<String> = _emailLD
+
+    private val _pictureUrlLD = MutableLiveData<String>()
+    val pictureUrlLD: LiveData<String> = _pictureUrlLD
+
     //-----------------------
     // AUTHENTIFICATION
     //-----------------------
@@ -138,12 +147,19 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
         val user = User(firebaseUser.uid, firebaseUser.email, firebaseUser.displayName, firebaseUser.phoneNumber, urlPhoto)
         userRepository.createUserInRemoteDB(user).addOnCompleteListener { task -> 
             if(task.isSuccessful){
-                userRepository.currentUser = user
-                showSnackBarMessage(R.string.welcome)
+                setupUserInformation(user)
             } else {
                 showSnackBarMessage(R.string.error_creatng_user_remote)
             }
         }
+    }
+
+    private fun setupUserInformation(user: User){
+        userRepository.currentUser = user
+        _usernameLD.value = user.username
+        user.pictureUrl?.let { _pictureUrlLD.value = it }
+        user.email?.let{ _emailLD.value = it }
+        showSnackBarMessage(R.string.welcome)
     }
 
     
