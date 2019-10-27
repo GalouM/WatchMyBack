@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewmodel"
+            type="com.galou.watchmyback.profileActivity.ProfileViewModel" />
+    </data>
+
+
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:id="@+id/activity_profile_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".profileActivity.ProfileActivity">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -25,7 +36,8 @@
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             app:layout_constraintTop_toBottomOf="@id/profile_view_toolbar"
             app:layout_constraintStart_toStartOf="parent"
-            android:indeterminate="true"/>
+            android:indeterminate="true"
+            app:visibleOrInvisible="@{viewmodel.dataLoading}"/>
 
         <ImageView
             android:id="@+id/profile_view_picture"
@@ -35,7 +47,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/profile_view_progressbar"
-            app:srcCompat="@drawable/icon_my_profile"/>
+            app:loadUrlInCircle="@{viewmodel.pictureUrlLD}"/>
 
         <ImageView
             android:id="@+id/add_agent_view_add_photo"
@@ -55,12 +67,14 @@
             app:layout_constraintTop_toBottomOf="@id/profile_view_picture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/username">
+            android:hint="@string/username"
+            app:errorMessage="@{viewmodel.errorUsername}">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/profile_view_username"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textCapWords"/>
+                android:inputType="textCapWords"
+                android:text="@={viewmodel.usernameLD}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,12 +86,14 @@
             app:layout_constraintTop_toBottomOf="@id/profile_view_username_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/email">
+            android:hint="@string/email"
+            app:errorMessage="@{viewmodel.errorEmail}">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/profile_view_email"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textEmailAddress"
+                android:text="@={viewmodel.emailLD}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,13 +105,15 @@
             app:layout_constraintTop_toBottomOf="@id/profile_view_email_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/phone_number">
+            android:hint="@string/phone_number"
+            app:errorMessage="@{viewmodel.errorPhoneNumber}">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/profile_view_phone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="phone"/>
+                android:inputType="phone"
+                android:text="@={viewmodel.phoneNumberLD}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -103,3 +121,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

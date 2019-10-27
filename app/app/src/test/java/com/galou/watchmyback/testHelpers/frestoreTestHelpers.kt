@@ -1,9 +1,7 @@
 package com.galou.watchmyback.testHelpers
 
 import android.app.Activity
-import androidx.core.net.toUri
 import com.galou.watchmyback.data.entity.User
-import com.galou.watchmyback.utils.idGenerated
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -50,4 +48,9 @@ data class MockTask<T>(private val resultObject: T?, private val success: Boolea
 }
 
 fun generateTestUser(id: String) = User(
-    id, TEST_EMAIL, TEST_NAME, TEST_PHONE_NUMBER, TEST_PHOTO_URI)
+    id,
+    TEST_EMAIL,
+    TEST_NAME,
+    TEST_PHONE_NUMBER,
+    TEST_PHOTO_URI
+)

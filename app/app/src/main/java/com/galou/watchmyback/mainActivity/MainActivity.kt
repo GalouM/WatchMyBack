@@ -18,7 +18,9 @@ import com.galou.watchmyback.databinding.HeaderNavViewBinding
 import com.galou.watchmyback.profileActivity.ProfileActivity
 import com.galou.watchmyback.utils.RC_SIGN_IN
 import com.galou.watchmyback.utils.displayData
+import com.galou.watchmyback.utils.extension.setupSnackBar
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -68,6 +70,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun setupSnackBar(){
+        val rooView = binding.mainActivityContainer
+        rooView.setupSnackBar(this, viewModel.snackbarMessage, Snackbar.LENGTH_LONG)
 
     }
 

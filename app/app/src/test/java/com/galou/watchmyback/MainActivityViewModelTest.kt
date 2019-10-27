@@ -1,19 +1,15 @@
 package com.galou.watchmyback
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.galou.watchmyback.data.repository.UserRepositoryImpl
 import com.galou.watchmyback.mainActivity.MainActivityViewModel
 import com.galou.watchmyback.testHelpers.FakeAuthResult
 import com.galou.watchmyback.testHelpers.LiveDataTestUtil
 import com.galou.watchmyback.testHelpers.UserRepositoryMocked
-import com.galou.watchmyback.testHelpers.assertSnackBarMessage
 import com.google.common.truth.Truth.assertThat
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito
 
 /**
  * Created by galou on 2019-10-24

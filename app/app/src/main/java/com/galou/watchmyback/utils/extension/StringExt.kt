@@ -3,12 +3,22 @@ package com.galou.watchmyback.utils.extension
 /**
  * Created by galou on 2019-10-25
  */
+/**
+ * Check that the string only contain letters and has more than 3 character
+ *
+ * @return true if the string is conform, false otherwise
+ */
 fun String.isCorrectName(): Boolean{
     val pattern = "[^a-z ]".toRegex(RegexOption.IGNORE_CASE)
     return !this.contains(pattern) && this.length >= 3
 
 }
 
+/**
+ * Check that the string contains a "@" a "." and at least 2 letter after the dot
+ *
+ * @return true if the string is conform, false otherwise
+ */
 fun String.isCorrectEmail(): Boolean{
     val emailPart = this.split("@")
     if(emailPart.size > 1){
@@ -20,6 +30,11 @@ fun String.isCorrectEmail(): Boolean{
 
 }
 
+/**
+ * Check if the string contains only numbers or numbers and start with a "+", contains between 10 and 13 characters
+ *
+ * @return true if the string is conform, false otherwise
+ */
 fun String.isCorrectPhoneNumber(): Boolean{
     val pattern = "(\\+\\d+)?\\d+".toRegex()
     return this.matches(pattern) &&

@@ -13,7 +13,8 @@ import java.lang.IllegalStateException
 object FakeAuthResult : AuthResult {
     private var user: FirebaseUser? = null
 
-    override fun getAdditionalUserInfo(): AdditionalUserInfo = FakeAdditionalUserInfo
+    override fun getAdditionalUserInfo(): AdditionalUserInfo =
+        FakeAdditionalUserInfo
 
     override fun writeToParcel(p0: Parcel?, p1: Int) {
         throw IllegalStateException("Don't try to parcel FakeAuthResult!")
@@ -45,7 +46,8 @@ object FakeAdditionalUserInfo : AdditionalUserInfo {
 
 fun getMockFirebaseUser(): FirebaseUser{
     val user = Mockito.mock(FirebaseUser::class.java)
-    val testUser = generateTestUser(TEST_UID)
+    val testUser =
+        generateTestUser(TEST_UID)
     Mockito.`when`(user.uid).thenReturn(testUser.id)
     Mockito.`when`(user.email).thenReturn(testUser.email)
     Mockito.`when`(user.displayName).thenReturn(testUser.username)

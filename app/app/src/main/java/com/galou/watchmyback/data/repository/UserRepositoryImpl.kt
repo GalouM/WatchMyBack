@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 
 /**
  * Main Entry point to access the [User] data
@@ -44,6 +45,7 @@ class UserRepositoryImpl : UserRepository {
      * Get the specified [User] from the Cloud Firestore database
      *
      * @param userId ID of the user to query
+     * @return [User] [Task] to observe to get the user information
      */
     override fun getUserFromRemoteDB(userId: String): Task<User>{
         val documentSnapshot = userCollection.document(userId).get()
@@ -61,6 +63,7 @@ class UserRepositoryImpl : UserRepository {
      * Create a [User] in the the Cloud Firestore database
      *
      * @param user [User] to create in the database
+     * @return Creation [Task] to observe
      */
     override fun createUserInRemoteDB(user: User) = userCollection.document(user.id).set(user)
 
@@ -68,6 +71,7 @@ class UserRepositoryImpl : UserRepository {
      * Delete the specified [User] in the Cloud Firestore database
      *
      * @param userId ID of the [User] to delete
+     * @return Delete [Task] to observe
      */
     override fun deleteUserFromCloudDB(userId: String) = userCollection.document(userId).delete()
 
@@ -76,10 +80,11 @@ class UserRepositoryImpl : UserRepository {
      *
      * @param user [User] to update
      * @return Update [Task] to observe
+     * @return Update [Task] to observe
      */
     override fun updateUserInRemoteDB(user: User): Task<Void> {
         return userCollection.document(user.id).update(
-            "username", user.username, "email", user.email, "phoneNumber", user.phoneNumber,
+            "username", user.username, "email", user.email, "phoneNumberLD", user.phoneNumber,
             "pictureUrl", user.pictureUrl
         )
     }
@@ -97,6 +102,7 @@ class UserRepositoryImpl : UserRepository {
      *
      * @param urlPicture local url of the picture to upload
      * @param userId ID of the [User]
+     * @return [UploadTask] to observe
      */
     override fun uploadUserPicture(urlPicture: String, userId: String) = getReferenceUserPictureStorage(userId)
         .putFile(urlPicture.toUri())

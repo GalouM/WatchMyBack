@@ -20,6 +20,10 @@ import com.google.firebase.auth.FirebaseUser
 /**
  * [ViewModel] of the [MainActivity]
  *
+ * Inherit from [ViewModel]
+ *
+ * @see ViewModel
+ * @see MainActivity
  *
  *
  * @property userRepository [UserRepositoryImpl] reference
@@ -58,8 +62,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
      */
     fun checkIfUserIsConnected(firebaseUser: FirebaseUser?){
         if(firebaseUser != null){
-            createUserToRemoteDB(firebaseUser)
-            //fetchCurrentUserInformation(firebaseUser)
+            fetchCurrentUserInformation(firebaseUser)
         } else{
             showSignInActivity()
         }
