@@ -6,6 +6,7 @@ import com.galou.watchmyback.testHelpers.FakeAuthResult
 import com.galou.watchmyback.testHelpers.LiveDataTestUtil
 import com.galou.watchmyback.testHelpers.UserRepositoryMocked
 import com.google.common.truth.Truth.assertThat
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
@@ -42,10 +43,11 @@ class MainActivityViewModelTest {
         val firebaseUser = FakeAuthResult.user
         viewModel.checkIfUserIsConnected(firebaseUser)
         assertNull(LiveDataTestUtil.getValue(viewModel.openSignInActivityEvent))
+        //val userValue = LiveDataTestUtil.getValue(viewModel.userLD)
+        //assertEquals(userValue.email, firebaseUser.email)
+        //assertEquals(userValue.username, firebaseUser.displayName)
+        //assertEquals(userValue.pictureUrl, firebaseUser.photoUrl)
         //assertSnackBarMessage(viewModel.snackbarMessage, R.string.welcome)
-        //assertEquals(LiveDataTestUtil.getValue(viewModel.usernameLD), firebaseUser.displayName)
-        //assertEquals(LiveDataTestUtil.getValue(viewModel.emailLD), firebaseUser.email)
-        //(LiveDataTestUtil.getValue(viewModel.pictureUrlLD), firebaseUser.photoUrl.toString())
     }
 
 }

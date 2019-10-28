@@ -23,13 +23,13 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="@dimen/margin_big"
         android:tint="@color/colorOnAccent"
-        app:loadUrlInCircle="@{viewmodel.pictureUrlLD}"/>
+        app:loadUrlInCircle="@{viewmodel.userLD.pictureUrl}"/>
 
     <TextView
         android:id="@+id/header_nav_username"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@{viewmodel.usernameLD}"
+        android:text="@{viewmodel.userLD.username}"
         app:layout_constraintStart_toEndOf="@id/header_nav_profile_image"
         app:layout_constraintTop_toTopOf="@id/header_nav_profile_image"
         app:layout_constraintBottom_toTopOf="@id/header_nav_email"
@@ -43,7 +43,7 @@
         android:id="@+id/header_nav_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@{viewmodel.emailLD}"
+        android:text="@{viewmodel.userLD.email}"
         android:layout_marginStart="@dimen/margin_medium"
         android:textSize="@dimen/nav_header_email"
         app:layout_constraintStart_toEndOf="@id/header_nav_profile_image"

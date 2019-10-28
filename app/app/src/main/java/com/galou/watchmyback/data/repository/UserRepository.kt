@@ -1,5 +1,8 @@
 package com.galou.watchmyback.data.repository
 
+import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.galou.watchmyback.data.entity.User
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
@@ -15,7 +18,7 @@ interface UserRepository {
      * [User] currently connected to the application
      * @see User
      */
-    var currentUser: User?
+    val currentUser: MutableLiveData<User>
     /**
      * Get the specified [User] from the Cloud Firestore database
      *
@@ -51,9 +54,8 @@ interface UserRepository {
     /**
      * Upload a [User]'s profile picture to Firebase Storage
      *
-     * @param urlPicture local url of the picture to upload
-     * @param userId ID of the [User]
+     * @param uriPicture local url of the picture to upload
      * @return [UploadTask] to observe
      */
-    fun uploadUserPicture(urlPicture: String, userId: String): UploadTask?
+    fun uploadUserPictureToRemoteStorageAndGetUrl(uriPicture: Uri): Task<Uri>
 }

@@ -57,7 +57,8 @@
             app:layout_constraintStart_toStartOf="@id/profile_view_picture"
             app:layout_constraintTop_toTopOf="@id/profile_view_picture"
             app:layout_constraintBottom_toBottomOf="@id/profile_view_picture"
-            android:src="@drawable/icon_photo"/>
+            android:src="@drawable/icon_photo"
+            android:onClick="@{() -> viewmodel.pickProfilePicture()}"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/profile_view_username_layout"

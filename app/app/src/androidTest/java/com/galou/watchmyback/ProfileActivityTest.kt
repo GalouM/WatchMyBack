@@ -1,6 +1,7 @@
 package com.galou.watchmyback
 
 import android.content.Intent
+import androidx.lifecycle.MutableLiveData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
@@ -8,6 +9,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
+import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.profileActivity.ProfileActivity
 import com.galou.watchmyback.instrumentedTestHelpers.TEST_UID
@@ -34,7 +36,7 @@ class ProfileActivityTest : KoinTest  {
     @Before
     fun setup(){
         declareMock<UserRepository>{
-            given(this.currentUser).willReturn(user)
+            given(this.currentUser).willReturn(MutableLiveData(user))
         }
         activityTestResult.launchActivity(Intent())
     }

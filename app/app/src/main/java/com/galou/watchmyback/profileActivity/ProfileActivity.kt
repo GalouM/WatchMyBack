@@ -1,5 +1,6 @@
 package com.galou.watchmyback.profileActivity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -9,7 +10,10 @@ import androidx.databinding.DataBindingUtil
 import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
 import com.galou.watchmyback.databinding.ActivityProfileBinding
+import com.galou.watchmyback.utils.RC_LIBRARY_PICK
 import com.galou.watchmyback.utils.extension.setupSnackBar
+import com.galou.watchmyback.utils.intentSinglePicture
+import com.galou.watchmyback.utils.requestPermissionStorage
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -26,6 +30,13 @@ class ProfileActivity : AppCompatActivity() {
         configureToolbar()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode){
+            RC_LIBRARY_PICK -> viewModel.fetchPicturePickedByUser(resultCode, data?.data)
+        }
+    }
+
     private fun configureBinding(){
         binding = DataBindingUtil.setContentView(this, R.layout.activity_profile)
         binding.viewmodel = viewModel
@@ -39,6 +50,7 @@ class ProfileActivity : AppCompatActivity() {
     private fun setupObserverViewModel(){
         setupSnackBar()
         setupDataSaved()
+        setupOpenPhotoDialog()
     }
 
     private fun setupSnackBar(){
@@ -49,6 +61,10 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun setupDataSaved(){
         viewModel.dataSaved.observe(this, EventObserver{ finish() })
+    }
+
+    private fun setupOpenPhotoDialog(){
+        viewModel.openPhotoLibrary.observe(this, EventObserver{ openPhotoLibrary() })
     }
 
     //-------------------------
@@ -73,4 +89,17 @@ class ProfileActivity : AppCompatActivity() {
 
         return super.onOptionsItemSelected(item)
     }
+
+    //-------------------------
+    //  PHOTO ACTIONS
+    //-------------------------
+
+    private fun openPhotoLibrary(){
+        requestPermissionStorage(this)
+        if(requestPermissionStorage(this)) {
+            startActivityForResult(intentSinglePicture(), RC_LIBRARY_PICK)
+        }
+
+    }
+
 }

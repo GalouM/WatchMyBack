@@ -1,6 +1,9 @@
 package com.galou.watchmyback.data.repository
 
+import android.net.Uri
 import androidx.core.net.toUri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.utils.USER_COLLECTION_NAME
 import com.galou.watchmyback.utils.USER_PICTURE_REFERENCE
@@ -20,12 +23,11 @@ import com.google.firebase.storage.UploadTask
  */
 
 class UserRepositoryImpl : UserRepository {
-
     /**
      * [User] currently connected to the application
+     * @see User
      */
-    override var currentUser: User? = null
-
+    override val currentUser = MutableLiveData<User>()
 
     // REMOTE REQUEST
     /**
@@ -84,7 +86,7 @@ class UserRepositoryImpl : UserRepository {
      */
     override fun updateUserInRemoteDB(user: User): Task<Void> {
         return userCollection.document(user.id).update(
-            "username", user.username, "email", user.email, "phoneNumberLD", user.phoneNumber,
+            "username", user.username, "email", user.email, "phoneNumber", user.phoneNumber,
             "pictureUrl", user.pictureUrl
         )
     }
@@ -100,11 +102,22 @@ class UserRepositoryImpl : UserRepository {
     /**
      * Upload a [User]'s profile picture to Firebase Storage
      *
-     * @param urlPicture local url of the picture to upload
-     * @param userId ID of the [User]
+     * @param uriPicture local url of the picture to upload
      * @return [UploadTask] to observe
      */
-    override fun uploadUserPicture(urlPicture: String, userId: String) = getReferenceUserPictureStorage(userId)
-        .putFile(urlPicture.toUri())
+    override fun uploadUserPictureToRemoteStorageAndGetUrl(uriPicture: Uri): Task<Uri>{
+        val referenceStorage = getReferenceUserPictureStorage(currentUser!!.value!!.id)
+        val uploadTask = referenceStorage.putFile(uriPicture)
+        return uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+            if(!task.isSuccessful){
+                task.exception?.let{ exception ->
+                    throw exception
+                }
+            } else {
+                return@Continuation referenceStorage.downloadUrl
+            }
+        })
+
+    }
 
 }

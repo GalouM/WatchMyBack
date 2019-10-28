@@ -31,9 +31,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField('String', "AppName", appName)
         }
         debug {
             testCoverageEnabled true
+            buildConfigField('String', "AppName", appName)
         }
     }
 
@@ -134,4 +136,7 @@ dependencies {
     implementation "com.google.firebase:firebase-auth:$rootProject.firebaseAuthVersion"
     implementation "com.firebaseui:firebase-ui-auth:$rootProject.authUIVersion"
     implementation "com.google.firebase:firebase-firestore:$rootProject.firestoreVersion"
+
+    //EASY PERMISSIONS
+    implementation "pub.devrel:easypermissions:$rootProject.easyPermVersion"
 }

@@ -103,4 +103,8 @@
     <string name="incorrect_username">Incorrect username</string>
     <string name="incorrect_email">Incorrect Email</string>
     <string name="incorrect_phone_number">Incorrect phone number</string>
+    <string name="pick_library">Pick from library</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="app_storage_perm">This application needs storage permission</string>
+    <string name="error_download_picture">Error while downloading picture</string>
 </resources>

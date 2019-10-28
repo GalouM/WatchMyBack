@@ -1,9 +1,12 @@
 package com.galou.watchmyback
 
+import android.app.Activity.RESULT_OK
+import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.core.net.toUri
+import androidx.lifecycle.MutableLiveData
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.profileActivity.ProfileViewModel
-import com.galou.watchmyback.instrumentedTestHelpers.*
 import com.galou.watchmyback.testHelpers.LiveDataTestUtil
 import com.galou.watchmyback.testHelpers.TEST_UID
 import com.galou.watchmyback.testHelpers.UserRepositoryMocked
@@ -12,11 +15,16 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mockito
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
 /**
  * Created by galou on 2019-10-25
  */
+@Config(sdk = [Build.VERSION_CODES.P])
+@RunWith(RobolectricTestRunner::class)
 class ProfileViewModelUnitTest {
     private lateinit var viewModel: ProfileViewModel
     private lateinit var userRepository: UserRepositoryMocked
@@ -28,9 +36,8 @@ class ProfileViewModelUnitTest {
     @Before
     fun setupViewModel(){
         userRepository = Mockito.mock(UserRepositoryMocked::class.java)
-        userMocked =
-            generateTestUser(TEST_UID)
-        Mockito.`when`(userRepository.currentUser).thenReturn(userMocked)
+        userMocked = generateTestUser(TEST_UID)
+        Mockito.`when`(userRepository.currentUser).thenReturn(MutableLiveData(userMocked))
         viewModel = ProfileViewModel(userRepository)
 
     }
@@ -66,6 +73,13 @@ class ProfileViewModelUnitTest {
     }
 
      */
+
+    @Test
+    fun clickPicture_OpenPickPhotoDialog(){
+        val newPicturePath = "http://newUri"
+        viewModel.fetchPicturePickedByUser(RESULT_OK, newPicturePath.toUri())
+        //assertEquals(LiveDataTestUtil.getValue(viewModel.pictureUrlLD), newPicturePath)
+    }
 
 
 }

@@ -37,14 +37,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
     private val _openSignInActivityEvent = MutableLiveData<Event<Unit>>()
     val openSignInActivityEvent: LiveData<Event<Unit>> = _openSignInActivityEvent
 
-    private val _usernameLD = MutableLiveData<String>()
-    val usernameLD: LiveData<String> = _usernameLD
-
-    private val _emailLD = MutableLiveData<String>()
-    val emailLD: LiveData<String> = _emailLD
-
-    private val _pictureUrlLD = MutableLiveData<String>()
-    val pictureUrlLD: LiveData<String> = _pictureUrlLD
+    val userLD: LiveData<User> = userRepository.currentUser
 
     //-----------------------
     // AUTHENTIFICATION
@@ -163,11 +156,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
      * @param user [User] fetched from the database
      */
     private fun setupUserInformation(user: User){
-        userRepository.currentUser = user
-        displayData("USER: $user")
-        _usernameLD.value = user.username
-        user.pictureUrl?.let { _pictureUrlLD.value = it }
-        user.email?.let{ _emailLD.value = it }
+        userRepository.currentUser.value = user
         showSnackBarMessage(R.string.welcome)
     }
 

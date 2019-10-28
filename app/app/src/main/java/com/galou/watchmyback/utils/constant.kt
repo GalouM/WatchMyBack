@@ -1,5 +1,7 @@
 package com.galou.watchmyback.utils
 
+import android.Manifest
+
 /**
  * Created by galou on 2019-10-20
  */
@@ -76,3 +78,9 @@ const val USER_PICTURE_REFERENCE = "images/userPicture/"
 
 // ------ RESULT CODE ACTIVITIES -------
 const val RC_SIGN_IN = 100
+const val RC_LIBRARY_PICK = 200
+const val RC_IMAGE_PERMS = 400
+
+// ------ PERMISSIONS -------
+const val PERMS_EXT_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
+

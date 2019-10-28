@@ -1,5 +1,8 @@
 package com.galou.watchmyback.testHelpers
 
+import android.net.Uri
+import androidx.core.net.toUri
+import androidx.lifecycle.MutableLiveData
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.repository.UserRepository
 import com.google.android.gms.tasks.Task
@@ -11,7 +14,7 @@ import com.google.firebase.storage.UploadTask
 
 open class UserRepositoryMocked : UserRepository{
 
-    override var currentUser: User? = null
+    override val currentUser = MutableLiveData<User>()
 
     override fun getUserFromRemoteDB(userId: String): Task<User> =
         MockTask(
@@ -27,5 +30,8 @@ open class UserRepositoryMocked : UserRepository{
     override fun updateUserInRemoteDB(user: User): Task<Void> =
         MockTask(null, true)
 
-    override fun uploadUserPicture(urlPicture: String, userId: String): UploadTask? = null
+    override fun uploadUserPictureToRemoteStorageAndGetUrl(uriPicture: Uri): Task<Uri> {
+        val uri = "http://myurl".toUri()
+        return MockTask(uri, true)
+    }
 }

@@ -1,5 +1,8 @@
 package com.galou.watchmyback.profileActivity
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -51,8 +54,11 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
 
     private val _dataSaved = MutableLiveData<Event<Boolean>>()
     val dataSaved: LiveData<Event<Boolean>> = _dataSaved
-    
-    private var user: User
+
+    private val _openPhotoLibrary = MutableLiveData<Event<Unit>>()
+    val openPhotoLibrary: LiveData<Event<Unit>> = _openPhotoLibrary
+
+    val user = userRepository.currentUser.value!!
 
     /**
      * Emit the user information when the view model is created
@@ -61,8 +67,6 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
      */
     init {
         _dataLoading.value = true
-        
-        user = userRepository.currentUser!!
         usernameLD.value = user.username
         emailLD.value = user.email
         _pictureUrlLD.value = user.pictureUrl
@@ -92,6 +96,20 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
 
     }
 
+    fun pickProfilePicture(){
+        _openPhotoLibrary.value = Event(Unit)
+    }
+
+    fun fetchPicturePickedByUser(resultCode: Int, uri: Uri?){
+        _dataLoading.value = true
+        if (resultCode == RESULT_OK){
+            uri?.let {
+                downloadPictureToRemoteStorage(uri)
+            }
+        }
+
+    }
+
     /**
      * Update the user information in the repository and the remote database
      *
@@ -106,7 +124,7 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
         userRepository.updateUserInRemoteDB(user)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful){
-                    userRepository.currentUser = user
+                    userRepository.currentUser.value = user
                     _dataSaved.value = Event(true)
                     showSnackBarMessage(R.string.info_updated)
                     _dataLoading.value = false
@@ -145,6 +163,21 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
 
         return infoCorrect
 
+    }
+
+    private fun downloadPictureToRemoteStorage(uriPicture: Uri){
+        userRepository.uploadUserPictureToRemoteStorageAndGetUrl(uriPicture)
+            .addOnCompleteListener {task ->
+                if (task.isSuccessful){
+                    user.pictureUrl = task.result.toString()
+                    _pictureUrlLD.value = user.pictureUrl
+                    userRepository.currentUser.value = user
+                } else {
+                    showSnackBarMessage(R.string.error_download_picture)
+                }
+                _dataLoading.value = false
+
+            }
     }
 
     // UTILS

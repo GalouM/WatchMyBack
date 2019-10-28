@@ -9,10 +9,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.firebase.ui.auth.AuthUI
 import com.galou.watchmyback.*
+import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.databinding.ActivityMainBinding
 import com.galou.watchmyback.databinding.HeaderNavViewBinding
 import com.galou.watchmyback.profileActivity.ProfileActivity
@@ -67,6 +69,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun setupObserverViewModel(){
         setupSnackBar()
         setupOpenSignInActivity()
+
+        viewModel.userLD.observe(this, Observer { displayData("$it") })
     }
 
     private fun setupSnackBar(){
@@ -183,6 +187,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             RC_SIGN_IN
         )
     }
+
 
 
 }
