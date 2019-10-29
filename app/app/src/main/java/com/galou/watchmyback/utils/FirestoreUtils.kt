@@ -9,12 +9,22 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 /**
- * https://github.com/Kotlin/kotlinx.coroutines/blob/master/integration/kotlinx-coroutines-play-services/src/Tasks.kt
+ * Await for completion of an [Task] without blocking a thread
  *
- * @param T
- * @return
+ * Return a [Result] with data or and error
+ *
+ * This suspending function is cancellable.
+ * If the [Job] of the current coroutine is cancelled or completed while this suspending function is waiting, this function
+ * stops waiting for the completion stage and immediately resumes with [CancellationException].
+ *
+ * Took and modified from "https://github.com/Kotlin/kotlinx.coroutines"
+ *
+ * @param T Type of [Result] to return
+ * @return a [Result] with its data if the task succeed or its error
+ *
+ * @see Task
+ * @see Result
  */
-
 suspend fun <T> Task<T>.await(): Result<T> {
     // fast path
     if (isComplete) {
@@ -44,6 +54,23 @@ suspend fun <T> Task<T>.await(): Result<T> {
     }
 }
 
+/**
+ * Await for completion of an [UploadTask] without blocking a thread
+ *
+ * Return a [Result] with data or and error
+ *
+ * This suspending function is cancellable.
+ * If the [Job] of the current coroutine is cancelled or completed while this suspending function is waiting, this function
+ * stops waiting for the completion stage and immediately resumes with [CancellationException].
+ *
+ * Took and modified from "https://github.com/Kotlin/kotlinx.coroutines"
+ *
+ * @param T Type of [Result] to return
+ * @return a [Result] with its data if the task succeed or its error
+ *
+ * @see UploadTask
+ * @see Result
+ */
 suspend fun <T> UploadTask.await(): Result<T> {
     // fast path
     if (isComplete) {
@@ -73,10 +100,23 @@ suspend fun <T> UploadTask.await(): Result<T> {
     }
 }
 
+/**
+ * Generic class that holds a value and its status
+ *
+ * @param R Type of result
+ */
 sealed class Result<out R> {
     data class Success<out T>(val data: T) : Result<T>()
     data class Error(val exception: Exception) : Result<Nothing>()
     data class Canceled(val exception: Exception?) : Result<Nothing>()
+
+    override fun toString(): String {
+        return when (this) {
+            is Success<*> -> "Success[data=$data]"
+            is Error -> "Error[exception=$exception]"
+            is Canceled -> "Canceled[exception=$exception]"
+        }
+    }
 }
 
 

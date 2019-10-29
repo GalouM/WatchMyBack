@@ -7,7 +7,13 @@ import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
 /**
- * Created by galou on 2019-10-28
+ * Abstract Class used to build [ViewModel]
+ *
+ * Inherit from [ViewModel] and implement [CoroutineScope] in order to execute coroutines jobs
+ *
+ * @see ViewModel
+ * @see CoroutineScope
+ *
  */
 abstract class BaseViewModel : ViewModel(), CoroutineScope {
 

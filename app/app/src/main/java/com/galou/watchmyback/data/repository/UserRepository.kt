@@ -18,10 +18,14 @@ interface UserRepository {
      */
     val currentUser: MutableLiveData<User>
     /**
-     * Suspend function, get the specified [User] from the Cloud Firestore database
+     * Suspend function, get the specified [User] from the Cloud Firestore database.
+     *
+     * Return a [Result] with a [User] or an error
      *
      * @param userId ID of the user to query
-     * @return [User] requested if it exist in the database
+     * @return [Result] with the [User] requested if it exist in the database
+     *
+     * @see Result
      */
     suspend fun getUserFromRemoteDB(userId: String): Result<User>
 
@@ -29,7 +33,9 @@ interface UserRepository {
      * Suspend function, create a [User] in the the Cloud Firestore database
      *
      * @param user [User] to create in the database
-     * @return [Void] result of the creation, if ti was successful or not
+     * @return [Result] of the operation
+     *
+     * @see Result
      */
     suspend fun createUserInRemoteDB(user: User): Result<Void?>
 
@@ -37,7 +43,7 @@ interface UserRepository {
      * Delete the specified [User] in the Cloud Firestore database
      *
      * @param userId ID of the [User] to delete
-     * @return [Void] or null if the task was successful or not
+     * @return [Result] of the operation
      */
     suspend fun deleteUserFromCloudDB(userId: String): Result<Void?>
 
@@ -45,15 +51,21 @@ interface UserRepository {
      * Update a [User] in the remote database
      *
      * @param user [User] to update
-     * @return [Void] or null if the task was successful or not
+     * @return [Result] of the operation
+     *
+     * @see Result
      */
     suspend fun updateUserInRemoteDB(user: User): Result<Void?>
 
     /**
      * Upload a [User]'s profile picture to Firebase Storage
      *
+     * The suspend function return a [Result] with the uri of the picture in the remote storage
+     *
      * @param uriPicture local url of the picture to upload
-     * @return [UploadTask] to observe
+     * @return [Result] with the uri of picture in the remote storage or error message
+     *
+     * @see Result
      */
     suspend fun uploadUserPictureToRemoteStorageAndGetUrl(uriPicture: Uri): Result<Uri>
 }

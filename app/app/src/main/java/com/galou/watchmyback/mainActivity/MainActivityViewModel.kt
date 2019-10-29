@@ -25,9 +25,9 @@ import kotlin.coroutines.CoroutineContext
 /**
  * [ViewModel] of the [MainActivity]
  *
- * Inherit from [ViewModel]
+ * Inherit from [BaseViewModel]
  *
- * @see ViewModel
+ * @see BaseViewModel
  * @see MainActivity
  *
  *

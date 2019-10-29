@@ -23,9 +23,9 @@ import kotlinx.coroutines.launch
 /**
  * [ViewModel] of [ProfileActivity]
  *
- * Inherit from [ViewModel]
+ * Inherit from [BaseViewModel]
  *
- * @see ViewModel
+ * @see BaseViewModel
  * @see ProfileActivity
  *
  *
