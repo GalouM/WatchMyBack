@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View" />
+        <import type="com.galou.watchmyback.data.entity.User"/>
+
         <variable
             name="viewmodel"
             type="com.galou.watchmyback.mainActivity.MainActivityViewModel" />

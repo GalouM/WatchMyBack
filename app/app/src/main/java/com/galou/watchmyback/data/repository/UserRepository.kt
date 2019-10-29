@@ -27,7 +27,7 @@ interface UserRepository {
      *
      * @see Result
      */
-    suspend fun getUserFromRemoteDB(userId: String): Result<User>
+    suspend fun getUserFromRemoteDB(userId: String): Result<User?>
 
     /**
      * Suspend function, create a [User] in the the Cloud Firestore database
@@ -55,7 +55,16 @@ interface UserRepository {
      *
      * @see Result
      */
-    suspend fun updateUserInRemoteDB(user: User): Result<Void?>
+    suspend fun updateUserInfoInRemoteDB(user: User): Result<Void?>
+
+    /**
+     * Update a [User] profile picture path in the remote database
+     *
+     * @param userId ID of the user to update
+     * @param urlPicure url of the new profile picture
+     * @return [Result] of the operation
+     */
+    suspend fun updateUserPicturePathInRemoteDB(userId: String, urlPicure: String): Result<Void?>
 
     /**
      * Upload a [User]'s profile picture to Firebase Storage

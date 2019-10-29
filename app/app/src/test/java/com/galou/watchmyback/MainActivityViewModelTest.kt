@@ -1,5 +1,6 @@
 package com.galou.watchmyback
 
+import android.app.Activity.RESULT_OK
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.galou.watchmyback.mainActivity.MainActivityViewModel
 import com.galou.watchmyback.testHelpers.*
@@ -62,5 +63,24 @@ class MainActivityViewModelTest {
         assertSnackBarMessage(viewModel.snackbarMessage, R.string.welcome)
 
     }
+
+    @Test
+    fun checkUserIsCreated_AfterSignIn(){
+        val firebaseUser = FakeAuthResult.user
+        viewModel.handleSignIngActivityResult(RESULT_OK, null, firebaseUser)
+        assertNull(LiveDataTestUtil.getValue(viewModel.openSignInActivityEvent))
+        val userValue = LiveDataTestUtil.getValue(viewModel.userLD)
+        assertEquals(userValue.email, firebaseUser.email)
+        assertEquals(userValue.username, firebaseUser.displayName)
+        assertEquals(userValue.pictureUrl, firebaseUser.photoUrl)
+        assertSnackBarMessage(viewModel.snackbarMessage, R.string.welcome)
+    }
+
+    @Test
+    fun showModificationSAvedMessage_afterProfileSaved(){
+        viewModel.handleResultAfterProfileActivityClosed(RESULT_OK)
+        assertSnackBarMessage(viewModel.snackbarMessage, R.string.info_updated)
+    }
+
 
 }

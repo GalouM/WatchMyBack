@@ -25,7 +25,7 @@ const val NEW_USERNAME = "New Name"
 const val NEW_PHONE_NB = "5553457897"
 const val NEW_EMAIL = "new@email.com"
 
-fun generateTestUser(id: String) = User(
+fun generateTestUser(id: String): User = User(
     id,
     TEST_EMAIL,
     TEST_NAME,

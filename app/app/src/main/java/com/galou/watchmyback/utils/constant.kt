@@ -80,6 +80,7 @@ const val USER_PICTURE_REFERENCE = "images/userPicture/"
 const val RC_SIGN_IN = 100
 const val RC_LIBRARY_PICK = 200
 const val RC_IMAGE_PERMS = 400
+const val RC_PROFILE = 500
 
 // ------ PERMISSIONS -------
 const val PERMS_EXT_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE

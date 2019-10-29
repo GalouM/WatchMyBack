@@ -38,7 +38,7 @@ class ProfileViewModelUnitTest: KoinTest {
     @Before
     fun setupViewModel(){
         userRepository = FakeUserRepositoryImpl()
-        userMocked = generateTestUser(TEST_UID)
+        userMocked = generateTestUser(TEST_UID)!!
         userRepository.currentUser.value = userMocked
         viewModel = ProfileViewModel(userRepository)
 

@@ -31,7 +31,7 @@ task clean(type: Delete) {
 
 ext {
     roomVersion = '2.2.1'
-    glideVersion = '4.8.0'
+    glideVersion = '4.9.0'
     gsonVersion = '2.8.5'
     espressoCoreVersion= '3.2.0'
     jUnitVersion = '4.12'
@@ -59,4 +59,8 @@ ext {
     firebaseAuthVersion = "16.0.5"
     powerMockApiVersion = "1.4.12"
     powerMockModuleVersion = "1.6.2"
+    annotationVersion = "1.1.0"
+    espressoVersion = "3.2.0"
+    junitVersion = "4.12"
+    testRunnerAndroidVersion = "1.2.0"
 }

@@ -1,5 +1,6 @@
 package com.galou.watchmyback.profileActivity
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -60,7 +61,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setupDataSaved(){
-        viewModel.dataSaved.observe(this, EventObserver{ finish() })
+        viewModel.dataSaved.observe(this, EventObserver{ modificationsSaved() })
     }
 
     private fun setupOpenPhotoDialog(){
@@ -100,6 +101,11 @@ class ProfileActivity : AppCompatActivity() {
             startActivityForResult(intentSinglePicture(), RC_LIBRARY_PICK)
         }
 
+    }
+
+    private fun modificationsSaved(){
+        setResult(Activity.RESULT_OK)
+        finish()
     }
 
 }

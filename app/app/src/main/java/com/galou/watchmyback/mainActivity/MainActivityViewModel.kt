@@ -1,6 +1,7 @@
 package com.galou.watchmyback.mainActivity
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.LiveData
@@ -81,7 +82,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
      * @param firebaseUser user connected to the app through Firebase Authentification
      */
     fun handleSignIngActivityResult(resultCode: Int, data: Intent?, firebaseUser: FirebaseUser?){
-        if(resultCode == Activity.RESULT_OK){
+        if(resultCode == RESULT_OK){
             checkIfUserIsConnected(firebaseUser)
         }
         else {
@@ -113,6 +114,10 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
             }
     }
 
+    fun handleResultAfterProfileActivityClosed(resultCode: Int){
+        if(resultCode == RESULT_OK) showSnackBarMessage(R.string.info_updated)
+    }
+
     /**
      * Fetch the users information from the remote database
      * Create a user in the remote database if it doesn't already exist
@@ -126,7 +131,15 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
         if (getUserJob?.isActive == true) getUserJob?.cancel()
         getUserJob = launch {
             when (val result = userRepository.getUserFromRemoteDB(firebaseUser.uid)) {
-                is Result.Success -> setupUserInformation(result.data)
+                is Result.Success -> {
+                    val user = result.data
+                    if(user != null){
+                        setupUserInformation(user)
+                    } else {
+                        createUserToRemoteDB(firebaseUser)
+                    }
+
+                }
                 is Result.Error -> showSnackBarMessage(R.string.error_fetching)
                 is Result.Canceled -> showSnackBarMessage(R.string.canceled)
             }
@@ -160,7 +173,6 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
      */
     private fun setupUserInformation(user: User){
         userRepository.currentUser.value = user
-        println(user)
         showSnackBarMessage(R.string.welcome)
     }
 

@@ -18,6 +18,7 @@ import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.databinding.ActivityMainBinding
 import com.galou.watchmyback.databinding.HeaderNavViewBinding
 import com.galou.watchmyback.profileActivity.ProfileActivity
+import com.galou.watchmyback.utils.RC_PROFILE
 import com.galou.watchmyback.utils.RC_SIGN_IN
 import com.galou.watchmyback.utils.displayData
 import com.galou.watchmyback.utils.extension.setupSnackBar
@@ -53,6 +54,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
             RC_SIGN_IN -> viewModel.handleSignIngActivityResult(resultCode, data, authFirebase.currentUser)
+            RC_PROFILE ->  viewModel.handleResultAfterProfileActivityClosed(resultCode)
         }
     }
 
@@ -154,7 +156,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun openProfileActivity(){
         val intent = Intent(this, ProfileActivity::class.java)
-        startActivity(intent)
+        startActivityForResult(intent, RC_PROFILE)
     }
 
     private fun openMyTripActivity(){

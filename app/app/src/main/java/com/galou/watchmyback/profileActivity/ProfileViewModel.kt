@@ -1,7 +1,6 @@
 package com.galou.watchmyback.profileActivity
 
 import android.app.Activity.RESULT_OK
-import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -68,6 +67,7 @@ class ProfileViewModel (val userRepository: UserRepository) : BaseViewModel(){
 
     // Coroutines Jobs
     private var updateUserJob: Job? = null
+    private var uploadPictureJob: Job? = null
     private var updatePictureJob: Job? = null
 
     /**
@@ -135,7 +135,7 @@ class ProfileViewModel (val userRepository: UserRepository) : BaseViewModel(){
     /**
      * Update the user information in the repository and the remote database
      *
-     * @see UserRepository.updateUserInRemoteDB
+     * @see UserRepository.updateUserInfoInRemoteDB
      * @see UserRepository.currentUser
      *
      */
@@ -145,7 +145,7 @@ class ProfileViewModel (val userRepository: UserRepository) : BaseViewModel(){
         user.username = usernameLD.value
         if(updateUserJob?.isActive == true) updateUserJob?.cancel()
         updateUserJob = launch {
-            when(userRepository.updateUserInRemoteDB(user)){
+            when(userRepository.updateUserInfoInRemoteDB(user)){
                 is Result.Success -> {
                     userRepository.currentUser.value = user
                     _dataSaved.value = Event(true)
@@ -197,20 +197,32 @@ class ProfileViewModel (val userRepository: UserRepository) : BaseViewModel(){
      * @see UserRepository.uploadUserPictureToRemoteStorageAndGetUrl
      */
     private fun downloadPictureToRemoteStorage(uriPicture: Uri){
-        if (updatePictureJob?.isActive == true) updatePictureJob?.cancel()
-        updatePictureJob = launch {
+        if (uploadPictureJob?.isActive == true) uploadPictureJob?.cancel()
+        uploadPictureJob = launch {
             when(val uriStorage = userRepository.uploadUserPictureToRemoteStorageAndGetUrl(uriPicture)){
-                is Result.Success -> {
-                    user.pictureUrl = uriStorage.data.toString()
-                    displayData("${user.pictureUrl}")
-                    _pictureUrlLD.value = user.pictureUrl
-                    userRepository.currentUser.value = user
-                }
+                is Result.Success -> updateUserPictureWithNewPicture(uriStorage.data.toString())
                 is Result.Error -> showSnackBarMessage(R.string.error_download_picture)
                 is Result.Canceled -> showSnackBarMessage(R.string.canceled)
             }
             _dataLoading.value = false
         }
+    }
+    
+    private fun updateUserPictureWithNewPicture(uri: String){
+        if (updatePictureJob?.isActive == true) updatePictureJob?.cancel()
+        updatePictureJob = launch { 
+            when(userRepository.updateUserPicturePathInRemoteDB(user.id, uri)){
+                is Result.Success -> {
+                    user.pictureUrl = uri
+                    userRepository.currentUser.value = user
+                    _pictureUrlLD.value = user.pictureUrl
+                    showSnackBarMessage(R.string.picture_updated)
+                }
+                is Result.Error -> showSnackBarMessage(R.string.error_update_picture)
+                is Result.Canceled -> showSnackBarMessage(R.string.canceled)
+            }
+        }
+        
     }
 
     // UTILS

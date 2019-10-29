@@ -40,10 +40,10 @@ class UserRepositoryImpl : UserRepository {
     private val userCollection = remoteDB.collection(USER_COLLECTION_NAME)
 
 
-    override suspend fun getUserFromRemoteDB(userId: String): Result<User> {
+    override suspend fun getUserFromRemoteDB(userId: String): Result<User?> {
         return when(val resultDocumentSnapshot = userCollection.document(userId).get().await()){
             is Result.Success -> {
-                val user = resultDocumentSnapshot.data.toObject(User::class.java)!!
+                val user = resultDocumentSnapshot.data.toObject(User::class.java)
                 Result.Success(user)
             }
             is Result.Error -> Result.Error(resultDocumentSnapshot.exception)
@@ -56,10 +56,20 @@ class UserRepositoryImpl : UserRepository {
 
     override suspend fun deleteUserFromCloudDB(userId: String) = userCollection.document(userId).delete().await()
 
-    override suspend fun updateUserInRemoteDB(user: User): Result<Void?> {
+    override suspend fun updateUserInfoInRemoteDB(user: User): Result<Void?> {
         return userCollection.document(user.id).update(
-            "username", user.username, "email", user.email, "phoneNumber", user.phoneNumber,
-            "pictureUrl", user.pictureUrl
+            "username", user.username,
+            "email", user.email,
+            "phoneNumber", user.phoneNumber
+        ).await()
+    }
+
+    override suspend fun updateUserPicturePathInRemoteDB(
+        userId: String,
+        urlPicure: String
+    ): Result<Void?> {
+        return userCollection.document(userId).update(
+            "pictureUrl", urlPicure
         ).await()
     }
 

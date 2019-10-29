@@ -108,4 +108,6 @@
     <string name="app_storage_perm">This application needs storage permission</string>
     <string name="error_download_picture">Error while downloading picture</string>
     <string name="canceled">Operation was canceled</string>
+    <string name="picture_updated">Your picture was updated</string>
+    <string name="error_update_picture">Error while updating your picture</string>
 </resources>

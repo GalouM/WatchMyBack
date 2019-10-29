@@ -5,6 +5,9 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.galou.watchmyback.R
+import com.galou.watchmyback.utils.GlideApp
+import com.galou.watchmyback.utils.WatchMyBackAppGlide
+import com.galou.watchmyback.utils.displayData
 
 /**
  * Load an URL  into a [ImageView] using [Glide] and crop it in circle
@@ -18,8 +21,8 @@ import com.galou.watchmyback.R
  * @see RequestOptions.circleCropTransform
  */
 @BindingAdapter("loadUrlInCircle")
-fun ImageView.bindLoadUrlInCircle(url: String?){
-    val glide = Glide.with(this.context)
+fun ImageView.bindLoadUrlInCircle(url: String?) {
+    val glide = GlideApp.with(this.context)
     glide
         .load(url)
         .apply(RequestOptions.circleCropTransform())
@@ -41,5 +44,8 @@ fun ImageView.bindLoadUrlInCircle(url: String?){
  */
 @BindingAdapter("loadUrl")
 fun ImageView.bindLoadUrl(url: String?){
-    Glide.with(this.context).load(url).apply(RequestOptions.centerCropTransform()).into(this)
+    GlideApp.with(this.context)
+        .load(url)
+        .apply(RequestOptions.centerCropTransform())
+        .into(this)
 }

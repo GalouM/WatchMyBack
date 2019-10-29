@@ -66,9 +66,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    kapt "androidx.annotation:annotation:$rootProject.annotationVersion"
 
     //DESIGN
     implementation 'com.google.android.material:material:1.2.0-alpha01'
@@ -87,6 +85,7 @@ dependencies {
 
     //GLIDE
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
 
     //GSON
     implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
@@ -104,8 +103,7 @@ dependencies {
     testImplementation "org.koin:koin-test:$rootProject.koinVersion"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutinesVersion"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootProject.coroutinesVersion"
-    testImplementation "org.powermock:powermock-api-mockito:$rootProject.powerMockApiVersion"
-    testImplementation "org.powermock:powermock-module-junit4:$rootProject.powerMockModuleVersion"
+    testImplementation "junit:junit:$rootProject.junitVersion"
 
     //INSTRUMENTED TEST
     androidTestImplementation ("org.koin:koin-test:$rootProject.koinVersion") { exclude group: 'org.mockito' }
@@ -115,6 +113,8 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoCoreVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.espressoCoreVersion"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootProject.coroutinesVersion"
+    androidTestImplementation "androidx.test:runner:$rootProject.testRunnerAndroidVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"
 
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
@@ -139,14 +139,12 @@ dependencies {
     implementation "com.firebaseui:firebase-ui-auth:$rootProject.authUIVersion"
     implementation "com.google.firebase:firebase-firestore:$rootProject.firestoreVersion"
     implementation "com.google.firebase:firebase-storage:$rootProject.firebaseStorageVersion"
-    implementation "com.google.firebase:firebase-auth:$rootProject.firebaseAuthVersion"
 
     //EASY PERMISSIONS
     implementation "pub.devrel:easypermissions:$rootProject.easyPermVersion"
 
     //KOTLIN
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutinesVersion"
     implementation "androidx.core:core-ktx:$rootProject.coreKtxVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
