@@ -172,15 +172,16 @@ class ProfileViewModel (val userRepository: UserRepository) : BaseViewModel(){
      */
     private fun userInputCorrect(): Boolean {
         var infoCorrect = true
-        if (usernameLD.value?.isCorrectName() == false){
+        if (usernameLD.value?.isCorrectName() != true){
             _errorUsername.value = R.string.incorrect_username
             infoCorrect = false
         }
-        if (emailLD.value?.isCorrectEmail() == false){
+        if (emailLD.value?.isCorrectEmail() != true){
             _errorEmail.value = R.string.incorrect_email
             infoCorrect = false
         }
-        if (phoneNumberLD.value?.isCorrectPhoneNumber() == false) {
+
+        if (phoneNumberLD.value?.isCorrectPhoneNumber() != true) {
             _errorPhoneNumber.value = R.string.incorrect_phone_number
             infoCorrect = false
         }

@@ -87,6 +87,34 @@ class Converters {
             throw Exception("Weather Condition not recognize")
         }
 
+        @TypeConverter
+        @JvmStatic
+        fun fromUnitSytem(sytem: UnitSystem) = sytem.systemName
+
+        @TypeConverter
+        @JvmStatic
+        fun toUnitsystem(system: String): UnitSystem {
+            UnitSystem.values().forEach {
+                if(system == it.systemName) return it
+            }
+
+            throw Exception("Weather Condition not recognize")
+        }
+
+        @TypeConverter
+        @JvmStatic
+        fun fromTimeDisplay(pattern: TimeDisplay) = pattern.displayPattern
+
+        @TypeConverter
+        @JvmStatic
+        fun toTimeDisplay(pattern: String): TimeDisplay {
+            TimeDisplay.values().forEach {
+                if(pattern == it.displayPattern) return it
+            }
+
+            throw Exception("Weather Condition not recognize")
+        }
+
 
         @TypeConverter
         @JvmStatic

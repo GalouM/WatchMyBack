@@ -13,6 +13,14 @@ val mainUser = User(idGenerated, "main-user@gmail.com", "Main User", "5556674567
 val firstFriend = User(idGenerated, "first-friend@gmail.com", "First Friend", "5550985674")
 val secondFriend = User(idGenerated, "second-friend@gmail.com", "Second Friend", "5555649834")
 
+// preferences
+val mainUserPreferences = UserPreferences(mainUser.id, "112", UnitSystem.METRIC, TimeDisplay.H_12,
+    notificationBackSafe = false,
+    notificationEmergency = true,
+    notificationLate = true,
+    notificationLocationUpdate = true
+)
+
 //friend
 val friendship1 = Friend(mainUser.id, firstFriend.id)
 val friendship2 = Friend(mainUser.id, secondFriend.id)

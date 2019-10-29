@@ -18,6 +18,7 @@ import java.util.*
  * @see Location
  * @see Date
  * @see WeatherCondition
+ * @see Entity
  *
  * @author Galou Minisini
  */

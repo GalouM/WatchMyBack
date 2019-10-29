@@ -4,6 +4,7 @@ import androidx.room.*
 import com.galou.watchmyback.data.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.entity.Trip
 import com.galou.watchmyback.data.entity.User
+import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.utils.*
 
 /**
@@ -16,7 +17,7 @@ import com.galou.watchmyback.utils.*
  *
  */
 @Dao
-interface UserDao {
+abstract class UserDao(private val database: WatchMyBackDatabase) {
 
     /**
      * Query a [User] with a specific ID
@@ -27,7 +28,7 @@ interface UserDao {
      * @see Query
      */
     @Query("SELECT * FROM $USER_TABLE_NAME WHERE $USER_TABLE_UUID = :userId")
-    suspend fun getUser(userId: String): User?
+    abstract suspend fun getUser(userId: String): User?
 
     /**
      * Query a list of [User] who have a specific chain of character in their username
@@ -38,7 +39,7 @@ interface UserDao {
      * @see Query
      */
     @Query("SELECT * FROM $USER_TABLE_NAME WHERE $USER_TABLE_USERNAME LIKE :username")
-    suspend fun getUsersFromUsername(username: String): List<User>
+    abstract suspend fun getUsersFromUsername(username: String): List<User>
 
     /**
      * Create a [User] object in the database
@@ -52,7 +53,7 @@ interface UserDao {
      *
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun createUser(user: User)
+    abstract suspend fun createUser(user: User)
 
 
     /**
@@ -63,7 +64,7 @@ interface UserDao {
      * @see Update
      */
     @Update
-    suspend fun updateUser(user: User)
+    abstract suspend fun updateUser(user: User)
 
     /**
      * Delete [User] with a specific ID from the database
@@ -73,6 +74,12 @@ interface UserDao {
      * @see Query
      */
     @Query("DELETE FROM $USER_TABLE_NAME WHERE $USER_TABLE_UUID = :userId")
-    suspend fun deleteUser(userId: String)
+    abstract suspend fun deleteUser(userId: String)
+
+    @Transaction
+    open suspend fun createUserAndPreferences(user: User, preferences: UserPreferences){
+        createUser(user)
+        database.userPreferencesDao().createUserPreferences(preferences)
+    }
 
 }

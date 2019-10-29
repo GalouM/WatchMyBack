@@ -22,7 +22,7 @@ import com.galou.watchmyback.data.entity.*
  */
 @Database(
     entities = [
-        User::class, Trip::class, PointTrip::class, Location::class,
+        User::class, Trip::class, PointTrip::class, Location::class, UserPreferences::class,
         WeatherData::class, CheckList::class, ItemCheckList::class, Friend::class, Watcher::class
     ],
     version = 1,
@@ -41,5 +41,6 @@ abstract class WatchMyBackDatabase : RoomDatabase() {
     abstract fun locationDao(): LocationDao
     abstract fun pointTripDao(): PointTripDao
     abstract fun tripDao(): TripDao
+    abstract fun userPreferencesDao(): UserPreferencesDao
 
 }

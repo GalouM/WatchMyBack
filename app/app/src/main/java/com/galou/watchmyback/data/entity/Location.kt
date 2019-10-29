@@ -16,6 +16,7 @@ import com.galou.watchmyback.utils.*
  *
  * @see PointTrip
  * @see WeatherData
+ * @see Entity
  *
  * @author Galou Minisini
  */

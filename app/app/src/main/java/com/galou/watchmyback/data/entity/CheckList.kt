@@ -17,7 +17,8 @@ import com.galou.watchmyback.utils.*
  * @see TripType
  * @see User
  * @see Trip
- * @see [ItemCheckList]
+ * @see ItemCheckList
+ * @see Entity
  *
  * @author Galou Minisini
  */

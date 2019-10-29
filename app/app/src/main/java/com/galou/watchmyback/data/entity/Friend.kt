@@ -19,6 +19,7 @@ import com.galou.watchmyback.utils.USER_TABLE_UUID
  * @property friendId ID of the friend.
  *
  * @see User
+ * @see Entity
  *
  * @author Galou Minisini
  */

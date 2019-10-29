@@ -14,6 +14,8 @@ import com.galou.watchmyback.utils.*
  * @property username the user's name in the application
  * @property phoneNumber the user's phone number
  *
+ * @see Entity
+ *
  * @author Galou Minisini
  */
 @Entity(

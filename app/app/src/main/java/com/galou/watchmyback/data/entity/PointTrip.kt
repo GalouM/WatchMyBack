@@ -18,6 +18,7 @@ import java.util.*
  *
  * @see User
  * @see TypePoint
+ * @see Entity
  *
  * @author Galou Minisini
  */

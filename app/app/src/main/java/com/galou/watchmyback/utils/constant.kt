@@ -17,6 +17,7 @@ const val LOCATION_TABLE_NAME = "locations"
 const val WEATHER_DATA_TABLE_NAME = "weather_data"
 const val CHECK_LIST_TABLE_NAME = "check_lists"
 const val ITEM_LIST_TABLE_NAME = "items_check_list"
+const val PREFERENCES_TABLE_NAME = "user_preferences"
 // tables attributes
 // user
 const val USER_TABLE_UUID = "user_uuid"
@@ -68,6 +69,16 @@ const val POINT_TRIP_UUID = "point_uuid"
 const val POINT_TRIP_TRIP_UUID = "trip_id"
 const val POINT_TRIP_TIME = "time"
 const val POINT_TRIP_TYPE = "point_type"
+// preferences
+const val PREFERENCES_TABLE_USER_UUID = "preferences_user_id"
+const val PREFERENCES_TABLE_NOTIFICATION_EMERGENCY_STATUS = "notification_friend_emergency_status"
+const val PREFERENCES_TABLE_NOTIFICATION_BACK_SAFE = "notification_friend_back_safe"
+const val PREFERENCES_TABLE_NOTIFICATION_LATE = "notification_friend_late"
+const val PREFERENCES_TABLE_NOTIFICATION_LOCATION_UPDATE = "notification_friend_update_location"
+const val PREFERENCES_TABLE_EMERGENCY_NUMBER = "emergency_number"
+const val PREFERENCES_TABLE_UNIT_SYSTEM = "unit_system"
+const val PREFERENCES_TABLE_TIME_DISPLAY = "time_display"
+
 
 
 // ------ COLLECTION FIRESTORE -------

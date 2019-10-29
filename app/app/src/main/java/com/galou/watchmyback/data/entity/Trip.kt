@@ -28,6 +28,7 @@ import com.galou.watchmyback.utils.*
  * @see TripType
  * @see TripUpdateFrequency
  * @see CheckList
+ * @see Entity
  *
  * @author Galou Minisini
  */

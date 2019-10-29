@@ -18,6 +18,7 @@ import com.galou.watchmyback.utils.*
  *
  * @see User
  * @see Trip
+ * @see Entity
  *
  * @author Galou Minisini
  */

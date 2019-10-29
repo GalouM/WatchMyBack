@@ -16,6 +16,7 @@ import com.galou.watchmyback.utils.*
  * @property checked tells if the [User] took this item with him/her or not
  *
  * @see CheckList
+ * @see Entity
  *
  * @author Galou Minisini
  */

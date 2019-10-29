@@ -14,10 +14,10 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.firebase.ui.auth.AuthUI
 import com.galou.watchmyback.*
-import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.databinding.ActivityMainBinding
 import com.galou.watchmyback.databinding.HeaderNavViewBinding
 import com.galou.watchmyback.profileActivity.ProfileActivity
+import com.galou.watchmyback.settings.SettingsActivity
 import com.galou.watchmyback.utils.RC_PROFILE
 import com.galou.watchmyback.utils.RC_SIGN_IN
 import com.galou.watchmyback.utils.displayData

@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    android:id="@+id/activity_settings_container"
+<ScrollView
+    android:id="@+id/activity_settings_scrollview"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/activity_settings_container"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingsActivity">
+    tools:context=".settings.SettingsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -60,7 +66,9 @@
                 android:layout_height="wrap_content"
                 android:checked="true"
                 app:layout_constraintTop_toBottomOf="@id/settings_view_notification_title"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="@dimen/medium_padding"
+                android:layout_marginTop="@dimen/margin_small"/>
 
             <TextView
                 android:id="@+id/settings_view_notification_back_title"
@@ -79,7 +87,9 @@
                 android:layout_height="wrap_content"
                 android:checked="true"
                 app:layout_constraintTop_toBottomOf="@id/settings_view_notification_emergency_switch"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="@dimen/medium_padding"
+                android:layout_marginTop="@dimen/margin_small"/>
 
             <TextView
                 android:id="@+id/settings_view_notification_late_title"
@@ -98,7 +108,9 @@
                 android:layout_height="wrap_content"
                 android:checked="true"
                 app:layout_constraintTop_toBottomOf="@id/settings_view_notification_back_switch"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="@dimen/medium_padding"
+                android:layout_marginTop="@dimen/margin_small"/>
 
             <TextView
                 android:id="@+id/settings_view_notification_update_title"
@@ -117,7 +129,9 @@
                 android:layout_height="wrap_content"
                 android:checked="true"
                 app:layout_constraintTop_toBottomOf="@id/settings_view_notification_late_switch"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="@dimen/medium_padding"
+                android:layout_marginTop="@dimen/margin_small"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -258,3 +272,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</ScrollView>

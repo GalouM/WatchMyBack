@@ -7,6 +7,7 @@ import androidx.test.runner.AndroidJUnit4
 import com.galou.watchmyback.data.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.database.dao.FriendDao
 import com.galou.watchmyback.data.database.dao.UserDao
+import com.galou.watchmyback.data.database.dao.UserPreferencesDao
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -28,6 +29,7 @@ class UserDaoTest {
 
     private lateinit var db: WatchMyBackDatabase
     private lateinit var userDao: UserDao
+    private lateinit var preferencesDao: UserPreferencesDao
 
     @Before
     fun createDatabase(){
@@ -38,6 +40,7 @@ class UserDaoTest {
             .build()
 
         userDao = db.userDao()
+        preferencesDao = db.userPreferencesDao()
     }
 
     @After
@@ -64,6 +67,26 @@ class UserDaoTest {
         userDao.deleteUser(mainUser.id)
         val userDeleted = userDao.getUser(mainUser.id)
         assertNull(userDeleted)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun createUserAndPreferences() = runBlocking{
+        userDao.createUserAndPreferences(mainUser, mainUserPreferences)
+        val preferencesFromDB = preferencesDao.getUserPreferences(mainUser.id)
+        assertNotNull(preferencesFromDB)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun updatePreferencesUser() = runBlocking {
+        userDao.createUserAndPreferences(mainUser, mainUserPreferences)
+        val newEmergencyNumber = "911"
+        mainUserPreferences.emergencyNumber = newEmergencyNumber
+        preferencesDao.updateUserPreferences(mainUserPreferences)
+        val preferencesFromDB = preferencesDao.getUserPreferences(mainUser.id)
+        assertNotNull(preferencesFromDB)
+        assertEquals(preferencesFromDB?.emergencyNumber, newEmergencyNumber)
     }
 
 

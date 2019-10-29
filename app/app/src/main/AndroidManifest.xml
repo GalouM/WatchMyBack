@@ -21,7 +21,7 @@
             android:label="@string/add_trip"
             android:parentActivityName=".mainActivity.MainActivity" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".settings.SettingsActivity"
             android:label="@string/settings"
             android:parentActivityName=".mainActivity.MainActivity" />
         <activity
