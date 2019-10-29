@@ -2,10 +2,13 @@ package com.galou.watchmyback
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.galou.watchmyback.mainActivity.MainActivityViewModel
-import com.galou.watchmyback.testHelpers.FakeAuthResult
-import com.galou.watchmyback.testHelpers.LiveDataTestUtil
-import com.galou.watchmyback.testHelpers.UserRepositoryMocked
+import com.galou.watchmyback.testHelpers.*
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.*
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
@@ -20,13 +23,22 @@ class MainActivityViewModelTest {
 
     private lateinit var viewModel: MainActivityViewModel
 
+    private val mainThreadSurrogate = newSingleThreadContext("UI thread")
+
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
+
     @Before
     fun setupViewModel(){
-        viewModel = MainActivityViewModel(UserRepositoryMocked())
+        Dispatchers.setMain(mainThreadSurrogate)
+        viewModel = MainActivityViewModel(FakeUserRepositoryImpl())
+    }
 
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+        mainThreadSurrogate.close()
     }
 
     @Test
@@ -39,15 +51,16 @@ class MainActivityViewModelTest {
     }
 
     @Test
-    fun checkUserIsConnected_isWelcomeBack(){
+    fun checkUserIsConnected_isWelcomeBack() = runBlocking {
         val firebaseUser = FakeAuthResult.user
         viewModel.checkIfUserIsConnected(firebaseUser)
         assertNull(LiveDataTestUtil.getValue(viewModel.openSignInActivityEvent))
-        //val userValue = LiveDataTestUtil.getValue(viewModel.userLD)
-        //assertEquals(userValue.email, firebaseUser.email)
-        //assertEquals(userValue.username, firebaseUser.displayName)
-        //assertEquals(userValue.pictureUrl, firebaseUser.photoUrl)
-        //assertSnackBarMessage(viewModel.snackbarMessage, R.string.welcome)
+        val userValue = LiveDataTestUtil.getValue(viewModel.userLD)
+        assertEquals(userValue.email, firebaseUser.email)
+        assertEquals(userValue.username, firebaseUser.displayName)
+        assertEquals(userValue.pictureUrl, firebaseUser.photoUrl)
+        assertSnackBarMessage(viewModel.snackbarMessage, R.string.welcome)
+
     }
 
 }

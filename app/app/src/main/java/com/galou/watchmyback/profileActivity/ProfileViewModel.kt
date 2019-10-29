@@ -8,12 +8,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
+import com.galou.watchmyback.base.BaseViewModel
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.data.repository.UserRepositoryImpl
+import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.displayData
 import com.galou.watchmyback.utils.extension.isCorrectEmail
 import com.galou.watchmyback.utils.extension.isCorrectName
 import com.galou.watchmyback.utils.extension.isCorrectPhoneNumber
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 /**
  * [ViewModel] of [ProfileActivity]
@@ -26,8 +31,9 @@ import com.galou.watchmyback.utils.extension.isCorrectPhoneNumber
  *
  * @property userRepository [UserRepositoryImpl] reference
  */
-class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
+class ProfileViewModel (val userRepository: UserRepository) : BaseViewModel(){
 
+    // Live Data
     private val _snackbarText = MutableLiveData<Event<Int>>()
     val snackbarMessage: LiveData<Event<Int>> = _snackbarText
 
@@ -59,6 +65,10 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
     val openPhotoLibrary: LiveData<Event<Unit>> = _openPhotoLibrary
 
     val user = userRepository.currentUser.value!!
+
+    // Coroutines Jobs
+    private var updateUserJob: Job? = null
+    private var updatePictureJob: Job? = null
 
     /**
      * Emit the user information when the view model is created
@@ -96,10 +106,22 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
 
     }
 
+    /**
+     * Emit Event to open the photo library
+     *
+     */
     fun pickProfilePicture(){
         _openPhotoLibrary.value = Event(Unit)
     }
 
+    /**
+     * If the application fetched correctly the image picked by the user, it downloads it the the remote storage
+     *
+     * @param resultCode
+     * @param uri internal URI of the picture picked
+     *
+     * @see downloadPictureToRemoteStorage
+     */
     fun fetchPicturePickedByUser(resultCode: Int, uri: Uri?){
         _dataLoading.value = true
         if (resultCode == RESULT_OK){
@@ -121,18 +143,20 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
         user.phoneNumber = phoneNumberLD.value
         user.email = emailLD.value
         user.username = usernameLD.value
-        userRepository.updateUserInRemoteDB(user)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful){
+        if(updateUserJob?.isActive == true) updateUserJob?.cancel()
+        updateUserJob = launch {
+            when(userRepository.updateUserInRemoteDB(user)){
+                is Result.Success -> {
                     userRepository.currentUser.value = user
                     _dataSaved.value = Event(true)
                     showSnackBarMessage(R.string.info_updated)
-                    _dataLoading.value = false
-                } else {
-                    showSnackBarMessage(R.string.fail_not_saved)
-                    _dataLoading.value = false
                 }
+                is Result.Error -> showSnackBarMessage(R.string.fail_not_saved)
+                is Result.Canceled -> showSnackBarMessage(R.string.canceled)
             }
+            _dataLoading.value = false
+
+        }
     }
 
     /**
@@ -165,19 +189,28 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
 
     }
 
+    /**
+     * Download a picture, get its [Uri] in the remote storage and assign this value to the [User.pictureUrl]
+     *
+     * @param uriPicture internal uri of the picture
+     *
+     * @see UserRepository.uploadUserPictureToRemoteStorageAndGetUrl
+     */
     private fun downloadPictureToRemoteStorage(uriPicture: Uri){
-        userRepository.uploadUserPictureToRemoteStorageAndGetUrl(uriPicture)
-            .addOnCompleteListener {task ->
-                if (task.isSuccessful){
-                    user.pictureUrl = task.result.toString()
+        if (updatePictureJob?.isActive == true) updatePictureJob?.cancel()
+        updatePictureJob = launch {
+            when(val uriStorage = userRepository.uploadUserPictureToRemoteStorageAndGetUrl(uriPicture)){
+                is Result.Success -> {
+                    user.pictureUrl = uriStorage.data.toString()
+                    displayData("${user.pictureUrl}")
                     _pictureUrlLD.value = user.pictureUrl
                     userRepository.currentUser.value = user
-                } else {
-                    showSnackBarMessage(R.string.error_download_picture)
                 }
-                _dataLoading.value = false
-
+                is Result.Error -> showSnackBarMessage(R.string.error_download_picture)
+                is Result.Canceled -> showSnackBarMessage(R.string.canceled)
             }
+            _dataLoading.value = false
+        }
     }
 
     // UTILS

@@ -7,27 +7,29 @@ import androidx.core.net.toUri
 import androidx.lifecycle.MutableLiveData
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.profileActivity.ProfileViewModel
-import com.galou.watchmyback.testHelpers.LiveDataTestUtil
-import com.galou.watchmyback.testHelpers.TEST_UID
-import com.galou.watchmyback.testHelpers.UserRepositoryMocked
-import com.galou.watchmyback.testHelpers.generateTestUser
+import com.galou.watchmyback.testHelpers.*
+import com.google.common.truth.Truth
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.context.stopKoin
+import org.koin.test.KoinTest
 import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+
 
 /**
  * Created by galou on 2019-10-25
  */
 @Config(sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
-class ProfileViewModelUnitTest {
+class ProfileViewModelUnitTest: KoinTest {
     private lateinit var viewModel: ProfileViewModel
-    private lateinit var userRepository: UserRepositoryMocked
+    private lateinit var userRepository: FakeUserRepositoryImpl
     private lateinit var userMocked: User
 
     @get:Rule
@@ -35,11 +37,16 @@ class ProfileViewModelUnitTest {
 
     @Before
     fun setupViewModel(){
-        userRepository = Mockito.mock(UserRepositoryMocked::class.java)
+        userRepository = FakeUserRepositoryImpl()
         userMocked = generateTestUser(TEST_UID)
-        Mockito.`when`(userRepository.currentUser).thenReturn(MutableLiveData(userMocked))
+        userRepository.currentUser.value = userMocked
         viewModel = ProfileViewModel(userRepository)
 
+    }
+    
+    @After
+    fun close(){
+        stopKoin()
     }
 
     @Test
@@ -61,25 +68,39 @@ class ProfileViewModelUnitTest {
         assertEquals(LiveDataTestUtil.getValue(viewModel.errorUsername), R.string.incorrect_username)
     }
 
-    /*
 
     @Test
     fun correctInfo_saveUserAndClose(){
+        viewModel.phoneNumberLD.value = NEW_PHONE_NB
+        viewModel.emailLD.value = NEW_EMAIL
+        viewModel.usernameLD.value = NEW_USERNAME
         viewModel.updateUserInformation()
-        assertSnackBarMessage(viewModel.snackbarMessage, R.string.info_updated)
         val  saveData: Event<Boolean> = LiveDataTestUtil.getValue(viewModel.dataSaved)
         assertEquals(saveData.getContentIfNotHandled(), true)
+        val userUpdated = viewModel.userRepository.currentUser.value
+        assertEquals(userUpdated?.username, NEW_USERNAME)
+        assertEquals(userUpdated?.email, NEW_EMAIL)
+        assertEquals(userUpdated?.phoneNumber, NEW_PHONE_NB)
 
     }
 
-     */
 
     @Test
-    fun clickPicture_OpenPickPhotoDialog(){
-        val newPicturePath = "http://newUri"
-        viewModel.fetchPicturePickedByUser(RESULT_OK, newPicturePath.toUri())
-        //assertEquals(LiveDataTestUtil.getValue(viewModel.pictureUrlLD), newPicturePath)
+    fun selectNewPicture_updateUserInfo(){
+        val newPicturePath = "http://internalUri".toUri()
+        viewModel.fetchPicturePickedByUser(RESULT_OK, newPicturePath)
+        assertEquals(LiveDataTestUtil.getValue(viewModel.pictureUrlLD), URI_STORAGE_REMOTE)
+        val userUpdated = viewModel.userRepository.currentUser.value
+        assertEquals(userUpdated?.pictureUrl, URI_STORAGE_REMOTE)
     }
+
+    @Test
+    fun clickPicture_OpenPickPhotoIntent(){
+        viewModel.pickProfilePicture()
+        val openLibrary = LiveDataTestUtil.getValue(viewModel.openPhotoLibrary)
+        Truth.assertThat(openLibrary.getContentIfNotHandled()).isNotNull()
+    }
+
 
 
 }

@@ -7,6 +7,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'jacoco-android'
 
 apply plugin: 'kotlin-kapt'
+
 apply plugin: 'com.google.gms.google-services'
 
 android {
@@ -62,19 +63,15 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.firebase:firebase-storage:16.0.4'
-    implementation 'com.google.firebase:firebase-auth:16.0.5'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     //DESIGN
-    implementation 'com.google.android.material:material:1.1.0-beta01'
+    implementation 'com.google.android.material:material:1.2.0-alpha01'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
@@ -105,6 +102,10 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:$rootProject.archTestingVersion"
     testImplementation "org.robolectric:robolectric:$rootProject.robolectricVersion"
     testImplementation "org.koin:koin-test:$rootProject.koinVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutinesVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootProject.coroutinesVersion"
+    testImplementation "org.powermock:powermock-api-mockito:$rootProject.powerMockApiVersion"
+    testImplementation "org.powermock:powermock-module-junit4:$rootProject.powerMockModuleVersion"
 
     //INSTRUMENTED TEST
     androidTestImplementation ("org.koin:koin-test:$rootProject.koinVersion") { exclude group: 'org.mockito' }
@@ -113,6 +114,7 @@ dependencies {
     androidTestImplementation "androidx.test:rules:$rootProject.ruleVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoCoreVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.espressoCoreVersion"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootProject.coroutinesVersion"
 
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
@@ -136,7 +138,15 @@ dependencies {
     implementation "com.google.firebase:firebase-auth:$rootProject.firebaseAuthVersion"
     implementation "com.firebaseui:firebase-ui-auth:$rootProject.authUIVersion"
     implementation "com.google.firebase:firebase-firestore:$rootProject.firestoreVersion"
+    implementation "com.google.firebase:firebase-storage:$rootProject.firebaseStorageVersion"
+    implementation "com.google.firebase:firebase-auth:$rootProject.firebaseAuthVersion"
 
     //EASY PERMISSIONS
     implementation "pub.devrel:easypermissions:$rootProject.easyPermVersion"
+
+    //KOTLIN
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutinesVersion"
+    implementation "androidx.core:core-ktx:$rootProject.coreKtxVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

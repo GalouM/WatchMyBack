@@ -1,12 +1,10 @@
 package com.galou.watchmyback.data.repository
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.galou.watchmyback.data.entity.User
-import com.google.android.gms.tasks.Task
+import com.galou.watchmyback.utils.Result
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 
 /**
@@ -20,36 +18,36 @@ interface UserRepository {
      */
     val currentUser: MutableLiveData<User>
     /**
-     * Get the specified [User] from the Cloud Firestore database
+     * Suspend function, get the specified [User] from the Cloud Firestore database
      *
      * @param userId ID of the user to query
-     * @return [User] [Task] to observe to get the user information
+     * @return [User] requested if it exist in the database
      */
-    fun getUserFromRemoteDB(userId: String): Task<User>
+    suspend fun getUserFromRemoteDB(userId: String): Result<User>
 
     /**
-     * Create a [User] in the the Cloud Firestore database
+     * Suspend function, create a [User] in the the Cloud Firestore database
      *
      * @param user [User] to create in the database
-     * @return Creation [Task] to observe
+     * @return [Void] result of the creation, if ti was successful or not
      */
-    fun createUserInRemoteDB(user: User): Task<Void>
+    suspend fun createUserInRemoteDB(user: User): Result<Void?>
 
     /**
      * Delete the specified [User] in the Cloud Firestore database
      *
      * @param userId ID of the [User] to delete
-     * @return Delete [Task] to observe
+     * @return [Void] or null if the task was successful or not
      */
-    fun deleteUserFromCloudDB(userId: String): Task<Void>
+    suspend fun deleteUserFromCloudDB(userId: String): Result<Void?>
 
     /**
      * Update a [User] in the remote database
      *
      * @param user [User] to update
-     * @return Update [Task] to observe
+     * @return [Void] or null if the task was successful or not
      */
-    fun updateUserInRemoteDB(user: User): Task<Void>
+    suspend fun updateUserInRemoteDB(user: User): Result<Void?>
 
     /**
      * Upload a [User]'s profile picture to Firebase Storage
@@ -57,5 +55,5 @@ interface UserRepository {
      * @param uriPicture local url of the picture to upload
      * @return [UploadTask] to observe
      */
-    fun uploadUserPictureToRemoteStorageAndGetUrl(uriPicture: Uri): Task<Uri>
+    suspend fun uploadUserPictureToRemoteStorageAndGetUrl(uriPicture: Uri): Result<Uri>
 }

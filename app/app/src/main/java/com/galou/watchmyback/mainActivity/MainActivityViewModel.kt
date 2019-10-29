@@ -11,11 +11,16 @@ import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
+import com.galou.watchmyback.base.BaseViewModel
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.data.repository.UserRepositoryImpl
+import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.displayData
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 /**
  * [ViewModel] of the [MainActivity]
@@ -28,7 +33,10 @@ import com.google.firebase.auth.FirebaseUser
  *
  * @property userRepository [UserRepositoryImpl] reference
  */
-class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
+class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel() {
+
+    private var getUserJob: Job? = null
+    private var createUserJob: Job? = null
 
     // -- Live data
     private val _snackbarText = MutableLiveData<Event<Int>>()
@@ -114,21 +122,15 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
      *
      * @param firebaseUser user connected to the app through Firebase Authentification
      */
-    private fun fetchCurrentUserInformation(firebaseUser: FirebaseUser){
-        userRepository.getUserFromRemoteDB(firebaseUser.uid)
-            .addOnCompleteListener { task ->
-                if(task.isSuccessful){
-                    val user = task.result
-                    if(user != null) {
-                        setupUserInformation(user)
-                    } else {
-                        createUserToRemoteDB(firebaseUser)
-                    }
-
-                } else {
-                    showSnackBarMessage(R.string.error_fetching)
-                }
+    private fun fetchCurrentUserInformation(firebaseUser: FirebaseUser) {
+        if (getUserJob?.isActive == true) getUserJob?.cancel()
+        getUserJob = launch {
+            when (val result = userRepository.getUserFromRemoteDB(firebaseUser.uid)) {
+                is Result.Success -> setupUserInformation(result.data)
+                is Result.Error -> showSnackBarMessage(R.string.error_fetching)
+                is Result.Canceled -> showSnackBarMessage(R.string.canceled)
             }
+        }
     }
 
     /**
@@ -141,11 +143,12 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
     private fun createUserToRemoteDB(firebaseUser: FirebaseUser){
         val urlPhoto = firebaseUser.photoUrl?.toString()
         val user = User(firebaseUser.uid, firebaseUser.email, firebaseUser.displayName, firebaseUser.phoneNumber, urlPhoto)
-        userRepository.createUserInRemoteDB(user).addOnCompleteListener { task -> 
-            if(task.isSuccessful){
-                fetchCurrentUserInformation(firebaseUser)
-            } else {
-                showSnackBarMessage(R.string.error_creatng_user_remote)
+        if(createUserJob?.isActive == true) createUserJob?.cancel()
+        createUserJob = launch {
+            when(userRepository.createUserInRemoteDB(user)){
+                is Result.Success -> fetchCurrentUserInformation(firebaseUser)
+                is Result.Error -> showSnackBarMessage(R.string.error_creatng_user_remote)
+                is Result.Canceled -> showSnackBarMessage(R.string.canceled)
             }
         }
     }
@@ -157,6 +160,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
      */
     private fun setupUserInformation(user: User){
         userRepository.currentUser.value = user
+        println(user)
         showSnackBarMessage(R.string.welcome)
     }
 

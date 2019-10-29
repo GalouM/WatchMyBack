@@ -107,4 +107,5 @@
     <string name="take_picture">Take Picture</string>
     <string name="app_storage_perm">This application needs storage permission</string>
     <string name="error_download_picture">Error while downloading picture</string>
+    <string name="canceled">Operation was canceled</string>
 </resources>

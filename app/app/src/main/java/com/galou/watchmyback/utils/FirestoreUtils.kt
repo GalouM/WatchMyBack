@@ -1,57 +1,82 @@
 package com.galou.watchmyback.utils
 
-import androidx.lifecycle.LiveData
-import com.google.firebase.firestore.*
-import java.lang.IllegalStateException
+import com.google.android.gms.tasks.Task
+import com.google.firebase.storage.UploadTask
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.suspendCancellableCoroutine
+import java.lang.Exception
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 /**
- * https://code.luasoftware.com/tutorials/google-cloud-firestore/firestore-query-addsnapshotlistener-as-livedata/
+ * https://github.com/Kotlin/kotlinx.coroutines/blob/master/integration/kotlinx-coroutines-play-services/src/Tasks.kt
+ *
+ * @param T
+ * @return
  */
-class QuerySnapshotLiveData(private val query: Query) : LiveData<Resource<QuerySnapshot>>(),
-        EventListener<QuerySnapshot> {
 
-    private  var registration: ListenerRegistration? = null
-
-    override fun onEvent(snapShots: QuerySnapshot?, e: FirebaseFirestoreException?) {
-        value = if (e != null){
-            Resource(e)
+suspend fun <T> Task<T>.await(): Result<T> {
+    // fast path
+    if (isComplete) {
+        val e = exception
+        return if (e == null) {
+            if (isCanceled) {
+                Result.Canceled(CancellationException("Task $this was cancelled normally."))
+            } else {
+                @Suppress("UNCHECKED_CAST")
+                Result.Success(result as T)
+            }
         } else {
-            Resource(snapShots!!)
+            Result.Error(e)
         }
-
     }
 
-    override fun onActive() {
-        super.onActive()
-        registration = query.addSnapshotListener(this)
-    }
-
-    override fun onInactive() {
-        super.onInactive()
-        registration?.also {
-            it.remove()
-            registration = null
+    return suspendCancellableCoroutine { cont ->
+        addOnCompleteListener {
+            val e = exception
+            if (e == null) {
+                @Suppress("UNCHECKED_CAST")
+                if (isCanceled) cont.cancel() else  cont.resume(Result.Success(result as T))
+            } else {
+                cont.resumeWithException(e)
+            }
         }
     }
 }
 
-class Resource<T> private constructor(
-    private val data: T?,
-    private val error: Exception?
-){
-    val isSuccessful: Boolean
-        get() = data != null && error != null
-
-    constructor(data: T) : this(data, null)
-    constructor(exception: Exception) : this(null, exception)
-
-    fun data() : T {
-        check(error == null) { "Check isSuccessful first: call error() instead." }
-        return data!!
+suspend fun <T> UploadTask.await(): Result<T> {
+    // fast path
+    if (isComplete) {
+        val e = exception
+        return if (e == null) {
+            if (isCanceled) {
+                Result.Canceled(CancellationException("Task $this was cancelled normally."))
+            } else {
+                @Suppress("UNCHECKED_CAST")
+                Result.Success(result as T)
+            }
+        } else {
+            Result.Error(e)
+        }
     }
 
-    fun error(): Exception{
-        check(data == null) { "Check isSuccessful first: call data() instead." }
-        return error!!
+    return suspendCancellableCoroutine { cont ->
+        addOnCompleteListener {
+            val e = exception
+            if (e == null) {
+                @Suppress("UNCHECKED_CAST")
+                if (isCanceled) cont.cancel() else cont.resume(Result.Success(result as T))
+            } else {
+                cont.resumeWithException(e)
+            }
+        }
     }
 }
+
+sealed class Result<out R> {
+    data class Success<out T>(val data: T) : Result<T>()
+    data class Error(val exception: Exception) : Result<Nothing>()
+    data class Canceled(val exception: Exception?) : Result<Nothing>()
+}
+
+

@@ -34,7 +34,7 @@ const val TEST_NAME = "John Doe"
 const val TEST_PHOTO_URI = "http://example.com/profile.png"
 const val TEST_PHONE_NUMBER = "555-456-3454"
 
-fun getMockFirebaseUser(): FirebaseUser {
+fun getFakeFirebaseUser(): FirebaseUser {
     val user = Mockito.mock(FirebaseUser::class.java)
     val testUser = generateTestUser(TEST_UID)
     Mockito.`when`(user.uid).thenReturn(testUser.id)

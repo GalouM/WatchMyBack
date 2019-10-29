@@ -1,6 +1,5 @@
 package com.galou.watchmyback
 
-import android.content.Intent
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -8,23 +7,14 @@ import androidx.test.espresso.contrib.NavigationViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
-import com.galou.watchmyback.data.repository.UserRepository
-import com.galou.watchmyback.di.appModules
 import com.galou.watchmyback.instrumentedTestHelpers.TEST_UID
 import com.galou.watchmyback.instrumentedTestHelpers.generateTestUser
 import com.galou.watchmyback.mainActivity.MainActivity
 import com.galou.watchmyback.mainActivity.MainActivityViewModel
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.test.KoinTest
-import org.koin.test.inject
-import org.koin.test.mock.declareMock
-import org.mockito.BDDMockito
-import org.mockito.BDDMockito.given
+import org.mockito.Mockito
 
 /**
  * Created by galou on 2019-10-22
@@ -99,19 +89,19 @@ class MainActivityTest {
         onView(withId(R.id.detail_trip_activity_container)).check(matches(isDisplayed()))
     }
 
+
     /*
 
     @Test
     @Throws(Exception::class)
     fun navHeaderInfo_filledUpWithUserInfo(){
+        val user = generateTestUser(TEST_UID)
         onView(withId(R.id.header_nav_username))
             .check(matches(withText(user.username)))
         onView(withId(R.id.header_nav_email))
             .check(matches(withText(user.email)))
 
     }
-
-
 
 
     @Test
