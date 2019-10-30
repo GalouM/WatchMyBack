@@ -18,6 +18,33 @@ tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
 }
 
+subprojects {
+
+    jacocoTestReport {
+        additionalSourceDirs.from = sourceSets.main.allSource.srcDirs
+        sourceDirectories.from = sourceSets.main.allSource.srcDirs
+        classDirectories.from = sourceSets.main.output
+        reports {
+            html.enabled = true
+            xml.enabled = true
+            csv.enabled = false
+        }
+    }
+}
+
+task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
+    dependsOn = subprojects.test
+    additionalSourceDirs.from = subprojects.sourceSets.main.allSource.srcDirs
+    sourceDirectories.from = subprojects.sourceSets.main.allSource.srcDirs
+    classDirectories.from = subprojects.sourceSets.main.output
+    executionData.from = subprojects.jacocoTestReport.executionData
+    reports {
+        html.enabled = true
+        xml.enabled = true
+        csv.enabled = false
+    }
+}
+
 android {
     compileSdkVersion 29
     defaultConfig {

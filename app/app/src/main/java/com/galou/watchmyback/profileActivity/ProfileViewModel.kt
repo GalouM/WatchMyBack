@@ -5,14 +5,13 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
-import com.galou.watchmyback.base.BaseViewModel
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.data.repository.UserRepositoryImpl
 import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.displayData
 import com.galou.watchmyback.utils.extension.isCorrectEmail
 import com.galou.watchmyback.utils.extension.isCorrectName
 import com.galou.watchmyback.utils.extension.isCorrectPhoneNumber
@@ -30,7 +29,7 @@ import kotlinx.coroutines.launch
  *
  * @property userRepository [UserRepositoryImpl] reference
  */
-class ProfileViewModel (val userRepository: UserRepository) : BaseViewModel(){
+class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
 
     // Live Data
     private val _snackbarText = MutableLiveData<Event<Int>>()
@@ -144,7 +143,7 @@ class ProfileViewModel (val userRepository: UserRepository) : BaseViewModel(){
         user.email = emailLD.value
         user.username = usernameLD.value
         if(updateUserJob?.isActive == true) updateUserJob?.cancel()
-        updateUserJob = launch {
+        updateUserJob = viewModelScope.launch {
             when(userRepository.updateUserInfoInRemoteDB(user)){
                 is Result.Success -> {
                     userRepository.currentUser.value = user
@@ -199,7 +198,7 @@ class ProfileViewModel (val userRepository: UserRepository) : BaseViewModel(){
      */
     private fun downloadPictureToRemoteStorage(uriPicture: Uri){
         if (uploadPictureJob?.isActive == true) uploadPictureJob?.cancel()
-        uploadPictureJob = launch {
+        uploadPictureJob = viewModelScope.launch {
             when(val uriStorage = userRepository.uploadUserPictureToRemoteStorageAndGetUrl(uriPicture)){
                 is Result.Success -> updateUserPictureWithNewPicture(uriStorage.data.toString())
                 is Result.Error -> showSnackBarMessage(R.string.error_download_picture)
@@ -211,7 +210,7 @@ class ProfileViewModel (val userRepository: UserRepository) : BaseViewModel(){
     
     private fun updateUserPictureWithNewPicture(uri: String){
         if (updatePictureJob?.isActive == true) updatePictureJob?.cancel()
-        updatePictureJob = launch { 
+        updatePictureJob = viewModelScope.launch {
             when(userRepository.updateUserPicturePathInRemoteDB(user.id, uri)){
                 is Result.Success -> {
                     user.pictureUrl = uri

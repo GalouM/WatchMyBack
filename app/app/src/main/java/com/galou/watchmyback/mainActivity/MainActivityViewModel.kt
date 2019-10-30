@@ -1,27 +1,24 @@
 package com.galou.watchmyback.mainActivity
 
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
-import com.galou.watchmyback.base.BaseViewModel
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.data.repository.UserRepositoryImpl
 import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.displayData
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
-import kotlin.coroutines.CoroutineContext
 
 /**
  * [ViewModel] of the [MainActivity]
@@ -34,7 +31,7 @@ import kotlin.coroutines.CoroutineContext
  *
  * @property userRepository [UserRepositoryImpl] reference
  */
-class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel() {
+class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
 
     private var getUserJob: Job? = null
     private var createUserJob: Job? = null
@@ -63,6 +60,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
      * @param firebaseUser user connected to the app through Firebase Authentification
      */
     fun checkIfUserIsConnected(firebaseUser: FirebaseUser?){
+        displayData("$firebaseUser")
         if(firebaseUser != null){
             fetchCurrentUserInformation(firebaseUser)
         } else{
@@ -129,7 +127,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
      */
     private fun fetchCurrentUserInformation(firebaseUser: FirebaseUser) {
         if (getUserJob?.isActive == true) getUserJob?.cancel()
-        getUserJob = launch {
+        getUserJob = viewModelScope.launch {
             when (val result = userRepository.getUserFromRemoteDB(firebaseUser.uid)) {
                 is Result.Success -> {
                     val user = result.data
@@ -161,7 +159,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
         val urlPhoto = firebaseUser.photoUrl?.toString()
         val user = User(firebaseUser.uid, firebaseUser.email, firebaseUser.displayName, firebaseUser.phoneNumber, urlPhoto)
         if(createUserJob?.isActive == true) createUserJob?.cancel()
-        createUserJob = launch {
+        createUserJob = viewModelScope.launch {
             when(userRepository.createUserInRemoteDB(user)){
                 is Result.Success -> fetchCurrentUserInformation(firebaseUser)
                 is Result.Error -> showSnackBarMessage(R.string.error_creatng_user_remote)
