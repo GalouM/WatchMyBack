@@ -146,6 +146,10 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
         }
     }
 
+    private fun fetchLocalInfoUser(user: User){
+
+    }
+
     /**
      * Create a user in the remote databse
      *

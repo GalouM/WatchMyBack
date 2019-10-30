@@ -17,6 +17,7 @@ interface UserRepository {
      * @see User
      */
     val currentUser: MutableLiveData<User>
+
     /**
      * Suspend function, get the specified [User] from the Cloud Firestore database.
      *

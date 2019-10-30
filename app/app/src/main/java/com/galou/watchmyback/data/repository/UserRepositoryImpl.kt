@@ -4,7 +4,10 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.galou.watchmyback.data.database.dao.UserDao
+import com.galou.watchmyback.data.database.dao.UserPreferencesDao
 import com.galou.watchmyback.data.entity.User
+import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.USER_COLLECTION_NAME
 import com.galou.watchmyback.utils.USER_PICTURE_REFERENCE
@@ -27,9 +30,26 @@ import kotlinx.coroutines.launch
  *
  */
 
-class UserRepositoryImpl : UserRepository {
+class UserRepositoryImpl(
+    private val userDao: UserDao,
+    private val preferencesDao: UserPreferencesDao
+) : UserRepository {
 
     override val currentUser = MutableLiveData<User>()
+
+    // LOCAL REQUEST
+
+    suspend fun createUserInLocalDB(user: User, preferences: UserPreferences) =
+        userDao.createUserAndPreferences(user, preferences)
+
+    suspend fun updateUserInLocalDB(user: User) = userDao.updateUser(user)
+
+    suspend fun updatePreferencesInLocalDB(preferences: UserPreferences) =
+        preferencesDao.updateUserPreferences(preferences)
+
+    suspend fun fetchUserPreferencesFomLocalDB(userId: String) =
+        preferencesDao.getUserPreferences(userId)
+
 
     // REMOTE REQUEST
 
@@ -41,7 +61,8 @@ class UserRepositoryImpl : UserRepository {
 
 
     override suspend fun getUserFromRemoteDB(userId: String): Result<User?> {
-        return when(val resultDocumentSnapshot = userCollection.document(userId).get().await()){
+        return when(val resultDocumentSnapshot =
+            userCollection.document(userId).get().await()){
             is Result.Success -> {
                 val user = resultDocumentSnapshot.data.toObject(User::class.java)
                 Result.Success(user)
@@ -52,9 +73,11 @@ class UserRepositoryImpl : UserRepository {
     }
 
 
-    override suspend fun createUserInRemoteDB(user: User) = userCollection.document(user.id).set(user).await()
+    override suspend fun createUserInRemoteDB(user: User) =
+        userCollection.document(user.id).set(user).await()
 
-    override suspend fun deleteUserFromCloudDB(userId: String) = userCollection.document(userId).delete().await()
+    override suspend fun deleteUserFromCloudDB(userId: String) =
+        userCollection.document(userId).delete().await()
 
     override suspend fun updateUserInfoInRemoteDB(user: User): Result<Void?> {
         return userCollection.document(user.id).update(

@@ -64,3 +64,4 @@ ext {
     junitVersion = "4.12"
     testRunnerAndroidVersion = "1.2.0"
 }
+

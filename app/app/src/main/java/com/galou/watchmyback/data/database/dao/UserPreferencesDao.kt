@@ -1,9 +1,6 @@
 package com.galou.watchmyback.data.database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.utils.PREFERENCES_TABLE_NAME
 import com.galou.watchmyback.utils.PREFERENCES_TABLE_USER_UUID
@@ -25,7 +22,7 @@ interface UserPreferencesDao {
      *
      * @see Insert
      */
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun createUserPreferences(preferences: UserPreferences)
 
     /**
