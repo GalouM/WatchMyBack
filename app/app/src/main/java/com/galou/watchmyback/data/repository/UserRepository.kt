@@ -3,9 +3,13 @@ package com.galou.watchmyback.data.repository
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.galou.watchmyback.data.entity.User
+import com.galou.watchmyback.data.entity.UserPreferences
+import com.galou.watchmyback.data.source.UserDataSource
+import com.galou.watchmyback.data.source.local.UserLocalDataSource
+import com.galou.watchmyback.data.source.remote.UserRemoteDataSource
 import com.galou.watchmyback.utils.Result
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.storage.UploadTask
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 /**
  * Created by galou on 2019-10-25
@@ -18,64 +22,13 @@ interface UserRepository {
      */
     val currentUser: MutableLiveData<User>
 
-    /**
-     * Suspend function, get the specified [User] from the Cloud Firestore database.
-     *
-     * Return a [Result] with a [User] or an error
-     *
-     * @param userId ID of the user to query
-     * @return [Result] with the [User] requested if it exist in the database
-     *
-     * @see Result
-     */
-    suspend fun getUserFromRemoteDB(userId: String): Result<User?>
+    suspend fun createUser(user: User): Result<Void?>
 
-    /**
-     * Suspend function, create a [User] in the the Cloud Firestore database
-     *
-     * @param user [User] to create in the database
-     * @return [Result] of the operation
-     *
-     * @see Result
-     */
-    suspend fun createUserInRemoteDB(user: User): Result<Void?>
+    suspend fun updateUser(user: User): Result<Void?>
 
-    /**
-     * Delete the specified [User] in the Cloud Firestore database
-     *
-     * @param userId ID of the [User] to delete
-     * @return [Result] of the operation
-     */
-    suspend fun deleteUserFromCloudDB(userId: String): Result<Void?>
+    suspend fun deleteUser(user: User): Result<Void?>
 
-    /**
-     * Update a [User] in the remote database
-     *
-     * @param user [User] to update
-     * @return [Result] of the operation
-     *
-     * @see Result
-     */
-    suspend fun updateUserInfoInRemoteDB(user: User): Result<Void?>
+    suspend fun fetchUser(userId: String): Result<User?>
 
-    /**
-     * Update a [User] profile picture path in the remote database
-     *
-     * @param userId ID of the user to update
-     * @param urlPicure url of the new profile picture
-     * @return [Result] of the operation
-     */
-    suspend fun updateUserPicturePathInRemoteDB(userId: String, urlPicure: String): Result<Void?>
-
-    /**
-     * Upload a [User]'s profile picture to Firebase Storage
-     *
-     * The suspend function return a [Result] with the uri of the picture in the remote storage
-     *
-     * @param uriPicture local url of the picture to upload
-     * @return [Result] with the uri of picture in the remote storage or error message
-     *
-     * @see Result
-     */
-    suspend fun uploadUserPictureToRemoteStorageAndGetUrl(uriPicture: Uri): Result<Uri>
+    suspend fun updateUserPicture(user: User, internalUri: Uri): Result<Uri?>
 }

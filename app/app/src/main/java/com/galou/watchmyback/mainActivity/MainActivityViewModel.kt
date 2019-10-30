@@ -128,7 +128,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
     private fun fetchCurrentUserInformation(firebaseUser: FirebaseUser) {
         if (getUserJob?.isActive == true) getUserJob?.cancel()
         getUserJob = viewModelScope.launch {
-            when (val result = userRepository.getUserFromRemoteDB(firebaseUser.uid)) {
+            when (val result = userRepository.fetchUser(firebaseUser.uid)) {
                 is Result.Success -> {
                     val user = result.data
                     if(user != null){
@@ -160,7 +160,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
         val user = User(firebaseUser.uid, firebaseUser.email, firebaseUser.displayName, firebaseUser.phoneNumber, urlPhoto)
         if(createUserJob?.isActive == true) createUserJob?.cancel()
         createUserJob = viewModelScope.launch {
-            when(userRepository.createUserInRemoteDB(user)){
+            when(userRepository.createUser(user)){
                 is Result.Success -> fetchCurrentUserInformation(firebaseUser)
                 is Result.Error -> showSnackBarMessage(R.string.error_creatng_user_remote)
                 is Result.Canceled -> showSnackBarMessage(R.string.canceled)

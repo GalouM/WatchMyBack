@@ -4,7 +4,6 @@ import android.app.Activity.RESULT_OK
 import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.core.net.toUri
-import androidx.lifecycle.MutableLiveData
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.profileActivity.ProfileViewModel
 import com.galou.watchmyback.testHelpers.*
@@ -17,7 +16,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
-import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -38,7 +36,7 @@ class ProfileViewModelUnitTest: KoinTest {
     @Before
     fun setupViewModel(){
         userRepository = FakeUserRepositoryImpl()
-        userMocked = generateTestUser(TEST_UID)!!
+        userMocked = generateTestUser(TEST_UID)
         userRepository.currentUser.value = userMocked
         viewModel = ProfileViewModel(userRepository)
 

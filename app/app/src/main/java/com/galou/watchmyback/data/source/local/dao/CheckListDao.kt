@@ -1,7 +1,7 @@
-package com.galou.watchmyback.data.database.dao
+package com.galou.watchmyback.data.source.local.dao
 
 import androidx.room.*
-import com.galou.watchmyback.data.database.WatchMyBackDatabase
+import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.entity.CheckList
 import com.galou.watchmyback.data.entity.CheckListWithItems
 import com.galou.watchmyback.data.entity.ItemCheckList

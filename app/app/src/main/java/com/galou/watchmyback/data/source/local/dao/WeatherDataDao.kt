@@ -1,12 +1,9 @@
-package com.galou.watchmyback.data.database.dao
+package com.galou.watchmyback.data.source.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import com.galou.watchmyback.data.entity.TypePoint
 import com.galou.watchmyback.data.entity.WeatherData
-import com.galou.watchmyback.utils.*
 
 /**
  * List all the actions possible on the [WeatherData] table

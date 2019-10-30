@@ -1,8 +1,7 @@
-package com.galou.watchmyback.data.database.dao
+package com.galou.watchmyback.data.source.local.dao
 
 import androidx.room.*
-import com.galou.watchmyback.data.database.WatchMyBackDatabase
-import com.galou.watchmyback.data.entity.Trip
+import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.utils.*
@@ -67,14 +66,14 @@ abstract class UserDao(private val database: WatchMyBackDatabase) {
     abstract suspend fun updateUser(user: User)
 
     /**
-     * Delete [User] with a specific ID from the database
+     * Delete [User] from the database
      *
-     * @param userId ID of the user to delete
+     * @param user user to delete
      *
-     * @see Query
+     * @see Delete
      */
-    @Query("DELETE FROM $USER_TABLE_NAME WHERE $USER_TABLE_UUID = :userId")
-    abstract suspend fun deleteUser(userId: String)
+    @Delete
+    abstract suspend fun deleteUser(user: User)
 
     @Transaction
     open suspend fun createUserAndPreferences(user: User, preferences: UserPreferences){

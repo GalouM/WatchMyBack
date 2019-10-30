@@ -1,11 +1,7 @@
-package com.galou.watchmyback.data.database.dao
+package com.galou.watchmyback.data.source.local.dao
 
 import androidx.room.*
-import com.galou.watchmyback.data.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.entity.Location
-import com.galou.watchmyback.data.entity.WeatherData
-import com.galou.watchmyback.utils.LOCATION_TABLE_NAME
-import com.galou.watchmyback.utils.LOCATION_TABLE_UUID
 
 /**
  * List of all tha actions possible on the [Location] table

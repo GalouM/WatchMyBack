@@ -1,4 +1,4 @@
-package com.galou.watchmyback.data.database.dao
+package com.galou.watchmyback.data.source.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

@@ -1,4 +1,4 @@
-package com.galou.watchmyback.data.database
+package com.galou.watchmyback.data.source.database
 
 import androidx.room.TypeConverter
 import com.galou.watchmyback.data.entity.*

@@ -21,14 +21,7 @@ import com.galou.watchmyback.utils.*
  * @see TimeDisplay
  */
 @Entity(
-    tableName = PREFERENCES_TABLE_NAME,
-    foreignKeys = [
-    ForeignKey(
-        entity = User::class,
-        parentColumns = [USER_TABLE_UUID],
-        childColumns = [PREFERENCES_TABLE_USER_UUID],
-        onDelete = ForeignKey.CASCADE
-    )]
+    tableName = PREFERENCES_TABLE_NAME
 )
 class UserPreferences (
     @ColumnInfo(name = PREFERENCES_TABLE_USER_UUID) @PrimaryKey var id: String = "",

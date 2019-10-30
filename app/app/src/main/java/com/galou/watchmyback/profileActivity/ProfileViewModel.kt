@@ -144,7 +144,7 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
         user.username = usernameLD.value
         if(updateUserJob?.isActive == true) updateUserJob?.cancel()
         updateUserJob = viewModelScope.launch {
-            when(userRepository.updateUserInfoInRemoteDB(user)){
+            when(userRepository.updateUser(user)){
                 is Result.Success -> {
                     userRepository.currentUser.value = user
                     _dataSaved.value = Event(true)
@@ -199,30 +199,20 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
     private fun downloadPictureToRemoteStorage(uriPicture: Uri){
         if (uploadPictureJob?.isActive == true) uploadPictureJob?.cancel()
         uploadPictureJob = viewModelScope.launch {
-            when(val uriStorage = userRepository.uploadUserPictureToRemoteStorageAndGetUrl(uriPicture)){
-                is Result.Success -> updateUserPictureWithNewPicture(uriStorage.data.toString())
-                is Result.Error -> showSnackBarMessage(R.string.error_download_picture)
-                is Result.Canceled -> showSnackBarMessage(R.string.canceled)
-            }
-            _dataLoading.value = false
-        }
-    }
-    
-    private fun updateUserPictureWithNewPicture(uri: String){
-        if (updatePictureJob?.isActive == true) updatePictureJob?.cancel()
-        updatePictureJob = viewModelScope.launch {
-            when(userRepository.updateUserPicturePathInRemoteDB(user.id, uri)){
+            when(val uriStorage = userRepository.updateUserPicture(user, uriPicture)){
                 is Result.Success -> {
-                    user.pictureUrl = uri
-                    userRepository.currentUser.value = user
-                    _pictureUrlLD.value = user.pictureUrl
-                    showSnackBarMessage(R.string.picture_updated)
+                    uriStorage.data?.let { uri ->
+                        user.pictureUrl = uri.toString()
+                        userRepository.currentUser.value = user
+                        _pictureUrlLD.value = user.pictureUrl
+                        showSnackBarMessage(R.string.picture_updated)
+                    }
                 }
                 is Result.Error -> showSnackBarMessage(R.string.error_update_picture)
                 is Result.Canceled -> showSnackBarMessage(R.string.canceled)
             }
+            _dataLoading.value = false
         }
-        
     }
 
     // UTILS

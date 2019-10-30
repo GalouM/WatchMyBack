@@ -1,4 +1,4 @@
-package com.galou.watchmyback.data.database.dao
+package com.galou.watchmyback.data.source.local.dao
 
 import androidx.room.*
 import com.galou.watchmyback.data.entity.UserPreferences
@@ -40,4 +40,7 @@ interface UserPreferencesDao {
      */
     @Update
     suspend fun updateUserPreferences(preferences: UserPreferences)
+
+    @Delete
+    suspend fun deleteUserPreferences(preferences: UserPreferences)
 }

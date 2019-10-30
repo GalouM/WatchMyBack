@@ -1,8 +1,7 @@
-package com.galou.watchmyback.data.database
+package com.galou.watchmyback.data.source.database
 
-import android.content.Context
 import androidx.room.*
-import com.galou.watchmyback.data.database.dao.*
+import com.galou.watchmyback.data.source.local.dao.*
 import com.galou.watchmyback.data.entity.*
 
 /**

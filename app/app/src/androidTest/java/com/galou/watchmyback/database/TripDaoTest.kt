@@ -4,8 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
-import com.galou.watchmyback.data.database.WatchMyBackDatabase
-import com.galou.watchmyback.data.database.dao.*
+import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
+import com.galou.watchmyback.data.source.local.dao.*
 import com.galou.watchmyback.data.entity.TypePoint
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.runBlocking

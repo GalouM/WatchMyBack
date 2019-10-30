@@ -1,10 +1,11 @@
 package com.galou.watchmyback.di
 
 import androidx.room.Room
-import com.galou.watchmyback.data.database.WatchMyBackDatabase
-import com.galou.watchmyback.data.database.dao.UserDao
+import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.data.repository.UserRepositoryImpl
+import com.galou.watchmyback.data.source.local.UserLocalDataSource
+import com.galou.watchmyback.data.source.remote.UserRemoteDataSource
 import com.galou.watchmyback.mainActivity.MainActivityViewModel
 import com.galou.watchmyback.profileActivity.ProfileViewModel
 import org.koin.android.ext.koin.androidApplication
@@ -27,11 +28,10 @@ val appModules = module {
         )
         .build()
     }
+    single { UserLocalDataSource(userDao = get<WatchMyBackDatabase>().userDao()) }
+    single { UserRemoteDataSource() }
     single<UserRepository> {
-        UserRepositoryImpl(
-            get<WatchMyBackDatabase>().userDao(), 
-            get<WatchMyBackDatabase>().userPreferencesDao()
-        )
+        UserRepositoryImpl(localSource = get(), remoteSource = get())
     }
     viewModel { MainActivityViewModel(userRepository = get()) }
     viewModel { ProfileViewModel(userRepository = get()) }

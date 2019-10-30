@@ -4,9 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
-import com.galou.watchmyback.data.database.WatchMyBackDatabase
-import com.galou.watchmyback.data.database.dao.CheckListDao
-import com.galou.watchmyback.data.database.dao.UserDao
+import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
+import com.galou.watchmyback.data.source.local.dao.CheckListDao
+import com.galou.watchmyback.data.source.local.dao.UserDao
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.hasItem
 import org.hamcrest.Matchers.hasSize

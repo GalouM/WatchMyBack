@@ -1,21 +1,8 @@
 package com.galou.watchmyback.instrumentedTestHelpers
 
-import android.app.Activity
 import com.galou.watchmyback.data.entity.User
-import com.galou.watchmyback.data.repository.UserRepository
-import com.galou.watchmyback.mainActivity.MainActivityViewModel
-import com.galou.watchmyback.profileActivity.ProfileViewModel
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseUser
-import org.koin.android.viewmodel.dsl.viewModel
-import org.koin.core.module.Module
-import org.koin.dsl.module
 import org.mockito.Mockito
-import java.lang.Exception
-import java.util.concurrent.Executor
 
 /**
  * Created by galou on 2019-10-27

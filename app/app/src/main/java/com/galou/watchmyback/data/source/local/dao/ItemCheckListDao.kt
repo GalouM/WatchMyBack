@@ -1,11 +1,10 @@
-package com.galou.watchmyback.data.database.dao
+package com.galou.watchmyback.data.source.local.dao
 
 import androidx.room.*
 import com.galou.watchmyback.data.entity.CheckList
 import com.galou.watchmyback.data.entity.ItemCheckList
 import com.galou.watchmyback.utils.ITEM_LIST_TABLE_NAME
 import com.galou.watchmyback.utils.ITEM_TABLE_LIST_ID
-import com.galou.watchmyback.utils.ITEM_TABLE_UUID
 
 /**
  * List all the actions possible on the [ItemCheckList] table

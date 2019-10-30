@@ -1,6 +1,6 @@
 package com.galou.watchmyback.database
 
-import com.galou.watchmyback.data.database.Converters
+import com.galou.watchmyback.data.source.database.Converters
 import com.galou.watchmyback.data.entity.*
 import com.galou.watchmyback.utils.todaysDate
 import org.junit.Assert.assertEquals
