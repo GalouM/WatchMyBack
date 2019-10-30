@@ -3,6 +3,7 @@ package com.galou.watchmyback.data.repository
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.galou.watchmyback.data.entity.User
+import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.source.local.UserLocalDataSource
 import com.galou.watchmyback.data.source.remote.UserRemoteDataSource
 import com.galou.watchmyback.utils.Result
@@ -70,4 +71,7 @@ class UserRepositoryImpl(
         }
         return uriResult
     }
+
+    override suspend fun updateUserPreferences(preferences: UserPreferences): Result<Void?> =
+        localSource.updateUserPreference(preferences)
 }

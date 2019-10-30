@@ -28,7 +28,10 @@ val appModules = module {
         )
         .build()
     }
-    single { UserLocalDataSource(userDao = get<WatchMyBackDatabase>().userDao()) }
+    single { UserLocalDataSource(
+        userDao = get<WatchMyBackDatabase>().userDao(),
+        userPreferencesDao = get<WatchMyBackDatabase>().userPreferencesDao()
+    ) }
     single { UserRemoteDataSource() }
     single<UserRepository> {
         UserRepositoryImpl(localSource = get(), remoteSource = get())

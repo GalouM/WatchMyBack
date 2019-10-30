@@ -63,7 +63,7 @@ class UserDaoTest {
         userDao.createUser(mainUser)
         val userFromDB = userDao.getUser(mainUser.id)
         assertNotNull(userFromDB)
-        userDao.deleteUser(mainUser.id)
+        userDao.deleteUser(mainUser)
         val userDeleted = userDao.getUser(mainUser.id)
         assertNull(userDeleted)
     }

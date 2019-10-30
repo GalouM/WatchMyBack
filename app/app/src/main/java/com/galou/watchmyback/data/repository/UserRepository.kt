@@ -31,4 +31,6 @@ interface UserRepository {
     suspend fun fetchUser(userId: String): Result<User?>
 
     suspend fun updateUserPicture(user: User, internalUri: Uri): Result<Uri?>
+
+    suspend fun updateUserPreferences(preferences: UserPreferences): Result<Void?>
 }
