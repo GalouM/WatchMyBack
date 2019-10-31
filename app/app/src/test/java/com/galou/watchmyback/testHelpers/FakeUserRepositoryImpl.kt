@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.MutableLiveData
 import com.galou.watchmyback.data.entity.User
+import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
 
@@ -27,5 +28,9 @@ open class FakeUserRepositoryImpl : UserRepository{
         val uriFromRemoteStorage = URI_STORAGE_REMOTE.toUri()
         return Result.Success(uriFromRemoteStorage)
     }
+
+    override suspend fun updateUserPreferences(preferences: UserPreferences): Result<Void?> = Result.Success(null)
+
+    override suspend fun fetchUserPreferences(userId: String): Result<UserPreferences?> = Result.Success(null)
 }
 

@@ -8,6 +8,7 @@ import com.galou.watchmyback.data.source.local.UserLocalDataSource
 import com.galou.watchmyback.data.source.remote.UserRemoteDataSource
 import com.galou.watchmyback.mainActivity.MainActivityViewModel
 import com.galou.watchmyback.profileActivity.ProfileViewModel
+import com.galou.watchmyback.settings.SettingsViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -38,4 +39,5 @@ val appModules = module {
     }
     viewModel { MainActivityViewModel(userRepository = get()) }
     viewModel { ProfileViewModel(userRepository = get()) }
+    viewModel { SettingsViewModel(userRepository = get()) }
 }

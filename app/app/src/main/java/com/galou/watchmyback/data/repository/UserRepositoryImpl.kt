@@ -74,4 +74,7 @@ class UserRepositoryImpl(
 
     override suspend fun updateUserPreferences(preferences: UserPreferences): Result<Void?> =
         localSource.updateUserPreference(preferences)
+
+    override suspend fun fetchUserPreferences(userId: String): Result<UserPreferences?> =
+        localSource.fetchUserPreferences(userId)
 }

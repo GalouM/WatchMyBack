@@ -110,4 +110,5 @@
     <string name="canceled">Operation was canceled</string>
     <string name="picture_updated">Your picture was updated</string>
     <string name="error_update_picture">Error while updating your picture</string>
+    <string name="fetch_preferences_error">Error fetching preferences</string>
 </resources>

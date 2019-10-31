@@ -63,4 +63,12 @@ class UserLocalDataSource(
             Result.Error(e)
         }
     }
+
+    suspend fun fetchUserPreferences(userId: String): Result<UserPreferences?> = withContext(ioDispatcher){
+        return@withContext try {
+            Result.Success(userPreferencesDao.getUserPreferences(userId))
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
 }
