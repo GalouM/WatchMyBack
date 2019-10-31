@@ -87,11 +87,15 @@ const val USER_COLLECTION_NAME = "userCollection"
 // ------ STORAGE REFERENCE -------
 const val USER_PICTURE_REFERENCE = "images/userPicture/"
 
-// ------ RESULT CODE ACTIVITIES -------
+// ------ REQUEST CODE ACTIVITIES -------
 const val RC_SIGN_IN = 100
 const val RC_LIBRARY_PICK = 200
 const val RC_IMAGE_PERMS = 400
 const val RC_PROFILE = 500
+const val RC_SETTINGS = 600
+
+// ------ RESULT CODE ACTIVITIES -------
+const val RESULT_DELETED = -100
 
 // ------ PERMISSIONS -------
 const val PERMS_EXT_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE

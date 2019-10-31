@@ -1,11 +1,14 @@
 package com.galou.watchmyback
 
+import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.idGenerated
+import com.galou.watchmyback.utils.returnSuccessOrError
 import com.galou.watchmyback.utils.todaysDate
+import com.google.common.truth.Truth.assertThat
 import org.hamcrest.CoreMatchers.not
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThat
 import org.junit.Test
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -18,7 +21,7 @@ class OtherUtilUnitTest {
     fun checkIdGenerated_isUnique(){
         val firstId = idGenerated
         val secondId = idGenerated
-        assertThat(firstId, not(secondId))
+        assertThat(firstId).doesNotMatch(secondId)
     }
 
     @Test
@@ -26,5 +29,37 @@ class OtherUtilUnitTest {
         val today = Calendar.getInstance(Locale.CANADA).time
         val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.CANADA)
         assertEquals(formatter.format(today), formatter.format(todaysDate))
+    }
+
+    @Test
+    fun failLocalRequestAndFailRemoteRequest_returnFail(){
+        val remote = Result.Error(Exception("test error"))
+        val local = Result.Error(Exception("test error"))
+
+        assertThat(returnSuccessOrError(local, remote)).isEqualTo(local)
+    }
+
+    @Test
+    fun failLocalRequestAndSuccessRemoteRequest_returnRemote(){
+        val remote = Result.Success(null)
+        val local = Result.Error(Exception("test error"))
+
+        assertThat(returnSuccessOrError(local, remote)).isEqualTo(local)
+    }
+
+    @Test
+    fun successLocalRequestAndFailRemoteRequest_returnRemote(){
+        val remote = Result.Error(Exception("test error"))
+        val local = Result.Success(null)
+
+        assertThat(returnSuccessOrError(local, remote)).isEqualTo(remote)
+    }
+
+    @Test
+    fun localAndRemoteSuccess_returnSuccess(){
+        val local = Result.Success(null)
+        val remote = Result.Success(null)
+        assertThat(returnSuccessOrError(local, remote)).isEqualTo(Result.Success(null))
+
     }
 }

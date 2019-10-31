@@ -1,35 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    android:id="@+id/activity_settings_scrollview"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    android:id="@+id/activity_settings_container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".settings.SettingsActivity">
+        <import type="android.view.View" />
+        <import type="android.widget.RadioGroup"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+        <variable
+            name="viewmodel"
+            type="com.galou.watchmyback.settings.SettingsViewModel" />
+    </data>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <include
+        android:id="@+id/settings_view_toolbar"
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/activity_settings_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/settings_view_toolbar"
-            layout="@layout/toolbar"/>
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/activity_settings_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <androidx.core.widget.ContentLoadingProgressBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/settings_view_progressbar"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            app:layout_constraintTop_toBottomOf="@id/settings_view_toolbar"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:indeterminate="true"/>
+            android:indeterminate="true"
+            app:visibleOrInvisible="@{viewmodel.dataLoading}"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -64,11 +82,12 @@
                 android:id="@+id/settings_view_notification_emergency_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
                 app:layout_constraintTop_toBottomOf="@id/settings_view_notification_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:padding="@dimen/medium_padding"
-                android:layout_marginTop="@dimen/margin_small"/>
+                android:layout_marginTop="@dimen/margin_small"
+                android:onClick="@{() -> viewmodel.updateUserPreferences()}"
+                android:checked="@={viewmodel.preferencesLD.notificationEmergency}"/>
 
             <TextView
                 android:id="@+id/settings_view_notification_back_title"
@@ -85,11 +104,12 @@
                 android:id="@+id/settings_view_notification_back_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
                 app:layout_constraintTop_toBottomOf="@id/settings_view_notification_emergency_switch"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:padding="@dimen/medium_padding"
-                android:layout_marginTop="@dimen/margin_small"/>
+                android:layout_marginTop="@dimen/margin_small"
+                android:onClick="@{() -> viewmodel.updateUserPreferences()}"
+                android:checked="@={viewmodel.preferencesLD.notificationBackSafe}"/>
 
             <TextView
                 android:id="@+id/settings_view_notification_late_title"
@@ -106,11 +126,12 @@
                 android:id="@+id/settings_view_notification_late_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
                 app:layout_constraintTop_toBottomOf="@id/settings_view_notification_back_switch"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:padding="@dimen/medium_padding"
-                android:layout_marginTop="@dimen/margin_small"/>
+                android:layout_marginTop="@dimen/margin_small"
+                android:onClick="@{() -> viewmodel.updateUserPreferences()}"
+                android:checked="@={viewmodel.preferencesLD.notificationLate}"/>
 
             <TextView
                 android:id="@+id/settings_view_notification_update_title"
@@ -127,11 +148,12 @@
                 android:id="@+id/settings_view_notification_update_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
                 app:layout_constraintTop_toBottomOf="@id/settings_view_notification_late_switch"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:padding="@dimen/medium_padding"
-                android:layout_marginTop="@dimen/margin_small"/>
+                android:layout_marginTop="@dimen/margin_small"
+                android:onClick="@{() -> viewmodel.updateUserPreferences()}"
+                android:checked="@={viewmodel.preferencesLD.notificationLocationUpdate}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -141,7 +163,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/settings_view_notification_group"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_really_big"
             android:layout_marginStart="@dimen/margin_small"
             android:layout_marginEnd="@dimen/margin_small">
 
@@ -165,7 +187,8 @@
                     android:id="@+id/settings_view_emergency_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="phone"/>
+                    android:inputType="phone"
+                    android:text="@={viewmodel.preferencesLD.emergencyNumber}"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -178,7 +201,7 @@
             app:layout_constraintTop_toBottomOf="@id/settings_view_emergency_group"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/margin_small"
-            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_really_big"
             android:layout_marginEnd="@dimen/margin_small">
 
             <TextView
@@ -196,19 +219,22 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/settings_view_unit_system_title"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:unitSystemType="@{viewmodel.preferencesLD.unitSystem}">
                 <RadioButton
                     android:id="@+id/settings_view_unit_system_unit_metric"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/metric"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:onClick="@{(view) -> viewmodel.updateUnitSytem(view)}"/>
                 <RadioButton
                     android:id="@+id/settings_view_unit_system_unit_imperial"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/imperial"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:onClick="@{(view) -> viewmodel.updateUnitSytem(view)}"/>
 
             </RadioGroup>
 
@@ -219,19 +245,22 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/settings_view_unit_system_unit"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:timeDisplay="@{viewmodel.preferencesLD.timeDisplay}">
                 <RadioButton
                     android:id="@+id/settings_view_unit_system_time_12"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/am_pm"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:onClick="@{(view) -> viewmodel.updateTimeDisplay(view)}"/>
                 <RadioButton
                     android:id="@+id/settings_view_unit_system_time_24"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/_24h"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:onClick="@{(view) -> viewmodel.updateTimeDisplay(view)}"/>
 
             </RadioGroup>
 
@@ -243,7 +272,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/settings_view_unit_system_group"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_really_big"
             android:layout_marginStart="@dimen/margin_small"
             android:layout_marginEnd="@dimen/margin_small">
 
@@ -264,12 +293,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="@string/delete_all_my_data"
-                app:icon="@drawable/icon_delete"/>
+                app:icon="@drawable/icon_delete"
+                android:onClick="@{() -> viewmodel.deleteUserData()}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
-</ScrollView>
+</layout>

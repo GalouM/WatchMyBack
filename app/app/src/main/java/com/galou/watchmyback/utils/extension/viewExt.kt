@@ -1,14 +1,17 @@
 package com.galou.watchmyback.utils.extension
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
-import android.widget.EditText
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.galou.watchmyback.Event
+import com.galou.watchmyback.utils.displayData
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 /**
@@ -84,3 +87,4 @@ fun TextInputLayout.errorMessage(errorMessage: Int?){
         this.isErrorEnabled = false
     }
 }
+

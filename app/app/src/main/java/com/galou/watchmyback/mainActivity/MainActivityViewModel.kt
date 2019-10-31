@@ -13,8 +13,10 @@ import com.firebase.ui.auth.IdpResponse
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
 import com.galou.watchmyback.data.entity.User
+import com.galou.watchmyback.data.entity.UserWithPreferences
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.data.repository.UserRepositoryImpl
+import com.galou.watchmyback.utils.RESULT_DELETED
 import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.displayData
 import com.google.firebase.auth.FirebaseUser
@@ -60,7 +62,6 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
      * @param firebaseUser user connected to the app through Firebase Authentification
      */
     fun checkIfUserIsConnected(firebaseUser: FirebaseUser?){
-        displayData("$firebaseUser")
         if(firebaseUser != null){
             fetchCurrentUserInformation(firebaseUser)
         } else{
@@ -116,11 +117,17 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
         if(resultCode == RESULT_OK) showSnackBarMessage(R.string.info_updated)
     }
 
+    fun handleResultSettingsAcitivity(resultCode: Int){
+        if (resultCode == RESULT_DELETED){
+            showSignInActivity()
+        }
+    }
+
     /**
      * Fetch the users information from the remote database
      * Create a user in the remote database if it doesn't already exist
      *
-     * @see createUserToRemoteDB
+     * @see createUserToDB
      * @see UserRepositoryImpl.getUserFromRemoteDB
      *
      * @param firebaseUser user connected to the app through Firebase Authentification
@@ -134,7 +141,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
                     if(user != null){
                         setupUserInformation(user)
                     } else {
-                        createUserToRemoteDB(firebaseUser)
+                        createUserToDB(firebaseUser)
                     }
 
                 }
@@ -144,10 +151,6 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
         }
     }
 
-    private fun fetchLocalInfoUser(user: User){
-
-    }
-
     /**
      * Create a user in the remote databse
      *
@@ -155,7 +158,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
      *
      * @param firebaseUser user connected to the app through Firebase Authentification
      */
-    private fun createUserToRemoteDB(firebaseUser: FirebaseUser){
+    private fun createUserToDB(firebaseUser: FirebaseUser){
         val urlPhoto = firebaseUser.photoUrl?.toString()
         val user = User(firebaseUser.uid, firebaseUser.email, firebaseUser.displayName, firebaseUser.phoneNumber, urlPhoto)
         if(createUserJob?.isActive == true) createUserJob?.cancel()
@@ -173,8 +176,10 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
      *
      * @param user [User] fetched from the database
      */
-    private fun setupUserInformation(user: User){
-        userRepository.currentUser.value = user
+    private fun setupUserInformation(user: UserWithPreferences){
+        displayData("user and prop: $user")
+        userRepository.currentUser.value = user.user
+        userRepository.userPreferences.value = user.preferences
         showSnackBarMessage(R.string.welcome)
     }
 

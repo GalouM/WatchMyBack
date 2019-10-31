@@ -4,6 +4,7 @@ import androidx.room.*
 import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
+import com.galou.watchmyback.data.entity.UserWithPreferences
 import com.galou.watchmyback.utils.*
 
 /**
@@ -28,6 +29,10 @@ abstract class UserDao(private val database: WatchMyBackDatabase) {
      */
     @Query("SELECT * FROM $USER_TABLE_NAME WHERE $USER_TABLE_UUID = :userId")
     abstract suspend fun getUser(userId: String): User?
+
+    @Transaction
+    @Query("SELECT * FROM $USER_TABLE_NAME WHERE $USER_TABLE_UUID = :userId")
+    abstract suspend fun getUserWithPreferences(userId: String): UserWithPreferences?
 
     /**
      * Query a list of [User] who have a specific chain of character in their username
@@ -80,5 +85,6 @@ abstract class UserDao(private val database: WatchMyBackDatabase) {
         createUser(user)
         database.userPreferencesDao().createUserPreferences(preferences)
     }
+
 
 }

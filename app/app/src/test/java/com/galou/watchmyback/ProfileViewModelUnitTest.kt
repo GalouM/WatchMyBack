@@ -8,6 +8,7 @@ import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.profileActivity.ProfileViewModel
 import com.galou.watchmyback.testHelpers.*
 import com.google.common.truth.Truth
+import kotlinx.coroutines.newSingleThreadContext
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -28,7 +29,7 @@ import org.robolectric.annotation.Config
 class ProfileViewModelUnitTest: KoinTest {
     private lateinit var viewModel: ProfileViewModel
     private lateinit var userRepository: FakeUserRepositoryImpl
-    private lateinit var userMocked: User
+    private lateinit var fakeUser: User
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
@@ -36,8 +37,8 @@ class ProfileViewModelUnitTest: KoinTest {
     @Before
     fun setupViewModel(){
         userRepository = FakeUserRepositoryImpl()
-        userMocked = generateTestUser(TEST_UID)
-        userRepository.currentUser.value = userMocked
+        fakeUser = generateTestUser(TEST_UID)
+        userRepository.currentUser.value = fakeUser
         viewModel = ProfileViewModel(userRepository)
 
     }
@@ -49,10 +50,10 @@ class ProfileViewModelUnitTest: KoinTest {
 
     @Test
     fun init_emitUserInfo(){
-        assertEquals(LiveDataTestUtil.getValue(viewModel.usernameLD), userMocked.username)
-        assertEquals(LiveDataTestUtil.getValue(viewModel.phoneNumberLD), userMocked.phoneNumber)
-        assertEquals(LiveDataTestUtil.getValue(viewModel.emailLD), userMocked.email)
-        assertEquals(LiveDataTestUtil.getValue(viewModel.pictureUrlLD), userMocked.pictureUrl)
+        assertEquals(LiveDataTestUtil.getValue(viewModel.usernameLD), fakeUser.username)
+        assertEquals(LiveDataTestUtil.getValue(viewModel.phoneNumberLD), fakeUser.phoneNumber)
+        assertEquals(LiveDataTestUtil.getValue(viewModel.emailLD), fakeUser.email)
+        assertEquals(LiveDataTestUtil.getValue(viewModel.pictureUrlLD), fakeUser.pictureUrl)
     }
 
     @Test

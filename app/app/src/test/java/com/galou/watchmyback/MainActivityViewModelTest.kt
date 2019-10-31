@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_OK
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.galou.watchmyback.mainActivity.MainActivityViewModel
 import com.galou.watchmyback.testHelpers.*
+import com.galou.watchmyback.utils.RESULT_DELETED
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.resetMain
@@ -80,6 +81,13 @@ class MainActivityViewModelTest {
     fun showModificationSAvedMessage_afterProfileSaved(){
         viewModel.handleResultAfterProfileActivityClosed(RESULT_OK)
         assertSnackBarMessage(viewModel.snackbarMessage, R.string.info_updated)
+    }
+
+    @Test
+    fun accountDeletedShowSignInActivity(){
+        viewModel.handleResultSettingsAcitivity(RESULT_DELETED)
+        val value: Event<Unit> = LiveDataTestUtil.getValue(viewModel.openSignInActivityEvent)
+        assertThat(value.getContentIfNotHandled()).isNotNull()
     }
 
 

@@ -2,10 +2,12 @@ package com.galou.watchmyback.data.source.local
 
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
+import com.galou.watchmyback.data.entity.UserWithPreferences
 import com.galou.watchmyback.data.source.UserDataSource
 import com.galou.watchmyback.data.source.local.dao.UserDao
 import com.galou.watchmyback.data.source.local.dao.UserPreferencesDao
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.displayData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -23,6 +25,22 @@ class UserLocalDataSource(
         val preferences = UserPreferences(id = user.id)
         return@withContext try {
             userDao.createUserAndPreferences(user, preferences)
+
+            Result.Success(null)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    suspend fun updateOrCreateUser(remoteUser: User?, localUser: UserWithPreferences?): Result<Void?> {
+        return  try {
+            if (remoteUser != null) {
+                if (localUser != null) {
+                    if (remoteUser != localUser.user) updateUserInformation(remoteUser)
+                } else {
+                    createUser(remoteUser)
+                }
+            }
             Result.Success(null)
         } catch (e: Exception) {
             Result.Error(e)
@@ -38,13 +56,14 @@ class UserLocalDataSource(
         }
     }
 
-    override suspend fun fetchUser(userId: String): Result<User?> = withContext(ioDispatcher){
+    suspend fun fetchUser(userId: String): Result<UserWithPreferences?> = withContext(ioDispatcher){
         return@withContext try {
-            Result.Success(userDao.getUser(userId))
+            Result.Success(userDao.getUserWithPreferences(userId))
         } catch (e: Exception) {
             Result.Error(e)
         }
     }
+
 
     override suspend fun deleteUser(user: User): Result<Void?> = withContext(ioDispatcher){
        return@withContext try {
@@ -66,7 +85,23 @@ class UserLocalDataSource(
 
     suspend fun fetchUserPreferences(userId: String): Result<UserPreferences?> = withContext(ioDispatcher){
         return@withContext try {
-            Result.Success(userPreferencesDao.getUserPreferences(userId))
+            val userPreferences = userPreferencesDao.getUserPreferences(userId)
+            if(userPreferences == null){
+                createUserPreferences(userId)
+                val newPrefs = userPreferencesDao.getUserPreferences(userId)
+                Result.Success(newPrefs)
+            }
+            Result.Success(userPreferences)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    private suspend fun createUserPreferences(userId: String): Result<Void?> = withContext(ioDispatcher){
+        val preferences = UserPreferences(id = userId)
+        return@withContext try {
+            userPreferencesDao.createUserPreferences(preferences)
+            Result.Success(null)
         } catch (e: Exception) {
             Result.Error(e)
         }

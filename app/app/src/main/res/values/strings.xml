@@ -1,4 +1,8 @@
 <resources>
+
+    <!-- DO NOT DELETE STRING FOR TESTING -->
+    <string name="test_message" translatable="false">Test Message</string>
+
     <string name="app_name">Watch My Back</string>
     <string name="menu_title">Map</string>
     <string name="trips_title">Trips</string>
@@ -10,8 +14,6 @@
     <string name="open_nav_drawer">Open navigation drawer</string>
     <string name="close_nav_drawer">Close navigation drawer</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="is_in">&#032;is in&#032;</string>
     <string name="trip_type">trip type:&#032;</string>
     <string name="back_at">back at:&#032;</string>
@@ -111,4 +113,6 @@
     <string name="picture_updated">Your picture was updated</string>
     <string name="error_update_picture">Error while updating your picture</string>
     <string name="fetch_preferences_error">Error fetching preferences</string>
+    <string name="error_delete_account">Something wrong happened</string>
+    <string name="error_deletion">Unknown error, your account hasn\'t been deleted properly</string>
 </resources>

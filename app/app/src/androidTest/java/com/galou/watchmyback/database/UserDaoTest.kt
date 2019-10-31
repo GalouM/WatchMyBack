@@ -74,6 +74,9 @@ class UserDaoTest {
         userDao.createUserAndPreferences(mainUser, mainUserPreferences)
         val preferencesFromDB = preferencesDao.getUserPreferences(mainUser.id)
         assertNotNull(preferencesFromDB)
+        val userWithPreferences = userDao.getUserWithPreferences(mainUser.id)
+        assertEquals(userWithPreferences?.user?.id, mainUser.id)
+        assertEquals(userWithPreferences?.preferences?.id, mainUser.id)
     }
 
     @Test

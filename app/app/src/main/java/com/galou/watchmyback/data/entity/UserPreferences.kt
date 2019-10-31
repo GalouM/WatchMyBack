@@ -30,7 +30,7 @@ import com.galou.watchmyback.utils.*
         onDelete = ForeignKey.CASCADE
     )]
 )
-class UserPreferences (
+data class UserPreferences (
     @ColumnInfo(name = PREFERENCES_TABLE_USER_UUID) @PrimaryKey var id: String = "",
     @ColumnInfo(name = PREFERENCES_TABLE_EMERGENCY_NUMBER) var emergencyNumber: String = "",
     @ColumnInfo(name = PREFERENCES_TABLE_UNIT_SYSTEM) var unitSystem: UnitSystem = UnitSystem.METRIC,

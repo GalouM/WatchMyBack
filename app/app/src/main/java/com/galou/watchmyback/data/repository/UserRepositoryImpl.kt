@@ -4,9 +4,11 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
+import com.galou.watchmyback.data.entity.UserWithPreferences
 import com.galou.watchmyback.data.source.local.UserLocalDataSource
 import com.galou.watchmyback.data.source.remote.UserRemoteDataSource
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.displayData
 import com.galou.watchmyback.utils.returnSuccessOrError
 import kotlinx.coroutines.*
 import java.lang.Error
@@ -24,6 +26,7 @@ class UserRepositoryImpl(
 ) : UserRepository {
 
     override val currentUser = MutableLiveData<User>()
+    override val userPreferences = MutableLiveData<UserPreferences>()
 
     private val ioDispatcher = Dispatchers.IO
 
@@ -52,11 +55,22 @@ class UserRepositoryImpl(
         return@withContext returnSuccessOrError(localTask.await(), remoteTask.await())
     }
 
-    override suspend fun fetchUser(userId: String): Result<User?> {
-        val remoteUserResult = remoteSource.fetchUser(userId)
-        if(remoteUserResult is Result.Success) return remoteUserResult
+    override suspend fun fetchUser(userId: String): Result<UserWithPreferences?> = withContext(ioDispatcher) {
+        val localTask =  async { localSource.fetchUser(userId) }
+        val remoteTask = async { remoteSource.fetchUser(userId) }
+        val remoteResult = remoteTask.await()
+        val localResult = localTask.await()
+        if (remoteResult is Result.Success && localResult is Result.Success){
+            remoteResult.data?.let {remoteUser ->
+                val localUser = localResult.data
+                localSource.updateOrCreateUser(remoteUser, localUser)
+                val userWithPreferences = UserWithPreferences(user = remoteUser, preferences = localUser?.preferences)
+                return@withContext Result.Success(userWithPreferences)
+            }
 
-        return localSource.fetchUser(userId)
+        }
+
+        return@withContext localResult
     }
 
     override suspend fun updateUserPicture(user: User, internalUri: Uri): Result<Uri?> {
@@ -75,6 +89,4 @@ class UserRepositoryImpl(
     override suspend fun updateUserPreferences(preferences: UserPreferences): Result<Void?> =
         localSource.updateUserPreference(preferences)
 
-    override suspend fun fetchUserPreferences(userId: String): Result<UserPreferences?> =
-        localSource.fetchUserPreferences(userId)
 }

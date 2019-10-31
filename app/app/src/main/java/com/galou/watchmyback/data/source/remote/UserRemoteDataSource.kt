@@ -71,7 +71,7 @@ class UserRemoteDataSource : UserDataSource{
     }
 
 
-    override suspend fun fetchUser(userId: String): Result<User?> = withContext(ioDispatcher) {
+    suspend fun fetchUser(userId: String): Result<User?> = withContext(ioDispatcher) {
         return@withContext try {
             when (val resultDocumentSnapshot =
                 userCollection.document(userId).get().await()) {

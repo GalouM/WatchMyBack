@@ -12,8 +12,6 @@ interface UserDataSource {
 
     suspend fun updateUserInformation(user: User): Result<Void?>
 
-    suspend fun fetchUser(userId: String): Result<User?>
-
     suspend fun deleteUser(user: User): Result<Void?>
 
 

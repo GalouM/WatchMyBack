@@ -6,8 +6,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.galou.watchmyback.R
 import com.galou.watchmyback.utils.GlideApp
-import com.galou.watchmyback.utils.WatchMyBackAppGlide
-import com.galou.watchmyback.utils.displayData
 
 /**
  * Load an URL  into a [ImageView] using [Glide] and crop it in circle

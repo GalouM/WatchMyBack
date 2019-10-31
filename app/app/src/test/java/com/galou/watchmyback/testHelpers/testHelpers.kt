@@ -3,6 +3,8 @@ package com.galou.watchmyback.testHelpers
 import androidx.lifecycle.LiveData
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.data.entity.User
+import com.galou.watchmyback.data.entity.UserPreferences
+import com.galou.watchmyback.data.entity.UserWithPreferences
 import org.junit.Assert.assertEquals
 
 /**
@@ -32,3 +34,10 @@ fun generateTestUser(id: String): User = User(
     TEST_PHONE_NUMBER,
     null
 )
+
+val preferencesTest = UserPreferences(id = TEST_UID)
+
+fun generateUserWithPref(id: String): UserWithPreferences{
+    return UserWithPreferences(user = generateTestUser(id), preferences = preferencesTest)
+
+}

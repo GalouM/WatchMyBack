@@ -19,6 +19,7 @@ import com.galou.watchmyback.databinding.HeaderNavViewBinding
 import com.galou.watchmyback.profileActivity.ProfileActivity
 import com.galou.watchmyback.settings.SettingsActivity
 import com.galou.watchmyback.utils.RC_PROFILE
+import com.galou.watchmyback.utils.RC_SETTINGS
 import com.galou.watchmyback.utils.RC_SIGN_IN
 import com.galou.watchmyback.utils.displayData
 import com.galou.watchmyback.utils.extension.setupSnackBar
@@ -55,6 +56,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(requestCode){
             RC_SIGN_IN -> viewModel.handleSignIngActivityResult(resultCode, data, authFirebase.currentUser)
             RC_PROFILE ->  viewModel.handleResultAfterProfileActivityClosed(resultCode)
+            RC_SETTINGS -> viewModel.handleResultSettingsAcitivity(resultCode)
         }
     }
 
@@ -71,8 +73,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun setupObserverViewModel(){
         setupSnackBar()
         setupOpenSignInActivity()
-
-        viewModel.userLD.observe(this, Observer { displayData("$it") })
     }
 
     private fun setupSnackBar(){
@@ -136,7 +136,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         item.isChecked = false
-        displayData(item.itemId.toString())
         when(item.itemId){
             R.id.nav_view_menu_settings -> openSettingsActivity()
             R.id.nav_view_menu_my_profile -> openProfileActivity()

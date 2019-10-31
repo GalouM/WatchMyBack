@@ -23,4 +23,5 @@
     <dimen name="separator_size">1dp</dimen>
     <dimen name="cardview_watcher">70dp</dimen>
     <dimen name="medium_padding">10dp</dimen>
+    <dimen name="margin_really_big">45dp</dimen>
 </resources>
