@@ -21,9 +21,8 @@ import kotlinx.coroutines.launch
 /**
  * [ViewModel] of [ProfileActivity]
  *
- * Inherit from [BaseViewModel]
+ * Inherit from [ViewModel]
  *
- * @see BaseViewModel
  * @see ProfileActivity
  *
  *
@@ -67,12 +66,10 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
     // Coroutines Jobs
     private var updateUserJob: Job? = null
     private var uploadPictureJob: Job? = null
-    private var updatePictureJob: Job? = null
 
     /**
      * Emit the user information when the view model is created
      *
-     * @see UserRepository.currentUser
      */
     init {
         _dataLoading.value = true
@@ -85,10 +82,12 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
     }
 
     /**
-     * Actions when the user confirm he/she wants to update his/her information
+     * Turn off all the displayed errors,
+     * Check if the new infromation entered are conform
+     * then update the User's information
      *
-     * @see ProfileViewModel.updateUserInDB
-     * @see ProfileViewModel.userInputCorrect
+     * @see updateUserInDB
+     * @see userInputCorrect
      *
      */
     fun updateUserInformation(){
@@ -114,7 +113,7 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
     }
 
     /**
-     * If the application fetched correctly the image picked by the user, it downloads it the the remote storage
+     * If the application fetched correctly the image picked by the user, update the user's information
      *
      * @param resultCode
      * @param uri internal URI of the picture picked
@@ -132,10 +131,10 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
     }
 
     /**
-     * Update the user information in the repository and the remote database
+     * Update the user information
      *
-     * @see UserRepository.updateUserInfoInRemoteDB
-     * @see UserRepository.currentUser
+     * @see UserRepositoryImpl.updateUser
+     * @see UserRepositoryImpl.currentUser
      *
      */
     private fun updateUserInDB(){
@@ -190,11 +189,11 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
     }
 
     /**
-     * Download a picture, get its [Uri] in the remote storage and assign this value to the [User.pictureUrl]
+     * Update the [User]'s profile picture and download the file to the remote storage
      *
      * @param uriPicture internal uri of the picture
      *
-     * @see UserRepository.uploadUserPictureToRemoteStorageAndGetUrl
+     * @see UserRepositoryImpl.updateUserPicture
      */
     private fun downloadPictureToRemoteStorage(uriPicture: Uri){
         if (uploadPictureJob?.isActive == true) uploadPictureJob?.cancel()
@@ -216,6 +215,11 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
     }
 
     // UTILS
+    /**
+     * Emit a message
+     *
+     * @param message messgae to emit
+     */
     private fun showSnackBarMessage(message: Int){
         _snackbarText.value = Event(message)
     }

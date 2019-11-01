@@ -4,7 +4,8 @@ import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.utils.Result
 
 /**
- * Created by galou on 2019-10-30
+ * Main Entry point for accessing the [User] data
+ *
  */
 interface UserDataSource {
 

@@ -48,6 +48,12 @@ open class SettingsViewModel(private val userRepository: UserRepository) : ViewM
         fetchPreferences()
     }
 
+    /**
+     * Update and save the new user's preferences
+     *
+     * @see UserRepository.updateUserPreferences
+     *
+     */
     fun updateUserPreferences(){
         _dataLoading.value = true
         if(updatePreferencesJob?.isActive == true) updatePreferencesJob?.cancel()
@@ -62,7 +68,13 @@ open class SettingsViewModel(private val userRepository: UserRepository) : ViewM
 
 
     }
-    
+
+    /**
+     * Delete the user's information and emit an [Event] to signal that the data have been deleted
+     *
+     * @see UserRepository.deleteUser
+     *
+     */
     fun deleteUserData(){
         _dataLoading.value = true
         if(deleteUserJob?.isActive == true) deleteUserJob?.cancel()
@@ -77,31 +89,62 @@ open class SettingsViewModel(private val userRepository: UserRepository) : ViewM
         
     }
 
+    /**
+     * update the unit system preferences
+     *
+     * @param radioButton preferences picked
+     *
+     * @see updateUserPreferences
+     */
     fun updateUnitSytem(radioButton: View?){
-        if(radioButton is RadioButton){
+        if (radioButton is RadioButton) {
             preferencesLD.value?.unitSystem = radioButton.onClickUnitSystem()
             updateUserPreferences()
         }
 
+
     }
 
+    /**
+     * update the time display preferences
+     *
+     * @param radioButton preferences picked
+     *
+     * @see updateUserPreferences
+     */
     fun updateTimeDisplay(radioButton: View?) {
-        if(radioButton is RadioButton){
+        if (radioButton is RadioButton) {
             preferencesLD.value?.timeDisplay = radioButton.onClickTimeDisplay()
             updateUserPreferences()
         }
+
     }
-    
+
+    /**
+     * Emit error message if the deletetion of the user 's data didn't happened
+     *
+     */
     fun errorDeletion(){
         showSnackBarMessage(R.string.error_deletion)
     }
 
+    /**
+     * Fet the user's preferences from the repository
+     *
+     * @see UserRepository.userPreferences
+     *
+     */
     private fun fetchPreferences(){
         preferencesLD.value = userRepository.userPreferences.value
         _dataLoading.value = false
 
     }
 
+    /**
+     * Emit a message to display
+     *
+     * @param message message to display
+     */
     private fun showSnackBarMessage(message: Int){
         _snackbarText.value = Event(message)
     }

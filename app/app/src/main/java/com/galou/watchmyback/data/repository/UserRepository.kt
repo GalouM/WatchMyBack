@@ -13,14 +13,11 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 /**
- * Created by galou on 2019-10-25
+ * Interface to the [User] data layer
+ *
  */
-
 interface UserRepository {
-    /**
-     * [User] currently connected to the application
-     * @see User
-     */
+
     val currentUser: MutableLiveData<User>
     val userPreferences: MutableLiveData<UserPreferences>
 

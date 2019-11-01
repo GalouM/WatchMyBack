@@ -25,9 +25,8 @@ import kotlinx.coroutines.*
 /**
  * [ViewModel] of the [MainActivity]
  *
- * Inherit from [BaseViewModel]
+ * Inherit from [ViewModel]
  *
- * @see BaseViewModel
  * @see MainActivity
  *
  *
@@ -114,10 +113,20 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
             }
     }
 
+    /**
+     * Show a message when the [User]'s information were updated
+     *
+     * @param resultCode
+     */
     fun handleResultAfterProfileActivityClosed(resultCode: Int){
         if(resultCode == RESULT_OK) showSnackBarMessage(R.string.info_updated)
     }
 
+    /**
+     * Show the sign in activity if the [User] was deleted
+     *
+     * @param resultCode
+     */
     fun handleResultSettingsAcitivity(resultCode: Int){
         if (resultCode == RESULT_DELETED){
             showSignInActivity()
@@ -125,11 +134,10 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
     }
 
     /**
-     * Fetch the users information from the remote database
-     * Create a user in the remote database if it doesn't already exist
+     * Fetch the users information from the database
      *
      * @see createUserToDB
-     * @see UserRepositoryImpl.getUserFromRemoteDB
+     * @see UserRepositoryImpl.fetchUser
      *
      * @param firebaseUser user connected to the app through Firebase Authentification
      */
@@ -153,9 +161,9 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
     }
 
     /**
-     * Create a user in the remote databse
+     * Create a user in the  database
      *
-     * @see UserRepositoryImpl.createUserInRemoteDB
+     * @see UserRepositoryImpl.createUser
      *
      * @param firebaseUser user connected to the app through Firebase Authentification
      */
@@ -186,10 +194,19 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
     
     
     // UTILS
+    /**
+     * Emit a message
+     *
+     * @param message messgae to emit
+     */
     private fun showSnackBarMessage(message: Int){
         _snackbarText.value = Event(message)
     }
 
+    /**
+     * Emit the [Event] to show the sign in activity
+     *
+     */
     private fun showSignInActivity(){
         _openSignInActivityEvent.value = Event(Unit)
     }
