@@ -11,7 +11,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 
 jacoco {
-    toolVersion = '0.8.0'
+    toolVersion = '0.8.3'
 }
 
 tasks.withType(Test) {
@@ -64,13 +64,6 @@ android {
             testCoverageEnabled true
             buildConfigField('String', "AppName", appName)
         }
-    }
-
-    compileOptions {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     testOptions {

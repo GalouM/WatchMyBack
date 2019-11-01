@@ -82,28 +82,4 @@ class UserLocalDataSource(
             Result.Error(e)
         }
     }
-
-    suspend fun fetchUserPreferences(userId: String): Result<UserPreferences?> = withContext(ioDispatcher){
-        return@withContext try {
-            val userPreferences = userPreferencesDao.getUserPreferences(userId)
-            if(userPreferences == null){
-                createUserPreferences(userId)
-                val newPrefs = userPreferencesDao.getUserPreferences(userId)
-                Result.Success(newPrefs)
-            }
-            Result.Success(userPreferences)
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
-    }
-
-    private suspend fun createUserPreferences(userId: String): Result<Void?> = withContext(ioDispatcher){
-        val preferences = UserPreferences(id = userId)
-        return@withContext try {
-            userPreferencesDao.createUserPreferences(preferences)
-            Result.Success(null)
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
-    }
 }
