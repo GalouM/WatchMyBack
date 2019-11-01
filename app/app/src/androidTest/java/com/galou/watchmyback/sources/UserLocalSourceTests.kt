@@ -4,6 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
+import com.galou.watchmyback.data.entity.UserPreferences
+import com.galou.watchmyback.data.entity.UserWithPreferences
 import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.source.local.UserLocalDataSource
 import com.galou.watchmyback.data.source.local.dao.UserDao
@@ -152,7 +154,39 @@ class UserLocalSourceTests{
         assertThat(userFromDB, `is` (mainUser))
         val preferenceFromDB = preferencesDao.getUserPreferences(mainUser.id)
         assertThat(preferenceFromDB, `is` (notNullValue()))
-        
+
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun userExistLocallyButDifferentThanRemote_updateUserLocallyAndEmitSuccess() = runBlocking {
+        localSource.createUser(mainUser)
+        val remoteUser = mainUser.copy()
+        val newPhotoUrl = "http://mynewPicturlUrl"
+        remoteUser.pictureUrl =  newPhotoUrl
+        val localUser = UserWithPreferences(user = mainUser, preferences = UserPreferences(id = mainUser.id))
+        val task = localSource.updateOrCreateUser(remoteUser, localUser)
+
+        //check operation was successful
+        val taskResult = task is Result.Success
+        assertThat(taskResult, `is` (true))
+
+        // check user was updated in local database
+        val userFromDB =  userDao.getUser(mainUser.id)
+        assertThat(userFromDB, `is` (remoteUser))
+
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun localAndRemoteUserAreTheSame_emitSuccess() = runBlocking {
+        localSource.createUser(mainUser)
+        val localUser = UserWithPreferences(user = mainUser, preferences = UserPreferences(id = mainUser.id))
+        val task = localSource.updateOrCreateUser(mainUser, localUser)
+        //check operation was successful
+        val taskResult = task is Result.Success
+        assertThat(taskResult, `is` (true))
+
     }
 
 
