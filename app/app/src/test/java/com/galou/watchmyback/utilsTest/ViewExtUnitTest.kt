@@ -41,11 +41,16 @@ class ViewExtUnitTest : KoinTest {
     }
 
     @Test
-    fun view_correctVisibility(){
+    fun whenTrue_viewVisible(){
         val view = View(context)
         view.visibleOrInvisible(true)
         assertThat(view.visibility).isEqualTo(VISIBLE)
 
+    }
+
+    @Test
+    fun whenFalse_viewInsisible(){
+        val view = View(context)
         view.visibleOrInvisible(false)
         assertThat(view.visibility).isEqualTo(INVISIBLE)
     }

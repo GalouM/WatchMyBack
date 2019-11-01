@@ -15,9 +15,12 @@ import com.galou.watchmyback.utils.extension.timeDisplay
 import com.galou.watchmyback.utils.extension.unitSystemType
 import com.google.common.truth.Truth.assertThat
 import kotlinx.android.synthetic.main.activity_settings.view.*
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.context.stopKoin
+import org.koin.test.KoinTest
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -26,7 +29,7 @@ import org.robolectric.annotation.Config
  */
 @Config(sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
-class RadioButtonExtUnitTest {
+class RadioButtonExtUnitTest : KoinTest{
 
     private lateinit var context: Context
     private lateinit var metricButton: RadioButton
@@ -45,6 +48,11 @@ class RadioButtonExtUnitTest {
         h12Button.id = R.id.settings_view_unit_system_time_12
         h24Button = RadioButton(context)
         h24Button.id = R.id.settings_view_unit_system_time_24
+    }
+
+    @After
+    fun close(){
+        stopKoin()
     }
 
     @Test
