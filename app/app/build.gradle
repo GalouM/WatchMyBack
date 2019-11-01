@@ -149,3 +149,49 @@ dependencies {
     implementation "androidx.core:core-ktx:$rootProject.coreKtxVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
+
+project.afterEvaluate {
+    //Gather build type and product flavor names in a list
+    def buildTypes = android.buildTypes.collect { type -> type.name }
+    def productFlavors = android.productFlavors.collect { flavor -> flavor.name }
+    if (!productFlavors) productFlavors.add('')
+
+    productFlavors.each { productFlavorName ->
+        buildTypes.each { buildTypeName ->
+
+            //Define the sourceName and the sourcePath.
+            def sourceName, sourcePath
+            if (!productFlavorName) {
+                sourceName = sourcePath = "${buildTypeName}"
+            } else {
+                sourceName = "${productFlavorName}${buildTypeName.capitalize()}"
+                sourcePath = "${productFlavorName}/${buildTypeName}"
+            }
+
+            def testTaskName = "test${sourceName.capitalize()}UnitTest"
+
+            task "create${sourceName.capitalize()}UnitTestCoverageReport"(type: JacocoReport, dependsOn: "$testTaskName") {
+
+                group = "Reporting"
+                description =
+                        "Generate Jacoco coverage reports on the ${sourceName.capitalize()} build."
+
+                reports {
+                    xml.enabled true
+                    html.enabled true
+                }
+
+                //Directory where the compiled class files are
+                def fileFilter = [ '**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*' ]
+                def debugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
+                def mainSrc = "$project.projectDir/src/main/kotlin"
+
+                sourceDirectories.from = files([mainSrc])
+                classDirectories.from = files([debugTree])
+                executionData.from = fileTree(dir: project.buildDir, includes: [
+                        'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
+                ])
+            }
+        }
+    }
+}

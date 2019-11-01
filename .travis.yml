@@ -49,11 +49,11 @@ before_script:
   - ./gradlew build jacocoTestReport assembleAndroidTest
   
 script:
-  - ./gradlew clean build
-  - ./gradlew test
+  - ./gradlew clean assembleDebug assembleRelease testDebug createDebugUnitTestCoverageReport
+  - mv app/build/reports/jacoco/createDebugUnitTestCoverageReport app/build/reports/jacoco/jacocoTestDebugUnitTestReport
+  - mv app/build/reports/jacoco/jacocoTestDebugUnitTestReport/createDebugUnitTestCoverageReport.xml app/build/reports/jacoco/jacocoTestDebugUnitTestReport/jacocoTestDebugUnitTestReport.xml
 
 after_success:
-  - codecov
   - bash <(curl -s https://codecov.io/bash)
 
 after_failure: 
