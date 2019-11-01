@@ -4,10 +4,7 @@ import android.net.Uri
 import androidx.core.net.toUri
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.source.UserDataSource
-import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.USER_COLLECTION_NAME
-import com.galou.watchmyback.utils.USER_PICTURE_REFERENCE
-import com.galou.watchmyback.utils.await
+import com.galou.watchmyback.utils.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
@@ -72,6 +69,7 @@ class UserRemoteDataSource : UserDataSource{
 
 
     suspend fun fetchUser(userId: String): Result<User?> = withContext(ioDispatcher) {
+        displayData("fetching from network")
         return@withContext try {
             when (val resultDocumentSnapshot =
                 userCollection.document(userId).get().await()) {

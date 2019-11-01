@@ -11,7 +11,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 
 jacoco {
-    toolVersion = '0.8.3'
+    toolVersion = "0.7.2.201409121644"
 }
 
 tasks.withType(Test) {

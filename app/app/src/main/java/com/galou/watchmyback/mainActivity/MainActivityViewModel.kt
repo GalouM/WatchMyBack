@@ -62,9 +62,10 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
      * @param firebaseUser user connected to the app through Firebase Authentification
      */
     fun checkIfUserIsConnected(firebaseUser: FirebaseUser?){
-        if(firebaseUser != null){
-            fetchCurrentUserInformation(firebaseUser)
-        } else{
+        if (firebaseUser != null) {
+            if (userLD.value == null) fetchCurrentUserInformation(firebaseUser)
+
+        } else {
             showSignInActivity()
         }
 
@@ -177,7 +178,6 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
      * @param user [User] fetched from the database
      */
     private fun setupUserInformation(user: UserWithPreferences){
-        displayData("user and prop: $user")
         userRepository.currentUser.value = user.user
         userRepository.userPreferences.value = user.preferences
         showSnackBarMessage(R.string.welcome)
