@@ -33,11 +33,7 @@ fun returnSuccessOrError(localResult: Result<Void?>, remoteResult: Result<Void?>
         if(localResult is Result.Error || localResult is Result.Canceled){
             localResult
         }
+        else remoteResult
 
-        else if(remoteResult is Result.Error || remoteResult is Result.Canceled){
-            remoteResult
-        } else {
-            Result.Error(Exception("Unknown error source"))
-        }
     }
 }

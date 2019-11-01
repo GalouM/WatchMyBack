@@ -40,6 +40,14 @@ class OtherUtilUnitTest {
     }
 
     @Test
+    fun cancelLocalRequestAndCancelRemoteRequest_returnCanceled(){
+        val remote = Result.Canceled(Exception("test error"))
+        val local = Result.Canceled(Exception("test error"))
+
+        assertThat(returnSuccessOrError(local, remote)).isEqualTo(local)
+    }
+
+    @Test
     fun failLocalRequestAndSuccessRemoteRequest_returnRemote(){
         val remote = Result.Success(null)
         val local = Result.Error(Exception("test error"))
@@ -48,8 +56,24 @@ class OtherUtilUnitTest {
     }
 
     @Test
+    fun canceledLocalRequestAndSuccessRemoteRequest_returnLocal(){
+        val remote = Result.Success(null)
+        val local = Result.Canceled(Exception("test error"))
+
+        assertThat(returnSuccessOrError(local, remote)).isEqualTo(local)
+    }
+
+    @Test
     fun successLocalRequestAndFailRemoteRequest_returnRemote(){
         val remote = Result.Error(Exception("test error"))
+        val local = Result.Success(null)
+
+        assertThat(returnSuccessOrError(local, remote)).isEqualTo(remote)
+    }
+
+    @Test
+    fun successLocalRequestAndCanceledRemoteRequest_returnRemote(){
+        val remote = Result.Canceled(Exception("test error"))
         val local = Result.Success(null)
 
         assertThat(returnSuccessOrError(local, remote)).isEqualTo(remote)
