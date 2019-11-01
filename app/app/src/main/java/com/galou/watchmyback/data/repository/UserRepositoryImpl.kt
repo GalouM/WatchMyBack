@@ -8,10 +8,8 @@ import com.galou.watchmyback.data.entity.UserWithPreferences
 import com.galou.watchmyback.data.source.local.UserLocalDataSource
 import com.galou.watchmyback.data.source.remote.UserRemoteDataSource
 import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.displayData
 import com.galou.watchmyback.utils.returnSuccessOrError
 import kotlinx.coroutines.*
-import java.lang.Error
 
 /**
  * Main Entry point to access the [User] data
@@ -58,14 +56,18 @@ class UserRepositoryImpl(
     override suspend fun fetchUser(userId: String): Result<UserWithPreferences?> = withContext(ioDispatcher) {
         val localTask =  async { localSource.fetchUser(userId) }
         val remoteTask = async { remoteSource.fetchUser(userId) }
+
         val remoteResult = remoteTask.await()
         val localResult = localTask.await()
+
         if (remoteResult is Result.Success && localResult is Result.Success){
             remoteResult.data?.let {remoteUser ->
-                val localUser = localResult.data
-                localSource.updateOrCreateUser(remoteUser, localUser)
-                val userWithPreferences = UserWithPreferences(user = remoteUser, preferences = localUser?.preferences)
-                return@withContext Result.Success(userWithPreferences)
+                val updateLocalDbResult = localSource.updateOrCreateUser(remoteUser, localResult.data)
+                if (updateLocalDbResult is Result.Success){
+                    return@withContext Result.Success(updateLocalDbResult.data)
+                } else {
+                    return@withContext updateLocalDbResult
+                }
             }
 
         }

@@ -32,16 +32,20 @@ class UserLocalDataSource(
         }
     }
 
-    suspend fun updateOrCreateUser(remoteUser: User?, localUser: UserWithPreferences?): Result<Void?> {
+    suspend fun updateOrCreateUser(remoteUser: User, localUser: UserWithPreferences?): Result<UserWithPreferences?> {
         return  try {
-            if (remoteUser != null) {
-                if (localUser != null) {
-                    if (remoteUser != localUser.user) updateUserInformation(remoteUser)
-                } else {
-                    createUser(remoteUser)
-                }
+            if (localUser != null) {
+                if (remoteUser != localUser.user) updateUserInformation(remoteUser)
+            } else {
+                createUser(remoteUser)
             }
-            Result.Success(null)
+            val fetchUser = fetchUser(remoteUser.id)
+            if (fetchUser is Result.Success){
+                Result.Success(fetchUser.data)
+            } else {
+                Result.Error(Exception("Error fetching user"))
+            }
+
         } catch (e: Exception) {
             Result.Error(e)
         }

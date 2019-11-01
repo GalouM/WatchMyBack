@@ -150,10 +150,9 @@ class UserLocalSourceTests{
         assertThat(taskResult, `is` (true))
 
         // check user now exist in local database
-        val userFromDB =  userDao.getUser(mainUser.id)
-        assertThat(userFromDB, `is` (mainUser))
-        val preferenceFromDB = preferencesDao.getUserPreferences(mainUser.id)
-        assertThat(preferenceFromDB, `is` (notNullValue()))
+        val taskData = (task as Result.Success).data
+        assertThat(taskData?.user, `is` (mainUser))
+        assertThat(taskData?.preferences, `is` (notNullValue()))
 
     }
 
@@ -171,9 +170,10 @@ class UserLocalSourceTests{
         val taskResult = task is Result.Success
         assertThat(taskResult, `is` (true))
 
-        // check user was updated in local database
-        val userFromDB =  userDao.getUser(mainUser.id)
-        assertThat(userFromDB, `is` (remoteUser))
+        // check user now exist in local database
+        val taskData = (task as Result.Success).data
+        assertThat(taskData?.user, `is` (remoteUser))
+        assertThat(taskData?.preferences, `is` (notNullValue()))
 
     }
 
@@ -186,6 +186,8 @@ class UserLocalSourceTests{
         //check operation was successful
         val taskResult = task is Result.Success
         assertThat(taskResult, `is` (true))
+        val taskData = (task as Result.Success).data
+        assertThat(taskData, `is` (localUser))
 
     }
 
