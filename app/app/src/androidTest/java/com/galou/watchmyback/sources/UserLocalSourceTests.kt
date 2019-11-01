@@ -11,7 +11,7 @@ import com.galou.watchmyback.data.source.local.dao.UserPreferencesDao
 import com.galou.watchmyback.database.mainUser
 import com.galou.watchmyback.utils.Result
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
 import org.junit.Before
@@ -78,8 +78,82 @@ class UserLocalSourceTests{
 
     @Test
     @Throws(Exception::class)
-    fun updateUserInformation() = runBlocking {
+    fun updateUserInformation_updatedInDBAndEmitSuccess() = runBlocking {
+        localSource.createUser(mainUser)
+        // update user
         val newPhoneNumber = "5559874637"
         mainUser.phoneNumber = newPhoneNumber
+        val updateTask = localSource.updateUserInformation(mainUser)
+
+        //check operation was successful
+        val updateResult = updateTask is Result.Success
+        assertThat(updateResult, `is` (true))
+
+        // fetch user and check informations were updated
+        val fetchTask = localSource.fetchUser(mainUser.id)
+        val fetchedData = (fetchTask as Result.Success).data
+        assertThat(mainUser.phoneNumber, `is` (fetchedData?.user?.phoneNumber))
+
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun updateUserPreferences_updatedInDBAndEmitSuccess() = runBlocking {
+        localSource.createUser(mainUser)
+        // fetch to get preferences
+        val fetchTask = localSource.fetchUser(mainUser.id)
+        val preferences = (fetchTask as Result.Success).data?.preferences!!
+
+        // update preferences
+        val newEmergencyNumber = "112"
+        preferences.emergencyNumber = newEmergencyNumber
+        val updateTask = localSource.updateUserPreference(preferences)
+
+        //check operation was successful
+        val updateResult = updateTask is Result.Success
+        assertThat(updateResult, `is` (true))
+
+        // fetch preferences and check information were updated
+
+        val fetchTaskAfterUpdate = localSource.fetchUser(mainUser.id)
+        val fetchedPreferences = (fetchTaskAfterUpdate as Result.Success).data?.preferences
+        assertThat(fetchedPreferences?.emergencyNumber, `is` (newEmergencyNumber))
+
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun deleteUser_deleteUserInDBAndEmitSuccess() = runBlocking {
+        localSource.createUser(mainUser)
+        val deleteTask = localSource.deleteUser(mainUser)
+
+        //check operation was successful
+        val deleteResult = deleteTask is Result.Success
+        assertThat(deleteResult, `is` (true))
+
+        //check user and preferences were deleted
+        val userFetched = userDao.getUser(mainUser.id)
+        assertThat(userFetched, `is`(nullValue()))
+        val preferencesFetched = preferencesDao.getUserPreferences(mainUser.id)
+        assertThat(preferencesFetched, `is`(nullValue()))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun userDoesntExistLocally_createUserInDBAndEmitSuccess() = runBlocking {
+        val task = localSource.updateOrCreateUser(mainUser, null)
+
+        //check operation was successful
+        val taskResult = task is Result.Success
+        assertThat(taskResult, `is` (true))
+
+        // check user now exist in local database
+        val userFromDB =  userDao.getUser(mainUser.id)
+        assertThat(userFromDB, `is` (mainUser))
+        val preferenceFromDB = preferencesDao.getUserPreferences(mainUser.id)
+        assertThat(preferenceFromDB, `is` (notNullValue()))
+        
+    }
+
+
 }
