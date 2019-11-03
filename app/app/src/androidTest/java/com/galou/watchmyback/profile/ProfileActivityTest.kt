@@ -7,6 +7,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.filters.MediumTest
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import com.galou.watchmyback.R
@@ -24,6 +25,7 @@ import org.mockito.BDDMockito.given
 /**
  * Created by galou on 2019-10-27
  */
+@MediumTest
 @RunWith(AndroidJUnit4::class)
 class ProfileActivityTest : KoinTest  {
 

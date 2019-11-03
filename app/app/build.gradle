@@ -98,7 +98,9 @@ dependencies {
     testImplementation "org.koin:koin-test:$rootProject.koinVersion"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutinesVersion"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootProject.coroutinesVersion"
-    testImplementation "junit:junit:$rootProject.junitVersion"
+    testImplementation "androidx.test:core-ktx:$rootProject.androidXTestCoreVersion"
+    testImplementation "androidx.test.ext:junit-ktx:$rootProject.androidXTestExtKotlinRunnerVersion"
+    testImplementation "androidx.test:rules:$rootProject.androidXTestRulesVersion"
 
     //INSTRUMENTED TEST
     androidTestImplementation ("org.koin:koin-test:$rootProject.koinVersion") { exclude group: 'org.mockito' }

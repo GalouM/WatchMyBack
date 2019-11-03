@@ -63,5 +63,8 @@ ext {
     espressoVersion = "3.2.0"
     junitVersion = "4.12"
     testRunnerAndroidVersion = "1.2.0"
+    androidXTestCoreVersion = '1.2.0'
+    androidXTestExtKotlinRunnerVersion = '1.1.1'
+    androidXTestRulesVersion = '1.2.0-beta01'
 }
 

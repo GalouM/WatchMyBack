@@ -2,6 +2,7 @@ package com.galou.watchmyback.data.source.local
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
+import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
 import com.galou.watchmyback.data.entity.UserPreferences
@@ -25,6 +26,7 @@ import java.io.IOException
  * @author galou
  * 2019-11-01
  */
+@MediumTest
 @RunWith(AndroidJUnit4::class)
 class UserLocalSourceTests{
     @get:Rule
