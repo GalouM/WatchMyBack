@@ -8,7 +8,7 @@
 
         <variable
             name="viewmodel"
-            type="com.galou.watchmyback.mainActivity.MainActivityViewModel" />
+            type="com.galou.watchmyback.main.MainActivityViewModel" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout

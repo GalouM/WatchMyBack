@@ -9,7 +9,7 @@
 
         <variable
             name="viewmodel"
-            type="com.galou.watchmyback.profileActivity.ProfileViewModel" />
+            type="com.galou.watchmyback.profile.ProfileViewModel" />
     </data>
 
 

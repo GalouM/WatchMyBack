@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.galou.watchmyback.mainActivity.MainActivityViewModel" />
+            type="com.galou.watchmyback.main.MainActivityViewModel" />
     </data>
 
 

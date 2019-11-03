@@ -19,21 +19,21 @@
         <activity
             android:name=".AddTripActivity"
             android:label="@string/add_trip"
-            android:parentActivityName=".mainActivity.MainActivity" />
+            android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/settings"
-            android:parentActivityName=".mainActivity.MainActivity" />
+            android:parentActivityName=".main.MainActivity" />
         <activity
-            android:name=".profileActivity.ProfileActivity"
+            android:name=".profile.ProfileActivity"
             android:label="@string/my_profile"
-            android:parentActivityName=".mainActivity.MainActivity" />
+            android:parentActivityName=".main.MainActivity" />
         <activity android:name=".AddModifyCheckListActivity" />
         <activity
             android:name=".DetailsTripActivity"
             android:label="@string/details_trip"
-            android:parentActivityName=".mainActivity.MainActivity" />
-        <activity android:name=".mainActivity.MainActivity">
+            android:parentActivityName=".main.MainActivity" />
+        <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

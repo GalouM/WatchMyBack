@@ -6,8 +6,8 @@ import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.data.repository.UserRepositoryImpl
 import com.galou.watchmyback.data.source.local.UserLocalDataSource
 import com.galou.watchmyback.data.source.remote.UserRemoteDataSource
-import com.galou.watchmyback.mainActivity.MainActivityViewModel
-import com.galou.watchmyback.profileActivity.ProfileViewModel
+import com.galou.watchmyback.main.MainActivityViewModel
+import com.galou.watchmyback.profile.ProfileViewModel
 import com.galou.watchmyback.settings.SettingsViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
