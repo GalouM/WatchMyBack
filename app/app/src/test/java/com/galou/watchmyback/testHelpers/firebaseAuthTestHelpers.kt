@@ -1,12 +1,10 @@
 package com.galou.watchmyback.testHelpers
 
 import android.os.Parcel
-import androidx.core.net.toUri
 import com.google.firebase.auth.AdditionalUserInfo
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import org.mockito.Mockito
-import java.lang.IllegalStateException
 
 /**
  * Created by galou on 2019-10-24
@@ -33,7 +31,7 @@ object FakeAdditionalUserInfo : AdditionalUserInfo {
     override fun getUsername(): String? = null
 
     override fun writeToParcel(p0: Parcel?, p1: Int) {
-        throw IllegalStateException("Don't try to parcel FakeAuthResult!");
+        throw IllegalStateException("Don't try to parcel FakeAuthResult!")
     }
 
     override fun getProfile(): MutableMap<String, Any>? = null

@@ -1,6 +1,8 @@
 package com.galou.watchmyback.data.source.local.dao
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import com.galou.watchmyback.data.entity.Location
 
 /**

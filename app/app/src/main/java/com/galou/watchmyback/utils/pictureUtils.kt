@@ -1,19 +1,11 @@
 package com.galou.watchmyback.utils
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import android.os.Environment
-import com.galou.watchmyback.BuildConfig
 import com.galou.watchmyback.R
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.EasyPermissions.hasPermissions
-import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * Created by galou on 2019-10-27

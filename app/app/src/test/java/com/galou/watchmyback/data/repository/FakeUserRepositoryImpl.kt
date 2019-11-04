@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.entity.UserWithPreferences
-import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.testHelpers.URI_STORAGE_REMOTE
 import com.galou.watchmyback.testHelpers.generateUserWithPref
 import com.galou.watchmyback.utils.Result

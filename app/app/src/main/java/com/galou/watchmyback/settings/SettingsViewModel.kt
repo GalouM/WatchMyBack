@@ -2,20 +2,15 @@ package com.galou.watchmyback.settings
 
 import android.view.View
 import android.widget.RadioButton
-import android.widget.RadioGroup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
-import com.galou.watchmyback.data.entity.TimeDisplay
-import com.galou.watchmyback.data.entity.UnitSystem
-import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.displayData
 import com.galou.watchmyback.utils.extension.onClickTimeDisplay
 import com.galou.watchmyback.utils.extension.onClickUnitSystem
 import kotlinx.coroutines.Job

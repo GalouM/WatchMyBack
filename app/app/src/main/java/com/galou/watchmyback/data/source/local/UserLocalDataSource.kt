@@ -7,7 +7,6 @@ import com.galou.watchmyback.data.source.UserDataSource
 import com.galou.watchmyback.data.source.local.dao.UserDao
 import com.galou.watchmyback.data.source.local.dao.UserPreferencesDao
 import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.displayData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

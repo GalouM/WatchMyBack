@@ -1,11 +1,13 @@
 package com.galou.watchmyback.data.source.local.dao
 
 import androidx.room.*
-import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.entity.UserWithPreferences
-import com.galou.watchmyback.utils.*
+import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
+import com.galou.watchmyback.utils.USER_TABLE_NAME
+import com.galou.watchmyback.utils.USER_TABLE_USERNAME
+import com.galou.watchmyback.utils.USER_TABLE_UUID
 
 /**
  * List all the actions possible on the [User] table

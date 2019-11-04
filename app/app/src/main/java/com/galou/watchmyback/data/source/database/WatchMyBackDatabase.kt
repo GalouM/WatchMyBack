@@ -1,8 +1,11 @@
 package com.galou.watchmyback.data.source.database
 
-import androidx.room.*
-import com.galou.watchmyback.data.source.local.dao.*
+import androidx.room.Dao
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.galou.watchmyback.data.entity.*
+import com.galou.watchmyback.data.source.local.dao.*
 
 /**
  * Represent the Database of the application

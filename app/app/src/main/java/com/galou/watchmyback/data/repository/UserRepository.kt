@@ -5,12 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.entity.UserWithPreferences
-import com.galou.watchmyback.data.source.UserDataSource
-import com.galou.watchmyback.data.source.local.UserLocalDataSource
-import com.galou.watchmyback.data.source.remote.UserRemoteDataSource
 import com.galou.watchmyback.utils.Result
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 
 /**
  * Interface to the [User] data layer

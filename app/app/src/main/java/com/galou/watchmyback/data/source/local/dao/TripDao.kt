@@ -1,9 +1,11 @@
 package com.galou.watchmyback.data.source.local.dao
 
 import androidx.room.*
-import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.entity.*
-import com.galou.watchmyback.utils.*
+import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
+import com.galou.watchmyback.utils.TRIP_TABLE_ACTIVE
+import com.galou.watchmyback.utils.TRIP_TABLE_NAME
+import com.galou.watchmyback.utils.TRIP_TABLE_USER_UUID
 
 /**
  * List all the actions possible on the [Trip] table

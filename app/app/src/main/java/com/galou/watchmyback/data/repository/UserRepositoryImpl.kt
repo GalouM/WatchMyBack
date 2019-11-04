@@ -9,7 +9,9 @@ import com.galou.watchmyback.data.source.local.UserLocalDataSource
 import com.galou.watchmyback.data.source.remote.UserRemoteDataSource
 import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.returnSuccessOrError
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 
 /**
  * Implementation of [UserRepository]

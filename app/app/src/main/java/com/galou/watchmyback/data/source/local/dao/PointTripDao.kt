@@ -1,8 +1,8 @@
 package com.galou.watchmyback.data.source.local.dao
 
 import androidx.room.*
-import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.entity.*
+import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.utils.POINT_TRIP_TABLE_NAME
 import com.galou.watchmyback.utils.POINT_TRIP_TRIP_UUID
 import com.galou.watchmyback.utils.POINT_TRIP_TYPE

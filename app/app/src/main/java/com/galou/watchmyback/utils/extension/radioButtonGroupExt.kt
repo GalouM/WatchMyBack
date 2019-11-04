@@ -6,8 +6,6 @@ import androidx.databinding.BindingAdapter
 import com.galou.watchmyback.R
 import com.galou.watchmyback.data.entity.TimeDisplay
 import com.galou.watchmyback.data.entity.UnitSystem
-import kotlinx.android.synthetic.main.activity_settings.view.*
-import java.lang.IllegalStateException
 
 /**
  * Created by galou on 2019-10-30

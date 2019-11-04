@@ -1,9 +1,9 @@
 package com.galou.watchmyback.settings
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import com.firebase.ui.auth.AuthUI
@@ -14,7 +14,6 @@ import com.galou.watchmyback.utils.RESULT_DELETED
 import com.galou.watchmyback.utils.extension.setupSnackBar
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.lang.IllegalStateException
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -68,7 +67,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun setupDataDeleted(){
-        viewModel.dataDeleted.observe(this, EventObserver<Unit> { closeActivityAndEmitDeleted() })
+        viewModel.dataDeleted.observe(this, EventObserver { closeActivityAndEmitDeleted() })
     }
 
     private fun closeActivityAndEmitDeleted(){

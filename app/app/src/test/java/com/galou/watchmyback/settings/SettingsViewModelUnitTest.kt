@@ -6,8 +6,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import com.galou.watchmyback.R
 import com.galou.watchmyback.WatchMyBackApplication
-import com.galou.watchmyback.data.repository.FakeUserRepositoryImpl
 import com.galou.watchmyback.data.entity.User
+import com.galou.watchmyback.data.repository.FakeUserRepositoryImpl
 import com.galou.watchmyback.testHelpers.*
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers

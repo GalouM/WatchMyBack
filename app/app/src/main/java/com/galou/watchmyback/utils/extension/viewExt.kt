@@ -1,7 +1,5 @@
 package com.galou.watchmyback.utils.extension
 
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -9,9 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.galou.watchmyback.Event
-import com.galou.watchmyback.utils.displayData
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 /**
@@ -29,7 +25,7 @@ import com.google.android.material.textfield.TextInputLayout
 fun View.showSnackBar(snackbarText: String, timeLength: Int){
     Snackbar.make(this, snackbarText, timeLength).apply {
         config(view.context)
-        getView().findViewById<TextView>(com.google.android.material.R.id.snackbar_text).maxLines = 5
+        view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).maxLines = 5
         show()
     }
 }

@@ -1,11 +1,8 @@
 package com.galou.watchmyback.data.source.remote
 
 import android.net.Uri
-import androidx.core.net.toUri
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.source.UserDataSource
-import com.galou.watchmyback.data.source.local.dao.UserDao
-import com.galou.watchmyback.data.source.local.dao.UserPreferencesDao
 import com.galou.watchmyback.utils.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage

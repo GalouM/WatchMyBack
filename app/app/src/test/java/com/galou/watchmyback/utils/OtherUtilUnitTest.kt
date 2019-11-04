@@ -1,6 +1,5 @@
 package com.galou.watchmyback.utils
 
-import com.galou.watchmyback.utils.Result
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import java.text.SimpleDateFormat

@@ -4,7 +4,6 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.UploadTask
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.suspendCancellableCoroutine
-import java.lang.Exception
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -14,7 +13,7 @@ import kotlin.coroutines.resumeWithException
  * Return a [Result] with data or and error
  *
  * This suspending function is cancellable.
- * If the [Job] of the current coroutine is cancelled or completed while this suspending function is waiting, this function
+ * If the Job of the current coroutine is cancelled or completed while this suspending function is waiting, this function
  * stops waiting for the completion stage and immediately resumes with [CancellationException].
  *
  * Took and modified from "https://github.com/Kotlin/kotlinx.coroutines"
@@ -60,7 +59,7 @@ suspend fun <T> Task<T>.await(): Result<T> {
  * Return a [Result] with data or and error
  *
  * This suspending function is cancellable.
- * If the [Job] of the current coroutine is cancelled or completed while this suspending function is waiting, this function
+ * If the Job of the current coroutine is cancelled or completed while this suspending function is waiting, this function
  * stops waiting for the completion stage and immediately resumes with [CancellationException].
  *
  * Took and modified from "https://github.com/Kotlin/kotlinx.coroutines"

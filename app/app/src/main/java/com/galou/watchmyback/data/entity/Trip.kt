@@ -2,7 +2,7 @@ package com.galou.watchmyback.data.entity
 
 import androidx.room.*
 import com.galou.watchmyback.R
-import com.galou.watchmyback.data.entity.TripStatus.ON_GOING
+import com.galou.watchmyback.data.entity.TripStatus.*
 import com.galou.watchmyback.data.entity.TripType.*
 import com.galou.watchmyback.data.entity.TripUpdateFrequency.*
 import com.galou.watchmyback.utils.*

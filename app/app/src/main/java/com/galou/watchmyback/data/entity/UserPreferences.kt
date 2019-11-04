@@ -1,6 +1,9 @@
 package com.galou.watchmyback.data.entity
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 import com.galou.watchmyback.utils.*
 
 /**

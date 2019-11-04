@@ -1,12 +1,14 @@
 package com.galou.watchmyback.data.source.local.dao
 
 import androidx.room.*
-import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.entity.CheckList
 import com.galou.watchmyback.data.entity.CheckListWithItems
 import com.galou.watchmyback.data.entity.ItemCheckList
 import com.galou.watchmyback.data.entity.User
-import com.galou.watchmyback.utils.*
+import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
+import com.galou.watchmyback.utils.CHECK_LIST_TABLE_NAME
+import com.galou.watchmyback.utils.CHECK_LIST_TABLE_USER_UUID
+import com.galou.watchmyback.utils.CHECK_LIST_TABLE_UUID
 
 /**
  * List all the possible actions on the [CheckList] table

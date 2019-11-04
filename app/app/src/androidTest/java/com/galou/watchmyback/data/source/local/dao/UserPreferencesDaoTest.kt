@@ -8,8 +8,11 @@ import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import junit.framework.Assert.assertNotNull
 import junit.framework.Assert.assertNull
 import kotlinx.coroutines.runBlocking
-import org.junit.*
+import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
 

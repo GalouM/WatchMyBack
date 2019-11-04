@@ -1,9 +1,9 @@
 package com.galou.watchmyback.di
 
 import androidx.room.Room
-import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.data.repository.UserRepositoryImpl
+import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.source.local.UserLocalDataSource
 import com.galou.watchmyback.data.source.remote.UserRemoteDataSource
 import com.galou.watchmyback.main.MainActivityViewModel
