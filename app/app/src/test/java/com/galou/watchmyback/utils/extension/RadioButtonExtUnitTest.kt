@@ -9,12 +9,7 @@ import com.galou.watchmyback.R
 import com.galou.watchmyback.WatchMyBackApplication
 import com.galou.watchmyback.data.entity.TimeDisplay
 import com.galou.watchmyback.data.entity.UnitSystem
-import com.galou.watchmyback.utils.extension.onClickTimeDisplay
-import com.galou.watchmyback.utils.extension.onClickUnitSystem
-import com.galou.watchmyback.utils.extension.timeDisplay
-import com.galou.watchmyback.utils.extension.unitSystemType
 import com.google.common.truth.Truth.assertThat
-import kotlinx.android.synthetic.main.activity_settings.view.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -68,8 +63,6 @@ class RadioButtonExtUnitTest : KoinTest{
         assertThat(h12Button.onClickTimeDisplay()).isEqualTo(TimeDisplay.H_12)
 
         assertThat(h24Button.onClickTimeDisplay()).isEqualTo(TimeDisplay.H_24)
-
-        val group = RadioGroup(context)
     }
 
     @Test

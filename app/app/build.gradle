@@ -32,6 +32,19 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    android {
+        sourceSets {
+            String largeTestDir = 'src/largeTest/java'
+            test {
+                java.srcDir largeTestDir
+            }
+            androidTest {
+                java.srcDir largeTestDir
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -54,6 +67,11 @@ android {
             jacoco {
                 includeNoLocationClasses = true
             }
+        }
+    }
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java', 'src/androidTest/java/largeTest', 'src/androidTest/largeTest/java/', 'src/largeTest/java/']
         }
     }
 }
@@ -103,7 +121,9 @@ dependencies {
     testImplementation "androidx.test:rules:$rootProject.androidXTestRulesVersion"
 
     //INSTRUMENTED TEST
-    androidTestImplementation ("org.koin:koin-test:$rootProject.koinVersion") { exclude group: 'org.mockito' }
+    androidTestImplementation("org.koin:koin-test:$rootProject.koinVersion") {
+        exclude group: 'org.mockito'
+    }
     androidTestImplementation "org.mockito:mockito-core:$rootProject.mockitoVersion"
     androidTestImplementation "org.mockito:mockito-android:$rootProject.mockitoVersion"
     androidTestImplementation "androidx.test:rules:$rootProject.ruleVersion"
@@ -178,7 +198,7 @@ project.afterEvaluate {
                 }
 
                 //Directory where the compiled class files are
-                def fileFilter = [ '**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*' ]
+                def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
                 def debugTree = fileTree(dir: "${project.buildDir}/tmp/kotlin-classes/${sourcePath}",
                         excludes: ['**/R.class',
                                    '**/BR.class',

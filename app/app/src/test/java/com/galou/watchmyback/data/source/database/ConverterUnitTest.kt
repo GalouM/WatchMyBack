@@ -2,7 +2,7 @@ package com.galou.watchmyback.data.source.database
 
 import com.galou.watchmyback.data.entity.*
 import com.galou.watchmyback.utils.todaysDate
-import org.junit.Assert.assertEquals
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 /**
@@ -31,61 +31,61 @@ class ConverterUnitTest{
 
     @Test
     fun checkConverterTripType_fromId(){
-        assertEquals(tripTypeId, Converters.fromTripType(tripType))
+        assertThat(Converters.fromTripType(tripType)).isEqualTo(tripTypeId)
     }
 
     @Test
     fun checkConverterId_toTripType(){
-        assertEquals(tripType, Converters.toTripType(tripTypeId))
+        assertThat(Converters.toTripType(tripTypeId)).isEqualTo(tripType)
     }
 
     @Test
     fun checkConvertTripStatus_fromID(){
-        assertEquals(tripStatusId, Converters.fromTripStatus(tripStatus))
+        assertThat(Converters.fromTripStatus(tripStatus)).isEqualTo(tripStatusId)
     }
 
     @Test
     fun checkConvertId_toTripStatus(){
-        assertEquals(tripStatus, Converters.toTripStatus(tripStatusId))
+        assertThat(Converters.toTripStatus(tripStatusId)).isEqualTo(tripStatus)
     }
 
     @Test
     fun checkConvertUpdateHz_fromMilli(){
-        assertEquals(frequencyMilli, Converters.fromTripUpdateFrequency(updateFrequency))
+        assertThat(Converters.fromTripUpdateFrequency(updateFrequency)).isEqualTo(frequencyMilli)
     }
 
     @Test
     fun checkConvertMilli_toUpdateHz(){
-        assertEquals(updateFrequency, Converters.toTripUpdateFrequency(frequencyMilli))
+        assertThat(Converters.toTripUpdateFrequency(frequencyMilli)).isEqualTo(updateFrequency)
     }
 
     @Test
     fun checkConvertPointType_fromId(){
-        assertEquals(pointTypeName, Converters.fromTypePoint(pointType))
+        assertThat(Converters.fromTypePoint(pointType)).isEqualTo(pointTypeName)
     }
 
     @Test
     fun checkConvertName_toPointType(){
-        assertEquals(pointType, Converters.toTypePoint(pointTypeName))
+        assertThat(Converters.toTypePoint(pointTypeName)).isEqualTo(pointType)
     }
 
     @Test
     fun checkConvertWeatherCondition_fromId(){
-        assertEquals(weatherConditionId, Converters.fromWeatherCondition(weatherType))
+        assertThat(Converters.fromWeatherCondition(weatherType)).isEqualTo(weatherConditionId)
     }
 
     @Test
     fun checkConverterId_toWeatherCondition(){
-        assertEquals(weatherType, Converters.toWeatherCondition(weatherConditionId))
+        assertThat(Converters.toWeatherCondition(weatherConditionId)).isEqualTo(weatherType)
     }
 
     @Test
     fun checkConvertDate_fromMilli(){
-        assertEquals(dateInMilli, Converters.dateToTimeStamp(date))
+        assertThat(Converters.dateToTimeStamp(date)).isEqualTo(dateInMilli)
     }
 
     @Test
     fun checkConvertMilli_toDate(){
-        assertEquals(date, Converters.fromTimeStamp(dateInMilli))
+        assertThat(Converters.fromTimeStamp(dateInMilli)).isEqualTo(date)
     }
 }

@@ -5,14 +5,17 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
 import com.galou.watchmyback.data.repository.FakeUserRepositoryImpl
-import com.galou.watchmyback.testHelpers.*
+import com.galou.watchmyback.testHelpers.FakeAuthResult
+import com.galou.watchmyback.testHelpers.LiveDataTestUtil
+import com.galou.watchmyback.testHelpers.assertSnackBarMessage
 import com.galou.watchmyback.utils.RESULT_DELETED
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
@@ -59,9 +62,9 @@ class MainActivityViewModelTest {
         viewModel.checkIfUserIsConnected(firebaseUser)
         assertNull(LiveDataTestUtil.getValue(viewModel.openSignInActivityEvent))
         val userValue = LiveDataTestUtil.getValue(viewModel.userLD)
-        assertEquals(userValue.email, firebaseUser.email)
-        assertEquals(userValue.username, firebaseUser.displayName)
-        assertEquals(userValue.pictureUrl, firebaseUser.photoUrl)
+        assertThat(userValue.email).isEqualTo(firebaseUser.email)
+        assertThat(userValue.username).isEqualTo(firebaseUser.displayName)
+        assertThat(userValue.pictureUrl).isEqualTo(firebaseUser.photoUrl)
         assertSnackBarMessage(viewModel.snackbarMessage, R.string.welcome)
 
     }
@@ -72,9 +75,9 @@ class MainActivityViewModelTest {
         viewModel.handleSignIngActivityResult(RESULT_OK, null, firebaseUser)
         assertNull(LiveDataTestUtil.getValue(viewModel.openSignInActivityEvent))
         val userValue = LiveDataTestUtil.getValue(viewModel.userLD)
-        assertEquals(userValue.email, firebaseUser.email)
-        assertEquals(userValue.username, firebaseUser.displayName)
-        assertEquals(userValue.pictureUrl, firebaseUser.photoUrl)
+        assertThat(userValue.email).isEqualTo(firebaseUser.email)
+        assertThat(userValue.username).isEqualTo(firebaseUser.displayName)
+        assertThat(userValue.pictureUrl).isEqualTo(firebaseUser.photoUrl)
         assertSnackBarMessage(viewModel.snackbarMessage, R.string.welcome)
     }
 
@@ -88,9 +91,10 @@ class MainActivityViewModelTest {
 
     @Test
     fun accountDeletedShowSignInActivity(){
-        viewModel.handleResultSettingsAcitivity(RESULT_DELETED)
+        viewModel.handleResultSettingsActivity(RESULT_DELETED)
         val value: Event<Unit> = LiveDataTestUtil.getValue(viewModel.openSignInActivityEvent)
         assertThat(value.getContentIfNotHandled()).isNotNull()
+        assertThat(viewModel.userLD.value).isNull()
     }
 
 

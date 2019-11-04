@@ -6,11 +6,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import androidx.test.core.app.ApplicationProvider
-import com.galou.watchmyback.R
 import com.galou.watchmyback.WatchMyBackApplication
-import com.galou.watchmyback.utils.extension.errorMessage
-import com.galou.watchmyback.utils.extension.visibleOrInvisible
-import com.google.android.material.textfield.TextInputLayout
 import com.google.common.truth.Truth.assertThat
 import org.junit.After
 import org.junit.Before
@@ -49,7 +45,7 @@ class ViewExtUnitTest : KoinTest {
     }
 
     @Test
-    fun whenFalse_viewInsisible(){
+    fun whenFalse_viewInvisible(){
         val view = View(context)
         view.visibleOrInvisible(false)
         assertThat(view.visibility).isEqualTo(INVISIBLE)

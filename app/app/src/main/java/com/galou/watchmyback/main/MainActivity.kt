@@ -1,10 +1,10 @@
 package com.galou.watchmyback.main
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
@@ -12,7 +12,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.firebase.ui.auth.AuthUI
-import com.galou.watchmyback.*
+import com.galou.watchmyback.DetailsTripActivity
+import com.galou.watchmyback.EventObserver
+import com.galou.watchmyback.R
 import com.galou.watchmyback.databinding.ActivityMainBinding
 import com.galou.watchmyback.databinding.HeaderNavViewBinding
 import com.galou.watchmyback.profile.ProfileActivity
@@ -54,7 +56,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(requestCode){
             RC_SIGN_IN -> viewModel.handleSignIngActivityResult(resultCode, data, authFirebase.currentUser)
             RC_PROFILE ->  viewModel.handleResultAfterProfileActivityClosed(resultCode)
-            RC_SETTINGS -> viewModel.handleResultSettingsAcitivity(resultCode)
+            RC_SETTINGS -> viewModel.handleResultSettingsActivity(resultCode)
         }
     }
 

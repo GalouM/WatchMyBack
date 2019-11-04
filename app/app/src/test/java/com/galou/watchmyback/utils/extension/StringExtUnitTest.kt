@@ -1,9 +1,6 @@
 package com.galou.watchmyback.utils.extension
 
-import com.galou.watchmyback.utils.extension.isCorrectEmail
-import com.galou.watchmyback.utils.extension.isCorrectName
-import com.galou.watchmyback.utils.extension.isCorrectPhoneNumber
-import junit.framework.Assert
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 /**
@@ -13,62 +10,62 @@ class StringExtUnitTest {
     @Test
     fun checkNameContainsSpecialCharacter(){
         val myString = "@estt123"
-        Assert.assertFalse(myString.isCorrectName())
+        assertThat(myString.isCorrectName()).isFalse()
     }
 
     @Test
     fun checkNameTooShort(){
         val myString = "My"
-        Assert.assertFalse(myString.isCorrectName())
+        assertThat(myString.isCorrectName()).isFalse()
     }
 
     @Test
     fun checkNameNoSpecialCharacter(){
         val myString = "My name"
-        Assert.assertTrue(myString.isCorrectName())
+        assertThat(myString.isCorrectName()).isTrue()
     }
 
     @Test
     fun checkEmailWithNoAt(){
         val myString = "test"
-        Assert.assertFalse(myString.isCorrectEmail())
+        assertThat(myString.isCorrectEmail()).isFalse()
     }
 
     @Test
     fun checkEmailWithNoDomainExt(){
         val myString = "test@test"
-        Assert.assertFalse(myString.isCorrectEmail())
+        assertThat(myString.isCorrectEmail()).isFalse()
     }
 
     @Test
     fun checkEmailCorrect(){
         val myString = "test@test.com"
-        Assert.assertTrue(myString.isCorrectEmail())
+        assertThat(myString.isCorrectEmail()).isTrue()
     }
 
     @Test
     fun checkPhoneNumberNotOnlyNumbers(){
         val number = "33344ttt"
-        Assert.assertFalse(number.isCorrectPhoneNumber())
+        assertThat(number.isCorrectPhoneNumber()).isFalse()
     }
 
     @Test
     fun checkPhoneNumberTooShort(){
         val number = "3334"
-        Assert.assertFalse(number.isCorrectPhoneNumber())
+        assertThat(number.isCorrectPhoneNumber()).isFalse()
     }
 
     @Test
     fun checkPhoneNumberTooLong(){
         val number = "33344567861234"
-        Assert.assertFalse(number.isCorrectPhoneNumber())
+        assertThat(number.isCorrectPhoneNumber()).isFalse()
     }
 
     @Test
     fun checkPhoneNumberCorrect(){
         val number = "16048030356"
-        Assert.assertTrue(number.isCorrectPhoneNumber())
+        assertThat(number.isCorrectPhoneNumber()).isTrue()
         val number2 = "+1608030356"
-        Assert.assertTrue(number2.isCorrectPhoneNumber())
+        assertThat(number2.isCorrectPhoneNumber()).isTrue()
     }
 }

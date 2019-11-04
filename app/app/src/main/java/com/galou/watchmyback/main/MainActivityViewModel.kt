@@ -19,7 +19,8 @@ import com.galou.watchmyback.data.repository.UserRepositoryImpl
 import com.galou.watchmyback.utils.RESULT_DELETED
 import com.galou.watchmyback.utils.Result
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 /**
  * [ViewModel] of the [MainActivity]
@@ -104,6 +105,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
         AuthUI.getInstance().signOut(context)
             .addOnCompleteListener { task ->
                 if(task.isSuccessful){
+                    userRepository.currentUser.value = null
                     showSignInActivity()
                 } else {
                     showSnackBarMessage(R.string.failed_signout)
@@ -126,8 +128,9 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
      *
      * @param resultCode
      */
-    fun handleResultSettingsAcitivity(resultCode: Int){
+    fun handleResultSettingsActivity(resultCode: Int){
         if (resultCode == RESULT_DELETED){
+            userRepository.currentUser.value = null
             showSignInActivity()
         }
     }

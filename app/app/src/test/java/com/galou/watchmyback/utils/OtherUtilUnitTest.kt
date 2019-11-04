@@ -1,14 +1,8 @@
 package com.galou.watchmyback.utils
 
 import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.idGenerated
-import com.galou.watchmyback.utils.returnSuccessOrError
-import com.galou.watchmyback.utils.todaysDate
 import com.google.common.truth.Truth.assertThat
-import org.hamcrest.CoreMatchers.not
-import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -28,7 +22,7 @@ class OtherUtilUnitTest {
     fun todayDate_isToday(){
         val today = Calendar.getInstance(Locale.CANADA).time
         val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.CANADA)
-        assertEquals(formatter.format(today), formatter.format(todaysDate))
+        assertThat(formatter.format(today)).isEqualTo(formatter.format(todaysDate))
     }
 
     @Test
