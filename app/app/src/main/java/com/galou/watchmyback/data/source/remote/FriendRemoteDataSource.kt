@@ -34,12 +34,12 @@ class FriendRemoteDataSource : FriendDataSource {
 
     override suspend fun removeFriend(userId: String, friendId: String): Result<Void?> = withContext(ioDispatcher) {
         return@withContext try {
-            when(val friendId = getFriendId(userId, friendId)){
+            when(val idResult = getFriendId(userId, friendId)){
                 is Result.Success -> {
-                    friendCollection.document(friendId.data).delete().await()
+                    friendCollection.document(idResult.data).delete().await()
                 }
-                is Result.Error -> Result.Error(friendId.exception)
-                is Result.Canceled -> Result.Canceled(friendId.exception)
+                is Result.Error -> Result.Error(idResult.exception)
+                is Result.Canceled -> Result.Canceled(idResult.exception)
             }
 
         } catch (e: Exception) {

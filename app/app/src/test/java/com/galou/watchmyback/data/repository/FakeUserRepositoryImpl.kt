@@ -37,5 +37,10 @@ open class FakeUserRepositoryImpl : UserRepository{
 
     override suspend fun updateUserPreferences(preferences: UserPreferences): Result<Void?> = Result.Success(null)
 
+    override suspend fun fetchAllUsers(): Result<List<User>> = Result.Success(listOf())
+
+    override suspend fun fetchUserByUsername(name: String): Result<List<User>> = Result.Success(listOf())
+
+    override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<User>> = Result.Success(listOf())
 }
 
