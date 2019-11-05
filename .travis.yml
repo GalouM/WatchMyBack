@@ -46,7 +46,7 @@ before_install:
 before_script:
   - cd app
   - chmod +x gradlew
-  - ./gradlew build jacocoTestReport assembleAndroidTest
+  - ./gradlew build customJacocoTestReport assembleAndroidTest
   
 script:
   - ./gradlew clean assembleDebug assembleRelease testDebug createDebugUnitTestCoverageReport
