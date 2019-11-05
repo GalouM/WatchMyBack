@@ -58,7 +58,6 @@ android {
     }
 
     testOptions {
-        execution 'ANDROID_TEST_ORCHESTRATOR'
         animationsDisabled = true
         unitTests {
             includeAndroidResources = true
@@ -120,8 +119,6 @@ dependencies {
     testImplementation "androidx.test:core-ktx:$rootProject.androidXTestCoreVersion"
     testImplementation "androidx.test.ext:junit-ktx:$rootProject.androidXTestExtKotlinRunnerVersion"
     testImplementation "androidx.test:rules:$rootProject.androidXTestRulesVersion"
-
-    androidTestUtil "androidx.test:orchestrator:$rootProject.testOrchestrorVersion"
 
     //INSTRUMENTED TEST
     androidTestImplementation("org.koin:koin-test:$rootProject.koinVersion") {
