@@ -39,9 +39,9 @@ class UserLocalDataSource(
      *
      * @see UserDao.getUserWithPreferences
      */
-    override suspend fun createUser(user: User): Result<Void?>  = withContext(ioDispatcher){
+    override suspend fun createUser(user: User): Result<Void?>  {
         val preferences = UserPreferences(id = user.id)
-        return@withContext try {
+        return try {
             userDao.createUserAndPreferences(user, preferences)
 
             Result.Success(null)
@@ -92,8 +92,8 @@ class UserLocalDataSource(
      *
      * @see UserDao.updateUser
      */
-    override suspend fun updateUserInformation(user: User): Result<Void?> = withContext(ioDispatcher) {
-        return@withContext try {
+    override suspend fun updateUserInformation(user: User): Result<Void?>  {
+        return try {
             userDao.updateUser(user)
             Result.Success(null)
         } catch (e: Exception) {
@@ -109,8 +109,8 @@ class UserLocalDataSource(
      *
      * @see UserDao.getUserWithPreferences
      */
-    suspend fun fetchUser(userId: String): Result<UserWithPreferences?> = withContext(ioDispatcher){
-        return@withContext try {
+    suspend fun fetchUser(userId: String): Result<UserWithPreferences?> {
+        return try {
             Result.Success(userDao.getUserWithPreferences(userId))
         } catch (e: Exception) {
             Result.Error(e)
@@ -126,8 +126,8 @@ class UserLocalDataSource(
      *
      * @see UserDao.deleteUser
      */
-    override suspend fun deleteUser(user: User): Result<Void?> = withContext(ioDispatcher){
-       return@withContext try {
+    override suspend fun deleteUser(user: User): Result<Void?> {
+       return try {
            userDao.deleteUser(user)
            Result.Success(null)
        } catch (e: Exception) {
@@ -143,8 +143,8 @@ class UserLocalDataSource(
      *
      * @see UserPreferencesDao.updateUserPreferences
      */
-    suspend fun updateUserPreference(preferences: UserPreferences): Result<Void?> = withContext(ioDispatcher){
-        return@withContext try {
+    suspend fun updateUserPreference(preferences: UserPreferences): Result<Void?> {
+        return try {
             userPreferencesDao.updateUserPreferences(preferences)
             Result.Success(null)
         } catch (e: Exception) {
@@ -171,8 +171,8 @@ class UserLocalDataSource(
      * @param name string to look for in the username
      * @return [Result] with a list of user
      */
-    override suspend fun fetchUserByUsername(name: String): Result<List<User>> = withContext(ioDispatcher) {
-        return@withContext try {
+    override suspend fun fetchUserByUsername(name: String): Result<List<User>>  {
+        return try {
             Result.Success(userDao.getUsersFromUsername(name))
         } catch (e: Exception) {
             Result.Error(e)
@@ -185,8 +185,8 @@ class UserLocalDataSource(
      * @param emailAddress string to look for in the email address
      * @return [Result] with a list of user
      */
-    override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<User>> = withContext(ioDispatcher) {
-        return@withContext try {
+    override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<User>>  {
+        return try {
             Result.Success(userDao.getUsersFromEmail(emailAddress))
         } catch (e: Exception) {
             Result.Error(e)

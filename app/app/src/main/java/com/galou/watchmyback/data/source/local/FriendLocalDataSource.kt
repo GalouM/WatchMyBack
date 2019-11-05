@@ -19,8 +19,8 @@ class FriendLocalDataSource(
 
     private val ioDispatcher = Dispatchers.IO
 
-    override suspend fun addFriend(friend: Friend): Result<Void?> = withContext(ioDispatcher){
-        return@withContext try {
+    override suspend fun addFriend(friend: Friend): Result<Void?> {
+        return try {
             friendDao.addFriend(friend)
             Result.Success(null)
         } catch (e: Exception) {
@@ -29,8 +29,8 @@ class FriendLocalDataSource(
 
     }
 
-    override suspend fun removeFriend(userId: String, friendId: String): Result<Void?> = withContext(ioDispatcher) {
-        return@withContext try {
+    override suspend fun removeFriend(userId: String, friendId: String): Result<Void?>  {
+        return try {
             friendDao.removeFriend(userId, friendId)
             Result.Success(null)
         } catch (e: Exception) {
@@ -38,8 +38,8 @@ class FriendLocalDataSource(
         }
     }
 
-    override suspend fun fetchUserFriend(userId: String): Result<List<User>> = withContext(ioDispatcher) {
-        return@withContext try {
+    override suspend fun fetchUserFriend(userId: String): Result<List<User>>  {
+        return try {
             Result.Success(friendDao.getFriendsUser(userId))
 
         } catch (e: Exception) {
