@@ -16,11 +16,11 @@ import kotlinx.coroutines.withContext
  * @author galou
  * 2019-11-04
  */
-class FriendRemoteDataSource : FriendDataSource {
+class FriendRemoteDataSource(
+    remoteDB: FirebaseFirestore
+) : FriendDataSource {
 
     private val ioDispatcher = Dispatchers.IO
-
-    private val remoteDB = FirebaseFirestore.getInstance()
     private val friendCollection = remoteDB.collection(FRIEND_COLLECTION_NAME)
 
     override suspend fun addFriend(friend: Friend): Result<Void?> = withContext(ioDispatcher)  {

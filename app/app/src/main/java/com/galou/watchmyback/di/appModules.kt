@@ -14,6 +14,9 @@ import com.galou.watchmyback.friends.FriendsViewModel
 import com.galou.watchmyback.main.MainActivityViewModel
 import com.galou.watchmyback.profile.ProfileViewModel
 import com.galou.watchmyback.settings.SettingsViewModel
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.google.firebase.storage.FirebaseStorage
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -25,6 +28,16 @@ import org.koin.dsl.module
  */
 
 val appModules = module {
+
+    //firebase
+    single {
+        FirebaseFirestore.getInstance().apply {
+            firestoreSettings = FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(false)
+                .build()
+        }
+    }
+    single { FirebaseStorage.getInstance() }
 
     single {
         Room.databaseBuilder(
@@ -39,12 +52,12 @@ val appModules = module {
         userDao = get<WatchMyBackDatabase>().userDao(),
         userPreferencesDao = get<WatchMyBackDatabase>().userPreferencesDao()
     ) }
-    single { UserRemoteDataSource() }
+    single { UserRemoteDataSource(remoteDB = get(), remoteStorage = get()) }
     // Friends sources
     single {
         FriendLocalDataSource(friendDao = get<WatchMyBackDatabase>().friendDao())
     }
-    single { FriendRemoteDataSource() }
+    single { FriendRemoteDataSource(remoteDB = get()) }
 
     // Repos
     single<UserRepository> {

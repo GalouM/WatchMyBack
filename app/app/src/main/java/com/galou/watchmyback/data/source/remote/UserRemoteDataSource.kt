@@ -19,12 +19,12 @@ import kotlinx.coroutines.withContext
  * List all the possible action on the remote database for a [User]
  *
  */
-class UserRemoteDataSource : UserDataSource{
+class UserRemoteDataSource(
+    remoteDB: FirebaseFirestore,
+    private val remoteStorage: FirebaseStorage
+) : UserDataSource{
 
     private val ioDispatcher = Dispatchers.IO
-
-    private val remoteDB = FirebaseFirestore.getInstance()
-    private val remoteStorage = FirebaseStorage.getInstance()
     private val userCollection = remoteDB.collection(USER_COLLECTION_NAME)
 
     /**
