@@ -39,7 +39,6 @@ class UserLocalDataSource(
         val preferences = UserPreferences(id = user.id)
         return try {
             userDao.createUserAndPreferences(user, preferences)
-
             Result.Success(null)
         } catch (e: Exception) {
             Result.Error(e)

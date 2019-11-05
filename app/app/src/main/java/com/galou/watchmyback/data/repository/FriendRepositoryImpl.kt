@@ -8,6 +8,7 @@ import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.returnSuccessOrError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 
 /**
@@ -19,23 +20,17 @@ class FriendRepositoryImpl(
     private val remoteSource: FriendRemoteDataSource
 ) : FriendRepository {
 
-    private val ioDispatcher = Dispatchers.IO
-
-    override suspend fun addFriend(userId: String, friendId: String): Result<Void?> = withContext(ioDispatcher) {
+    override suspend fun addFriend(userId: String, friendId: String): Result<Void?> = coroutineScope {
         val friend = Friend(userId, friendId)
         val localTask = async { localSource.addFriend(friend) }
         val remoteTask = async { remoteSource.addFriend(friend) }
-
-        return@withContext returnSuccessOrError(localTask.await(), remoteTask.await())
-
+        return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
     }
 
-    override suspend fun removeFriend(userId: String, friendId: String): Result<Void?> = withContext(ioDispatcher) {
+    override suspend fun removeFriend(userId: String, friendId: String): Result<Void?> = coroutineScope {
         val localTask = async { localSource.removeFriend(userId, friendId) }
         val remoteTask = async { remoteSource.removeFriend(userId, friendId) }
-
-        return@withContext returnSuccessOrError(localTask.await(), remoteTask.await())
-
+        return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
     }
 
     override suspend fun fetchUserFriend(userId: String): Result<List<User>> {

@@ -11,6 +11,7 @@ import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.returnSuccessOrError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 
 /**
@@ -40,12 +41,6 @@ class UserRepositoryImpl(
     override val userPreferences = MutableLiveData<UserPreferences>()
 
     /**
-     * dispatcher to run coroutine on
-     */
-    private val ioDispatcher = Dispatchers.IO
-
-
-    /**
      * Run async task to create a [User] on the local and remote database
      *
      * @param user [User] to create
@@ -54,13 +49,10 @@ class UserRepositoryImpl(
      * @see UserLocalDataSource.createUser
      * @see UserRemoteDataSource.createUser
      */
-    override suspend fun createUser(user: User): Result<Void?> = withContext(ioDispatcher) {
+    override suspend fun createUser(user: User): Result<Void?> = coroutineScope {
         val localTask = async { localSource.createUser(user) }
         val remoteTask = async { remoteSource.createUser(user) }
-
-        return@withContext returnSuccessOrError(localTask.await(), remoteTask.await())
-
-
+        return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
     }
 
     /**
@@ -72,12 +64,10 @@ class UserRepositoryImpl(
      * @see UserLocalDataSource.updateUserInformation
      * @see UserRemoteDataSource.updateUserInformation
      */
-    override suspend fun updateUser(user: User): Result<Void?> = withContext(ioDispatcher) {
+    override suspend fun updateUser(user: User): Result<Void?> = coroutineScope {
         val localTask = async { localSource.updateUserInformation(user) }
         val remoteTask = async { remoteSource.updateUserInformation(user) }
-
-        return@withContext returnSuccessOrError(localTask.await(), remoteTask.await())
-
+        return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
     }
 
     /**
@@ -89,11 +79,10 @@ class UserRepositoryImpl(
      * @see UserLocalDataSource.deleteUser
      * @see UserRemoteDataSource.deleteUser
      */
-    override suspend fun deleteUser(user: User): Result<Void?> = withContext(ioDispatcher) {
+    override suspend fun deleteUser(user: User): Result<Void?> = coroutineScope {
         val localTask = async { localSource.deleteUser(user) }
         val remoteTask = async { remoteSource.deleteUser(user) }
-
-        return@withContext returnSuccessOrError(localTask.await(), remoteTask.await())
+        return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
     }
 
     /**
@@ -110,7 +99,7 @@ class UserRepositoryImpl(
      * @see UserRemoteDataSource.fetchUser
      * @see UserLocalDataSource.updateOrCreateUser
      */
-    override suspend fun fetchUser(userId: String): Result<UserWithPreferences?> = withContext(ioDispatcher) {
+    override suspend fun fetchUser(userId: String): Result<UserWithPreferences?> = coroutineScope {
         val localTask =  async { localSource.fetchUser(userId) }
         val remoteTask = async { remoteSource.fetchUser(userId) }
 
@@ -121,15 +110,15 @@ class UserRepositoryImpl(
             remoteResult.data?.let {remoteUser ->
                 val updateLocalDbResult = localSource.updateOrCreateUser(remoteUser, localResult.data)
                 if (updateLocalDbResult is Result.Success){
-                    return@withContext Result.Success(updateLocalDbResult.data)
+                    return@coroutineScope Result.Success(updateLocalDbResult.data)
                 } else {
-                    return@withContext updateLocalDbResult
+                    return@coroutineScope updateLocalDbResult
                 }
             }
 
         }
 
-        return@withContext localResult
+        return@coroutineScope localResult
     }
 
     /**
