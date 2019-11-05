@@ -2,6 +2,7 @@ package com.galou.watchmyback.testHelpers
 
 import android.os.Parcel
 import com.google.firebase.auth.AdditionalUserInfo
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import org.mockito.Mockito
@@ -24,6 +25,8 @@ object FakeAuthResult : AuthResult {
     }
 
     override fun describeContents(): Int = 0
+
+    override fun getCredential(): AuthCredential? = null
 }
 
 object FakeAdditionalUserInfo : AdditionalUserInfo {
@@ -41,6 +44,8 @@ object FakeAdditionalUserInfo : AdditionalUserInfo {
     override fun describeContents(): Int = 0
 
     override fun isNewUser(): Boolean = false
+
+
 }
 
 fun getFakeFirebaseUser(): FirebaseUser{

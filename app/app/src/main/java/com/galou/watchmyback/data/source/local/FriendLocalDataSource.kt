@@ -5,8 +5,6 @@ import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.source.FriendDataSource
 import com.galou.watchmyback.data.source.local.dao.FriendDao
 import com.galou.watchmyback.utils.Result
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 /**
  * @author galou
@@ -16,8 +14,6 @@ import kotlinx.coroutines.withContext
 class FriendLocalDataSource(
     private val friendDao: FriendDao
 ) : FriendDataSource {
-
-    private val ioDispatcher = Dispatchers.IO
 
     override suspend fun addFriend(friend: Friend): Result<Void?> {
         return try {

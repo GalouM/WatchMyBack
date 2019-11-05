@@ -7,8 +7,6 @@ import com.galou.watchmyback.data.source.UserDataSource
 import com.galou.watchmyback.data.source.local.dao.UserDao
 import com.galou.watchmyback.data.source.local.dao.UserPreferencesDao
 import com.galou.watchmyback.utils.Result
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 /**
  * Implementation of [UserDataSource] for the local database
@@ -28,8 +26,6 @@ class UserLocalDataSource(
     private val userDao: UserDao,
     private val userPreferencesDao: UserPreferencesDao
 ) : UserDataSource {
-
-    private val ioDispatcher = Dispatchers.IO
 
     /**
      * Create a [User] and his/her [UserPreferences] in the local database
@@ -157,8 +153,8 @@ class UserLocalDataSource(
      *
      * @return a [Result] with a list of user
      */
-    override suspend fun fetchAllUsers(): Result<List<User>> = withContext(ioDispatcher) {
-        return@withContext try {
+    override suspend fun fetchAllUsers(): Result<List<User>> {
+        return try {
             Result.Success(userDao.getAllUsers())
         } catch (e: Exception) {
             Result.Error(e)
