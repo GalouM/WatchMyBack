@@ -222,7 +222,7 @@ project.afterEvaluate {
                                "src/$buildTypeName/kotlin"]
 
                 sourceDirectories.from = files(mainSrc)
-                classDirectories.from = files([debugTree])
+                classDirectories.from = files(fileFilter)
                 executionData.from = files("${project.buildDir}/jacoco/${testTaskName}.exec")
             }
         }
