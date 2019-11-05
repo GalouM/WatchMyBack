@@ -66,5 +66,6 @@ ext {
     androidXTestCoreVersion = '1.2.0'
     androidXTestExtKotlinRunnerVersion = '1.1.1'
     androidXTestRulesVersion = '1.2.0-beta01'
+    testOrchestrorVersion = "1.2.0"
 }
 

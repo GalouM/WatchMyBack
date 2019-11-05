@@ -58,6 +58,7 @@ android {
     }
 
     testOptions {
+        execution 'ANDROID_TEST_ORCHESTRATOR'
         animationsDisabled = true
         unitTests {
             includeAndroidResources = true
@@ -120,6 +121,8 @@ dependencies {
     testImplementation "androidx.test.ext:junit-ktx:$rootProject.androidXTestExtKotlinRunnerVersion"
     testImplementation "androidx.test:rules:$rootProject.androidXTestRulesVersion"
 
+    androidTestUtil "androidx.test:orchestrator:$rootProject.testOrchestrorVersion"
+
     //INSTRUMENTED TEST
     androidTestImplementation("org.koin:koin-test:$rootProject.koinVersion") {
         exclude group: 'org.mockito'
@@ -166,4 +169,20 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
+task customJacocoTestReport(type: JacocoReport, dependsOn: 'test') {
 
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def fileFilter = [ '**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*' ]
+    def debugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
+    def mainSrc = "$project.projectDir/src/main/kotlin"
+
+    sourceDirectories.from = mainSrc
+    additionalSourceDirs.from = debugTree
+    additionalSourceDirs.from = fileTree(dir: project.buildDir, includes: [
+            'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
+    ])
+}
