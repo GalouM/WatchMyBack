@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 
 /**
@@ -69,8 +70,8 @@ class UserRemoteDataSource : UserDataSource{
      * @see uploadPictureToRemoteStorage
      * @see fetchPictureUriInRemoteStorage
      */
-    suspend fun createNewPictureInStorageAndGetUri(userId: String, internalUri: Uri): Result<Uri> = withContext(ioDispatcher){
-        return@withContext try {
+    suspend fun createNewPictureInStorageAndGetUri(userId: String, internalUri: Uri): Result<Uri> {
+        return try {
             uploadPictureToRemoteStorage(internalUri, userId)
             fetchPictureUriInRemoteStorage(userId)
         } catch (e: Exception){
@@ -124,7 +125,6 @@ class UserRemoteDataSource : UserDataSource{
      * @return [Result] that contains the [User]'s data
      */
     suspend fun fetchUser(userId: String): Result<User?> = withContext(ioDispatcher) {
-        displayData("fetching from network")
         return@withContext try {
             when (val resultDocumentSnapshot =
                 userCollection.document(userId).get().await()) {
