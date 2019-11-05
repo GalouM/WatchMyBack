@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_check_list_view" />
     <fragment
         android:id="@+id/friendsView"
-        android:name="com.galou.watchmyback.FriendsView"
+        android:name="com.galou.watchmyback.friends.FriendsView"
         android:label="fragment_friends_view"
         tools:layout="@layout/fragment_friends_view" />
     <fragment
