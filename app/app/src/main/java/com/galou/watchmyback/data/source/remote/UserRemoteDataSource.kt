@@ -4,6 +4,8 @@ import android.net.Uri
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.source.UserDataSource
 import com.galou.watchmyback.utils.*
+import com.galou.watchmyback.utils.extension.toUser
+import com.galou.watchmyback.utils.extension.toUserList
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
@@ -126,10 +128,7 @@ class UserRemoteDataSource : UserDataSource{
         return@withContext try {
             when (val resultDocumentSnapshot =
                 userCollection.document(userId).get().await()) {
-                is Result.Success -> {
-                    val user = resultDocumentSnapshot.data.toObject(User::class.java)
-                    Result.Success(user)
-                }
+                is Result.Success -> Result.Success(resultDocumentSnapshot.data.toUser())
                 is Result.Error -> Result.Error(resultDocumentSnapshot.exception)
                 is Result.Canceled -> Result.Canceled(resultDocumentSnapshot.exception)
             }
@@ -147,6 +146,65 @@ class UserRemoteDataSource : UserDataSource{
     override suspend fun deleteUser(user: User): Result<Void?> = withContext(ioDispatcher){
         return@withContext try {
             userCollection.document(user.id).delete().await()
+        } catch (e: Exception){
+            Result.Error(e)
+        }
+    }
+
+    /**
+     * Fetch all the [User] from the remote database
+     *
+     * @return [Result] with a list of user
+     */
+    override suspend fun fetchAllUsers(): Result<List<User>> = withContext(ioDispatcher) {
+        return@withContext try {
+            when(val userQuery = userCollection.orderBy("username").get().await()){
+                is Result.Success -> Result.Success(userQuery.data.toUserList())
+                is Result.Error -> Result.Error(userQuery.exception)
+                is Result.Canceled -> Result.Canceled(userQuery.exception)
+            }
+        } catch (e: Exception){
+            Result.Error(e)
+        }
+    }
+
+    /**
+     * Fetch all the user from the remote database who have a specific chain of character in their username
+     *
+     * @param name string to look for in the username
+     * @return [Result] with a list of user
+     */
+    override suspend fun fetchUserByUsername(name: String): Result<List<User>> = withContext(ioDispatcher) {
+        return@withContext try {
+            when(val userQuery = userCollection
+                .whereArrayContains("username", name)
+                .orderBy("username")
+                .get().await()){
+                is Result.Success -> Result.Success(userQuery.data.toUserList())
+                is Result.Error -> Result.Error(userQuery.exception)
+                is Result.Canceled -> Result.Canceled(userQuery.exception)
+            }
+        } catch (e: Exception){
+            Result.Error(e)
+        }
+    }
+
+    /**
+     * Fetch all the user from the remote database who have a specific chain of character in their email address
+     *
+     * @param emailAddress string to look for in the email address
+     * @return [Result] with a list of user
+     */
+    override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<User>> = withContext(ioDispatcher) {
+        return@withContext try {
+            when(val userQuery = userCollection
+                .whereArrayContains("email", emailAddress)
+                .orderBy("username")
+                .get().await()){
+                is Result.Success -> Result.Success(userQuery.data.toUserList())
+                is Result.Error -> Result.Error(userQuery.exception)
+                is Result.Canceled -> Result.Canceled(userQuery.exception)
+            }
         } catch (e: Exception){
             Result.Error(e)
         }

@@ -151,4 +151,45 @@ class UserLocalDataSource(
             Result.Error(e)
         }
     }
+
+    /**
+     * Fetch all the [User] from the local database
+     *
+     * @return a [Result] with a list of user
+     */
+    override suspend fun fetchAllUsers(): Result<List<User>> = withContext(ioDispatcher) {
+        return@withContext try {
+            Result.Success(userDao.getAllUsers())
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    /**
+     * Fetch all the user from the local database who have a specific chain of character in their username
+     *
+     * @param name string to look for in the username
+     * @return [Result] with a list of user
+     */
+    override suspend fun fetchUserByUsername(name: String): Result<List<User>> = withContext(ioDispatcher) {
+        return@withContext try {
+            Result.Success(userDao.getUsersFromUsername(name))
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    /**
+     * Fetch all the user from the local database who have a specific chain of character in their email address
+     *
+     * @param emailAddress string to look for in the email address
+     * @return [Result] with a list of user
+     */
+    override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<User>> = withContext(ioDispatcher) {
+        return@withContext try {
+            Result.Success(userDao.getUsersFromEmail(emailAddress))
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
 }

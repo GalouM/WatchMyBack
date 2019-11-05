@@ -7,6 +7,9 @@ import androidx.test.runner.AndroidJUnit4
 import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.CoreMatchers
+import org.hamcrest.CoreMatchers.*
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -93,6 +96,46 @@ class UserDaoTest {
         val preferencesFromDB = preferencesDao.getUserPreferences(mainUser.id)
         assertNotNull(preferencesFromDB)
         assertEquals(preferencesFromDB?.emergencyNumber, newEmergencyNumber)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun fetchAllTheUser() = runBlocking{
+        userDao.createUser(mainUser)
+        userDao.createUser(firstFriend)
+        userDao.createUser(secondFriend)
+        val users = userDao.getAllUsers()
+        assertThat(users, `is`(notNullValue()))
+        assertThat(users, hasItem(mainUser))
+        assertThat(users, hasItem(firstFriend))
+        assertThat(users, hasItem(secondFriend))
+        assertThat(users.size, equalTo(3))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun fetchUserByUsername() = runBlocking{
+        userDao.createUser(mainUser)
+        userDao.createUser(firstFriend)
+        userDao.createUser(secondFriend)
+        val users = userDao.getUsersFromUsername("user")
+        assertThat(users, `is`(notNullValue()))
+        assertThat(users, hasItem(mainUser))
+        assertThat(users.size, equalTo(1))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun fetchUserByEmailAddress() = runBlocking {
+        userDao.createUser(mainUser)
+        userDao.createUser(firstFriend)
+        userDao.createUser(secondFriend)
+        val users = userDao.getUsersFromEmail("friend")
+        assertThat(users, `is`(notNullValue()))
+        assertThat(users, hasItem(firstFriend))
+        assertThat(users, hasItem(secondFriend))
+        assertThat(users.size, equalTo(2))
+
     }
 
 

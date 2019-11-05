@@ -8,9 +8,7 @@ import androidx.test.runner.AndroidJUnit4
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.entity.UserWithPreferences
 import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
-import com.galou.watchmyback.data.source.local.dao.UserDao
-import com.galou.watchmyback.data.source.local.dao.UserPreferencesDao
-import com.galou.watchmyback.data.source.local.dao.mainUser
+import com.galou.watchmyback.data.source.local.dao.*
 import com.galou.watchmyback.utils.Result
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.*
@@ -189,6 +187,57 @@ class UserLocalSourceTests{
         assertThat(taskResult, `is` (true))
         val taskData = (task as Result.Success).data
         assertThat(taskData, `is` (localUser))
+
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun fetchAllUser_emitSuccessAndListAllUsers() = runBlocking {
+        localSource.createUser(mainUser)
+        localSource.createUser(firstFriend)
+        localSource.createUser(secondFriend)
+        val task = localSource.fetchAllUsers()
+        val taskResult = task is Result.Success
+        assertThat(taskResult, `is` (true))
+        val taskData = (task as Result.Success).data
+        assertThat(taskData, `is`(notNullValue()))
+        assertThat(taskData, hasItem(mainUser))
+        assertThat(taskData, hasItem(firstFriend))
+        assertThat(taskData, hasItem(secondFriend))
+        assertThat(taskData.size, equalTo(3))
+
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun fetchUserByUsername_emitSuccessAndListUser() = runBlocking {
+        localSource.createUser(mainUser)
+        localSource.createUser(firstFriend)
+        localSource.createUser(secondFriend)
+        val task = localSource.fetchUserByUsername("user")
+        val taskResult = task is Result.Success
+        assertThat(taskResult, `is` (true))
+        val taskData = (task as Result.Success).data
+        assertThat(taskData, `is`(notNullValue()))
+        assertThat(taskData, hasItem(mainUser))
+        assertThat(taskData.size, equalTo(1))
+
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun fetchUserByEmail_emitSuccessAndListUser() = runBlocking {
+        localSource.createUser(mainUser)
+        localSource.createUser(firstFriend)
+        localSource.createUser(secondFriend)
+        val task = localSource.fetchUserByEmailAddress("friend")
+        val taskResult = task is Result.Success
+        assertThat(taskResult, `is` (true))
+        val taskData = (task as Result.Success).data
+        assertThat(taskData, `is`(notNullValue()))
+        assertThat(taskData, hasItem(firstFriend))
+        assertThat(taskData, hasItem(secondFriend))
+        assertThat(taskData.size, equalTo(2))
 
     }
 

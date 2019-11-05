@@ -159,8 +159,74 @@ class UserRepositoryImpl(
      *
      * @param preferences [UserPreferences] to update
      * @return [Result] of the operation
+     *
+     * @see UserLocalDataSource.updateUserInformation
      */
     override suspend fun updateUserPreferences(preferences: UserPreferences): Result<Void?> =
         localSource.updateUserPreference(preferences)
 
+    /**
+     * Run async task to fetch all the user from the database
+     *
+     * By default it will fetch the users from the remote database
+     * If the remote database is not available it will fetch the user from the local database
+     *
+     * @return [Result] with a list of [User]
+     *
+     * @see UserRemoteDataSource.fetchAllUsers
+     * @see UserLocalDataSource.fetchAllUsers
+     */
+    override suspend fun fetchAllUsers(): Result<List<User>> {
+        val remoteResult = remoteSource.fetchAllUsers()
+        if (remoteResult is Result.Success){
+            if (remoteResult.data.isNotEmpty()){
+                return remoteResult
+            }
+        }
+        return localSource.fetchAllUsers()
+    }
+
+    /**
+     * Run async task to fetch all the user from the database who have a specific chain of character in their username
+     *
+     * By default it will fetch the users from the remote database
+     * If the remote database is not available it will fetch the user from the local database
+     *
+     * @param name string to look for in the username
+     * @return [Result] with a list of [User]
+     *
+     * @see UserRemoteDataSource.fetchUserByUsername
+     * @see UserLocalDataSource.fetchUserByUsername
+     */
+    override suspend fun fetchUserByUsername(name: String): Result<List<User>> {
+        val remoteResult = remoteSource.fetchUserByUsername(name)
+        if (remoteResult is Result.Success){
+            if (remoteResult.data.isNotEmpty()){
+                return remoteResult
+            }
+        }
+        return localSource.fetchUserByUsername(name)
+    }
+
+    /**
+     * Run async task to fetch all the user from the database who have a specific chain of character in their email address
+     *
+     * By default it will fetch the users from the remote database
+     * If the remote database is not available it will fetch the user from the local database
+     *
+     * @param emailAddress string to look for in the address
+     * @return [Result] with a list of [User]
+     *
+     * @see UserRemoteDataSource.fetchUserByEmailAddress
+     * @see UserLocalDataSource.fetchUserByEmailAddress
+     */
+    override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<User>> {
+        val remoteResult = remoteSource.fetchUserByEmailAddress(emailAddress)
+        if (remoteResult is Result.Success){
+            if (remoteResult.data.isNotEmpty()){
+                return remoteResult
+            }
+        }
+        return localSource.fetchUserByEmailAddress(emailAddress)
+    }
 }

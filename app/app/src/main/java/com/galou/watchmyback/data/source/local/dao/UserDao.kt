@@ -5,6 +5,7 @@ import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.entity.UserWithPreferences
 import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
+import com.galou.watchmyback.utils.USER_TABLE_EMAIL
 import com.galou.watchmyback.utils.USER_TABLE_NAME
 import com.galou.watchmyback.utils.USER_TABLE_USERNAME
 import com.galou.watchmyback.utils.USER_TABLE_UUID
@@ -32,6 +33,16 @@ abstract class UserDao(private val database: WatchMyBackDatabase) {
     @Query("SELECT * FROM $USER_TABLE_NAME WHERE $USER_TABLE_UUID = :userId")
     abstract suspend fun getUser(userId: String): User?
 
+    /**
+     * Query all the [User]
+     *
+     * @return List of [User]
+     *
+     * @see Query
+     */
+    @Query("SELECT * FROM $USER_TABLE_NAME")
+    abstract suspend fun getAllUsers(): List<User>
+
     @Transaction
     @Query("SELECT * FROM $USER_TABLE_NAME WHERE $USER_TABLE_UUID = :userId")
     abstract suspend fun getUserWithPreferences(userId: String): UserWithPreferences?
@@ -46,6 +57,17 @@ abstract class UserDao(private val database: WatchMyBackDatabase) {
      */
     @Query("SELECT * FROM $USER_TABLE_NAME WHERE $USER_TABLE_USERNAME LIKE :username")
     abstract suspend fun getUsersFromUsername(username: String): List<User>
+
+    /**
+     * Query a list of [User] who have a specific chain of character in their email address
+     *
+     * @param emailAddress chain of character to query
+     * @return List of [User] wo have the chain of character requested in their email address
+     *
+     * @see Query
+     */
+    @Query("SELECT * FROM $USER_TABLE_NAME WHERE $USER_TABLE_EMAIL LIKE :emailAddress")
+    abstract suspend fun getUsersFromEmail(emailAddress: String): List<User>
 
     /**
      * Create a [User] object in the database

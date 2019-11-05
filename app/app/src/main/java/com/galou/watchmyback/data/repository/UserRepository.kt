@@ -28,4 +28,10 @@ interface UserRepository {
 
     suspend fun updateUserPreferences(preferences: UserPreferences): Result<Void?>
 
+    suspend fun fetchAllUsers(): Result<List<User>>
+
+    suspend fun fetchUserByUsername(name: String): Result<List<User>>
+
+    suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<User>>
+
 }
