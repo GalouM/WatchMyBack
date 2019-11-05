@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.galou.watchmyback.R
+import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * A simple [Fragment] subclass.
  */
 class FriendsView : Fragment() {
+
+    private val viewModel: FriendsViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
