@@ -108,26 +108,30 @@ class UserRepositoryImpl(
         val remoteResult = remoteUserTask.await()
         val localResult = localUserTask.await()
 
-        if (remoteResult is Result.Success &&
-            localResult is Result.Success ){
-            remoteResult.data?.let {remoteUser ->
-                // fetch user's friends
-                val remoteFriendTask = friendRemoteSource.fetchUserFriend(remoteUser)
-                // make sure friends fetch succeed and update or create the user with it data
-                if (remoteFriendTask is Result.Success){
-                    val updateLocalDbResult = userLocalSource.updateOrCreateUser(remoteUser, localResult.data, *remoteFriendTask.data.toTypedArray())
-                    if (updateLocalDbResult is Result.Success){
-                        return@coroutineScope Result.Success(updateLocalDbResult.data)
+        when {
+            remoteResult is Result.Success && localResult is Result.Success -> {
+                remoteResult.data?.let {remoteUser ->
+                    // fetch user's friends
+                    // make sure friends fetch succeed and update or create the user with it data
+                    when (val remoteFriendTask = friendRemoteSource.fetchUserFriend(remoteUser)) {
+                        is Result.Success -> {
+                            when(val updateLocalDbResult =
+                                userLocalSource.updateOrCreateUser(remoteUser, localResult.data,
+                                    *remoteFriendTask.data.toTypedArray())) {
+                                is Result.Success -> return@coroutineScope Result.Success(updateLocalDbResult.data)
+
+                                else -> return@coroutineScope localResult
+                            }
+
+                        }
+                        else -> return@coroutineScope localResult
                     }
                 }
             }
+
         }
 
         return@coroutineScope localResult
-    }
-
-    private suspend fun fetchUserFriend(user: User): Result<List<User>> {
-        return friendRemoteSource.fetchUserFriend(user)
     }
 
     /**
@@ -141,12 +145,16 @@ class UserRepositoryImpl(
      */
     override suspend fun updateUserPicture(user: User, internalUri: Uri): Result<Uri?> {
         val uriResult = userRemoteSource.createNewPictureInStorageAndGetUri(user.id, internalUri)
-        if(uriResult is Result.Success){
-            val uriRemotePicture = uriResult.data.toString()
-            user.pictureUrl = uriRemotePicture
-            val updateUserResult = updateUser(user)
-            if(updateUserResult is Result.Error || updateUserResult is Result.Canceled ){
-                return Result.Error(Exception("Error while updating user information"))
+
+        when(uriResult){
+            is Result.Success -> {
+                val uriRemotePicture = uriResult.data.toString()
+                user.pictureUrl = uriRemotePicture
+                when (updateUser(user)) {
+                    is Result.Error, is Result.Canceled -> {
+                        return Result.Error(Exception("Error while updating user information"))
+                    }
+                }
             }
         }
         return uriResult
@@ -175,11 +183,8 @@ class UserRepositoryImpl(
      * @see UserLocalDataSource.fetchAllUsers
      */
     override suspend fun fetchAllUsers(): Result<List<User>> {
-        val remoteResult = userRemoteSource.fetchAllUsers()
-        if (remoteResult is Result.Success){
-            if (remoteResult.data.isNotEmpty()){
-                return remoteResult
-            }
+        when(val remoteResult = userRemoteSource.fetchAllUsers()){
+            is Result.Success -> if (remoteResult.data.isNotEmpty()) return remoteResult
         }
         return userLocalSource.fetchAllUsers()
     }
@@ -197,11 +202,8 @@ class UserRepositoryImpl(
      * @see UserLocalDataSource.fetchUserByUsername
      */
     override suspend fun fetchUserByUsername(name: String): Result<List<User>> {
-        val remoteResult = userRemoteSource.fetchUserByUsername(name)
-        if (remoteResult is Result.Success){
-            if (remoteResult.data.isNotEmpty()){
-                return remoteResult
-            }
+        when(val remoteResult = userRemoteSource.fetchUserByUsername(name)){
+            is Result.Success -> if (remoteResult.data.isNotEmpty()) return remoteResult
         }
         return userLocalSource.fetchUserByUsername(name)
     }
@@ -219,11 +221,8 @@ class UserRepositoryImpl(
      * @see UserLocalDataSource.fetchUserByEmailAddress
      */
     override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<User>> {
-        val remoteResult = userRemoteSource.fetchUserByEmailAddress(emailAddress)
-        if (remoteResult is Result.Success){
-            if (remoteResult.data.isNotEmpty()){
-                return remoteResult
-            }
+        when(val remoteResult = userRemoteSource.fetchUserByEmailAddress(emailAddress)){
+            is Result.Success -> if (remoteResult.data.isNotEmpty()) return remoteResult
         }
         return userLocalSource.fetchUserByEmailAddress(emailAddress)
     }

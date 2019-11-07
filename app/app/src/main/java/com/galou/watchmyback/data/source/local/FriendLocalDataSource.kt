@@ -37,7 +37,6 @@ class FriendLocalDataSource(
     override suspend fun fetchUserFriend(user: User): Result<List<User>>  {
         return try {
             Result.Success(friendDao.getFriendsUser(user.id))
-
         } catch (e: Exception) {
             Result.Error(e)
         }
