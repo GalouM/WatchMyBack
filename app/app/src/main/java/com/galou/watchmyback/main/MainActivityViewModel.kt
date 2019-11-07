@@ -12,6 +12,7 @@ import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
+import com.galou.watchmyback.base.BaseViewModel
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserWithPreferences
 import com.galou.watchmyback.data.repository.UserRepository
@@ -25,21 +26,19 @@ import kotlinx.coroutines.launch
 /**
  * [ViewModel] of the [MainActivity]
  *
- * Inherit from [ViewModel]
+ * Inherit from [BaseViewModel]
  *
  * @see MainActivity
  *
  *
  * @property userRepository [UserRepositoryImpl] reference
  */
-class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
+class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel() {
 
     private var getUserJob: Job? = null
     private var createUserJob: Job? = null
 
     // -- Live data
-    private val _snackbarText = MutableLiveData<Event<Int>>()
-    val snackbarMessage: LiveData<Event<Int>> = _snackbarText
 
     private val _openSignInActivityEvent = MutableLiveData<Event<Unit>>()
     val openSignInActivityEvent: LiveData<Event<Unit>> = _openSignInActivityEvent
@@ -165,7 +164,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
     /**
      * Create a user in the  database
      *
-     * @see UserRepositoryImpl.createUser
+     * @see UserRepositoryImpl.createNewUser
      *
      * @param firebaseUser user connected to the app through Firebase Authentification
      */
@@ -174,7 +173,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
         val user = User(firebaseUser.uid, firebaseUser.email, firebaseUser.displayName, firebaseUser.phoneNumber, urlPhoto)
         if(createUserJob?.isActive == true) createUserJob?.cancel()
         createUserJob = viewModelScope.launch {
-            when(userRepository.createUser(user)){
+            when(userRepository.createNewUser(user)){
                 is Result.Success -> fetchCurrentUserInformation(firebaseUser)
                 is Result.Error -> showSnackBarMessage(R.string.error_creatng_user_remote)
                 is Result.Canceled -> showSnackBarMessage(R.string.canceled)
@@ -193,17 +192,6 @@ class MainActivityViewModel(val userRepository: UserRepository) : ViewModel() {
         showSnackBarMessage(R.string.welcome)
     }
 
-    
-    
-    // UTILS
-    /**
-     * Emit a message
-     *
-     * @param message messgae to emit
-     */
-    private fun showSnackBarMessage(message: Int){
-        _snackbarText.value = Event(message)
-    }
 
     /**
      * Emit the [Event] to show the sign in activity

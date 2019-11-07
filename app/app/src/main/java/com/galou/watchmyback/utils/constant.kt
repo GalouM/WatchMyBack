@@ -83,7 +83,6 @@ const val PREFERENCES_TABLE_TIME_DISPLAY = "time_display"
 
 // ------ COLLECTION FIRESTORE -------
 const val USER_COLLECTION_NAME = "userCollection"
-const val FRIEND_COLLECTION_NAME = "friendCollection"
 
 // ------ STORAGE REFERENCE -------
 const val USER_PICTURE_REFERENCE = "images/userPicture/"

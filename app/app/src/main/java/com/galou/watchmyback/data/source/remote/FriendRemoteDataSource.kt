@@ -3,14 +3,10 @@ package com.galou.watchmyback.data.source.remote
 import com.galou.watchmyback.data.entity.Friend
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.source.FriendDataSource
-import com.galou.watchmyback.utils.FRIEND_COLLECTION_NAME
-import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.await
+import com.galou.watchmyback.utils.*
 import com.galou.watchmyback.utils.extension.toUserList
-import com.galou.watchmyback.utils.idGenerated
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 /**
  * @author galou
@@ -21,73 +17,34 @@ class FriendRemoteDataSource(
 ) : FriendDataSource {
 
     private val ioDispatcher = Dispatchers.IO
-    private val friendCollection = remoteDB.collection(FRIEND_COLLECTION_NAME)
+    private val userCollection = remoteDB.collection(USER_COLLECTION_NAME)
 
-    override suspend fun addFriend(friend: Friend): Result<Void?> = withContext(ioDispatcher)  {
-        return@withContext try {
-            friendCollection.document(idGenerated).set(friend).await()
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
+    override suspend fun addFriend(user: User, vararg friend: User): Result<Void?> = withContext(ioDispatcher)  {
+        user.friendsId.addAll(friend.map { it.id })
+        return@withContext userCollection.document(user.id).update("friendId", user.friendsId).await()
     }
 
-
-    override suspend fun removeFriend(userId: String, friendId: String): Result<Void?> = withContext(ioDispatcher) {
-        return@withContext try {
-            when(val idResult = getFriendId(userId, friendId)){
-                is Result.Success -> {
-                    friendCollection.document(idResult.data).delete().await()
-                }
-                is Result.Error -> Result.Error(idResult.exception)
-                is Result.Canceled -> Result.Canceled(idResult.exception)
-            }
-
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
+    override suspend fun removeFriend(user: User, friendId: String): Result<Void?> = withContext(ioDispatcher) {
+        user.friendsId.remove(friendId)
+        return@withContext userCollection.document(user.id).update("friendId", user.friendsId).await()
 
     }
 
-    private suspend fun getFriendId(userId: String, friendId: String): Result<String> = withContext(ioDispatcher) {
-        return@withContext try {
-            when(
-                val resultQuery =
-                    friendCollection.whereEqualTo("userId", userId)
-                        .whereEqualTo("friendId", friendId)
-                        .get()
-                        .await()){
-                is Result.Success -> {
-                   Result.Success(resultQuery.data.documents[0].id)
-
+    override suspend fun fetchUserFriend(user: User): Result<List<User>> = withContext(ioDispatcher) {
+        val friends = mutableListOf<User>()
+        supervisorScope {
+            for (friendId: String in user.friendsId){
+                launch {
+                    val friendResult = userCollection.document(friendId).get().await()
+                    if (friendResult is Result.Success){
+                        friendResult.data.toObject(User::class.java)?.let { friend ->
+                            friends.add(friend)
+                        }
+                    }
                 }
-                is Result.Error -> Result.Error(resultQuery.exception)
-                is Result.Canceled -> Result.Canceled(resultQuery.exception)
             }
-
-        } catch (e: Exception) {
-            Result.Error(e)
+            return@supervisorScope Result.Success(friends)
         }
-
-    }
-
-    override suspend fun fetchUserFriend(userId: String): Result<List<User>> = withContext(ioDispatcher) {
-        return@withContext try {
-            when(
-                val resultDocumentSnapshot =
-                    friendCollection.whereEqualTo("userId", userId).get().await()
-                ){
-                is Result.Success -> {
-                    val friends = resultDocumentSnapshot.data.toUserList()
-                    Result.Success(friends)
-                }
-                is Result.Error -> Result.Error(resultDocumentSnapshot.exception)
-                is Result.Canceled -> Result.Canceled(resultDocumentSnapshot.exception)
-            }
-
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
-
     }
 
 }

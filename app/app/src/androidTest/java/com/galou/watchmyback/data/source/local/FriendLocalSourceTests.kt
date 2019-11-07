@@ -52,8 +52,6 @@ class FriendLocalSourceTests{
 
         runBlocking {
             userDao.createUser(mainUser)
-            userDao.createUser(firstFriend)
-            userDao.createUser(secondFriend)
         }
     }
 
@@ -65,16 +63,14 @@ class FriendLocalSourceTests{
 
     @Test
     @Throws(Exception::class)
-    fun addAndFetchFriendThenRemove_emiteSuccess() = runBlocking {
-        val friendship1 = Friend(mainUser.id, firstFriend.id)
-        val creationTask = localSource.addFriend(friendship1)
-
+    fun addAndFetchFriendThenRemove_emitSuccess() = runBlocking {
+        val creationTask = localSource.addFriend(mainUser, firstFriend, secondFriend)
         //check creation operation was successful
         val creationResult = creationTask is Result.Success
         assertThat(creationResult, `is`(true))
 
         // fetch
-        val fetchTask = localSource.fetchUserFriend(mainUser.id)
+        val fetchTask = localSource.fetchUserFriend(mainUser)
 
         //check fetch operation was successful
         val fetchResult = fetchTask is Result.Success
@@ -82,25 +78,22 @@ class FriendLocalSourceTests{
 
         // check data are fetched and exist in DB
         val fetchedData = (fetchTask as Result.Success).data
-        assertThat(fetchedData.size, equalTo(1))
+        assertThat(fetchedData.size, equalTo(2))
         assertThat(fetchedData, hasItem(firstFriend))
+        assertThat(fetchedData, hasItem(secondFriend))
 
-        val deleteTask = localSource.removeFriend(mainUser.id, firstFriend.id)
+        val deleteTask = localSource.removeFriend(mainUser, firstFriend.id)
 
-        //check fetch operation was successful
+        //check delete operation was successful
         val deleteResult = deleteTask is Result.Success
         assertThat(deleteResult, `is`(true))
 
-        //check fetch operation was successful
-        val fetchDeletedResult = fetchTask is Result.Success
-        assertThat(fetchResult, `is`(true))
-
         // fetch
-        val fetchDeletedTask = localSource.fetchUserFriend(mainUser.id)
+        val fetchDeletedTask = localSource.fetchUserFriend(mainUser)
 
         // check data are fetched and exist in DB
         val fetchedDeletedData = (fetchDeletedTask as Result.Success).data
-        assertThat(fetchedDeletedData.size, equalTo(0))
+        assertThat(fetchedDeletedData.size, equalTo(1))
     }
 
 }

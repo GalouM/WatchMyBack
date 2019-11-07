@@ -1,11 +1,9 @@
 package com.galou.watchmyback.data.source.local.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.galou.watchmyback.data.entity.Friend
 import com.galou.watchmyback.data.entity.User
+import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.utils.*
 
 /**
@@ -18,7 +16,7 @@ import com.galou.watchmyback.utils.*
  *
  */
 @Dao
-interface FriendDao {
+abstract class FriendDao(private val database: WatchMyBackDatabase) {
 
     /**
      * Create a [Friend] object in the database
@@ -31,7 +29,7 @@ interface FriendDao {
      * @see OnConflictStrategy.REPLACE
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addFriend(friend: Friend)
+    abstract suspend fun createFriendship(vararg friend: Friend)
 
     /**
      * Delete a [Friend] object from the database
@@ -44,7 +42,7 @@ interface FriendDao {
      */
     @Query("DELETE FROM $FRIEND_TABLE_NAME WHERE $FRIEND_TABLE_USER_FRIEND_UUID = :friendId " +
             "AND $FRIEND_TABLE_USER_UUID = :userId")
-    suspend fun removeFriend(friendId: String, userId: String)
+    abstract suspend fun removeFriend(friendId: String, userId: String)
 
     /**
      * Query all the [User] who are friend with a specific [User]
@@ -59,5 +57,13 @@ interface FriendDao {
             "INNER JOIN $FRIEND_TABLE_NAME " +
             "ON ${FRIEND_TABLE_NAME}.${FRIEND_TABLE_USER_FRIEND_UUID} = $USER_TABLE_NAME.$USER_TABLE_UUID " +
             "WHERE ${FRIEND_TABLE_NAME}.${FRIEND_TABLE_USER_UUID} = :userId")
-    suspend fun getFriendsUser(userId: String): List<User>
+    abstract suspend fun getFriendsUser(userId: String): List<User>
+
+    @Transaction
+    open suspend fun addFriend(currentUserId: String, vararg friends: User){
+        database.userDao().createUser(*friends)
+        val friendships = mutableListOf<Friend>()
+        friends.forEach { friend -> friendships.add(Friend(currentUserId, friend.id)) }
+        createFriendship(*friendships.toTypedArray())
+    }
 }

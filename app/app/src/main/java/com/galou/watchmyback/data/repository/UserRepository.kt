@@ -16,7 +16,7 @@ interface UserRepository {
     val currentUser: MutableLiveData<User>
     val userPreferences: MutableLiveData<UserPreferences>
 
-    suspend fun createUser(user: User): Result<Void?>
+    suspend fun createNewUser(user: User): Result<Void?>
 
     suspend fun updateUser(user: User): Result<Void?>
 

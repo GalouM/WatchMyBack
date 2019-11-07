@@ -1,5 +1,6 @@
 package com.galou.watchmyback.data.source.local
 
+import com.galou.watchmyback.data.entity.Friend
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.entity.UserWithPreferences
@@ -38,7 +39,7 @@ class UserLocalDataSource(
     override suspend fun createUser(user: User): Result<Void?>  {
         val preferences = UserPreferences(id = user.id)
         return try {
-            userDao.createUserAndPreferences(user, preferences)
+            userDao.createOrUpdateUserWithData(true , user, preferences)
             Result.Success(null)
         } catch (e: Exception) {
             Result.Error(e)
@@ -60,20 +61,17 @@ class UserLocalDataSource(
      * @see fetchUser
      * @see createUser
      */
-    suspend fun updateOrCreateUser(remoteUser: User, localUser: UserWithPreferences?): Result<UserWithPreferences?> {
-        return  try {
-            if (localUser != null) {
-                if (remoteUser != localUser.user) updateUserInformation(remoteUser)
-            } else {
-                createUser(remoteUser)
-            }
+    suspend fun updateOrCreateUser(remoteUser: User, localUser: UserWithPreferences?, vararg friend: User): Result<UserWithPreferences?> {
+        val createUser = localUser == null
+        val preferences = UserPreferences(id = remoteUser.id)
+        return try {
+            userDao.createOrUpdateUserWithData(createUser, remoteUser, preferences, *friend)
             val fetchUser = fetchUser(remoteUser.id)
             if (fetchUser is Result.Success){
                 Result.Success(fetchUser.data)
             } else {
                 Result.Error(Exception("Error fetching user"))
             }
-
         } catch (e: Exception) {
             Result.Error(e)
         }

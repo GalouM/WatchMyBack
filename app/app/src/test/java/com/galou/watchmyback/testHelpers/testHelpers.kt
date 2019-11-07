@@ -5,6 +5,7 @@ import com.galou.watchmyback.Event
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.entity.UserWithPreferences
+import com.galou.watchmyback.utils.idGenerated
 import org.junit.Assert.assertEquals
 
 /**
@@ -41,3 +42,6 @@ fun generateUserWithPref(id: String): UserWithPreferences{
     return UserWithPreferences(user = generateTestUser(id), preferences = preferencesTest)
 
 }
+
+val firstFriend = User(idGenerated, "first-friend@gmail.com", "First Friend", "5550985674")
+val secondFriend = User(idGenerated, "second-friend@gmail.com", "Second Friend", "5555649834")

@@ -20,26 +20,28 @@ class FriendRepositoryImpl(
     private val remoteSource: FriendRemoteDataSource
 ) : FriendRepository {
 
-    override suspend fun addFriend(userId: String, friendId: String): Result<Void?> = coroutineScope {
-        val friend = Friend(userId, friendId)
-        val localTask = async { localSource.addFriend(friend) }
-        val remoteTask = async { remoteSource.addFriend(friend) }
+    override suspend fun addFriend(user: User, friend: User): Result<Void?> = coroutineScope {
+        val localTask = async { localSource.addFriend(user, friend) }
+        val remoteTask = async { remoteSource.addFriend(user, friend) }
         return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
     }
 
-    override suspend fun removeFriend(userId: String, friendId: String): Result<Void?> = coroutineScope {
-        val localTask = async { localSource.removeFriend(userId, friendId) }
-        val remoteTask = async { remoteSource.removeFriend(userId, friendId) }
+    override suspend fun removeFriend(user: User, friendId: String): Result<Void?> = coroutineScope {
+        val localTask = async { localSource.removeFriend(user, friendId) }
+        val remoteTask = async { remoteSource.removeFriend(user, friendId) }
         return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
     }
 
-    override suspend fun fetchUserFriend(userId: String): Result<List<User>> {
-        val remoteResult = remoteSource.fetchUserFriend(userId)
-        if (remoteResult is Result.Success){
-            if (remoteResult.data.isNotEmpty()){
-                return remoteResult
+    override suspend fun fetchUserFriend(user: User, refresh: Boolean): Result<List<User>> {
+        if (refresh) {
+            val remoteResult = remoteSource.fetchUserFriend(user)
+            if (remoteResult is Result.Success) {
+                if (remoteResult.data.isNotEmpty()) {
+                    localSource.addFriend(user, *remoteResult.data.toTypedArray())
+                    return remoteResult
+                }
             }
         }
-        return localSource.fetchUserFriend(userId)
+        return localSource.fetchUserFriend(user)
     }
 }

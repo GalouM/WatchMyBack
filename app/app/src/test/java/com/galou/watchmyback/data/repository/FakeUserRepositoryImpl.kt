@@ -20,7 +20,7 @@ open class FakeUserRepositoryImpl : UserRepository{
 
     override val userPreferences= MutableLiveData<UserPreferences>()
 
-    override suspend fun createUser(user: User): Result<Void?> = Result.Success(null)
+    override suspend fun createNewUser(user: User): Result<Void?> = Result.Success(null)
 
     override suspend fun updateUser(user: User): Result<Void?> = Result.Success(null)
 

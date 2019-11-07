@@ -5,30 +5,31 @@ import androidx.lifecycle.MutableLiveData
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.entity.UserWithPreferences
+import com.galou.watchmyback.data.source.local.FriendLocalDataSource
 import com.galou.watchmyback.data.source.local.UserLocalDataSource
+import com.galou.watchmyback.data.source.remote.FriendRemoteDataSource
 import com.galou.watchmyback.data.source.remote.UserRemoteDataSource
 import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.returnSuccessOrError
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
 
 /**
  * Implementation of [UserRepository]
  *
  * List all the possible actions on a [User]
  *
- * @property localSource Access to the local database
- * @property remoteSource Access to the remote database
+ * @property userLocalSource Access to the local database
+ * @property userRemoteSource Access to the remote database
  *
  * @see User
  *
  */
 
 class UserRepositoryImpl(
-    private val localSource: UserLocalDataSource,
-    private val remoteSource: UserRemoteDataSource
+    private val userLocalSource: UserLocalDataSource,
+    private val userRemoteSource: UserRemoteDataSource,
+    private val friendRemoteSource: FriendRemoteDataSource
 ) : UserRepository {
 
     /**
@@ -41,7 +42,7 @@ class UserRepositoryImpl(
     override val userPreferences = MutableLiveData<UserPreferences>()
 
     /**
-     * Run async task to create a [User] on the local and remote database
+     * Run async task to create a new [User] on the local and remote database
      *
      * @param user [User] to create
      * @return [Result] of the creation
@@ -49,9 +50,9 @@ class UserRepositoryImpl(
      * @see UserLocalDataSource.createUser
      * @see UserRemoteDataSource.createUser
      */
-    override suspend fun createUser(user: User): Result<Void?> = coroutineScope {
-        val localTask = async { localSource.createUser(user) }
-        val remoteTask = async { remoteSource.createUser(user) }
+    override suspend fun createNewUser(user: User): Result<Void?> = coroutineScope {
+        val localTask = async { userLocalSource.createUser(user) }
+        val remoteTask = async { userRemoteSource.createUser(user) }
         return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
     }
 
@@ -65,8 +66,8 @@ class UserRepositoryImpl(
      * @see UserRemoteDataSource.updateUserInformation
      */
     override suspend fun updateUser(user: User): Result<Void?> = coroutineScope {
-        val localTask = async { localSource.updateUserInformation(user) }
-        val remoteTask = async { remoteSource.updateUserInformation(user) }
+        val localTask = async { userLocalSource.updateUserInformation(user) }
+        val remoteTask = async { userRemoteSource.updateUserInformation(user) }
         return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
     }
 
@@ -80,8 +81,8 @@ class UserRepositoryImpl(
      * @see UserRemoteDataSource.deleteUser
      */
     override suspend fun deleteUser(user: User): Result<Void?> = coroutineScope {
-        val localTask = async { localSource.deleteUser(user) }
-        val remoteTask = async { remoteSource.deleteUser(user) }
+        val localTask = async { userLocalSource.deleteUser(user) }
+        val remoteTask = async { userRemoteSource.deleteUser(user) }
         return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
     }
 
@@ -100,25 +101,33 @@ class UserRepositoryImpl(
      * @see UserLocalDataSource.updateOrCreateUser
      */
     override suspend fun fetchUser(userId: String): Result<UserWithPreferences?> = coroutineScope {
-        val localTask =  async { localSource.fetchUser(userId) }
-        val remoteTask = async { remoteSource.fetchUser(userId) }
+        // fetch user from both database
+        val localUserTask =  async { userLocalSource.fetchUser(userId) }
+        val remoteUserTask = async { userRemoteSource.fetchUser(userId) }
+        // wait for result DB and make sure fetch succeed
+        val remoteResult = remoteUserTask.await()
+        val localResult = localUserTask.await()
 
-        val remoteResult = remoteTask.await()
-        val localResult = localTask.await()
-
-        if (remoteResult is Result.Success && localResult is Result.Success){
+        if (remoteResult is Result.Success &&
+            localResult is Result.Success ){
             remoteResult.data?.let {remoteUser ->
-                val updateLocalDbResult = localSource.updateOrCreateUser(remoteUser, localResult.data)
-                if (updateLocalDbResult is Result.Success){
-                    return@coroutineScope Result.Success(updateLocalDbResult.data)
-                } else {
-                    return@coroutineScope updateLocalDbResult
+                // fetch user's friends
+                val remoteFriendTask = friendRemoteSource.fetchUserFriend(remoteUser)
+                // make sure friends fetch succeed and update or create the user with it data
+                if (remoteFriendTask is Result.Success){
+                    val updateLocalDbResult = userLocalSource.updateOrCreateUser(remoteUser, localResult.data, *remoteFriendTask.data.toTypedArray())
+                    if (updateLocalDbResult is Result.Success){
+                        return@coroutineScope Result.Success(updateLocalDbResult.data)
+                    }
                 }
             }
-
         }
 
         return@coroutineScope localResult
+    }
+
+    private suspend fun fetchUserFriend(user: User): Result<List<User>> {
+        return friendRemoteSource.fetchUserFriend(user)
     }
 
     /**
@@ -131,7 +140,7 @@ class UserRepositoryImpl(
      * @see UserRemoteDataSource.createNewPictureInStorageAndGetUri
      */
     override suspend fun updateUserPicture(user: User, internalUri: Uri): Result<Uri?> {
-        val uriResult = remoteSource.createNewPictureInStorageAndGetUri(user.id, internalUri)
+        val uriResult = userRemoteSource.createNewPictureInStorageAndGetUri(user.id, internalUri)
         if(uriResult is Result.Success){
             val uriRemotePicture = uriResult.data.toString()
             user.pictureUrl = uriRemotePicture
@@ -152,7 +161,7 @@ class UserRepositoryImpl(
      * @see UserLocalDataSource.updateUserInformation
      */
     override suspend fun updateUserPreferences(preferences: UserPreferences): Result<Void?> =
-        localSource.updateUserPreference(preferences)
+        userLocalSource.updateUserPreference(preferences)
 
     /**
      * Run async task to fetch all the user from the database
@@ -166,13 +175,13 @@ class UserRepositoryImpl(
      * @see UserLocalDataSource.fetchAllUsers
      */
     override suspend fun fetchAllUsers(): Result<List<User>> {
-        val remoteResult = remoteSource.fetchAllUsers()
+        val remoteResult = userRemoteSource.fetchAllUsers()
         if (remoteResult is Result.Success){
             if (remoteResult.data.isNotEmpty()){
                 return remoteResult
             }
         }
-        return localSource.fetchAllUsers()
+        return userLocalSource.fetchAllUsers()
     }
 
     /**
@@ -188,13 +197,13 @@ class UserRepositoryImpl(
      * @see UserLocalDataSource.fetchUserByUsername
      */
     override suspend fun fetchUserByUsername(name: String): Result<List<User>> {
-        val remoteResult = remoteSource.fetchUserByUsername(name)
+        val remoteResult = userRemoteSource.fetchUserByUsername(name)
         if (remoteResult is Result.Success){
             if (remoteResult.data.isNotEmpty()){
                 return remoteResult
             }
         }
-        return localSource.fetchUserByUsername(name)
+        return userLocalSource.fetchUserByUsername(name)
     }
 
     /**
@@ -210,12 +219,12 @@ class UserRepositoryImpl(
      * @see UserLocalDataSource.fetchUserByEmailAddress
      */
     override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<User>> {
-        val remoteResult = remoteSource.fetchUserByEmailAddress(emailAddress)
+        val remoteResult = userRemoteSource.fetchUserByEmailAddress(emailAddress)
         if (remoteResult is Result.Success){
             if (remoteResult.data.isNotEmpty()){
                 return remoteResult
             }
         }
-        return localSource.fetchUserByEmailAddress(emailAddress)
+        return userLocalSource.fetchUserByEmailAddress(emailAddress)
     }
 }

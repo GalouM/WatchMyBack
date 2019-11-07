@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- DO NOT DELETE STRING FOR TESTING -->
     <string name="test_message" translatable="false">Test Message</string>
@@ -115,4 +115,7 @@
     <string name="fetch_preferences_error">Error fetching preferences</string>
     <string name="error_delete_account">Something wrong happened</string>
     <string name="error_deletion">Unknown error, your account hasn\'t been deleted properly</string>
+    <string name="error_fetch_friends">Error while fetching your friend</string>
+    <string name="error_occured">An error has occured</string>
+    <string name="no_friends_yet">You don\'t have any friends yet</string>
 </resources>

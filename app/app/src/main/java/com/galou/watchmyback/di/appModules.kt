@@ -61,7 +61,7 @@ val appModules = module {
 
     // Repos
     single<UserRepository> {
-        UserRepositoryImpl(localSource = get(), remoteSource = get())
+        UserRepositoryImpl(userLocalSource = get(), userRemoteSource = get(), friendRemoteSource = get())
     }
     single<FriendRepository> {
         FriendRepositoryImpl(localSource = get(), remoteSource = get())

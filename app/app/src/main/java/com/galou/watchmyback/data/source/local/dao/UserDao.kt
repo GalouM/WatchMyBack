@@ -1,6 +1,7 @@
 package com.galou.watchmyback.data.source.local.dao
 
 import androidx.room.*
+import com.galou.watchmyback.data.entity.Friend
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.entity.UserWithPreferences
@@ -81,7 +82,7 @@ abstract class UserDao(private val database: WatchMyBackDatabase) {
      *
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun createUser(user: User)
+    abstract suspend fun createUser(vararg user: User)
 
 
     /**
@@ -105,9 +106,15 @@ abstract class UserDao(private val database: WatchMyBackDatabase) {
     abstract suspend fun deleteUser(user: User)
 
     @Transaction
-    open suspend fun createUserAndPreferences(user: User, preferences: UserPreferences){
-        createUser(user)
-        database.userPreferencesDao().createUserPreferences(preferences)
+    open suspend fun createOrUpdateUserWithData(createUser: Boolean, user: User, preferences: UserPreferences, vararg friend: User){
+        if(createUser){
+            createUser(user)
+            database.userPreferencesDao().createUserPreferences(preferences)
+        } else {
+            updateUser(user)
+        }
+        database.friendDao().addFriend(user.id, *friend)
+
     }
 
 

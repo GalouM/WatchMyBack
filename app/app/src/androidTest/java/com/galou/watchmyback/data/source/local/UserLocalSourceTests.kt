@@ -34,6 +34,7 @@ class UserLocalSourceTests{
     private lateinit var localSource: UserLocalDataSource
     private lateinit var userDao: UserDao
     private lateinit var preferencesDao: UserPreferencesDao
+    private lateinit var friendDao: FriendDao
 
     @Before
     fun createDatabase(){
@@ -45,6 +46,7 @@ class UserLocalSourceTests{
 
         userDao = db.userDao()
         preferencesDao = db.userPreferencesDao()
+        friendDao = db.friendDao()
         localSource = UserLocalDataSource(userDao, preferencesDao)
     }
 
@@ -187,6 +189,27 @@ class UserLocalSourceTests{
         assertThat(taskResult, `is` (true))
         val taskData = (task as Result.Success).data
         assertThat(taskData, `is` (localUser))
+
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun fetchUserWithFriends_emitSuccessAndCreateFriendsInDB() = runBlocking {
+        // add friend to user
+        mainUser.friendsId.add(firstFriend.id)
+        mainUser.friendsId.add(secondFriend.id)
+        // create user locally
+        val task = localSource.updateOrCreateUser(mainUser, null, firstFriend, secondFriend)
+        //check user was created
+        val taskResult = task is Result.Success
+        assertThat(taskResult, `is` (true))
+        val taskData = (task as Result.Success).data
+        assertThat(taskData?.user, `is` (mainUser))
+        // check friends were created
+        val userFriends = friendDao.getFriendsUser(mainUser.id)
+        assertThat(userFriends, hasItem(firstFriend))
+        assertThat(userFriends, hasItem(secondFriend))
+        assertThat(userFriends.size, `is` (2))
 
     }
 

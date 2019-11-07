@@ -55,8 +55,8 @@ class FriendDaoTest {
     @Test
     @Throws(Exception::class)
     fun addAndRemoveAndGetFriend() = runBlocking {
-        friendDao.addFriend(friendship1)
-        friendDao.addFriend(friendship2)
+        friendDao.createFriendship(friendship1)
+        friendDao.createFriendship(friendship2)
 
         val friends = friendDao.getFriendsUser(mainUser.id)
 

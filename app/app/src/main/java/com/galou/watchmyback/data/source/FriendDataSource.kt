@@ -10,9 +10,9 @@ import com.galou.watchmyback.utils.Result
  */
 interface FriendDataSource {
 
-    suspend fun addFriend(friend: Friend): Result<Void?>
+    suspend fun addFriend(user: User, vararg friend: User): Result<Void?>
 
-    suspend fun removeFriend(userId: String, friendId:String): Result<Void?>
+    suspend fun removeFriend(user: User, friendId:String): Result<Void?>
 
-    suspend fun fetchUserFriend(userId: String): Result<List<User>>
+    suspend fun fetchUserFriend(user: User): Result<List<User>>
 }

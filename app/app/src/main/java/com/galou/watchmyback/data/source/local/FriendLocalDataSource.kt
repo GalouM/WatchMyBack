@@ -15,9 +15,9 @@ class FriendLocalDataSource(
     private val friendDao: FriendDao
 ) : FriendDataSource {
 
-    override suspend fun addFriend(friend: Friend): Result<Void?> {
+    override suspend fun addFriend(user: User, vararg friend: User): Result<Void?> {
         return try {
-            friendDao.addFriend(friend)
+            friendDao.addFriend(user.id, *friend)
             Result.Success(null)
         } catch (e: Exception) {
             Result.Error(e)
@@ -25,18 +25,18 @@ class FriendLocalDataSource(
 
     }
 
-    override suspend fun removeFriend(userId: String, friendId: String): Result<Void?>  {
+    override suspend fun removeFriend(user: User, friendId: String): Result<Void?>  {
         return try {
-            friendDao.removeFriend(userId, friendId)
+            friendDao.removeFriend(user.id, friendId)
             Result.Success(null)
         } catch (e: Exception) {
             Result.Error(e)
         }
     }
 
-    override suspend fun fetchUserFriend(userId: String): Result<List<User>>  {
+    override suspend fun fetchUserFriend(user: User): Result<List<User>>  {
         return try {
-            Result.Success(friendDao.getFriendsUser(userId))
+            Result.Success(friendDao.getFriendsUser(user.id))
 
         } catch (e: Exception) {
             Result.Error(e)

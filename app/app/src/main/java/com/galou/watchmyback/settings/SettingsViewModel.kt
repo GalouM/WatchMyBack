@@ -8,8 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
+import com.galou.watchmyback.base.BaseViewModel
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.repository.UserRepository
+import com.galou.watchmyback.data.repository.UserRepositoryImpl
+import com.galou.watchmyback.profile.ProfileActivity
 import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.extension.onClickTimeDisplay
 import com.galou.watchmyback.utils.extension.onClickUnitSystem
@@ -17,12 +20,16 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 /**
- * Created by galou on 2019-10-30
+ * [ViewModel] of [SettingsActivity]
+ *
+ * Inherit from [BaseViewModel]
+ *
+ * @see SettingsActivity
+ *
+ *
+ * @property userRepository [UserRepositoryImpl] reference
  */
-open class SettingsViewModel(private val userRepository: UserRepository) : ViewModel() {
-
-    private val _dataLoading = MutableLiveData<Boolean>()
-    val dataLoading: LiveData<Boolean> = _dataLoading
+open class SettingsViewModel(private val userRepository: UserRepository) : BaseViewModel() {
 
     private val _dataDeleted = MutableLiveData<Event<Unit>>()
     val dataDeleted: LiveData<Event<Unit>> = _dataDeleted
@@ -31,9 +38,6 @@ open class SettingsViewModel(private val userRepository: UserRepository) : ViewM
     val dataSaved: LiveData<Event<Unit>> = _dataSaved
 
     val preferencesLD = MutableLiveData<UserPreferences>()
-
-    private val _snackbarText = MutableLiveData<Event<Int>>()
-    val snackbarMessage: LiveData<Event<Int>> = _snackbarText
 
     private var updatePreferencesJob: Job? = null
     private var deleteUserJob: Job? = null
@@ -133,15 +137,6 @@ open class SettingsViewModel(private val userRepository: UserRepository) : ViewM
         preferencesLD.value = userRepository.userPreferences.value
         _dataLoading.value = false
 
-    }
-
-    /**
-     * Emit a message to display
-     *
-     * @param message message to display
-     */
-    private fun showSnackBarMessage(message: Int){
-        _snackbarText.value = Event(message)
     }
 
 }

@@ -7,7 +7,6 @@ import androidx.test.runner.AndroidJUnit4
 import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
@@ -72,10 +71,7 @@ class UserDaoTest {
     @Test
     @Throws(Exception::class)
     fun createUserAndPreferences() = runBlocking{
-        userDao.createUserAndPreferences(
-            mainUser,
-            mainUserPreferences
-        )
+        userDao.createOrUpdateUserWithData(true, mainUser, mainUserPreferences)
         val preferencesFromDB = preferencesDao.getUserPreferences(mainUser.id)
         assertNotNull(preferencesFromDB)
         val userWithPreferences = userDao.getUserWithPreferences(mainUser.id)
@@ -86,10 +82,7 @@ class UserDaoTest {
     @Test
     @Throws(Exception::class)
     fun updatePreferencesUser() = runBlocking {
-        userDao.createUserAndPreferences(
-            mainUser,
-            mainUserPreferences
-        )
+        userDao.createOrUpdateUserWithData(false, mainUser, mainUserPreferences)
         val newEmergencyNumber = "911"
         mainUserPreferences.emergencyNumber = newEmergencyNumber
         preferencesDao.updateUserPreferences(mainUserPreferences)

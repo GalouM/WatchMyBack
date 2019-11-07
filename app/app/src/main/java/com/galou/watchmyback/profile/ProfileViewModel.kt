@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
+import com.galou.watchmyback.base.BaseViewModel
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.data.repository.UserRepositoryImpl
@@ -21,19 +22,16 @@ import kotlinx.coroutines.launch
 /**
  * [ViewModel] of [ProfileActivity]
  *
- * Inherit from [ViewModel]
+ * Inherit from [BaseViewModel]
  *
  * @see ProfileActivity
  *
  *
  * @property userRepository [UserRepositoryImpl] reference
  */
-class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
+class ProfileViewModel (val userRepository: UserRepository) : BaseViewModel(){
 
     // Live Data
-    private val _snackbarText = MutableLiveData<Event<Int>>()
-    val snackbarMessage: LiveData<Event<Int>> = _snackbarText
-
     val usernameLD = MutableLiveData<String>()
 
     val emailLD = MutableLiveData<String>()
@@ -42,9 +40,6 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
     val pictureUrlLD: LiveData<String> = _pictureUrlLD
 
     val phoneNumberLD = MutableLiveData<String>()
-
-    private val _dataLoading = MutableLiveData<Boolean>()
-    val dataLoading: LiveData<Boolean> = _dataLoading
 
     private val _errorEmail = MutableLiveData<Int?>()
     val errorEmail: LiveData<Int?> = _errorEmail
@@ -212,15 +207,5 @@ class ProfileViewModel (val userRepository: UserRepository) : ViewModel(){
             }
             _dataLoading.value = false
         }
-    }
-
-    // UTILS
-    /**
-     * Emit a message
-     *
-     * @param message messgae to emit
-     */
-    private fun showSnackBarMessage(message: Int){
-        _snackbarText.value = Event(message)
     }
 }

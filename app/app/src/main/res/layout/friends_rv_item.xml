@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.galou.watchmyback.friends.FriendsViewModel" />
+
+        <variable
+            name="friend"
+            type="com.galou.watchmyback.data.entity.User" />
+    </data>
 <androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/cardview_friend"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="@dimen/margin_small">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:srcCompat="@drawable/icon_my_profile"/>
+            app:loadUrl="@{friend.pictureUrl}"/>
 
         <TextView
             android:id="@+id/friends_item_username"
@@ -26,7 +38,7 @@
             app:layout_constraintStart_toEndOf="@id/friends_item_picture"
             app:layout_constraintTop_toTopOf="@id/friends_item_picture"
             app:layout_constraintBottom_toTopOf="@id/friends_item_email"
-            android:text="Gaelle Minisini"
+            android:text="@{friend.username}"
             android:layout_marginStart="@dimen/margin_medium"
             android:textStyle="bold"/>
 
@@ -37,7 +49,7 @@
             app:layout_constraintStart_toStartOf="@id/friends_item_username"
             app:layout_constraintTop_toBottomOf="@id/friends_item_username"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="galou.minisini@gmail.com"/>
+            android:text="@{friend.email}"/>
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -48,9 +60,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:tint="@color/colorAccent"
-            android:background="@null"/>
+            android:background="@null"
+            android:onClick="@{() -> viewmodel.removeFriend(friend)}"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
+</layout>

@@ -1,9 +1,6 @@
 package com.galou.watchmyback.data.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.galou.watchmyback.utils.*
 
 /**
@@ -27,5 +24,6 @@ data class User (
     @ColumnInfo(name = USER_TABLE_EMAIL) var email: String? = "",
     @ColumnInfo(name = USER_TABLE_USERNAME) var username: String? = "",
     @ColumnInfo(name = USER_TABLE_PHONE_NUMBER) var phoneNumber: String? = "",
-    @ColumnInfo(name = USER_TABLE_PICTURE_URL) var pictureUrl: String? = ""
+    @ColumnInfo(name = USER_TABLE_PICTURE_URL) var pictureUrl: String? = "",
+    @Ignore val friendsId: MutableList<String> = mutableListOf()
 )
