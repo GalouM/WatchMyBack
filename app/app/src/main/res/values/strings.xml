@@ -118,4 +118,5 @@
     <string name="error_fetch_friends">Error while fetching your friend</string>
     <string name="error_occured">An error has occured</string>
     <string name="no_friends_yet">You don\'t have any friends yet</string>
+    <string name="search">Search</string>
 </resources>
