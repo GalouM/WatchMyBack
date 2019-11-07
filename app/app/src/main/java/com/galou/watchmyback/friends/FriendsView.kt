@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.galou.watchmyback.R
+import com.galou.watchmyback.data.entity.OtherUser
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.databinding.FragmentFriendsViewBinding
 import com.galou.watchmyback.utils.extension.setupSnackBar
@@ -66,7 +67,7 @@ class FriendsView : Fragment() {
 
     }
 
-    private fun updateFriendsList(friends: List<User>){
+    private fun updateFriendsList(friends: List<OtherUser>){
         adapterRv.friends = friends
         adapterRv.notifyDataSetChanged()
     }

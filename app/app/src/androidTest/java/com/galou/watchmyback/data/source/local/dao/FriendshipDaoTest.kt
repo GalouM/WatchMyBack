@@ -20,7 +20,7 @@ import java.io.IOException
  * Created by galou on 2019-10-22
  */
 @RunWith(AndroidJUnit4::class)
-class FriendDaoTest {
+class FriendshipDaoTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 

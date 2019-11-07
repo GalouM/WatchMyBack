@@ -1,15 +1,14 @@
 package com.galou.watchmyback.data.repository
 
-import com.galou.watchmyback.data.entity.Friend
+import com.galou.watchmyback.data.entity.OtherUser
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.source.local.FriendLocalDataSource
 import com.galou.watchmyback.data.source.remote.FriendRemoteDataSource
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.extension.toListOtherUser
 import com.galou.watchmyback.utils.returnSuccessOrError
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
 
 /**
  * @author galou
@@ -32,16 +31,22 @@ class FriendRepositoryImpl(
         return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
     }
 
-    override suspend fun fetchUserFriend(user: User, refresh: Boolean): Result<List<User>> {
-        if (refresh) {
-            val remoteResult = remoteSource.fetchUserFriend(user)
-            if (remoteResult is Result.Success) {
-                if (remoteResult.data.isNotEmpty()) {
-                    localSource.addFriend(user, *remoteResult.data.toTypedArray())
-                    return remoteResult
+    override suspend fun fetchUserFriend(user: User, refresh: Boolean): Result<List<OtherUser>> {
+        when (refresh) {
+            true -> {
+                val remoteResult = remoteSource.fetchUserFriend(user)
+                if (remoteResult is Result.Success) {
+                    if (remoteResult.data.isNotEmpty()) {
+                        localSource.addFriend(user, *remoteResult.data.toTypedArray())
+                        return Result.Success(remoteResult.data.toListOtherUser(true))
+                    }
                 }
             }
         }
-        return localSource.fetchUserFriend(user)
+        return when (val localResult = localSource.fetchUserFriend(user)) {
+            is Result.Success -> Result.Success(localResult.data.toListOtherUser(true))
+            is Result.Error -> Result.Error(localResult.exception)
+            is Result.Canceled -> Result.Canceled(localResult.exception)
+        }
     }
 }

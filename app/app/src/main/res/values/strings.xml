@@ -119,4 +119,6 @@
     <string name="error_occured">An error has occured</string>
     <string name="no_friends_yet">You don\'t have any friends yet</string>
     <string name="search">Search</string>
+    <string name="by_username">by username</string>
+    <string name="by_email">by email</string>
 </resources>

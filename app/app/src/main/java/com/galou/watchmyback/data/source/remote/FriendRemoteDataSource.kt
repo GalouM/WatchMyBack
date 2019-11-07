@@ -1,10 +1,11 @@
 package com.galou.watchmyback.data.source.remote
 
-import com.galou.watchmyback.data.entity.Friend
+import com.galou.watchmyback.data.entity.OtherUser
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.source.FriendDataSource
 import com.galou.watchmyback.utils.*
-import com.galou.watchmyback.utils.extension.toUserList
+import com.galou.watchmyback.utils.extension.toListOtherUser
+import com.galou.watchmyback.utils.extension.toOtherUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
 
@@ -35,9 +36,8 @@ class FriendRemoteDataSource(
         supervisorScope {
             for (friendId: String in user.friendsId){
                 launch {
-                    val friendResult = userCollection.document(friendId).get().await()
-                    if (friendResult is Result.Success){
-                        friendResult.data.toObject(User::class.java)?.let { friend ->
+                    when (val friendResult = userCollection.document(friendId).get().await()) {
+                        is Result.Success -> friendResult.data.toObject(User::class.java)?.let { friend ->
                             friends.add(friend)
                         }
                     }

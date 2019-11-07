@@ -23,8 +23,8 @@ val mainUserPreferences = UserPreferences(
 )
 
 //friend
-val friendship1 = Friend(mainUser.id, firstFriend.id)
-val friendship2 = Friend(mainUser.id, secondFriend.id)
+val friendship1 = Friendship(mainUser.id, firstFriend.id)
+val friendship2 = Friendship(mainUser.id, secondFriend.id)
 
 //check list
 val checkList1 = CheckList(idGenerated, mainUser.id, TripType.BIKING, "List 1")

@@ -3,6 +3,7 @@ package com.galou.watchmyback.friends
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.galou.watchmyback.data.entity.OtherUser
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.databinding.FriendsRvItemBinding
 
@@ -11,7 +12,7 @@ import com.galou.watchmyback.databinding.FriendsRvItemBinding
  * 2019-11-05
  */
 class FriendsAdapter(
-    var friends: List<User>,
+    var friends: List<OtherUser>,
     private val viewModel: FriendsViewModel
 ) : RecyclerView.Adapter<FriendViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendViewHolder {
@@ -27,7 +28,7 @@ class FriendsAdapter(
 
 class FriendViewHolder(private val binding: FriendsRvItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bindWithFriend(viewModel: FriendsViewModel, friend: User){
+    fun bindWithFriend(viewModel: FriendsViewModel, friend: OtherUser){
         binding.friend = friend
         binding.viewmodel = viewModel
 

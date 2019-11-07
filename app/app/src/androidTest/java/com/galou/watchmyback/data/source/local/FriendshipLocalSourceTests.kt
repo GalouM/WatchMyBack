@@ -5,14 +5,11 @@ import androidx.room.Room
 import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
-import com.galou.watchmyback.data.entity.Friend
 import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.source.local.dao.*
 import com.galou.watchmyback.utils.Result
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.*
-import org.hamcrest.MatcherAssert
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
 import org.junit.Before
@@ -28,7 +25,7 @@ import java.io.IOException
 
 @MediumTest
 @RunWith(AndroidJUnit4::class)
-class FriendLocalSourceTests{
+class FriendshipLocalSourceTests{
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()

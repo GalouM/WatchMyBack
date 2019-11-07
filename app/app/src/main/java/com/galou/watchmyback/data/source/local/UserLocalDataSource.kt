@@ -1,6 +1,5 @@
 package com.galou.watchmyback.data.source.local
 
-import com.galou.watchmyback.data.entity.Friend
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.entity.UserWithPreferences

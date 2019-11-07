@@ -41,7 +41,7 @@ import com.galou.watchmyback.utils.USER_TABLE_UUID
     )],
     primaryKeys = [FRIEND_TABLE_USER_UUID, FRIEND_TABLE_USER_FRIEND_UUID]
 )
-data class Friend(
+data class Friendship(
     @ColumnInfo(name = FRIEND_TABLE_USER_UUID) var userId: String = "",
     @ColumnInfo(name = FRIEND_TABLE_USER_FRIEND_UUID) var friendId: String = ""
 )

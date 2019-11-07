@@ -1,16 +1,16 @@
 package com.galou.watchmyback.data.source.local.dao
 
 import androidx.room.*
-import com.galou.watchmyback.data.entity.Friend
+import com.galou.watchmyback.data.entity.Friendship
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.utils.*
 
 /**
- * List all the actions possible on the [Friend] table
+ * List all the actions possible on the [Friendship] table
  *
  * @see Dao
- * @see Friend
+ * @see Friendship
  *
  * @author Galou Minisini
  *
@@ -19,20 +19,20 @@ import com.galou.watchmyback.utils.*
 abstract class FriendDao(private val database: WatchMyBackDatabase) {
 
     /**
-     * Create a [Friend] object in the database
+     * Create a [Friendship] object in the database
      *
      * If an object with the same Primary key exist in the database, it will be replace by this one
      *
-     * @param friend [Friend] object to create
+     * @param friendship [Friendship] object to create
      *
      * @see Insert
      * @see OnConflictStrategy.REPLACE
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun createFriendship(vararg friend: Friend)
+    abstract suspend fun createFriendship(vararg friendship: Friendship)
 
     /**
-     * Delete a [Friend] object from the database
+     * Delete a [Friendship] object from the database
      *
      * @param friendId ID of the [User] who is the friend
      * @param userId ID of the [User] who own the friend
@@ -62,8 +62,8 @@ abstract class FriendDao(private val database: WatchMyBackDatabase) {
     @Transaction
     open suspend fun addFriend(currentUserId: String, vararg friends: User){
         database.userDao().createUser(*friends)
-        val friendships = mutableListOf<Friend>()
-        friends.forEach { friend -> friendships.add(Friend(currentUserId, friend.id)) }
+        val friendships = mutableListOf<Friendship>()
+        friends.forEach { friend -> friendships.add(Friendship(currentUserId, friend.id)) }
         createFriendship(*friendships.toTypedArray())
     }
 }

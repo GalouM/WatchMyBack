@@ -5,6 +5,7 @@ import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.repository.FakeFriendRepositoryImpl
 import com.galou.watchmyback.data.repository.FakeUserRepositoryImpl
 import com.galou.watchmyback.testHelpers.*
+import com.galou.watchmyback.utils.extension.toOtherUser
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.newSingleThreadContext
@@ -52,13 +53,13 @@ class FriendsViewModelTest {
     @Test
     fun init_emitSuccessAndFriends(){
         assertThat(LiveDataTestUtil.getValue(viewModel.friendsLD)).hasSize(2)
-        assertThat(LiveDataTestUtil.getValue(viewModel.friendsLD)).contains(firstFriend)
-        assertThat(LiveDataTestUtil.getValue(viewModel.friendsLD)).contains(secondFriend)
+        assertThat(LiveDataTestUtil.getValue(viewModel.friendsLD)).contains(firstFriend.toOtherUser(true))
+        assertThat(LiveDataTestUtil.getValue(viewModel.friendsLD)).contains(secondFriend.toOtherUser(true))
     }
 
     @Test
     fun removeFriend_emitSuccessAndFriends(){
-        viewModel.removeFriend(firstFriend)
+        viewModel.removeFriend(firstFriend.toOtherUser(true))
         assertThat(LiveDataTestUtil.getValue(viewModel.friendsLD)).hasSize(2)
     }
 

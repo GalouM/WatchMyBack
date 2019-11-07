@@ -1,10 +1,11 @@
 package com.galou.watchmyback.data.source.local
 
-import com.galou.watchmyback.data.entity.Friend
+import com.galou.watchmyback.data.entity.OtherUser
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.source.FriendDataSource
 import com.galou.watchmyback.data.source.local.dao.FriendDao
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.extension.toListOtherUser
 
 /**
  * @author galou

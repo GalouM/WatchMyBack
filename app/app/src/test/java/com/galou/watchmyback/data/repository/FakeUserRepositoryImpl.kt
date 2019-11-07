@@ -3,6 +3,7 @@ package com.galou.watchmyback.data.repository
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.MutableLiveData
+import com.galou.watchmyback.data.entity.OtherUser
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.entity.UserWithPreferences
@@ -37,10 +38,10 @@ open class FakeUserRepositoryImpl : UserRepository{
 
     override suspend fun updateUserPreferences(preferences: UserPreferences): Result<Void?> = Result.Success(null)
 
-    override suspend fun fetchAllUsers(): Result<List<User>> = Result.Success(listOf())
+    override suspend fun fetchAllUsers(): Result<List<OtherUser>> = Result.Success(listOf())
 
-    override suspend fun fetchUserByUsername(name: String): Result<List<User>> = Result.Success(listOf())
+    override suspend fun fetchUserByUsername(name: String): Result<List<OtherUser>> = Result.Success(listOf())
 
-    override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<User>> = Result.Success(listOf())
+    override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<OtherUser>> = Result.Success(listOf())
 }
 

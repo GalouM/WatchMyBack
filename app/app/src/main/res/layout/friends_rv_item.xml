@@ -11,7 +11,7 @@
 
         <variable
             name="friend"
-            type="com.galou.watchmyback.data.entity.User" />
+            type="com.galou.watchmyback.data.entity.OtherUser" />
     </data>
 <androidx.cardview.widget.CardView
     android:layout_width="match_parent"
@@ -49,7 +49,7 @@
             app:layout_constraintStart_toStartOf="@id/friends_item_username"
             app:layout_constraintTop_toBottomOf="@id/friends_item_username"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@{friend.email}"/>
+            android:text="@{friend.emailAddress}"/>
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:tint="@color/colorAccent"
+            android:tint="@{friend.myFriend ? @color/colorAccent : @color/colorOnPrimary }"
             android:background="@null"
             android:onClick="@{() -> viewmodel.removeFriend(friend)}"/>
 

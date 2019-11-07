@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.galou.watchmyback.R
 import com.galou.watchmyback.base.BaseViewModel
+import com.galou.watchmyback.data.entity.OtherUser
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.repository.FriendRepository
 import com.galou.watchmyback.data.repository.UserRepository
@@ -23,8 +24,8 @@ class FriendsViewModel(
     private val friendRepository: FriendRepository
 ) : BaseViewModel(){
 
-    private val _friendsLD = MutableLiveData<List<User>>()
-    val friendsLD: LiveData<List<User>> = _friendsLD
+    private val _friendsLD = MutableLiveData<List<OtherUser>>()
+    val friendsLD: LiveData<List<OtherUser>> = _friendsLD
 
     private var user: User = userRepository.currentUser.value!!
 
@@ -34,7 +35,7 @@ class FriendsViewModel(
 
     }
 
-    fun removeFriend(friend: User){
+    fun removeFriend(friend: OtherUser){
         _dataLoading.value = true
         viewModelScope.launch {
             when(friendRepository.removeFriend(user, friend.id)){
@@ -60,7 +61,7 @@ class FriendsViewModel(
         }
     }
 
-    private fun showListFriends(friends: List<User>){
+    private fun showListFriends(friends: List<OtherUser>){
         if (friends.isNotEmpty()) _friendsLD.value = friends
         else showSnackBarMessage(R.string.no_friends_yet)
         _dataLoading.value = false
