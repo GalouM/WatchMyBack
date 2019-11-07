@@ -38,6 +38,7 @@ class ViewExtUnitTest : KoinTest {
     }
 
     @Test
+    @Throws(Exception::class)
     fun whenTrue_viewVisible(){
         val view = View(context)
         view.visibleOrInvisible(true)
@@ -46,6 +47,7 @@ class ViewExtUnitTest : KoinTest {
     }
 
     @Test
+    @Throws(Exception::class)
     fun whenFalse_viewInvisible(){
         val view = View(context)
         view.visibleOrInvisible(false)

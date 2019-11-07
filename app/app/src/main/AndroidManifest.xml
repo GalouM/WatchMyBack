@@ -16,6 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/WatchMyBackTheme">
+        <activity android:name=".addFriend.AddFriendActivity"></activity>
         <activity
             android:name=".AddTripActivity"
             android:label="@string/add_trip"
@@ -48,7 +49,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
     </application>
 

@@ -27,18 +27,3 @@ fun RadioGroup.timeDisplay(timeDisplay: TimeDisplay?){
     }
 }
 
-fun RadioButton.onClickUnitSystem(): UnitSystem{
-    return when(this.id){
-        R.id.settings_view_unit_system_unit_metric -> UnitSystem.METRIC
-        R.id.settings_view_unit_system_unit_imperial -> UnitSystem.IMPERIAL
-        else -> throw IllegalStateException("Unrecognized button")
-    }
-}
-
-fun RadioButton.onClickTimeDisplay(): TimeDisplay {
-    return when(this.id){
-        R.id.settings_view_unit_system_time_24 -> TimeDisplay.H_24
-        R.id.settings_view_unit_system_time_12 -> TimeDisplay.H_12
-        else -> throw IllegalStateException("Unrecognized button")
-    }
-}

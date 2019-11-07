@@ -91,15 +91,14 @@ open class SettingsViewModel(private val userRepository: UserRepository) : BaseV
     /**
      * update the unit system preferences
      *
-     * @param radioButton preferences picked
+     * @param buttonId ID of the button clicked
      *
      * @see updateUserPreferences
      */
-    fun updateUnitSytem(radioButton: View?){
-        if (radioButton is RadioButton) {
-            preferencesLD.value?.unitSystem = radioButton.onClickUnitSystem()
-            updateUserPreferences()
-        }
+    fun updateUnitSytem(buttonId: Int){
+        preferencesLD.value?.unitSystem = buttonId.onClickUnitSystem()
+        updateUserPreferences()
+
 
 
     }
@@ -107,15 +106,14 @@ open class SettingsViewModel(private val userRepository: UserRepository) : BaseV
     /**
      * update the time display preferences
      *
-     * @param radioButton preferences picked
+     * @param buttonId ID of the button clicked
      *
      * @see updateUserPreferences
      */
-    fun updateTimeDisplay(radioButton: View?) {
-        if (radioButton is RadioButton) {
-            preferencesLD.value?.timeDisplay = radioButton.onClickTimeDisplay()
-            updateUserPreferences()
-        }
+    fun updateTimeDisplay(buttonId: Int) {
+        preferencesLD.value?.timeDisplay = buttonId.onClickTimeDisplay()
+        updateUserPreferences()
+
 
     }
 

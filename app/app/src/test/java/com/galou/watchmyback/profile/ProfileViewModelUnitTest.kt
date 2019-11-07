@@ -50,6 +50,7 @@ class ProfileViewModelUnitTest: KoinTest {
     }
 
     @Test
+    @Throws(Exception::class)
     fun init_emitUserInfo(){
         assertThat(LiveDataTestUtil.getValue(viewModel.usernameLD)).isEqualTo(fakeUser.username)
         assertThat(LiveDataTestUtil.getValue(viewModel.phoneNumberLD)).isEqualTo(fakeUser.phoneNumber)
@@ -58,6 +59,7 @@ class ProfileViewModelUnitTest: KoinTest {
     }
 
     @Test
+    @Throws(Exception::class)
     fun wrongInfo_showError(){
         viewModel.usernameLD.value = "@incorrect"
         viewModel.emailLD.value = "incorrect@adress"
@@ -70,6 +72,7 @@ class ProfileViewModelUnitTest: KoinTest {
 
 
     @Test
+    @Throws(Exception::class)
     fun correctInfo_saveUserAndClose(){
         viewModel.phoneNumberLD.value = NEW_PHONE_NB
         viewModel.emailLD.value = NEW_EMAIL
@@ -86,6 +89,7 @@ class ProfileViewModelUnitTest: KoinTest {
 
 
     @Test
+    @Throws(Exception::class)
     fun selectNewPicture_updateUserInfo(){
         val newPicturePath = "http://internalUri".toUri()
         viewModel.fetchPicturePickedByUser(RESULT_OK, newPicturePath)
@@ -95,6 +99,7 @@ class ProfileViewModelUnitTest: KoinTest {
     }
 
     @Test
+    @Throws(Exception::class)
     fun clickPicture_OpenPickPhotoIntent(){
         viewModel.pickProfilePicture()
         val openLibrary = LiveDataTestUtil.getValue(viewModel.openPhotoLibrary)

@@ -5,7 +5,7 @@
     <data>
 
         <import type="android.view.View" />
-        <import type="android.widget.RadioGroup"/>
+        <import type="android.widget.RadioButton"/>
 
         <variable
             name="viewmodel"
@@ -227,14 +227,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/metric"
                     android:layout_weight="1"
-                    android:onClick="@{(view) -> viewmodel.updateUnitSytem(view)}"/>
+                    android:onClick="@{(view) -> viewmodel.updateUnitSytem(view.id)}"/>
                 <RadioButton
                     android:id="@+id/settings_view_unit_system_unit_imperial"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/imperial"
                     android:layout_weight="1"
-                    android:onClick="@{(view) -> viewmodel.updateUnitSytem(view)}"/>
+                    android:onClick="@{(view) -> viewmodel.updateUnitSytem(view.id)}"/>
 
             </RadioGroup>
 
@@ -253,14 +253,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/am_pm"
                     android:layout_weight="1"
-                    android:onClick="@{(view) -> viewmodel.updateTimeDisplay(view)}"/>
+                    android:onClick="@{(view) -> viewmodel.updateTimeDisplay(view.id)}"/>
                 <RadioButton
                     android:id="@+id/settings_view_unit_system_time_24"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/_24h"
                     android:layout_weight="1"
-                    android:onClick="@{(view) -> viewmodel.updateTimeDisplay(view)}"/>
+                    android:onClick="@{(view) -> viewmodel.updateTimeDisplay(view.id)}"/>
 
             </RadioGroup>
 

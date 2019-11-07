@@ -51,22 +51,9 @@ class RadioButtonExtUnitTest : KoinTest{
         stopKoin()
     }
 
-    @Test
-    fun radioButtonUnitSystem_clickSendRightValue(){
-        assertThat(metricButton.onClickUnitSystem()).isEqualTo(UnitSystem.METRIC)
-
-        assertThat(imperialButton.onClickUnitSystem()).isEqualTo(UnitSystem.IMPERIAL)
-
-    }
 
     @Test
-    fun radioButtonTime_clickSendRightValue(){
-        assertThat(h12Button.onClickTimeDisplay()).isEqualTo(TimeDisplay.H_12)
-
-        assertThat(h24Button.onClickTimeDisplay()).isEqualTo(TimeDisplay.H_24)
-    }
-
-    @Test
+    @Throws(Exception::class)
     fun radioButtonGroupUnitSystem_setCorrectly(){
         val unitSystemGroup = RadioGroup(context)
         unitSystemGroup.addView(metricButton)
@@ -80,6 +67,7 @@ class RadioButtonExtUnitTest : KoinTest{
     }
 
     @Test
+    @Throws(Exception::class)
     fun radioButtonGroupTimeDisplay_setCorrectly(){
         val timeDisplayGroup = RadioGroup(context)
         timeDisplayGroup.addView(h12Button)

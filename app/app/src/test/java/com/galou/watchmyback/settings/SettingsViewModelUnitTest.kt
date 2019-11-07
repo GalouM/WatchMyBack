@@ -28,8 +28,6 @@ import org.robolectric.annotation.Config
 /**
  * Created by galou on 2019-10-31
  */
-@Config(sdk = [Build.VERSION_CODES.P])
-@RunWith(AndroidJUnit4::class)
 class SettingsViewModelUnitTest : KoinTest {
 
     private lateinit var viewModel: SettingsViewModel
@@ -60,6 +58,7 @@ class SettingsViewModelUnitTest : KoinTest {
     }
 
     @Test
+    @Throws(Exception::class)
     fun init_emitUserPreferences(){
         assertThat(LiveDataTestUtil.getValue(viewModel.preferencesLD)).isEqualTo(preferencesTest)
     }
@@ -72,28 +71,25 @@ class SettingsViewModelUnitTest : KoinTest {
     }
 
     @Test
+    @Throws(Exception::class)
     fun modifyUnitsystem_saveData(){
-        val context = ApplicationProvider.getApplicationContext<WatchMyBackApplication>()
-        val buttonMetric = RadioButton(context)
-        buttonMetric.id = R.id.settings_view_unit_system_unit_metric
-        viewModel.updateUnitSytem(buttonMetric)
+        viewModel.updateUnitSytem(R.id.settings_view_unit_system_unit_metric)
 
         val dataSavedMetric = LiveDataTestUtil.getValue(viewModel.dataSaved)
         assertThat(dataSavedMetric.getContentIfNotHandled()).isNotNull()
     }
 
     @Test
+    @Throws(Exception::class)
     fun modifyTimeDisplay_saveData(){
-        val context = ApplicationProvider.getApplicationContext<WatchMyBackApplication>()
-        val button12h = RadioButton(context)
-        button12h.id = R.id.settings_view_unit_system_time_12
-        viewModel.updateTimeDisplay(button12h)
+        viewModel.updateTimeDisplay(R.id.settings_view_unit_system_time_12)
 
         val dataSaved12 = LiveDataTestUtil.getValue(viewModel.dataSaved)
         assertThat(dataSaved12.getContentIfNotHandled()).isNotNull()
     }
 
     @Test
+    @Throws(Exception::class)
     fun deleteData_emitActionToView(){
         viewModel.deleteUserData()
         val deleteEvent = LiveDataTestUtil.getValue(viewModel.dataDeleted)
@@ -101,6 +97,7 @@ class SettingsViewModelUnitTest : KoinTest {
     }
 
     @Test
+    @Throws(Exception::class)
     fun errorDeletion_showMessage(){
         viewModel.errorDeletion()
         assertSnackBarMessage(viewModel.snackbarMessage,
