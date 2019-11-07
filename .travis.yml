@@ -49,7 +49,7 @@ before_script:
   - ./gradlew build jacocoTestReport assembleAndroidTest
   
 script:
-  - ./gradlew clean assembleDebug assembleRelease testDebug createDebugUnitTestCoverageReport
+  - ./gradlew clean assembleDebug assembleRelease testDebug createDebugUnitTestCoverageReport --stacktrace
   - mv app/build/reports/jacoco/createDebugUnitTestCoverageReport app/build/reports/jacoco/jacocoTestDebugUnitTestReport
   - mv app/build/reports/jacoco/jacocoTestDebugUnitTestReport/createDebugUnitTestCoverageReport.xml app/build/reports/jacoco/jacocoTestDebugUnitTestReport/jacocoTestDebugUnitTestReport.xml
 
