@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_OK
 import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.core.net.toUri
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
 import com.galou.watchmyback.data.entity.User
@@ -25,7 +26,7 @@ import org.robolectric.annotation.Config
  * Created by galou on 2019-10-25
  */
 @Config(sdk = [Build.VERSION_CODES.P])
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 class ProfileViewModelUnitTest: KoinTest {
     private lateinit var viewModel: ProfileViewModel
     private lateinit var userRepository: FakeUserRepositoryImpl

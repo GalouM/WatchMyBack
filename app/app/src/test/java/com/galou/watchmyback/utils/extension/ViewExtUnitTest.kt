@@ -6,6 +6,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galou.watchmyback.WatchMyBackApplication
 import com.google.common.truth.Truth.assertThat
 import org.junit.After
@@ -21,7 +22,7 @@ import org.robolectric.annotation.Config
  * Created by galou on 2019-10-31
  */
 @Config(sdk = [Build.VERSION_CODES.P])
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 class ViewExtUnitTest : KoinTest {
 
     private lateinit var context: Context

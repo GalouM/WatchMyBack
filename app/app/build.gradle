@@ -134,6 +134,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.androidxArchVersion"
+    testImplementation "junit:junit:$jUnitVersion"
 
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"

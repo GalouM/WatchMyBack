@@ -4,6 +4,7 @@ import android.os.Build
 import android.widget.RadioButton
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galou.watchmyback.R
 import com.galou.watchmyback.WatchMyBackApplication
 import com.galou.watchmyback.data.entity.User
@@ -19,16 +20,16 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 /**
  * Created by galou on 2019-10-31
  */
 @Config(sdk = [Build.VERSION_CODES.P])
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 class SettingsViewModelUnitTest : KoinTest {
 
     private lateinit var viewModel: SettingsViewModel

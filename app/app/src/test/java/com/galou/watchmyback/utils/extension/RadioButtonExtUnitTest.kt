@@ -5,6 +5,7 @@ import android.os.Build
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galou.watchmyback.R
 import com.galou.watchmyback.WatchMyBackApplication
 import com.galou.watchmyback.data.entity.TimeDisplay
@@ -23,7 +24,7 @@ import org.robolectric.annotation.Config
  * Created by galou on 2019-10-31
  */
 @Config(sdk = [Build.VERSION_CODES.P])
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 class RadioButtonExtUnitTest : KoinTest{
 
     private lateinit var context: Context
