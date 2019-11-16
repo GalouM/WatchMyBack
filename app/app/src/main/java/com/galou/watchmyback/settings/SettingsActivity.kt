@@ -1,10 +1,12 @@
 package com.galou.watchmyback.settings
 
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import com.firebase.ui.auth.AuthUI
 import com.galou.watchmyback.EventObserver
@@ -45,13 +47,12 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun configureEmergencyNumberListener(){
-        binding.settingsViewEmergencyNumber.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {}
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = viewModel.updateUserPreferences()
-        })
+        binding.settingsViewEmergencyNumber.doAfterTextChanged { searchTerm ->
+            val currentTextLength = searchTerm?.length
+            Handler().postDelayed({
+                if (currentTextLength == searchTerm?.length) viewModel.updateUserPreferences()
+            }, 2000)
+        }
     }
 
     private fun setupObserverViewModel(){

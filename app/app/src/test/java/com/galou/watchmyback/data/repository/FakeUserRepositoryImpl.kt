@@ -8,8 +8,11 @@ import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.entity.UserWithPreferences
 import com.galou.watchmyback.testHelpers.URI_STORAGE_REMOTE
+import com.galou.watchmyback.testHelpers.firstFriend
 import com.galou.watchmyback.testHelpers.generateUserWithPref
+import com.galou.watchmyback.testHelpers.secondFriend
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.extension.toOtherUser
 
 /**
  * Created by galou on 2019-10-25
@@ -38,10 +41,13 @@ open class FakeUserRepositoryImpl : UserRepository{
 
     override suspend fun updateUserPreferences(preferences: UserPreferences): Result<Void?> = Result.Success(null)
 
-    override suspend fun fetchAllUsers(): Result<List<OtherUser>> = Result.Success(listOf())
+    override suspend fun fetchAllUsers(): Result<List<OtherUser>> = Result.Success(listOf(
+        firstFriend.toOtherUser(false), secondFriend.toOtherUser(false)))
 
-    override suspend fun fetchUserByUsername(name: String): Result<List<OtherUser>> = Result.Success(listOf())
+    override suspend fun fetchUserByUsername(name: String): Result<List<OtherUser>> = Result.Success(listOf(
+        firstFriend.toOtherUser(false)))
 
-    override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<OtherUser>> = Result.Success(listOf())
+    override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<OtherUser>> = Result.Success(listOf(
+        secondFriend.toOtherUser(false)))
 }
 

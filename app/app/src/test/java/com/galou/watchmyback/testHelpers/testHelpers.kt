@@ -28,12 +28,16 @@ const val NEW_USERNAME = "New Name"
 const val NEW_PHONE_NB = "5553457897"
 const val NEW_EMAIL = "new@email.com"
 
+const val UUID_FIRST_FRIEND = "uuid_first_friend"
+const val UUID_SECOND_FRIEND = "uuid_second_friend"
+
 fun generateTestUser(id: String): User = User(
     id,
     TEST_EMAIL,
     TEST_NAME,
     TEST_PHONE_NUMBER,
-    null
+    null,
+    friendsId = mutableListOf(UUID_FIRST_FRIEND,UUID_SECOND_FRIEND)
 )
 
 val preferencesTest = UserPreferences(id = TEST_UID)
@@ -43,5 +47,5 @@ fun generateUserWithPref(id: String): UserWithPreferences{
 
 }
 
-val firstFriend = User(idGenerated, "first-friend@gmail.com", "First Friend", "5550985674")
-val secondFriend = User(idGenerated, "second-friend@gmail.com", "Second Friend", "5555649834")
+val firstFriend = User(UUID_FIRST_FRIEND, "first-friend@gmail.com", "First Friend", "5550985674")
+val secondFriend = User(UUID_SECOND_FRIEND, "second-friend@gmail.com", "Second Friend", "5555649834")

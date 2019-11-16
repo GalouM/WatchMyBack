@@ -30,7 +30,6 @@ class AddFriendViewModel(
     }
 
     fun fetchUsers(){
-        displayData("fetch user")
         when {
             searchPattern.value!!.isBlank() -> fetchAllUsers()
             _fetchType.value == USERNAME -> fetchUserByUsername()
@@ -46,7 +45,6 @@ class AddFriendViewModel(
     }
 
     private fun fetchAllUsers(){
-        displayData("fetch all user")
         _dataLoading.value = true
         viewModelScope.launch { fetchResultUsers(userRepository.fetchAllUsers()) }
     }

@@ -2,9 +2,11 @@ package com.galou.watchmyback.addFriend
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.appcompat.widget.Toolbar
+import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -70,13 +72,12 @@ class AddFriendActivity : AppCompatActivity() {
     }
 
     private fun configureEditTextListener(){
-        binding.addFriendViewSearch.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {}
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun onTextChanged(searchPattern: CharSequence?, p1: Int, p2: Int, p3: Int) = viewModel.fetchUsers()
-        })
+        binding.addFriendViewSearch.doAfterTextChanged { searchTerm ->
+            val currentTextLength = searchTerm?.length
+            Handler().postDelayed({
+                if (currentTextLength == searchTerm?.length) viewModel.fetchUsers()
+            }, 2000)
+        }
     }
 
     private fun setupUsersList(){

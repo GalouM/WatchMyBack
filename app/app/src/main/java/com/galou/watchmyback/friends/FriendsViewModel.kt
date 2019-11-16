@@ -24,7 +24,7 @@ class FriendsViewModel(
     val openAddFriendLD: LiveData<Event<Unit>> = _openAddFriendLD
 
     init {
-        fetchFriends(false)
+        fetchFriends()
     }
 
     fun refreshFriendList(){
