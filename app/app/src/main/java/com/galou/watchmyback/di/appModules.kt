@@ -1,6 +1,7 @@
 package com.galou.watchmyback.di
 
 import androidx.room.Room
+import com.galou.watchmyback.addFriend.AddFriendViewModel
 import com.galou.watchmyback.data.repository.FriendRepository
 import com.galou.watchmyback.data.repository.FriendRepositoryImpl
 import com.galou.watchmyback.data.repository.UserRepository
@@ -43,7 +44,7 @@ val appModules = module {
         Room.databaseBuilder(
             androidApplication(),
             WatchMyBackDatabase::class.java,
-            "watchMyBack_db_test.db"
+            "watchMyBack_db_test3.db"
         )
         .build()
     }
@@ -71,4 +72,5 @@ val appModules = module {
     viewModel { ProfileViewModel(userRepository = get()) }
     viewModel { SettingsViewModel(userRepository = get()) }
     viewModel { FriendsViewModel(userRepository = get(), friendRepository = get()) }
+    viewModel { AddFriendViewModel(userRepository = get(), friendRepository = get()) }
 }

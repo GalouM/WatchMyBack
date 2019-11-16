@@ -2,6 +2,7 @@ package com.galou.watchmyback.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.firebase.ui.auth.AuthUI
@@ -32,6 +34,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var binding: ActivityMainBinding
+
+    private var navController: NavController? = null
 
     private lateinit var authFirebase: FirebaseAuth
     private val providers = arrayListOf(
@@ -104,10 +108,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun configureBottomNavigation(){
         val bottomNavigation = binding.mainActivityBottomNav
-        val navController = Navigation.findNavController(this,
+        navController = Navigation.findNavController(this,
             R.id.main_activity_nav_host
         )
-        NavigationUI.setupWithNavController(bottomNavigation, navController)
+        NavigationUI.setupWithNavController(bottomNavigation, navController!!)
 
     }
 
@@ -149,6 +153,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun openSettingsActivity(){
+        navController?.saveState()
         val intent = Intent(this, SettingsActivity::class.java)
         startActivity(intent)
     }

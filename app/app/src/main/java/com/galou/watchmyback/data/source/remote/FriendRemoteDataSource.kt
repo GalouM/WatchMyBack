@@ -22,12 +22,12 @@ class FriendRemoteDataSource(
 
     override suspend fun addFriend(user: User, vararg friend: User): Result<Void?> = withContext(ioDispatcher)  {
         user.friendsId.addAll(friend.map { it.id })
-        return@withContext userCollection.document(user.id).update("friendId", user.friendsId).await()
+        return@withContext userCollection.document(user.id).update("friendsId", user.friendsId).await()
     }
 
     override suspend fun removeFriend(user: User, friendId: String): Result<Void?> = withContext(ioDispatcher) {
         user.friendsId.remove(friendId)
-        return@withContext userCollection.document(user.id).update("friendId", user.friendsId).await()
+        return@withContext userCollection.document(user.id).update("friendsId", user.friendsId).await()
 
     }
 
@@ -40,6 +40,7 @@ class FriendRemoteDataSource(
                         is Result.Success -> friendResult.data.toObject(User::class.java)?.let { friend ->
                             friends.add(friend)
                         }
+
                     }
                 }
             }

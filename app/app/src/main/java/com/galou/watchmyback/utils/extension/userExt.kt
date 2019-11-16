@@ -10,12 +10,8 @@ import com.galou.watchmyback.data.entity.User
 
 fun User.toOtherUser(myFriend: Boolean): OtherUser {
     return OtherUser(
-        id = this.id,
-        username = this.username!!,
-        emailAddress = this.email!!,
-        phoneNumber = this.phoneNumber,
-        pictureUrl = this.pictureUrl,
-        isMyFriend = myFriend
+        user = this,
+        myFriend = myFriend
         )
 }
 
@@ -25,3 +21,14 @@ fun List<User>.toListOtherUser(myFriend: Boolean): List<OtherUser> {
         otherUsers.add(user.toOtherUser(myFriend)) }
     return otherUsers
 }
+
+
+infix fun List<OtherUser>.removeCurrentUser(currentUserId: String) =
+    when (val currentUser = firstOrNull { it.user.id == currentUserId }) {
+        null -> this
+        else -> {
+            val mutable = this.toMutableList()
+            mutable.remove(currentUser)
+            mutable
+        }
+    }

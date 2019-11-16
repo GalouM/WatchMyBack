@@ -1,6 +1,7 @@
 package com.galou.watchmyback.friends
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,11 +9,15 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
+import com.galou.watchmyback.addFriend.AddFriendActivity
+import com.galou.watchmyback.base.UsersListAdapter
 import com.galou.watchmyback.data.entity.OtherUser
-import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.databinding.FragmentFriendsViewBinding
+import com.galou.watchmyback.utils.RC_ADD_FRIEND
 import com.galou.watchmyback.utils.extension.setupSnackBar
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -25,7 +30,7 @@ class FriendsView : Fragment() {
     private val viewModel: FriendsViewModel by viewModel()
     private lateinit var binding: FragmentFriendsViewBinding
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapterRv: FriendsAdapter
+    private lateinit var adapterRv: UsersListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +51,8 @@ class FriendsView : Fragment() {
 
     private fun configureRecyclerView(){
         recyclerView = binding.friendsViewRv
-        adapterRv = FriendsAdapter(listOf(), viewModel)
+        adapterRv = UsersListAdapter(listOf(), viewModel)
+        recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapterRv
 
     }
@@ -54,11 +60,12 @@ class FriendsView : Fragment() {
     private fun setupObserverViewModel(){
         setupFriendsList()
         setupSnackBar()
+        setupOpenAddFriend()
 
     }
 
     private fun setupFriendsList(){
-        viewModel.friendsLD.observe(this, Observer { updateFriendsList(it) })
+        viewModel.usersLD.observe(this, Observer { updateFriendsList(it) })
     }
 
     private fun setupSnackBar(){
@@ -67,9 +74,17 @@ class FriendsView : Fragment() {
 
     }
 
+    private fun setupOpenAddFriend(){
+        viewModel.openAddFriendLD.observe(this, EventObserver { openAddFriendActivity() })
+    }
+
     private fun updateFriendsList(friends: List<OtherUser>){
-        adapterRv.friends = friends
-        adapterRv.notifyDataSetChanged()
+        adapterRv.update(friends)
+    }
+
+    private fun openAddFriendActivity(){
+        val intent = Intent(activity!!, AddFriendActivity::class.java)
+        startActivityForResult(intent, RC_ADD_FRIEND)
     }
 
 

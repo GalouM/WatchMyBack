@@ -11,6 +11,7 @@ import com.galou.watchmyback.data.source.local.UserLocalDataSource
 import com.galou.watchmyback.data.source.remote.FriendRemoteDataSource
 import com.galou.watchmyback.data.source.remote.UserRemoteDataSource
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.displayData
 import com.galou.watchmyback.utils.extension.toListOtherUser
 import com.galou.watchmyback.utils.returnSuccessOrError
 import kotlinx.coroutines.async

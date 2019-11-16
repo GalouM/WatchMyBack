@@ -129,7 +129,11 @@ class UserRemoteDataSource(
         return@withContext try {
             when (val resultDocumentSnapshot =
                 userCollection.document(userId).get().await()) {
-                is Result.Success -> Result.Success(resultDocumentSnapshot.data.toUser())
+                is Result.Success -> {
+                    displayData("${resultDocumentSnapshot.data.toObject(User::class.java)}")
+                    displayData("${resultDocumentSnapshot.data}")
+                    Result.Success(resultDocumentSnapshot.data.toUser())
+                }
                 is Result.Error -> Result.Error(resultDocumentSnapshot.exception)
                 is Result.Canceled -> Result.Canceled(resultDocumentSnapshot.exception)
             }
@@ -178,7 +182,8 @@ class UserRemoteDataSource(
     override suspend fun fetchUserByUsername(name: String): Result<List<User>> = withContext(ioDispatcher) {
         return@withContext try {
             when(val userQuery = userCollection
-                .whereArrayContains("username", name)
+                .whereGreaterThanOrEqualTo("username", name)
+                .whereLessThanOrEqualTo("username", name+ '\uf8ff')
                 .orderBy("username")
                 .get().await()){
                 is Result.Success -> Result.Success(userQuery.data.toUserList())
@@ -199,7 +204,8 @@ class UserRemoteDataSource(
     override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<User>> = withContext(ioDispatcher) {
         return@withContext try {
             when(val userQuery = userCollection
-                .whereArrayContains("email", emailAddress)
+                .whereGreaterThanOrEqualTo("email", emailAddress)
+                .whereLessThanOrEqualTo("email", emailAddress+ '\uf8ff')
                 .orderBy("username")
                 .get().await()){
                 is Result.Success -> Result.Success(userQuery.data.toUserList())

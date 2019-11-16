@@ -42,7 +42,7 @@ abstract class FriendDao(private val database: WatchMyBackDatabase) {
      */
     @Query("DELETE FROM $FRIEND_TABLE_NAME WHERE $FRIEND_TABLE_USER_FRIEND_UUID = :friendId " +
             "AND $FRIEND_TABLE_USER_UUID = :userId")
-    abstract suspend fun removeFriend(friendId: String, userId: String)
+    abstract suspend fun removeFriend(userId: String, friendId: String)
 
     /**
      * Query all the [User] who are friend with a specific [User]

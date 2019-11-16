@@ -65,11 +65,11 @@ class UserLocalDataSource(
         val preferences = UserPreferences(id = remoteUser.id)
         return try {
             userDao.createOrUpdateUserWithData(createUser, remoteUser, preferences, *friend)
-            when (val fetchUser = fetchUser(remoteUser.id)){
-                is Result.Success -> Result.Success(fetchUser.data)
-                is Result.Error -> Result.Error(fetchUser.exception)
-                is Result.Canceled -> Result.Canceled(fetchUser.exception)
-            }
+            val preferences = userPreferencesDao.getUserPreferences(remoteUser.id)
+            Result.Success(UserWithPreferences(
+            user = remoteUser,
+            preferences = preferences
+            ))
         } catch (e: Exception) {
             Result.Error(e)
         }

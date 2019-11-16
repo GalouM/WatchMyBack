@@ -19,6 +19,7 @@ import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.data.repository.UserRepositoryImpl
 import com.galou.watchmyback.utils.RESULT_DELETED
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.displayData
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -149,6 +150,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
                 is Result.Success -> {
                     val user = result.data
                     if(user != null){
+                        displayData("user $user")
                         setupUserInformation(user)
                     } else {
                         createUserToDB(firebaseUser)

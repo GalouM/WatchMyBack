@@ -45,8 +45,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun configureEmergencyNumberListener(){
-        val numberField = binding.settingsViewEmergencyNumber
-        numberField.addTextChangedListener(object : TextWatcher {
+        binding.settingsViewEmergencyNumber.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}

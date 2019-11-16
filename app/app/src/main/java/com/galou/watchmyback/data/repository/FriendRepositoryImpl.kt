@@ -5,7 +5,9 @@ import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.source.local.FriendLocalDataSource
 import com.galou.watchmyback.data.source.remote.FriendRemoteDataSource
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.displayData
 import com.galou.watchmyback.utils.extension.toListOtherUser
+import com.galou.watchmyback.utils.extension.toUser
 import com.galou.watchmyback.utils.returnSuccessOrError
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -32,19 +34,22 @@ class FriendRepositoryImpl(
     }
 
     override suspend fun fetchUserFriend(user: User, refresh: Boolean): Result<List<OtherUser>> {
+        displayData("refresh = $refresh")
         when (refresh) {
             true -> {
                 val remoteResult = remoteSource.fetchUserFriend(user)
                 if (remoteResult is Result.Success) {
-                    if (remoteResult.data.isNotEmpty()) {
-                        localSource.addFriend(user, *remoteResult.data.toTypedArray())
-                        return Result.Success(remoteResult.data.toListOtherUser(true))
-                    }
+                    displayData("remote friends ${remoteResult.data}")
+                    if (remoteResult.data.isNotEmpty()) localSource.addFriend(user, *remoteResult.data.toTypedArray())
+                    return Result.Success(remoteResult.data.toListOtherUser(true))
                 }
             }
         }
         return when (val localResult = localSource.fetchUserFriend(user)) {
-            is Result.Success -> Result.Success(localResult.data.toListOtherUser(true))
+            is Result.Success -> {
+                displayData("local friends ${localResult.data}")
+                Result.Success(localResult.data.toListOtherUser(true))
+            }
             is Result.Error -> Result.Error(localResult.exception)
             is Result.Canceled -> Result.Canceled(localResult.exception)
         }

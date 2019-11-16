@@ -93,6 +93,7 @@ const val RC_LIBRARY_PICK = 200
 const val RC_IMAGE_PERMS = 400
 const val RC_PROFILE = 500
 const val RC_SETTINGS = 600
+const val RC_ADD_FRIEND = 700
 
 // ------ RESULT CODE ACTIVITIES -------
 const val RESULT_DELETED = -100

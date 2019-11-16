@@ -7,6 +7,8 @@
         <variable
             name="viewmodel"
             type="com.galou.watchmyback.addFriend.AddFriendViewModel" />
+
+        <import type="com.galou.watchmyback.addFriend.FetchType"/>
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -24,21 +26,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <androidx.core.widget.ContentLoadingProgressBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/add_friend_view_progressbar"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                app:layout_constraintTop_toBottomOf="@id/add_friend_view_toolbar"
-                app:layout_constraintStart_toStartOf="parent"
-                android:indeterminate="true"
-                app:visibleOrInvisible="@{viewmodel.dataLoading}"/>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/add_friend_view_search_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/add_friend_view_progressbar"
+                app:layout_constraintTop_toBottomOf="@id/add_friend_view_toolbar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_margin="@dimen/margin_big"
@@ -48,7 +40,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/add_friend_view_search"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:text="@={viewmodel.searchPattern}"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,7 +54,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:orientation="horizontal"
                 android:layout_marginStart="@dimen/margin_big"
-                android:layout_marginEnd="@dimen/margin_big">
+                android:layout_marginEnd="@dimen/margin_big"
+                app:searchUserType="@{viewmodel.fetchType}">
 
                 <RadioButton
                     android:id="@+id/add_friend_view_radio_button_username"
@@ -69,25 +63,35 @@
                     android:layout_height="wrap_content"
                     android:text="@string/by_username"
                     android:layout_weight="1"
-                    android:checked="true"/>
+                    android:onClick="@{() -> viewmodel.changeTypeSearch(FetchType.USERNAME)}"/>
 
                 <RadioButton
                     android:id="@+id/add_friend_view_radio_button_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/by_email"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:onClick="@{() -> viewmodel.changeTypeSearch(FetchType.EMAIL_ADDRESS)}"/>
 
             </RadioGroup>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="0dp"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/friend_view_refresh"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:onRefreshListener="@{viewmodel::fetchUsers}"
+                app:refreshing="@{viewmodel.dataLoading}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/add_friend_view_radio_group"
+                app:layout_constraintTop_toBottomOf="@id/add_friend_view_radio_group">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/add_friend_view_rv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_big"
                 tools:listitem="@layout/friends_rv_item"/>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -16,7 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/WatchMyBackTheme">
-        <activity android:name=".addFriend.AddFriendActivity"></activity>
+        <activity android:name=".addFriend.AddFriendActivity"
+            android:label="Add Friends"
+            android:parentActivityName=".main.MainActivity"/>
         <activity
             android:name=".AddTripActivity"
             android:label="@string/add_trip"

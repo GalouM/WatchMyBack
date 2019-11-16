@@ -1,11 +1,17 @@
 package com.galou.watchmyback.utils.extension
 
+import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.galou.watchmyback.R
+import com.galou.watchmyback.base.UserListBaseViewModel
+import com.galou.watchmyback.data.entity.OtherUser
 import com.galou.watchmyback.utils.GlideApp
+import com.galou.watchmyback.utils.displayData
 
 /**
  * Load an URL  into a [ImageView] using [Glide] and crop it in circle
@@ -42,8 +48,10 @@ fun ImageView.bindLoadUrlInCircle(url: String?) {
  */
 @BindingAdapter("loadUrl")
 fun ImageView.bindLoadUrl(url: String?){
-    GlideApp.with(this.context)
+    val glide = GlideApp.with(this.context)
+    glide
         .load(url)
         .apply(RequestOptions.centerCropTransform())
+        .error(glide.load(R.drawable.icon_friends))
         .into(this)
 }
