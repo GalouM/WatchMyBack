@@ -10,6 +10,7 @@ import com.galou.watchmyback.utils.*
  * @property email the user's email
  * @property username the user's name in the application
  * @property phoneNumber the user's phone number
+ * @property friendsId list of the friends'id
  *
  * @see Entity
  *

@@ -20,7 +20,6 @@ import com.galou.watchmyback.utils.Result
  * @see UserDataSource
  * @see UserDao
  * @see UserPreferencesDao
- * @see UserDataSource
  */
 class UserLocalDataSource(
     private val userDao: UserDao,

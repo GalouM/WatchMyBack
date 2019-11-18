@@ -7,7 +7,6 @@ import com.galou.watchmyback.Event
 import com.galou.watchmyback.base.UserListBaseViewModel
 import com.galou.watchmyback.data.repository.FriendRepository
 import com.galou.watchmyback.data.repository.UserRepository
-import com.galou.watchmyback.utils.displayData
 import kotlinx.coroutines.launch
 
 /**
@@ -27,14 +26,32 @@ class FriendsViewModel(
         fetchFriends()
     }
 
+    /**
+     * Refresh the list of friend
+     *
+     * @see fetchFriends
+     *
+     */
     fun refreshFriendList(){
         fetchFriends(true)
     }
 
+    /**
+     * Show the Add Friend Activty
+     *
+     */
     fun openAddFriendsActivity(){
         _openAddFriendLD.value = Event(Unit)
     }
 
+    /**
+     * Fetch all the friends of the current user
+     *
+     * @param refresh determine if the list should be refreshed or not
+     *
+     * @see fetchResultUsers
+     * @see FriendRepository.fetchUserFriend
+     */
     private fun fetchFriends(refresh: Boolean = false){
         viewModelScope.launch { fetchResultUsers(friendRepository.fetchUserFriend(currentUser, refresh)) }
     }

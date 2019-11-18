@@ -104,6 +104,19 @@ abstract class UserDao(private val database: WatchMyBackDatabase) {
     @Delete
     abstract suspend fun deleteUser(user: User)
 
+    /**
+     * Create or update a user if it exsist in the database with all its data
+     *
+     * @param createUser determine if its an creation or an update
+     * @param user [User] to create
+     * @param preferences [UserWithPreferences] of the user
+     * @param friend the user's friends
+     *
+     * @see Transaction
+     * @see createUser
+     * @see updateUser
+     * @see FriendDao.addFriend
+     */
     @Transaction
     open suspend fun createOrUpdateUserWithData(createUser: Boolean, user: User, preferences: UserPreferences, vararg friend: User){
         if(createUser){

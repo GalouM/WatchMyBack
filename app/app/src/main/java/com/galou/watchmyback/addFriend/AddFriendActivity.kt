@@ -1,10 +1,8 @@
 package com.galou.watchmyback.addFriend
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.text.Editable
-import android.text.TextWatcher
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
@@ -12,10 +10,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.galou.watchmyback.R
-import com.galou.watchmyback.databinding.ActivityAddFriendBinding
 import com.galou.watchmyback.base.UsersListAdapter
 import com.galou.watchmyback.data.entity.OtherUser
-import com.galou.watchmyback.utils.displayData
+import com.galou.watchmyback.databinding.ActivityAddFriendBinding
 import com.galou.watchmyback.utils.extension.setupSnackBar
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel

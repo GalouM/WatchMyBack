@@ -10,14 +10,15 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
  * Implementation of [UserDataSource] for the remote database
  *
  * List all the possible action on the remote database for a [User]
+ *
+ * @param remoteDB Reference toward the remote database
+ * @param remoteStorage Reference toward the remote storage
  *
  */
 class UserRemoteDataSource(

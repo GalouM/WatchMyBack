@@ -1,6 +1,5 @@
 package com.galou.watchmyback.utils.extension
 
-import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.databinding.BindingAdapter
 import com.galou.watchmyback.R
@@ -12,6 +11,13 @@ import com.galou.watchmyback.data.entity.UnitSystem
  * Created by galou on 2019-10-30
  */
 
+/**
+ * Determine which radio button of a radio group should be selected depending on the [UnitSystem] selected
+ *
+ * @param system type of unit system
+ *
+ * @see BindingAdapter
+ */
 @BindingAdapter("unitSystemType")
 fun RadioGroup.unitSystemType(system: UnitSystem?){
     when(system){
@@ -20,6 +26,13 @@ fun RadioGroup.unitSystemType(system: UnitSystem?){
     }
 }
 
+/**
+ * Determine which radio button of a radio group should be selected depending on the [TimeDisplay] selected
+ *
+ * @param timeDisplay way to display time
+ *
+ * @see BindingAdapter
+ */
 @BindingAdapter("timeDisplay")
 fun RadioGroup.timeDisplay(timeDisplay: TimeDisplay?){
     when(timeDisplay){
@@ -28,6 +41,13 @@ fun RadioGroup.timeDisplay(timeDisplay: TimeDisplay?){
     }
 }
 
+/**
+ * Determine which radio button of a radio group should be selected depending on the [FetchType] selected
+ *
+ * @param fetchType type of fetch
+ *
+ * @see BindingAdapter
+ */
 @BindingAdapter("searchUserType")
 fun RadioGroup.searchUserType(fetchType: FetchType?){
     when(fetchType) {

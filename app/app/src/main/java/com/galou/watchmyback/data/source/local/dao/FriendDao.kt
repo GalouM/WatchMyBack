@@ -59,6 +59,19 @@ abstract class FriendDao(private val database: WatchMyBackDatabase) {
             "WHERE ${FRIEND_TABLE_NAME}.${FRIEND_TABLE_USER_UUID} = :userId")
     abstract suspend fun getFriendsUser(userId: String): List<User>
 
+    /**
+     * Add one or several friends to the current user in the database
+     *
+     * Create the friends as User in the database
+     * Create the friendship in the database
+     *
+     * @param currentUserId
+     * @param friends
+     *
+     * @see Transaction
+     * @see UserDao.createUser
+     * @see createFriendship
+     */
     @Transaction
     open suspend fun addFriend(currentUserId: String, vararg friends: User){
         database.userDao().createUser(*friends)

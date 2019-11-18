@@ -1,7 +1,5 @@
 package com.galou.watchmyback.settings
 
-import android.view.View
-import android.widget.RadioButton
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +10,6 @@ import com.galou.watchmyback.base.BaseViewModel
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.data.repository.UserRepositoryImpl
-import com.galou.watchmyback.profile.ProfileActivity
 import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.extension.onClickTimeDisplay
 import com.galou.watchmyback.utils.extension.onClickUnitSystem

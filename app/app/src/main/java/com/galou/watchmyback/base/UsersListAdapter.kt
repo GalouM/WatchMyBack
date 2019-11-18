@@ -2,9 +2,7 @@ package com.galou.watchmyback.base
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.galou.watchmyback.R
 import com.galou.watchmyback.data.entity.OtherUser
 import com.galou.watchmyback.databinding.FriendsRvItemBinding
 import com.galou.watchmyback.utils.displayData

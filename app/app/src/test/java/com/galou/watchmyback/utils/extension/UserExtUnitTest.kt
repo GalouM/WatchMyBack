@@ -48,6 +48,18 @@ class UserExtUnitTest {
         assertThat(listWithoutCurrentUser).doesNotContain(mainUser)
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun setupIsMyFriendCorrectly(){
+        val mainUser = generateTestUser("Test_id")
+        mainUser.friendsId.clear()
+        mainUser.friendsId.add(firstFriend.id)
+        val listAllUsers = listOf(firstFriend.toOtherUser(false), secondFriend.toOtherUser(false))
+        listAllUsers setIsMyFriend mainUser.friendsId
+        assertThat(listAllUsers[0].myFriend).isTrue()
+        assertThat(listAllUsers[1].myFriend).isFalse()
+    }
+
 
 
 
