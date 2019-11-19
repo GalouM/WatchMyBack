@@ -20,7 +20,7 @@ class OtherUtilUnitTest {
     @Test
     fun todayDate_isToday(){
         val today = Calendar.getInstance(Locale.CANADA).time
-        val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.CANADA)
+        val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.CANADA)
         assertThat(formatter.format(today)).isEqualTo(formatter.format(todaysDate))
     }
 
