@@ -1,4 +1,4 @@
-package com.galou.watchmyback
+package com.galou.watchmyback.checklist
 
 
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.galou.watchmyback.R
 
 /**
  * A simple [Fragment] subclass.

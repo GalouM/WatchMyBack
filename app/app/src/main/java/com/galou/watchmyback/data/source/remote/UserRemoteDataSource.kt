@@ -50,16 +50,12 @@ class UserRemoteDataSource(
      * @return [Result] of the operation
      */
     override suspend fun updateUserInformation(user: User): Result<Void?> = withContext(ioDispatcher) {
-        return@withContext try {
-            userCollection.document(user.id).update(
-                "username", user.username,
-                "email", user.email,
-                "phoneNumber", user.phoneNumber,
-                "pictureUrl", user.pictureUrl
-            ).await()
-        } catch (e: Exception){
-            Result.Error(e)
-        }
+        return@withContext userCollection.document(user.id).update(
+            "username", user.username,
+            "email", user.email,
+            "phoneNumber", user.phoneNumber,
+            "pictureUrl", user.pictureUrl
+        ).await()
     }
 
     /**
@@ -112,11 +108,7 @@ class UserRemoteDataSource(
      * @see getReferenceUserPictureStorage
      */
     private suspend fun fetchPictureUriInRemoteStorage(userId: String): Result<Uri> = withContext(ioDispatcher){
-        return@withContext try {
-            getReferenceUserPictureStorage(userId).downloadUrl.await()
-        } catch (e: Exception){
-            Result.Error(e)
-        }
+        return@withContext getReferenceUserPictureStorage(userId).downloadUrl.await()
     }
 
 
@@ -150,11 +142,7 @@ class UserRemoteDataSource(
      * @return [Result] of the deletion
      */
     override suspend fun deleteUser(user: User): Result<Void?> = withContext(ioDispatcher){
-        return@withContext try {
-            userCollection.document(user.id).delete().await()
-        } catch (e: Exception){
-            Result.Error(e)
-        }
+        return@withContext userCollection.document(user.id).delete().await()
     }
 
     /**

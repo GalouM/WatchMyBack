@@ -30,7 +30,7 @@ abstract class CheckListDao(private val database: WatchMyBackDatabase) {
      * @see Query
      */
     @Query("SELECT * FROM $CHECK_LIST_TABLE_NAME WHERE $CHECK_LIST_TABLE_USER_UUID = :userId")
-    abstract suspend fun getUserCheckList(userId: String): List<CheckList>
+    abstract suspend fun getUserCheckList(userId: String): List<CheckListWithItems>
 
     /**
      * Query a [CheckList] and all its [ItemCheckList]
@@ -44,7 +44,7 @@ abstract class CheckListDao(private val database: WatchMyBackDatabase) {
      */
     @Transaction
     @Query("SELECT * FROM $CHECK_LIST_TABLE_NAME WHERE $CHECK_LIST_TABLE_UUID = :checkListId")
-    abstract suspend fun getCheckListWithItems(checkListId: String): List<CheckListWithItems>
+    abstract suspend fun getCheckListWithItems(checkListId: String): CheckListWithItems?
 
     /**
      * Create a [CheckList] object in the database
@@ -72,12 +72,12 @@ abstract class CheckListDao(private val database: WatchMyBackDatabase) {
     /**
      * Delete a [CheckList] object from the database
      *
-     * @param checkListId ID of the [CheckList] to delete
+     * @param checkList  [CheckList] to delete
      *
-     * @see Query
+     * @see Delete
      */
-    @Query("DELETE FROM $CHECK_LIST_TABLE_NAME WHERE $CHECK_LIST_TABLE_UUID = :checkListId")
-    abstract suspend fun deleteCheckList(checkListId: String)
+    @Delete
+    abstract suspend fun deleteCheckList(checkList: CheckList)
 
 
     /**
@@ -116,4 +116,5 @@ abstract class CheckListDao(private val database: WatchMyBackDatabase) {
         updateCheckList(checkList)
 
     }
+
 }

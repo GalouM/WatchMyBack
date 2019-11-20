@@ -76,7 +76,6 @@ class FriendRepositoryImpl(
             true -> {
                 val remoteResult = remoteSource.fetchUserFriend(user)
                 if (remoteResult is Result.Success) {
-                    displayData("remote friends ${remoteResult.data}")
                     if (remoteResult.data.isNotEmpty()) localSource.addFriend(user, *remoteResult.data.toTypedArray())
                     return Result.Success(remoteResult.data.toListOtherUser(true))
                 }

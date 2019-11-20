@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/checkListView"
-        android:name="com.galou.watchmyback.CheckListView"
+        android:name="com.galou.watchmyback.checklist.CheckListView"
         android:label="fragment_check_list_view"
         tools:layout="@layout/fragment_check_list_view" />
     <fragment
