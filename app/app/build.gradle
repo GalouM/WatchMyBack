@@ -222,7 +222,10 @@ project.afterEvaluate {
 
                 sourceDirectories.from = files(mainSrc)
                 classDirectories.from = files([debugTree])
-                executionData.from = files("${project.buildDir}/jacoco/${testTaskName}.exec")
+                executionData.from = fileTree(dir: "$buildDir", includes: [
+                        "jacoco/testDebugUnitTest.exec",
+                        "output/code-coverage/connected/*.ec"
+                ])
             }
         }
     }

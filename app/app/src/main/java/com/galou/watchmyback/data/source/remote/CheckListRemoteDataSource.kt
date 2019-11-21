@@ -35,7 +35,7 @@ class CheckListRemoteDataSource(
                     fetchCheckLists.data.toObjects(CheckList::class.java).forEach { checkList ->
                         checkListWithItems.add(CheckListWithItems(
                             checkList = checkList,
-                            items = fetchItemsCheckList(checkList)
+                            items = fetchItemsCheckList(checkList) ?: mutableListOf()
                         ))
                     }
                     Result.Success(checkListWithItems)
@@ -175,9 +175,9 @@ class CheckListRemoteDataSource(
 
     }
 
-    private suspend fun createItemsCheckList(items: List<ItemCheckList>?): Result<Void?> = withContext(ioDispatcher){
+    private suspend fun createItemsCheckList(items: List<ItemCheckList>): Result<Void?> = withContext(ioDispatcher){
         var error = false
-        items?.forEach {
+        items.forEach {
             coroutineScope {
                 launch {
                     when(itemCollection.document(it.id).set(it).await()) {

@@ -27,5 +27,5 @@ data class CheckListWithItems(
         entityColumn = ITEM_TABLE_LIST_ID,
         entity = ItemCheckList::class
     )
-    val items: List<ItemCheckList>?
+    val items: List<ItemCheckList>
 )

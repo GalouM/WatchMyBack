@@ -6,11 +6,9 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
 import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.Matchers.hasItem
-import org.hamcrest.Matchers.hasSize
+import org.hamcrest.Matchers.*
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThat
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -67,11 +65,9 @@ class CheckListDaoTest {
     @Throws(Exception::class)
     fun createAndGetCheckListAndItem() = runBlocking {
         val checkListFromDB = checkListDao.getCheckListWithItems(checkList1.id)
-        assertEquals(checkListFromDB[0].checkList,
-            checkList1
-        )
-        assertThat(checkListFromDB[0].items, hasSize(3))
-        assertThat(checkListFromDB[0].items, hasItem(item1List1))
+        assertThat(checkListFromDB, `is`(notNullValue()))
+        assertThat(checkListFromDB?.items, hasSize(3))
+        assertThat(checkListFromDB?.items, hasItem(item1List1))
     }
 
     @Test
@@ -86,18 +82,18 @@ class CheckListDaoTest {
         )
 
         val listAndItemFromDB = checkListDao.getCheckListWithItems(checkList1.id)
-        val item1FromList = listAndItemFromDB[0].items.find { it.id == item1List1.id }
+        val item1FromList = listAndItemFromDB!!.items.find { it.id == item1List1.id }
         assertEquals(item1List1.name, item1FromList?.name)
-        assertEquals(checkList1.name, listAndItemFromDB[0].checkList.name)
+        assertEquals(checkList1.name, listAndItemFromDB.checkList.name)
 
     }
 
     @Test
     @Throws(Exception::class)
     fun deleteCheckList() = runBlocking {
-        checkListDao.deleteCheckList(checkList1.id)
+        checkListDao.deleteCheckList(checkList1)
         val checkListFromDB = checkListDao.getCheckListWithItems(checkList1.id)
-        assertThat(checkListFromDB, hasSize(0))
+        assertThat(checkListFromDB, `is` (nullValue()))
     }
 
 }
