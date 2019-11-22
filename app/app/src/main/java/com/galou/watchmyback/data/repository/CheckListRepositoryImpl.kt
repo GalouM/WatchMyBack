@@ -19,6 +19,9 @@ class CheckListRepositoryImpl(
     private val remoteSource: CheckListRemoteDataSource
 ) : CheckListRepository {
 
+    override var checkList: CheckList? = null
+    override var checkListFetched: Boolean = false
+
     override suspend fun fetchUserCheckLists(userId: String, refresh: Boolean): Result<List<CheckListWithItems>> {
         return when(refresh){
             true -> {

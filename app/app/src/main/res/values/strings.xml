@@ -122,4 +122,6 @@
     <string name="by_username">by username</string>
     <string name="by_email">by email</string>
     <string name="no_user">No users to show</string>
+    <string name="error_fetch_check_lists">Error while fetching your checklists</string>
+    <string name="no_checkList">No CheckList to show</string>
 </resources>

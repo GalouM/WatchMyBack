@@ -37,7 +37,6 @@ class UsersViewHolder(private val binding: FriendsRvItemBinding) : RecyclerView.
     fun bindWithUser(viewModel: UserListBaseViewModel, user: OtherUser){
         binding.friend = user
         binding.viewmodel = viewModel
-        displayData("holder ${binding.friend}")
         binding.executePendingBindings()
     }
 

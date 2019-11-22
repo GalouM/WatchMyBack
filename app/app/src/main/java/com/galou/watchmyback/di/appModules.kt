@@ -2,13 +2,13 @@ package com.galou.watchmyback.di
 
 import androidx.room.Room
 import com.galou.watchmyback.addFriend.AddFriendViewModel
-import com.galou.watchmyback.data.repository.FriendRepository
-import com.galou.watchmyback.data.repository.FriendRepositoryImpl
-import com.galou.watchmyback.data.repository.UserRepository
-import com.galou.watchmyback.data.repository.UserRepositoryImpl
+import com.galou.watchmyback.checklist.CheckListViewModel
+import com.galou.watchmyback.data.repository.*
 import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
+import com.galou.watchmyback.data.source.local.CheckListLocalDataSource
 import com.galou.watchmyback.data.source.local.FriendLocalDataSource
 import com.galou.watchmyback.data.source.local.UserLocalDataSource
+import com.galou.watchmyback.data.source.remote.CheckListRemoteDataSource
 import com.galou.watchmyback.data.source.remote.FriendRemoteDataSource
 import com.galou.watchmyback.data.source.remote.UserRemoteDataSource
 import com.galou.watchmyback.friends.FriendsViewModel
@@ -59,6 +59,13 @@ val appModules = module {
         FriendLocalDataSource(friendDao = get<WatchMyBackDatabase>().friendDao())
     }
     single { FriendRemoteDataSource(remoteDB = get()) }
+    // checklists sources
+    single {
+        CheckListLocalDataSource(checkListDao = get<WatchMyBackDatabase>().checkListDao())
+    }
+    single {
+        CheckListRemoteDataSource(remoteDB = get())
+    }
 
     // Repos
     single<UserRepository> {
@@ -67,10 +74,14 @@ val appModules = module {
     single<FriendRepository> {
         FriendRepositoryImpl(localSource = get(), remoteSource = get())
     }
+    single<CheckListRepository> {
+        CheckListRepositoryImpl(localSource = get(), remoteSource = get())
+    }
     // ViewModels
     viewModel { MainActivityViewModel(userRepository = get()) }
     viewModel { ProfileViewModel(userRepository = get()) }
     viewModel { SettingsViewModel(userRepository = get()) }
     viewModel { FriendsViewModel(userRepository = get(), friendRepository = get()) }
     viewModel { AddFriendViewModel(userRepository = get(), friendRepository = get()) }
+    viewModel { CheckListViewModel(userRepository = get(), checkListRepository = get()) }
 }
