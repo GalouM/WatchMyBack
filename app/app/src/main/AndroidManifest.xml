@@ -31,7 +31,7 @@
             android:name=".profile.ProfileActivity"
             android:label="@string/my_profile"
             android:parentActivityName=".main.MainActivity" />
-        <activity android:name=".AddModifyCheckListActivity" />
+        <activity android:name=".addModifyCheckList.AddModifyCheckListActivity" />
         <activity
             android:name=".DetailsTripActivity"
             android:label="@string/details_trip"

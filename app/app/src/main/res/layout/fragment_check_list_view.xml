@@ -44,7 +44,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="70dp"
-            android:layout_marginEnd="50dp"/>
+            android:layout_marginEnd="50dp"
+            android:onClick="@{() -> viewmodel.addCheckList()}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

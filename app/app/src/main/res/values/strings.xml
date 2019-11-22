@@ -124,4 +124,10 @@
     <string name="no_user">No users to show</string>
     <string name="error_fetch_check_lists">Error while fetching your checklists</string>
     <string name="no_checkList">No CheckList to show</string>
+    <string name="error_fetch_checklist">Error while fetching the checklist</string>
+    <string name="error_saving_list">Error while saving your list please try again</string>
+    <string name="eror_name_checklist">Must have a name</string>
+    <string name="error_type_checklist">Must have a type</string>
+    <string name="error_item_checklist">Must have at least one item</string>
+    <string name="error_delete_checklist">Erroor while deleting your check list</string>
 </resources>

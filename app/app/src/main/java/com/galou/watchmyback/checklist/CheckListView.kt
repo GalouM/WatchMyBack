@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.galou.watchmyback.AddModifyCheckListActivity
+import com.galou.watchmyback.addModifyCheckList.AddModifyCheckListActivity
 import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
 import com.galou.watchmyback.data.entity.CheckList

@@ -30,19 +30,26 @@ class CheckListViewModel(
     private val currentUser = userRepository.currentUser.value!!
 
     init {
+        _dataLoading.value = true
         fetchCheckLists(!checkListRepository.checkListFetched)
         checkListRepository.checkListFetched = true
     }
 
     fun refresh(){
+        _dataLoading.value = true
         fetchCheckLists(true)
     }
 
 
-    fun addModifyCheckListActivity(checkList: CheckList?){
+    fun addModifyCheckListActivity(checkList: CheckList){
         checkListRepository.checkList = checkList
         _openAddModifyCheckList.value = Event(Unit)
 
+    }
+
+    fun addCheckList(){
+        checkListRepository.checkList = null
+        _openAddModifyCheckList.value = Event(Unit)
     }
     
     private fun fetchCheckLists(refresh: Boolean = false){
@@ -55,6 +62,7 @@ class CheckListViewModel(
                 } 
                 is Result.Canceled, is Result.Error -> showSnackBarMessage(R.string.error_fetch_check_lists)
             }
+            _dataLoading.value = false
         }
 
     }
