@@ -8,7 +8,7 @@ import com.galou.watchmyback.data.repository.FakeUserRepositoryImpl
 import com.galou.watchmyback.testHelpers.FakeAuthResult
 import com.galou.watchmyback.testHelpers.LiveDataTestUtil
 import com.galou.watchmyback.testHelpers.assertSnackBarMessage
-import com.galou.watchmyback.utils.RESULT_DELETED
+import com.galou.watchmyback.utils.RESULT_ACCOUNT_DELETED
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.newSingleThreadContext
@@ -91,7 +91,7 @@ class MainActivityViewModelTest {
 
     @Test
     fun accountDeletedShowSignInActivity(){
-        viewModel.handleResultSettingsActivity(RESULT_DELETED)
+        viewModel.handleResultSettingsActivity(RESULT_ACCOUNT_DELETED)
         val value: Event<Unit> = LiveDataTestUtil.getValue(viewModel.openSignInActivityEvent)
         assertThat(value.getContentIfNotHandled()).isNotNull()
         assertThat(viewModel.userLD.value).isNull()

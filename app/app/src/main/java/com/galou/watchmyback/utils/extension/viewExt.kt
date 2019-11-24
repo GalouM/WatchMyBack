@@ -2,12 +2,14 @@ package com.galou.watchmyback.utils.extension
 
 import android.view.View
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.galou.watchmyback.Event
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 /**
@@ -82,5 +84,15 @@ fun TextInputLayout.errorMessage(errorMessage: Int?){
         this.error = null
         this.isErrorEnabled = false
     }
+}
+
+@BindingAdapter("textFromResourceId")
+fun TextInputEditText.textFromResourceId(resourceId: Int?){
+    if (resourceId != 0) resourceId?.let { setText(resourceId) }
+}
+
+@BindingAdapter("iconFromResourceId")
+fun TextInputLayout.iconFromResourceId(resourceId: Int?){
+    if(resourceId != 0) resourceId?.let{ startIconDrawable = ContextCompat.getDrawable(context, resourceId) }
 }
 

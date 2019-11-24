@@ -11,6 +11,7 @@
     </data>
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/add_modify_checklist_list_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".addModifyCheckList.AddModifyCheckListActivity">
@@ -49,7 +50,7 @@
                 android:id="@+id/add_modify_checklist_list_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={viewmodel.checkListLD.checkList.name}"/>
+                android:text="@={viewmodel.checkListLD.name}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,20 +62,24 @@
             app:layout_constraintTop_toBottomOf="@id/add_modify_checklist_list_name_layout"
             android:layout_margin="@dimen/margin_small"
             android:hint="@string/trip_type_title"
-            app:errorMessage="@{viewmodel.errorTypeLD}">
+            app:errorMessage="@{viewmodel.errorTypeLD}"
+            app:iconFromResourceId="@{viewmodel.checkListLD.tripType.iconId}">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/add_modify_checklist_list_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Widget.AppCompat.Spinner"/>
+                style="@style/Widget.AppCompat.Spinner"
+                android:onClick="@{() -> viewmodel.showCheckListTypeDialog()}"
+                android:focusable="false"
+                app:textFromResourceId="@{viewmodel.checkListLD.tripType.typeNameId}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/add_modify_checklist_delete_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delete Check List"
+            android:text="@string/delete_check_list"
             app:icon="@drawable/icon_delete"
             app:layout_constraintTop_toBottomOf="@id/add_modify_checklist_list_type_layout"
             app:layout_constraintStart_toStartOf="parent"
@@ -92,7 +97,7 @@
             app:layout_constraintTop_toBottomOf="@id/add_modify_checklist_delete_button"
             app:layout_constraintStart_toStartOf="@id/add_modify_checklist_list_type_layout"
             app:layout_constraintEnd_toEndOf="parent"
-            android:onClick="@={() -> viewmodel.addItem()}"/>
+            android:onClick="@{() -> viewmodel.addItem()}"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/add_modify_checklist_rv"

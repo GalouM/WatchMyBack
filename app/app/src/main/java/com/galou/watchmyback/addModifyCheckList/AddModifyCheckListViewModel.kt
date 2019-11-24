@@ -12,7 +12,9 @@ import com.galou.watchmyback.data.entity.CheckListWithItems
 import com.galou.watchmyback.data.entity.ItemCheckList
 import com.galou.watchmyback.data.entity.TripType
 import com.galou.watchmyback.data.repository.CheckListRepository
+import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.displayData
 import com.galou.watchmyback.utils.idGenerated
 import kotlinx.coroutines.launch
 
@@ -21,18 +23,20 @@ import kotlinx.coroutines.launch
  * 2019-11-22
  */
 class AddModifyCheckListViewModel(
-    private val checkListRepository: CheckListRepository
+    private val checkListRepository: CheckListRepository,
+    private val userRepository: UserRepository
 ) : BaseViewModel() {
 
-    private val _typesCheckList = MutableLiveData<List<Int>>()
-        get() {
-            field.value = TripType.values().map { it.typeNameId }.toList()
-            return field
-        }
-    val typesCheckList: LiveData<List<Int>> = _typesCheckList
+    private val tripeType = TripType.values().toList()
 
-    private val _checkListLD = MutableLiveData<CheckListWithItems>()
-    val checkListLD: LiveData<CheckListWithItems> = _checkListLD
+    private val _typesCheckList = MutableLiveData<Event<List<TripType>>>()
+    val typesCheckList: LiveData<Event<List<TripType>>> = _typesCheckList
+
+    private val _checkListLD = MutableLiveData<CheckList>()
+    val checkListLD: LiveData<CheckList> = _checkListLD
+
+    private val _itemsCheckListLD = MutableLiveData<MutableList<ItemCheckList>>()
+    val itemsCheckListLD: LiveData<MutableList<ItemCheckList>> = _itemsCheckListLD
     
     private val _checkListSavedLD = MutableLiveData<Event<Unit>>()
     val checkListSavedLD: LiveData<Event<Unit>> = _checkListSavedLD
@@ -46,9 +50,6 @@ class AddModifyCheckListViewModel(
     private val _errorTypeLD = MutableLiveData<Int?>()
     val errorTypeLD: LiveData<Int?> = _errorTypeLD
     
-    private val _errorNoItems = MutableLiveData<Int?>()
-    val errorNoItems: LiveData<Int?> = _errorNoItems
-    
     private val _modifyCheckList = MutableLiveData<Boolean>()
     val modifyCheckList: LiveData<Boolean> = _modifyCheckList
 
@@ -59,14 +60,16 @@ class AddModifyCheckListViewModel(
         actionType = when(val selectedCheckList = checkListRepository.checkList){
             null -> {
                 _modifyCheckList.value = false
-                _checkListLD.value = CheckListWithItems(
-                    checkList = CheckList(idGenerated),
-                    items = mutableListOf()
-                )
+                _checkListLD.value = CheckList(
+                    id = idGenerated,
+                    userId = userRepository.currentUser.value?.id ?: throw IllegalAccessError("User is null"))
+                _itemsCheckListLD.value = mutableListOf()
+                _dataLoading.value = false
                 ADD
             }
             else -> {
                 _modifyCheckList.value = true
+                _checkListLD.value = selectedCheckList
                 fetchItemsCheckList(selectedCheckList)
                 MODIFY
             }
@@ -75,29 +78,43 @@ class AddModifyCheckListViewModel(
     
     fun saveCheckList(){
         _dataLoading.value = true
-        val checkList = _checkListLD.value!!
-        if (!checkErrors(checkList)) {
+        resetErrors()
+        val checkList = _checkListLD.value ?: throw IllegalAccessException("CheckList is null")
+        val items = _itemsCheckListLD.value!!
+        if (!checkErrors(checkList, items)) {
             when(actionType){
-                ADD -> saveNewCheckList(checkList)
-                MODIFY -> updateCheckList(checkList)
+                ADD -> saveNewCheckList(checkList, items)
+                MODIFY -> updateCheckList(checkList, items)
             }
+        } else {
+            _dataLoading.value = false
         }
     }
     
     fun addItem(){
-        _checkListLD.value!!.items.add(ItemCheckList(
+        _itemsCheckListLD.value!!.add(ItemCheckList(
             id = idGenerated,
-            listId = checkListLD.value!!.checkList.id))
+            listId = _checkListLD.value!!.id))
+        _itemsCheckListLD.apply {
+            value = this.value
+        }
     }
 
     fun removeItem(item: ItemCheckList){
-        _checkListLD.value!!.items.remove(item)
+        _itemsCheckListLD.value!!.remove(item)
+        _itemsCheckListLD.apply {
+            value = this.value
+        }
     }
     
     fun deleteCheckList(){
         _dataLoading.value = true
         viewModelScope.launch { 
-            when(val result = checkListRepository.deleteCheckList(_checkListLD.value!!.checkList)){
+            when(checkListRepository.deleteCheckList(
+                CheckListWithItems(
+                    checkList = _checkListLD.value!!,
+                    items = _itemsCheckListLD.value!!
+            ))){
                 is Result.Success -> _checkListDeletedLD.value = Event(Unit)
                 is Result.Canceled, is Result.Error -> showSnackBarMessage(R.string.error_delete_checklist)
             }
@@ -105,30 +122,39 @@ class AddModifyCheckListViewModel(
         _dataLoading.value = false
     }
 
+    fun showCheckListTypeDialog(){
+        _typesCheckList.value = Event(tripeType)
+    }
+
+    fun selectCheckListType(type: TripType){
+        _checkListLD.value!!.tripType = type
+        _checkListLD.run { value = this.value }
+    }
+
     private fun fetchItemsCheckList(checkList: CheckList){
         viewModelScope.launch { 
             when(val result = checkListRepository.fetchCheckList(checkList, false)){
-                is Result.Success -> _checkListLD.value = result.data
-                is Result.Error, is Result.Canceled -> showSnackBarMessage(R.string.error_fetch_checklist)
+                is Result.Success -> _itemsCheckListLD.value = result.data?.items?.toMutableList() ?: throw IllegalAccessException("Items is null")
+                is Result.Canceled, is Result.Error -> showSnackBarMessage(R.string.error_fetch_checklist)
             }
         }
         _dataLoading.value = false
     }
     
-    private fun saveNewCheckList(checkList: CheckListWithItems){
+    private fun saveNewCheckList(checkList: CheckList, items: List<ItemCheckList>){
         viewModelScope.launch { 
             showResultSavedCheckList(checkListRepository.createCheckList(
-                checkList = checkList.checkList,
-                items = checkList.items
+                checkList = checkList,
+                items = items
             ))
         }
     }
     
-    private fun updateCheckList(checkList: CheckListWithItems){
+    private fun updateCheckList(checkList: CheckList, items: List<ItemCheckList>){
         viewModelScope.launch { 
             showResultSavedCheckList(checkListRepository.updateCheckList(
-                checkList = checkList.checkList,
-                items = checkList.items
+                checkList = checkList,
+                items = items
             ))
         }
     }
@@ -136,28 +162,33 @@ class AddModifyCheckListViewModel(
     private fun showResultSavedCheckList(result: Result<Void?>){
         when(result){
             is Result.Success -> _checkListSavedLD.value = Event(Unit)
-            is Result.Error, is Result.Canceled -> showSnackBarMessage(R.string.error_saving_list)
+            is Result.Canceled, is Result.Error -> showSnackBarMessage(R.string.error_saving_list)
         }
         _dataLoading.value = false
     }
     
-    private fun checkErrors(checkList: CheckListWithItems): Boolean {
+    private fun checkErrors(checkList: CheckList, items: List<ItemCheckList>): Boolean {
         var error = false
-        if (checkList.checkList.name.isBlank()) {
+        if (checkList.name.isBlank()) {
             _errorNameLD.value = R.string.eror_name_checklist
             error = true
         }
-        if (checkList.checkList.tripType == null) {
+        if (checkList.tripType == null) {
             _errorTypeLD.value = R.string.error_type_checklist
             error = true
         }
-        if (checkList.items.isEmpty()) {
-            _errorNoItems.value = R.string.error_item_checklist
+        if (items.isEmpty()) {
+            showSnackBarMessage(R.string.error_item_checklist)
             error = true
         }
 
-        checkList.items.forEach { if (it.name.isBlank()) removeItem(it) }
+        items.forEach { if (it.name.isBlank()) removeItem(it) }
         return error
+    }
+
+    private fun resetErrors(){
+        _errorTypeLD.value = null
+        _errorNameLD.value = null
     }
 
 

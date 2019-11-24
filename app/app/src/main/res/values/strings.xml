@@ -129,5 +129,7 @@
     <string name="eror_name_checklist">Must have a name</string>
     <string name="error_type_checklist">Must have a type</string>
     <string name="error_item_checklist">Must have at least one item</string>
-    <string name="error_delete_checklist">Erroor while deleting your check list</string>
+    <string name="error_delete_checklist">Error while deleting your check list</string>
+    <string name="delete_check_list">Delete Check List</string>
+    <string name="pick_type_trip">Pick a type</string>
 </resources>

@@ -6,6 +6,7 @@ import com.galou.watchmyback.data.entity.ItemCheckList
 import com.galou.watchmyback.data.source.local.CheckListLocalDataSource
 import com.galou.watchmyback.data.source.remote.CheckListRemoteDataSource
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.displayData
 import com.galou.watchmyback.utils.returnSuccessOrError
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -65,10 +66,11 @@ class CheckListRepositoryImpl(
     ): Result<Void?>  = coroutineScope {
         val localTask = async { localSource.updateCheckList(checkList, items) }
         val remoteTask = async { remoteSource.updateCheckList(checkList, items) }
+        displayData("remote: ${remoteTask.await()} local: ${localTask.await()}")
         return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
     }
 
-    override suspend fun deleteCheckList(checkList: CheckList): Result<Void?> = coroutineScope {
+    override suspend fun deleteCheckList(checkList: CheckListWithItems): Result<Void?> = coroutineScope {
         val localTask = async { localSource.deleteCheckList(checkList) }
         val remoteTask = async { remoteSource.deleteCheckList(checkList) }
         return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())

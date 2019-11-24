@@ -52,17 +52,8 @@ fun ImageView.bindLoadUrl(url: String?){
         .into(this)
 }
 
-@BindingAdapter("typeCheckListImage")
-fun ImageView.typeCheckListImage(type: TripType){
-    val drawable = when(type){
-        TripType.BIKING -> R.drawable.icon_bike
-        TripType.MOUNTAIN_BIKING -> R.drawable.icon_mtb
-        TripType.HIKING -> R.drawable.icon_hike
-        TripType.RUNNING -> R.drawable.icon_run
-        TripType.SKIING -> R.drawable.icon_ski
-        TripType.MOTORCYCLE -> R.drawable.icon_motorcycle
-    }
-
-    GlideApp.with(context).load(drawable).into(this)
+@BindingAdapter("imageResouce")
+fun ImageView.imageResouce(imageResource: Int){
+    setImageResource(imageResource)
 
 }

@@ -10,6 +10,7 @@ import com.galou.watchmyback.data.entity.CheckList
 import com.galou.watchmyback.data.repository.CheckListRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.displayData
 import kotlinx.coroutines.launch
 
 /**
@@ -59,7 +60,7 @@ class CheckListViewModel(
                     val checkLists = checkListsResult.data.map { it.checkList }
                     if (checkLists.isEmpty()) showSnackBarMessage(R.string.no_checkList)
                     else _checkListLD.value = checkLists
-                } 
+                }
                 is Result.Canceled, is Result.Error -> showSnackBarMessage(R.string.error_fetch_check_lists)
             }
             _dataLoading.value = false

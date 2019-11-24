@@ -63,9 +63,8 @@ class AddFriendActivity : AppCompatActivity() {
     }
 
     private fun setupSnackBar(){
-        val rooView = binding.addFriendsViewRoot
-        rooView.setupSnackBar(this, viewModel.snackbarMessage, Snackbar.LENGTH_LONG)
-
+        binding.addFriendsViewRoot
+            .setupSnackBar(this, viewModel.snackbarMessage, Snackbar.LENGTH_LONG)
     }
 
     private fun configureEditTextListener(){

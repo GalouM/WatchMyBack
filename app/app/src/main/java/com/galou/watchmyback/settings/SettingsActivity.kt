@@ -10,7 +10,7 @@ import com.firebase.ui.auth.AuthUI
 import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
 import com.galou.watchmyback.databinding.ActivitySettingsBinding
-import com.galou.watchmyback.utils.RESULT_DELETED
+import com.galou.watchmyback.utils.RESULT_ACCOUNT_DELETED
 import com.galou.watchmyback.utils.extension.setupSnackBar
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -73,7 +73,7 @@ class SettingsActivity : AppCompatActivity() {
             .delete(this)
             .addOnCompleteListener {task ->
                 if(task.isSuccessful){
-                    setResult(RESULT_DELETED)
+                    setResult(RESULT_ACCOUNT_DELETED)
                     finish()
                 } else {
                     viewModel.errorDeletion()

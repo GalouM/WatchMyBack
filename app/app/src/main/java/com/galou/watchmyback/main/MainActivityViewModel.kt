@@ -17,7 +17,7 @@ import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserWithPreferences
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.data.repository.UserRepositoryImpl
-import com.galou.watchmyback.utils.RESULT_DELETED
+import com.galou.watchmyback.utils.RESULT_ACCOUNT_DELETED
 import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.displayData
 import com.google.firebase.auth.FirebaseUser
@@ -129,7 +129,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
      * @param resultCode
      */
     fun handleResultSettingsActivity(resultCode: Int){
-        if (resultCode == RESULT_DELETED){
+        if (resultCode == RESULT_ACCOUNT_DELETED){
             userRepository.currentUser.value = null
             showSignInActivity()
         }

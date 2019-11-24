@@ -18,7 +18,7 @@
 <androidx.cardview.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="@dimen/cardview_checklist"
-    android:layout_margin="@dimen/margin_small"
+    android:layout_margin="5dp"
     android:onClick="@{() -> viewmodel.addModifyCheckListActivity(checklist)}">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,7 +27,7 @@
 
         <TextView
             android:id="@+id/check_list_item_name"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -45,7 +45,7 @@
             app:layout_constraintStart_toStartOf="@id/check_list_item_name"
             app:layout_constraintTop_toBottomOf="@id/check_list_item_name"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:typeCheckListImage="@{checklist.tripType}"/>
+            app:imageResouce="@{checklist.tripType.iconId}"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

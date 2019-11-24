@@ -122,11 +122,7 @@ class UserRemoteDataSource(
         return@withContext try {
             when (val resultDocumentSnapshot =
                 userCollection.document(userId).get().await()) {
-                is Result.Success -> {
-                    displayData("${resultDocumentSnapshot.data.toObject(User::class.java)}")
-                    displayData("${resultDocumentSnapshot.data}")
-                    Result.Success(resultDocumentSnapshot.data.toUser())
-                }
+                is Result.Success -> Result.Success(resultDocumentSnapshot.data.toUser())
                 is Result.Error -> Result.Error(resultDocumentSnapshot.exception)
                 is Result.Canceled -> Result.Canceled(resultDocumentSnapshot.exception)
             }

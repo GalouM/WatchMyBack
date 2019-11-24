@@ -2,6 +2,7 @@ package com.galou.watchmyback.di
 
 import androidx.room.Room
 import com.galou.watchmyback.addFriend.AddFriendViewModel
+import com.galou.watchmyback.addModifyCheckList.AddModifyCheckListViewModel
 import com.galou.watchmyback.checklist.CheckListViewModel
 import com.galou.watchmyback.data.repository.*
 import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
@@ -84,4 +85,5 @@ val appModules = module {
     viewModel { FriendsViewModel(userRepository = get(), friendRepository = get()) }
     viewModel { AddFriendViewModel(userRepository = get(), friendRepository = get()) }
     viewModel { CheckListViewModel(userRepository = get(), checkListRepository = get()) }
+    viewModel { AddModifyCheckListViewModel(checkListRepository = get(), userRepository = get()) }
 }

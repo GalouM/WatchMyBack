@@ -6,6 +6,7 @@ import com.galou.watchmyback.data.entity.ItemCheckList
 import com.galou.watchmyback.data.source.CheckListDataSource
 import com.galou.watchmyback.data.source.local.dao.CheckListDao
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.displayData
 import java.lang.Exception
 
 /**
@@ -52,13 +53,14 @@ class CheckListLocalDataSource(private val checkListDao: CheckListDao) : CheckLi
             checkListDao.updateCheckListAndItems(checkList, items)
             Result.Success(null)
         } catch (e: Exception){
+            displayData("$e")
             Result.Error(e)
         }
     }
 
-    override suspend fun deleteCheckList(checkList: CheckList): Result<Void?> {
+    override suspend fun deleteCheckList(checkList: CheckListWithItems): Result<Void?> {
         return try {
-            checkListDao.deleteCheckList(checkList)
+            checkListDao.deleteCheckList(checkList.checkList)
             Result.Success(null)
         } catch (e: Exception){
             Result.Error(e)

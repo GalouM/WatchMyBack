@@ -81,13 +81,13 @@ data class Trip (
  * @see Trip
  * @author Galou Minisini
  */
-enum class TripType (val typeNameId: Int) {
-    BIKING(R.string.biking),
-    MOUNTAIN_BIKING(R.string.mountain_biking),
-    HIKING(R.string.hiking),
-    RUNNING(R.string.running),
-    SKIING(R.string.skiing),
-    MOTORCYCLE(R.string.motorcycle)
+enum class TripType (val typeNameId: Int, val iconId: Int) {
+    BIKING(R.string.biking, R.drawable.icon_bike),
+    MOUNTAIN_BIKING(R.string.mountain_biking, R.drawable.icon_mtb),
+    HIKING(R.string.hiking, R.drawable.icon_hike),
+    RUNNING(R.string.running, R.drawable.icon_run),
+    SKIING(R.string.skiing, R.drawable.icon_ski),
+    MOTORCYCLE(R.string.motorcycle, R.drawable.icon_motorcycle)
 
 }
 

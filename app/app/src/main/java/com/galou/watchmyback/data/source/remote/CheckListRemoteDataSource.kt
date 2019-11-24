@@ -4,10 +4,7 @@ import com.galou.watchmyback.data.entity.CheckList
 import com.galou.watchmyback.data.entity.CheckListWithItems
 import com.galou.watchmyback.data.entity.ItemCheckList
 import com.galou.watchmyback.data.source.CheckListDataSource
-import com.galou.watchmyback.utils.CHECKLIST_COLLECTION_NAME
-import com.galou.watchmyback.utils.ITEM_COLLECTION_NAME
-import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.await
+import com.galou.watchmyback.utils.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -51,7 +48,7 @@ class CheckListRemoteDataSource(
             null  -> Result.Error(Exception("Error while fetching list's items"))
             else -> Result.Success(CheckListWithItems(
                 checkList = checkList,
-                items = items
+                items = items.toMutableList()
             ))
         }
     }
@@ -64,7 +61,7 @@ class CheckListRemoteDataSource(
             coroutineScope {
                 checkLists.forEach { checkList ->
                     launch {
-                        when(checkListCollection.document(checkList.checkList.id).set(checkList).await()){
+                        when(checkListCollection.document(checkList.checkList.id).set(checkList.checkList).await()){
                             is Result.Error, is Result.Canceled -> error = true
                         }
                         when (createItemsCheckList(checkList.items)){
@@ -98,8 +95,8 @@ class CheckListRemoteDataSource(
                     }
                 }
                 launch {
-                    when(deleteItemsCheckList(checkList)){
-                        is Result.Error, is Result.Canceled -> error = true
+                    when(val task = deleteItemsCheckList(items)){
+                        is Result.Canceled, is Result.Error -> error = true
                         is Result.Success -> {
                             when(createItemsCheckList(items)){
                                 is Result.Error, is Result.Canceled -> error = true
@@ -118,17 +115,17 @@ class CheckListRemoteDataSource(
 
     }
 
-    override suspend fun deleteCheckList(checkList: CheckList): Result<Void?> = withContext(ioDispatcher) {
+    override suspend fun deleteCheckList(checkList: CheckListWithItems): Result<Void?> = withContext(ioDispatcher) {
         return@withContext try {
             var error = false
             coroutineScope {
                 launch {
-                    when(checkListCollection.document(checkList.id).delete().await()){
+                    when(checkListCollection.document(checkList.checkList.id).delete().await()){
                         is Result.Error, is Result.Canceled -> error = true
                     }
                 }
                 launch {
-                    when(deleteItemsCheckList(checkList)){
+                    when(deleteItemsCheckList(checkList.items)){
                         is Result.Error, is Result.Canceled -> error = true
                     }
                 }
@@ -153,26 +150,26 @@ class CheckListRemoteDataSource(
 
     }
 
-    private suspend fun deleteItemsCheckList(checkList: CheckList): Result<Void?> = withContext(ioDispatcher) {
+    private suspend fun deleteItemsCheckList(items: List<ItemCheckList>): Result<Void?> = withContext(ioDispatcher) {
         var error = false
-        fetchItemsCheckList(checkList)?.let { items ->
-            items.forEach {
-                coroutineScope {
+        return@withContext try {
+            coroutineScope {
+                items.forEach {
                     launch {
-                        when(itemCollection.document(it.id).delete().await()) {
+                        when (itemCollection.document(it.id).delete().await()) {
                             is Result.Error, is Result.Canceled -> error = true
                         }
                     }
-                    return@coroutineScope when(error) {
-                        true -> Result.Error(Exception("Error while deleting items"))
-                        false -> Result.Success(null)
-                    }
                 }
             }
+            when (error) {
+                true -> Result.Error(Exception("Error while deleting items"))
+                false -> Result.Success(null)
+            }
+
+        } catch (e: Exception){
+            Result.Error(e)
         }
-
-        return@withContext Result.Error(Exception("Error while deleting items"))
-
     }
 
     private suspend fun createItemsCheckList(items: List<ItemCheckList>): Result<Void?> = withContext(ioDispatcher){

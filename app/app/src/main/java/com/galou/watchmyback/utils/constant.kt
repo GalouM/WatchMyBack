@@ -99,7 +99,14 @@ const val RC_ADD_FRIEND = 700
 const val RC_ADD_CHECKLIST = 800
 
 // ------ RESULT CODE ACTIVITIES -------
-const val RESULT_DELETED = -100
+const val RESULT_ACCOUNT_DELETED = -100
+const val RESULT_CHECKLIST_DELETED = -200
+
+// ------ DIALOG CODE -------
+const val TRIP_TYPE_DIALOG = -1000
+
+// ------ TAG -------
+const val TRIP_TYPE_TAG = "tripTypeDialog"
 
 // ------ PERMISSIONS -------
 const val PERMS_EXT_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
