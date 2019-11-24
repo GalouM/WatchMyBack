@@ -66,4 +66,13 @@ class CheckListLocalDataSource(private val checkListDao: CheckListDao) : CheckLi
             Result.Error(e)
         }
     }
+
+    fun deleteExistingChecklist(userId: String): Result<Void?> {
+        return try {
+            checkListDao.deleteUserCheckList(userId)
+            Result.Success(null)
+        } catch (e: Exception){
+            Result.Error(e)
+        }
+    }
 }

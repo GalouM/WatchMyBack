@@ -28,6 +28,7 @@ class CheckListRepositoryImpl(
             true -> {
                 when(val remoteResult = remoteSource.fetchUserCheckLists(userId)){
                     is Result.Success -> {
+                        localSource.deleteExistingChecklist(userId)
                         localSource.createCheckList(*remoteResult.data.toTypedArray())
                         remoteResult
                     }
