@@ -41,6 +41,13 @@ interface UserPreferencesDao {
     @Update
     suspend fun updateUserPreferences(preferences: UserPreferences)
 
+    /**
+     * Delete a [UserPreferences] object in the database
+     *
+     * @param preferences [UserPreferences] to delete
+     *
+     * @see Delete
+     */
     @Delete
     suspend fun deleteUserPreferences(preferences: UserPreferences)
 }

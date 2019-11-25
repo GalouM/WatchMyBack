@@ -14,7 +14,7 @@ import kotlinx.coroutines.coroutineScope
 /**
  * Implementation of [FriendRepository]
  *
- * List all the possible actions ona Friend
+ * List all the possible actions on a Friend object
  *
  * @property localSource Access to the local database
  * @property remoteSource Access to the remote database

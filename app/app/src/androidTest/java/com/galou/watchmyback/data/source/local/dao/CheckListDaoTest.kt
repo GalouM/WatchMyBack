@@ -2,6 +2,7 @@ package com.galou.watchmyback.data.source.local.dao
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
+import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
 import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
@@ -18,6 +19,7 @@ import java.io.IOException
 /**
  * Created by galou on 2019-10-22
  */
+@SmallTest
 @RunWith(AndroidJUnit4::class)
 class CheckListDaoTest {
     @get:Rule
@@ -94,6 +96,15 @@ class CheckListDaoTest {
         checkListDao.deleteCheckList(checkList1)
         val checkListFromDB = checkListDao.getCheckListWithItems(checkList1.id)
         assertThat(checkListFromDB, `is` (nullValue()))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun deleteAllCheckListOfAUser() = runBlocking {
+        checkListDao.deleteUserCheckList(mainUser.id)
+        val checkListFromDB = checkListDao.getUserCheckList(mainUser.id)
+        assertThat(checkListFromDB.size, equalTo(0))
+
     }
 
 }

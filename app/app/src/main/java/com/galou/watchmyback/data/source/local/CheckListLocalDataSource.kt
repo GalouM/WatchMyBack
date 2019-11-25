@@ -7,14 +7,27 @@ import com.galou.watchmyback.data.source.CheckListDataSource
 import com.galou.watchmyback.data.source.local.dao.CheckListDao
 import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.displayData
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import java.lang.Exception
 
 /**
- * @author galou
- * 2019-11-19
+ * Implementation of [CheckListDataSource] for the local database
+ *
+ * List all the possible actions on the local database for the [CheckList] objects
+ *
+ * @property checkListDao [CheckListDao]
  */
 class CheckListLocalDataSource(private val checkListDao: CheckListDao) : CheckListDataSource {
 
+    /**
+     * Fetch all the [CheckList] of a specific user from the database
+     *
+     * @param userId ID of the user
+     * @return [Result] of the action containing a list of [CheckListWithItems]
+     *
+     * @see CheckListDao.getUserCheckList
+     */
     override suspend fun fetchUserCheckLists(userId: String): Result<List<CheckListWithItems>> {
         return try {
             Result.Success(checkListDao.getUserCheckList(userId))
@@ -23,6 +36,14 @@ class CheckListLocalDataSource(private val checkListDao: CheckListDao) : CheckLi
         }
     }
 
+    /**
+     * Fetch a specific [CheckList] with its [ItemCheckList] from the database
+     *
+     * @param checkList checklist to fetch
+     * @return [Result] of the action containing a [CheckListWithItems] object
+     *
+     * @see CheckListDao.getCheckListWithItems
+     */
     override suspend fun fetchCheckList(checkList: CheckList): Result<CheckListWithItems?> {
         return try {
             Result.Success(checkListDao.getCheckListWithItems(checkList.id))
@@ -31,12 +52,22 @@ class CheckListLocalDataSource(private val checkListDao: CheckListDao) : CheckLi
         }
     }
 
+    /**
+     * Create one of several [CheckList] with their [ItemCheckList] in the database
+     *
+     * @param checkLists [CheckListWithItems] to create
+     * @return [Result] of the operation
+     *
+     * @see CheckListDao.createCheckListAndItems
+     */
     override suspend fun createCheckList(
         vararg checkLists: CheckListWithItems
     ): Result<Void?> {
         return try {
-            checkLists.forEach {
-                checkListDao.createCheckListAndItems(it.checkList, it.items)
+            coroutineScope {
+                checkLists.forEach {
+                    launch { checkListDao.createCheckListAndItems(it.checkList, it.items) }
+                }
             }
             Result.Success(null)
         } catch (e: Exception){
@@ -45,6 +76,15 @@ class CheckListLocalDataSource(private val checkListDao: CheckListDao) : CheckLi
 
     }
 
+    /**
+     * Update a specific [CheckList] with its [ItemCheckList] in the database
+     *
+     * @param checkList [CheckList] to udpate
+     * @param items [ItemCheckList] of the check list
+     * @return [Result] of the operation
+     *
+     * @see CheckListDao.updateCheckListAndItems
+     */
     override suspend fun updateCheckList(
         checkList: CheckList,
         items: List<ItemCheckList>
@@ -58,6 +98,14 @@ class CheckListLocalDataSource(private val checkListDao: CheckListDao) : CheckLi
         }
     }
 
+    /**
+     * Delete a specific [CheckList] in the database
+     *
+     * @param checkList [CheckList] to delete
+     * @return [Result] of the operation
+     *
+     * @see CheckListDao.deleteCheckList
+     */
     override suspend fun deleteCheckList(checkList: CheckListWithItems): Result<Void?> {
         return try {
             checkListDao.deleteCheckList(checkList.checkList)
@@ -67,7 +115,15 @@ class CheckListLocalDataSource(private val checkListDao: CheckListDao) : CheckLi
         }
     }
 
-    fun deleteExistingChecklist(userId: String): Result<Void?> {
+    /**
+     * Delete all the existing [CheckList] of a specific user from the database
+     *
+     * @param userId Id of the user
+     * @return [Result] of the operation
+     *
+     * @see CheckListDao.deleteUserCheckList
+     */
+    suspend fun deleteExistingChecklist(userId: String): Result<Void?> {
         return try {
             checkListDao.deleteUserCheckList(userId)
             Result.Success(null)

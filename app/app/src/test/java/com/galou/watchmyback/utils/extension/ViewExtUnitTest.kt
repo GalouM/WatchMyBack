@@ -5,9 +5,15 @@ import android.os.Build
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.widget.EditText
+import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.galou.watchmyback.R
 import com.galou.watchmyback.WatchMyBackApplication
+import com.galou.watchmyback.main.MainActivity
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.common.truth.Truth.assertThat
 import org.junit.After
 import org.junit.Before
@@ -15,6 +21,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -56,24 +63,55 @@ class ViewExtUnitTest : KoinTest {
 
     /*
 
+
     @Test
     fun inputLayout_showError(){
         val inputLayout = TextInputLayout(context)
-        inputLayout.errorMessage(null)
+        //inputLayout.errorMessage(null)
 
         //assertThat(inputLayout.error).isEqualTo(null)
         //assertThat(inputLayout.isErrorEnabled).isFalse()
 
-        inputLayout.errorMessage(0)
+        //inputLayout.errorMessage(0)
         //assertThat(inputLayout.error).isEqualTo(null)
         //assertThat(inputLayout.isErrorEnabled).isFalse()
 
-        inputLayout.errorMessage(R.string.test_message)
-        assertThat(inputLayout.error).isEqualTo(context.getString(R.string.test_message))
-        assertThat(inputLayout.isErrorEnabled).isTrue()
+        //inputLayout.errorMessage(R.string.test_message)
+        //assertThat(inputLayout.error).isEqualTo(context.getString(R.string.test_message))
+        //assertThat(inputLayout.isErrorEnabled).isTrue()
 
 
     }
 
      */
+
+    @Test
+    fun setEditTextWithExistingResource_showText(){
+        val editText = TextInputEditText(context)
+        editText.textFromResourceId(R.string.test_message)
+        assertThat(editText.text.toString()).isEqualTo("Test Message")
+
+        editText.textFromResourceId(90)
+        assertThat(editText.text.toString()).isEmpty()
+    }
+    
+    fun setEditTextWithResource0_showEmptyText(){
+        val editText = TextInputEditText(context)
+        editText.textFromResourceId(0)
+        assertThat(editText.text.toString()).isEmpty()
+    }
+
+    fun setEditTextWithNull_showEmptyText(){
+        val editText = TextInputEditText(context)
+        editText.textFromResourceId(null)
+        assertThat(editText.text.toString()).isEmpty()
+    }
+
+    fun setEditTextWithNonExistingResource_showEmptyText(){
+        val editText = TextInputEditText(context)
+        editText.textFromResourceId(90)
+        assertThat(editText.text.toString()).isEmpty()
+    }
+
+
 }

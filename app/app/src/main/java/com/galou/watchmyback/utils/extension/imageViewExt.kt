@@ -52,6 +52,14 @@ fun ImageView.bindLoadUrl(url: String?){
         .into(this)
 }
 
+/**
+ * Load a drawable from its resource id to an ImageView
+ *
+ * @see BindingAdapter
+ * @see ImageView.setImageResource
+ *
+ * @param imageResource
+ */
 @BindingAdapter("imageResouce")
 fun ImageView.imageResouce(imageResource: Int){
     setImageResource(imageResource)

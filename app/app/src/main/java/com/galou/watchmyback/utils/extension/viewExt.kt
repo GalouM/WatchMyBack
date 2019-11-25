@@ -11,6 +11,7 @@ import com.galou.watchmyback.Event
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import java.lang.Exception
 
 /**
  * Created by galou on 2019-10-25
@@ -86,13 +87,41 @@ fun TextInputLayout.errorMessage(errorMessage: Int?){
     }
 }
 
+/**
+ * Set text of an [TextInputEditText] from a resource ID
+ *
+ * @param resourceId: ID of the string
+ *
+ * @see BindingAdapter
+ * @see TextInputEditText.setText
+ */
 @BindingAdapter("textFromResourceId")
 fun TextInputEditText.textFromResourceId(resourceId: Int?){
-    if (resourceId != 0) resourceId?.let { setText(resourceId) }
+    if (resourceId != 0 && resourceId != null){
+        try {
+            setText(resourceId)
+        } catch (e: Exception){
+            setText("")
+        }
+    } else {
+        setText("")
+    }
 }
 
+/**
+ * Set the start Icon of an [TextInputLayout] from the Id od a drawable
+ *
+ * @param resourceId ID of the drawable
+ *
+ * @see BindingAdapter
+ * @see TextInputLayout.setStartIconDrawable
+ */
 @BindingAdapter("iconFromResourceId")
 fun TextInputLayout.iconFromResourceId(resourceId: Int?){
-    if(resourceId != 0) resourceId?.let{ startIconDrawable = ContextCompat.getDrawable(context, resourceId) }
+    if(resourceId != 0) resourceId?.let{
+        try {
+            startIconDrawable = ContextCompat.getDrawable(context, resourceId)
+        } catch (e: Exception) { }
+    }
 }
 
