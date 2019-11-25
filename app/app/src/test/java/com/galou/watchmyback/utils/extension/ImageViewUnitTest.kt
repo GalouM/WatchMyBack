@@ -9,9 +9,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galou.watchmyback.R
 import com.galou.watchmyback.WatchMyBackApplication
 import com.google.common.truth.Truth.assertThat
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.context.stopKoin
+import org.koin.test.KoinTest
 import org.robolectric.annotation.Config
 
 
@@ -22,7 +25,7 @@ import org.robolectric.annotation.Config
 
 @Config(sdk = [Build.VERSION_CODES.P])
 @RunWith(AndroidJUnit4::class)
-class ImageViewUnitTest {
+class ImageViewUnitTest: KoinTest {
 
     private lateinit var context: Context
     private lateinit var imageView: ImageView
@@ -34,6 +37,11 @@ class ImageViewUnitTest {
         context = ApplicationProvider.getApplicationContext<WatchMyBackApplication>()
         imageView = ImageView(context)
         drawableFromResource = context.resources.getDrawable(resourceId, context.theme).constantState
+    }
+
+    @After
+    fun close(){
+        stopKoin()
     }
 
     @Test
