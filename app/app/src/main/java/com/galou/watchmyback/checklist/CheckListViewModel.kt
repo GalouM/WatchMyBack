@@ -10,12 +10,15 @@ import com.galou.watchmyback.data.entity.CheckList
 import com.galou.watchmyback.data.repository.CheckListRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.displayData
 import kotlinx.coroutines.launch
 
 /**
- * @author galou
- * 2019-11-19
+ * [ViewModel] for [CheckListView]
+ *
+ * Inherit from [BaseViewModel]
+ *
+ * @property userRepository [UserRepository] reference
+ * @property checkListRepository [CheckListRepository] reference
  */
 class CheckListViewModel(
     private val userRepository: UserRepository,
@@ -30,29 +33,61 @@ class CheckListViewModel(
     
     private val currentUser = userRepository.currentUser.value!!
 
+    /**
+     *
+     *
+     * @see CheckListRespository.checkListFetched
+     * @see fetchCheckLists
+     */
     init {
         _dataLoading.value = true
         fetchCheckLists(!checkListRepository.checkListFetched)
         checkListRepository.checkListFetched = true
     }
 
+    /**
+     * Refresh the check list shown and make the repository fetch them from the remote database
+     *
+     * @see fetchCheckLists
+     *
+     */
     fun refresh(){
         _dataLoading.value = true
         fetchCheckLists(true)
     }
 
 
-    fun addModifyCheckListActivity(checkList: CheckList){
+    /**
+     * Open the activity to modify a check list
+     * Set the check list selected with the user's selection
+     *
+     * @param checkList check list selected by the user
+     */
+    fun modifyCheckList(checkList: CheckList){
         checkListRepository.checkList = checkList
         _openAddModifyCheckList.value = Event(Unit)
 
     }
 
+    /**
+     * Open the activity to create a new checklist
+     * Set the check list selected as null
+     *
+     * @see CheckListRepository.checkList
+     *
+     */
     fun addCheckList(){
         checkListRepository.checkList = null
         _openAddModifyCheckList.value = Event(Unit)
     }
-    
+
+    /**
+     * Fetch all the check list of the current user
+     *
+     * @param refresh determine if the list should be fetched from the local or remote database
+     *
+     * @see CheckListRepository.fetchUserCheckLists
+     */
     private fun fetchCheckLists(refresh: Boolean = false){
         viewModelScope.launch {
             when(val checkListsResult = checkListRepository.fetchUserCheckLists(currentUser.id, refresh)){

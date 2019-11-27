@@ -1,8 +1,6 @@
 package com.galou.watchmyback.addModifyCheckList
 
 import android.app.Activity
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -20,9 +18,7 @@ import com.galou.watchmyback.databinding.ActivityAddModifyCheckListBinding
 import com.galou.watchmyback.selectTripTypeDialog.SelectTripTypeDialog
 import com.galou.watchmyback.selectTripTypeDialog.TripTypeSelectionListener
 import com.galou.watchmyback.utils.RESULT_CHECKLIST_DELETED
-import com.galou.watchmyback.utils.TRIP_TYPE_DIALOG
 import com.galou.watchmyback.utils.TRIP_TYPE_TAG
-import com.galou.watchmyback.utils.displayData
 import com.galou.watchmyback.utils.extension.setupSnackBar
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -144,7 +140,6 @@ class AddModifyCheckListActivity : AppCompatActivity(), TripTypeSelectionListene
     //  CLICK LISTENER
     //-------------------------
     override fun onClickType(type: TripType) {
-        displayData("type $type")
         viewModel.selectCheckListType(type)
         checkListTypeDialog?.dismiss()
     }

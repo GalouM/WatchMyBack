@@ -19,7 +19,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/cardview_checklist"
     android:layout_margin="5dp"
-    android:onClick="@{() -> viewmodel.addModifyCheckListActivity(checklist)}">
+    android:onClick="@{() -> viewmodel.modifyCheckList(checklist)}">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

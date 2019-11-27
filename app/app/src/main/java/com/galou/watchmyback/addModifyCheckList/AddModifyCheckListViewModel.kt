@@ -5,7 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
-import com.galou.watchmyback.addModifyCheckList.ActionCheckList.*
+import com.galou.watchmyback.addModifyCheckList.ActionCheckList.ADD
+import com.galou.watchmyback.addModifyCheckList.ActionCheckList.MODIFY
 import com.galou.watchmyback.base.BaseViewModel
 import com.galou.watchmyback.data.entity.CheckList
 import com.galou.watchmyback.data.entity.CheckListWithItems
@@ -14,13 +15,16 @@ import com.galou.watchmyback.data.entity.TripType
 import com.galou.watchmyback.data.repository.CheckListRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.displayData
 import com.galou.watchmyback.utils.idGenerated
 import kotlinx.coroutines.launch
 
 /**
- * @author galou
- * 2019-11-22
+ * [ViewModel] for [AddModifyCheckListActivity]
+ *
+ * Inehrit from [BaseViewModel]
+ *
+ * @property checkListRepository [CheckListRepository] reference
+ * @property userRepository [UserRepositoryImpl] reference
  */
 class AddModifyCheckListViewModel(
     private val checkListRepository: CheckListRepository,
@@ -43,10 +47,10 @@ class AddModifyCheckListViewModel(
 
     private val _checkListDeletedLD = MutableLiveData<Event<Unit>>()
     val checkListDeletedLD: LiveData<Event<Unit>> = _checkListDeletedLD
-    
+
     private val _errorNameLD = MutableLiveData<Int?>()
     val errorNameLD: LiveData<Int?> = _errorNameLD
-    
+
     private val _errorTypeLD = MutableLiveData<Int?>()
     val errorTypeLD: LiveData<Int?> = _errorTypeLD
     
@@ -55,6 +59,13 @@ class AddModifyCheckListViewModel(
 
     private val actionType: ActionCheckList
 
+    /**
+     * Get the check list selected from the repository and determine if its a modification
+     * of a check list or the creation of a new checklist
+     * and fetch the information accordingly
+     *
+     * @see CheckListRepository.checkList
+     */
     init {
         _dataLoading.value = true
         actionType = when(val selectedCheckList = checkListRepository.checkList){
@@ -75,12 +86,21 @@ class AddModifyCheckListViewModel(
             }
         }
     }
-    
+
+    /**
+     * Save the modification or the new checklist
+     *
+     * @see resetErrors
+     * @see saveCheckList
+     * @see updateCheckList
+     * @see checkErrors
+     *
+     */
     fun saveCheckList(){
         _dataLoading.value = true
         resetErrors()
         val checkList = _checkListLD.value ?: throw IllegalAccessException("CheckList is null")
-        val items = _itemsCheckListLD.value!!
+        val items = _itemsCheckListLD.value ?: throw IllegalAccessException("Items is null")
         if (!checkErrors(checkList, items)) {
             when(actionType){
                 ADD -> saveNewCheckList(checkList, items)
@@ -90,7 +110,11 @@ class AddModifyCheckListViewModel(
             _dataLoading.value = false
         }
     }
-    
+
+    /**
+     * Add an item to the check list
+     *
+     */
     fun addItem(){
         _itemsCheckListLD.value!!.add(ItemCheckList(
             id = idGenerated,
@@ -100,13 +124,24 @@ class AddModifyCheckListViewModel(
         }
     }
 
+    /**
+     * Remove an existing item from the check list
+     *
+     * @param item
+     */
     fun removeItem(item: ItemCheckList){
         _itemsCheckListLD.value!!.remove(item)
         _itemsCheckListLD.apply {
             value = this.value
         }
     }
-    
+
+    /**
+     * Delete an existing check list
+     *
+     * @see CheckListRepository.deleteCheckList
+     *
+     */
     fun deleteCheckList(){
         _dataLoading.value = true
         viewModelScope.launch { 
@@ -122,15 +157,31 @@ class AddModifyCheckListViewModel(
         _dataLoading.value = false
     }
 
+    /**
+     * Show all th epossible [TripType] for a check list
+     *
+     */
     fun showCheckListTypeDialog(){
         _typesCheckList.value = Event(tripeType)
     }
 
+    /**
+     * Set the [TripType] of a check list
+     *
+     * @param type [TripType] selected
+     */
     fun selectCheckListType(type: TripType){
         _checkListLD.value!!.tripType = type
         _checkListLD.run { value = this.value }
     }
 
+    /**
+     * Fetch all the Items of a check list
+     *
+     * @param checkList check list selected
+     *
+     * @see CheckListRepository.fetchCheckList
+     */
     private fun fetchItemsCheckList(checkList: CheckList){
         viewModelScope.launch { 
             when(val result = checkListRepository.fetchCheckList(checkList, false)){
@@ -140,7 +191,16 @@ class AddModifyCheckListViewModel(
         }
         _dataLoading.value = false
     }
-    
+
+    /**
+     * Save a new check list
+     *
+     * @param checkList check list to create
+     * @param items items of the check list
+     *
+     * @see CheckListRepository.createCheckList
+     * @see showResultSavedCheckList
+     */
     private fun saveNewCheckList(checkList: CheckList, items: List<ItemCheckList>){
         viewModelScope.launch { 
             showResultSavedCheckList(checkListRepository.createCheckList(
@@ -149,7 +209,16 @@ class AddModifyCheckListViewModel(
             ))
         }
     }
-    
+
+    /**
+     * Update an existing check list
+     *
+     * @param checkList check list to modify
+     * @param items items of the check list
+     *
+     * @see CheckListRepository.updateCheckList
+     * @see showResultSavedCheckList
+     */
     private fun updateCheckList(checkList: CheckList, items: List<ItemCheckList>){
         viewModelScope.launch { 
             showResultSavedCheckList(checkListRepository.updateCheckList(
@@ -158,7 +227,13 @@ class AddModifyCheckListViewModel(
             ))
         }
     }
-    
+
+    /**
+     * Show the result of the save operation.
+     * Either emit that the check list has been saved or show an error message
+     *
+     * @param result
+     */
     private fun showResultSavedCheckList(result: Result<Void?>){
         when(result){
             is Result.Success -> _checkListSavedLD.value = Event(Unit)
@@ -166,7 +241,16 @@ class AddModifyCheckListViewModel(
         }
         _dataLoading.value = false
     }
-    
+
+    /**
+     * Check if there is any error in the user's input
+     * Acheck list must have a name, a type and at least one item otherwise it can't be save
+     * and the errors will be indicated to the user
+     *
+     * @param checkList
+     * @param items
+     * @return
+     */
     private fun checkErrors(checkList: CheckList, items: List<ItemCheckList>): Boolean {
         var error = false
         if (checkList.name.isBlank()) {
@@ -182,10 +266,15 @@ class AddModifyCheckListViewModel(
             error = true
         }
 
-        items.forEach { if (it.name.isBlank()) removeItem(it) }
+        _itemsCheckListLD.value = items.filter { it.name.isNotBlank() }.toMutableList()
+
         return error
     }
 
+    /**
+     * reset all the error to none
+     *
+     */
     private fun resetErrors(){
         _errorTypeLD.value = null
         _errorNameLD.value = null
@@ -194,7 +283,7 @@ class AddModifyCheckListViewModel(
 
 }
 
-enum class ActionCheckList(){
+enum class ActionCheckList{
     ADD,
     MODIFY
 }

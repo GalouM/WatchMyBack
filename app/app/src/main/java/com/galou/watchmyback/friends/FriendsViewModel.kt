@@ -10,8 +10,11 @@ import com.galou.watchmyback.data.repository.UserRepository
 import kotlinx.coroutines.launch
 
 /**
- * @author galou
- * 2019-11-05
+ * [ViewModel] for [FriendsView]
+ * Inherit from [UserListBaseViewModel]
+ *
+ * @property userRepository [UserRepository] reference
+ * @property friendRepository [FriendRepository] reference
  */
 class FriendsViewModel(
     private val userRepository: UserRepository,
@@ -21,6 +24,7 @@ class FriendsViewModel(
 
     private val _openAddFriendLD = MutableLiveData<Event<Unit>>()
     val openAddFriendLD: LiveData<Event<Unit>> = _openAddFriendLD
+
 
     init {
         fetchFriends()

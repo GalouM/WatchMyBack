@@ -47,14 +47,7 @@ fun List<User>.toListOtherUser(myFriend: Boolean): List<OtherUser> {
  * @param currentUserId ID of the current user
  */
 infix fun List<OtherUser>.removeCurrentUser(currentUserId: String) =
-    when (val currentUser = firstOrNull { it.user.id == currentUserId }) {
-        null -> this
-        else -> {
-            val mutable = this.toMutableList()
-            mutable.remove(currentUser)
-            mutable
-        }
-    }
+    this.filter { it.user.id != currentUserId }
 
 /**
  * Detect the user's friend and set up the my friend parameter in a list of users
