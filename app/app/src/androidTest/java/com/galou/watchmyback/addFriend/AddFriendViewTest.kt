@@ -4,6 +4,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.filters.MediumTest
 import androidx.test.rule.ActivityTestRule
 import com.galou.watchmyback.R
 import org.junit.Rule
@@ -13,6 +14,7 @@ import org.junit.Test
  * @author galou
  * 2019-11-16
  */
+@MediumTest
 class AddFriendViewTest {
     @get:Rule
     val activityTestResult = ActivityTestRule<AddFriendActivity>(AddFriendActivity::class.java)
