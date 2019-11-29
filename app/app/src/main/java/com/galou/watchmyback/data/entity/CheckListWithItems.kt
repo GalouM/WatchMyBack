@@ -21,11 +21,11 @@ import com.galou.watchmyback.utils.ITEM_TABLE_LIST_ID
  * @author Galou Minisini
  */
 data class CheckListWithItems(
-    @Embedded val checkList: CheckList,
+    @Embedded val checkList: CheckList = CheckList(),
     @Relation(
         parentColumn = CHECK_LIST_TABLE_UUID,
         entityColumn = ITEM_TABLE_LIST_ID,
         entity = ItemCheckList::class
     )
-    val items: List<ItemCheckList>
+    val items: List<ItemCheckList> = listOf()
 )
