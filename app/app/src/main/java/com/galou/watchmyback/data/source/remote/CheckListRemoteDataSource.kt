@@ -7,7 +7,6 @@ import com.galou.watchmyback.data.source.CheckListDataSource
 import com.galou.watchmyback.utils.CHECKLIST_COLLECTION_NAME
 import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.await
-import com.galou.watchmyback.utils.displayData
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -38,12 +37,10 @@ class CheckListRemoteDataSource(
         return@withContext when(val fetchCheckLists = checkListCollection
                 .whereEqualTo("checkList.userId", userId)
                 .get().await()){
-                is Result.Success -> {
-                    displayData("${fetchCheckLists.data.size()}")
-                    Result.Success(
+                is Result.Success -> Result.Success(
                         fetchCheckLists.data.toObjects(CheckListWithItems::class.java)
                     )
-                }
+
                 is Result.Error -> Result.Error(fetchCheckLists.exception)
                 is Result.Canceled -> Result.Canceled(fetchCheckLists.exception)
             }
@@ -109,8 +106,8 @@ class CheckListRemoteDataSource(
         items: List<ItemCheckList>
     ): Result<Void?> = withContext(ioDispatcher) {
         return@withContext checkListCollection.document(checkList.id)
-            .update("tripType", checkList.tripType,
-                "name", checkList.name,
+            .update("checkList.tripType", checkList.tripType,
+                "checkList.name", checkList.name,
                 "items", items
             ).await()
 

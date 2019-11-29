@@ -15,6 +15,7 @@ import com.galou.watchmyback.data.entity.TripType
 import com.galou.watchmyback.data.repository.CheckListRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.displayData
 import com.galou.watchmyback.utils.idGenerated
 import kotlinx.coroutines.launch
 
@@ -100,7 +101,8 @@ class AddModifyCheckListViewModel(
         _dataLoading.value = true
         resetErrors()
         val checkList = _checkListLD.value ?: throw IllegalAccessException("CheckList is null")
-        val items = _itemsCheckListLD.value ?: throw IllegalAccessException("Items is null")
+        val items = _itemsCheckListLD.value?.filter { it.name.isNotBlank() }?.toMutableList()
+            ?: throw IllegalAccessException("Items is null")
         if (!checkErrors(checkList, items)) {
             when(actionType){
                 ADD -> saveNewCheckList(checkList, items)
@@ -220,6 +222,7 @@ class AddModifyCheckListViewModel(
      * @see showResultSavedCheckList
      */
     private fun updateCheckList(checkList: CheckList, items: List<ItemCheckList>){
+        displayData("$items")
         viewModelScope.launch { 
             showResultSavedCheckList(checkListRepository.updateCheckList(
                 checkList = checkList,
@@ -265,8 +268,6 @@ class AddModifyCheckListViewModel(
             showSnackBarMessage(R.string.error_item_checklist)
             error = true
         }
-
-        _itemsCheckListLD.value = items.filter { it.name.isNotBlank() }.toMutableList()
 
         return error
     }

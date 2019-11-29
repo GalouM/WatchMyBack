@@ -10,15 +10,11 @@
             type="com.galou.watchmyback.addModifyCheckList.AddModifyCheckListViewModel" />
     </data>
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    android:id="@+id/add_modify_checklist_list_root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".addModifyCheckList.AddModifyCheckListActivity">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
 
         <include
             android:id="@+id/add_modify_checklist_toolbar"
@@ -34,12 +30,28 @@
             android:indeterminate="true"
             app:visibleOrInvisible="@{viewmodel.dataLoading}"/>
 
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_modify_checkList_scroll">
+
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/add_modify_checklist_list_root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".addModifyCheckList.AddModifyCheckListActivity">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/add_modify_checklist_list_name_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_modify_checklist_progressbar"
+            app:layout_constraintTop_toTopOf="parent"
             android:hint="@string/checklist_name"
             android:layout_marginStart="@dimen/margin_small"
             android:layout_marginEnd="@dimen/margin_small"
@@ -107,7 +119,11 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:listitem="@layout/add_modify_checklist_rv_item"/>
 
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+
 </layout>
