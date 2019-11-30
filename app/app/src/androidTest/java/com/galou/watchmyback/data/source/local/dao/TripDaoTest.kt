@@ -88,7 +88,7 @@ class TripDaoTest {
     @Throws(Exception::class)
     fun createAndGetTrip() = runBlocking {
         val tripFromDb = tripDao.getUserActiveTrip(mainUser.id)
-        assertThat(tripFromDb, hasItem(trip1))
+        assertThat(tripFromDb.trip, equalTo(trip1))
 
     }
 
@@ -125,9 +125,9 @@ class TripDaoTest {
         assertEquals(point2FromDB!!.pointTrip,
             point2Trip1
         )
-        val pointLocation = point2FromDB.location[0]
+        val pointLocation = point2FromDB.location
         assertEquals(pointLocation, location2Trip1)
-        val pointWeather = point2FromDB.weatherData[0]
+        val pointWeather = point2FromDB.weatherData
         assertEquals(pointWeather, weather2Trip1)
     }
 

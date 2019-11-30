@@ -1,40 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    android:id="@+id/add_trip_scrollview"
+
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/add_trip_toolbar"
+        layout="@layout/toolbar"/>
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/add_trip_progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        app:layout_constraintTop_toBottomOf="@id/add_trip_toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:indeterminate="true"/>
+
+<androidx.core.widget.NestedScrollView
+    android:id="@+id/add_trip_scrollview"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/add_trip_view_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".addModifyCheckList.AddModifyCheckListActivity">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <include
-            android:id="@+id/add_trip_toolbar"
-            layout="@layout/toolbar"/>
-
-        <androidx.core.widget.ContentLoadingProgressBar
-            android:id="@+id/add_trip_progressbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            app:layout_constraintTop_toBottomOf="@id/add_trip_toolbar"
-            app:layout_constraintStart_toStartOf="parent"
-            android:indeterminate="true"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/add_trip_main_location_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_trip_progressbar"
+            app:layout_constraintTop_toTopOf="parent"
             android:hint="@string/trip_main_location"
             android:layout_marginStart="@dimen/margin_small"
             android:layout_marginEnd="@dimen/margin_small"
@@ -358,3 +364,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.core.widget.NestedScrollView>
+</LinearLayout>

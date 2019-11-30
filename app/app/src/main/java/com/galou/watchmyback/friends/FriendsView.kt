@@ -83,8 +83,9 @@ class FriendsView : Fragment() {
     }
 
     private fun openAddFriendActivity(){
-        val intent = Intent(activity!!, AddFriendActivity::class.java)
-        startActivityForResult(intent, RC_ADD_FRIEND)
+        with(Intent(activity!!, AddFriendActivity::class.java)){
+            startActivityForResult(this, RC_ADD_FRIEND)
+        }
     }
 
 

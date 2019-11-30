@@ -16,6 +16,7 @@ import com.galou.watchmyback.friends.FriendsViewModel
 import com.galou.watchmyback.main.MainActivityViewModel
 import com.galou.watchmyback.profile.ProfileViewModel
 import com.galou.watchmyback.settings.SettingsViewModel
+import com.galou.watchmyback.tripMapView.TripMapViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.storage.FirebaseStorage
@@ -86,4 +87,5 @@ val appModules = module {
     viewModel { AddFriendViewModel(userRepository = get(), friendRepository = get()) }
     viewModel { CheckListViewModel(userRepository = get(), checkListRepository = get()) }
     viewModel { AddModifyCheckListViewModel(checkListRepository = get(), userRepository = get()) }
+    viewModel { TripMapViewModel() }
 }

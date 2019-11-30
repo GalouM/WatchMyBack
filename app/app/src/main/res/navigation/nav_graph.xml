@@ -22,7 +22,7 @@
         tools:layout="@layout/fragment_trips_view" />
     <fragment
         android:id="@+id/mapView"
-        android:name="com.galou.watchmyback.MapView"
+        android:name="com.galou.watchmyback.tripMapView.TripMapView"
         android:label="fragment_map_view"
         tools:layout="@layout/fragment_map_view" />
 </navigation>

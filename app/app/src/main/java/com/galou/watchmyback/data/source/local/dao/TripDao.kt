@@ -29,7 +29,7 @@ abstract class TripDao(private val database: WatchMyBackDatabase) {
     @Query("SELECT * FROM $TRIP_TABLE_NAME " +
             "WHERE $TRIP_TABLE_USER_UUID = :userId " +
             "AND $TRIP_TABLE_ACTIVE = 1")
-    abstract suspend fun getUserActiveTrip(userId: String): List<Trip>
+    abstract suspend fun getUserActiveTrip(userId: String): TripWithData
 
     /**
      * Create an object [Trip] in the database
