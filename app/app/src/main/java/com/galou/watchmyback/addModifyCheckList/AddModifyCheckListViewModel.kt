@@ -283,6 +283,11 @@ class AddModifyCheckListViewModel(
 
 }
 
+/**
+ * Type Action on the check list.
+ * You can either add a new check list or modify an existing one
+ *
+ */
 enum class ActionCheckList{
     ADD,
     MODIFY

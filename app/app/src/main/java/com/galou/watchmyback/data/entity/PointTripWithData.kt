@@ -30,11 +30,11 @@ data class PointTripWithData(
         entityColumn = LOCATION_TABLE_UUID,
         entity = Location::class
     )
-    val location: Location?,
+    val location: Location? = Location(pointId = pointTrip.id),
     @Relation(
         parentColumn = POINT_TRIP_UUID,
         entityColumn = WEATHER_DATA_TABLE_POINT_UUID,
         entity = WeatherData::class
     )
-    val weatherData: WeatherData?
+    val weatherData: WeatherData? = WeatherData(pointId = pointTrip.id)
 )

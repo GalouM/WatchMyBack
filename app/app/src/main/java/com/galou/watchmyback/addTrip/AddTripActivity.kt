@@ -1,7 +1,8 @@
-package com.galou.watchmyback
+package com.galou.watchmyback.addTrip
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.galou.watchmyback.R
 
 class AddTripActivity : AppCompatActivity() {
 

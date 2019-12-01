@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <!-- DO NOT DELETE STRING FOR TESTING -->
     <string name="test_message" translatable="false">Test Message</string>
@@ -132,4 +132,11 @@
     <string name="error_delete_checklist">Error while deleting your check list</string>
     <string name="delete_check_list">Delete Check List</string>
     <string name="pick_type_trip">Pick a type</string>
+    <string name="fifteen_minutes">15 min</string>
+    <string name="thirteen_minutes">30 min</string>
+    <string name="hour">hour</string>
+    <string name="two_hours">2 hours</string>
+    <string name="add_friends_first">Add a friend first</string>
+    <string name="select_type_first">Select a type for your trip first</string>
+    <string name="create_checklist_first">Create a check list first</string>
 </resources>

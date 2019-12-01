@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<layout>
+    <data>
+
+        <import type="android.view.View" />
+        <variable
+            name="viewmodel"
+            type="com.galou.watchmyback.addTrip.AddTripViewModel" />
+    </data>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -19,7 +28,8 @@
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         app:layout_constraintTop_toBottomOf="@id/add_trip_toolbar"
         app:layout_constraintStart_toStartOf="parent"
-        android:indeterminate="true"/>
+        android:indeterminate="true"
+        visibleOrInvisible="@{viewmodel.dataLoading}"/>
 
 <androidx.core.widget.NestedScrollView
     android:id="@+id/add_trip_scrollview"
@@ -49,7 +59,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/add_trip_main_location"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="@={viewmodel.tripLD.mainLocation}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -60,13 +71,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/add_trip_main_location_layout"
             android:layout_margin="@dimen/margin_small"
-            android:hint="@string/trip_type_title">
+            android:hint="@string/trip_type_title"
+            app:iconFromResourceId="@{viewmodel.tripLD.type.iconId}">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/add_trip_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Widget.AppCompat.Spinner"/>
+                style="@style/Widget.AppCompat.Spinner"
+                android:focusable="false"
+                app:textFromResourceId="@{viewmodel.tripLD.type.typeNameId}"
+                android:onClick="@{() -> viewmodel.showTripTypeDialog()}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -82,7 +97,10 @@
                 android:id="@+id/add_trip_hz"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Widget.AppCompat.Spinner"/>
+                style="@style/Widget.AppCompat.Spinner"
+                android:focusable="false"
+                textFromResourceId="@{viewmodel.tripLD.updateFrequency.nameResourceId}"
+                android:onClick="@{() -> viewmodel.showTripUpdateFrequency()}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -98,7 +116,8 @@
                 android:id="@+id/add_trip_details"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:inputType="textMultiLine"/>
+                android:inputType="textMultiLine"
+                android:text="@={viewmodel.tripLD.details}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -114,7 +133,9 @@
                 android:id="@+id/add_trip_watchers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Widget.AppCompat.Spinner"/>
+                style="@style/Widget.AppCompat.Spinner"
+                android:focusable="false"
+                android:onClick="@{() -> viewmodel.showFriendsList()}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -126,7 +147,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/margin_small"
             android:text="@string/pick_a_check_list"
-            app:icon="@drawable/icon_check_list"/>
+            app:icon="@drawable/icon_check_list"
+            android:onClick="@{() -> viewmodel.clickPickCheckList()}"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/add_trip_checklist_item_rv"
@@ -164,7 +186,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/add_trip_start_point_pick"
                 android:text="@string/use_my_location"
-                app:icon="@drawable/icon_my_location"/>
+                app:icon="@drawable/icon_my_location"
+                android:onClick="@{(view) -> viewmodel.setPointFromCurrentLocation(view.id)}"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/add_trip_start_point_pick"
@@ -175,7 +198,8 @@
                 app:layout_constraintStart_toEndOf="@id/add_trip_start_point_user_location"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="@string/pick_on_map"
-                app:icon="@drawable/icon_point_map"/>
+                app:icon="@drawable/icon_point_map"
+                android:onClick="@{(view) -> viewmodel.setPointFromMap(view.id)}"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/add_trip_start_point_lat_layout"
@@ -189,7 +213,9 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/add_trip_start_point_lat"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:text="@={`` + viewmodel.startPointLD.location.latitude}"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -206,7 +232,9 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/add_trip_start_point_long"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:text="@={`` + viewmodel.startPointLD.location.longitude}"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -221,7 +249,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.AppCompat.Spinner"/>
+                    style="@style/Widget.AppCompat.Spinner"
+                    android:inputType="datetime"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -256,7 +285,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/add_trip_end_point_pick"
                 android:text="@string/use_my_location"
-                app:icon="@drawable/icon_my_location"/>
+                app:icon="@drawable/icon_my_location"
+                android:onClick="@{(view) -> viewmodel.setPointFromCurrentLocation(view.id)}"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/add_trip_end_point_pick"
@@ -267,7 +297,8 @@
                 app:layout_constraintStart_toEndOf="@id/add_trip_end_point_user_location"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="@string/pick_on_map"
-                app:icon="@drawable/icon_point_map"/>
+                app:icon="@drawable/icon_point_map"
+                android:onClick="@{(view) -> viewmodel.setPointFromMap(view.id)}"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/add_trip_end_point_lat_layout"
@@ -281,7 +312,9 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/add_trip_end_point_lat"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:text="@={`` + viewmodel.endPointLD.location.latitude}"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -298,7 +331,9 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/add_trip_end_point_long"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:text="@={`` + viewmodel.endPointLD.location.longitude}"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -313,7 +348,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.AppCompat.Spinner"/>
+                    style="@style/Widget.AppCompat.Spinner"
+                    android:inputType="datetime"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -348,7 +384,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/add_stage"
-            app:icon="@drawable/icon_add"/>
+            app:icon="@drawable/icon_add"
+            android:onClick="@{() -> viewmodel.addStagePoint()}"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/add_trip_stages_points_rv"
@@ -365,3 +402,4 @@
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.core.widget.NestedScrollView>
 </LinearLayout>
+</layout>

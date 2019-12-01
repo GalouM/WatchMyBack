@@ -62,7 +62,7 @@ data class Trip (
     @ColumnInfo(name = TRIP_TABLE_DETAILS) var details: String = "",
     @ColumnInfo(name = TRIP_TABLE_FREQUENCY) var updateFrequency:TripUpdateFrequency = FIFTEEN_MINUTES,
     @ColumnInfo(name = TRIP_TABLE_MAIN_LOCATION) var mainLocation: String = "",
-    @ColumnInfo(name = TRIP_TABLE_TYPE) var type: TripType = BIKING,
+    @ColumnInfo(name = TRIP_TABLE_TYPE) var type: TripType? = null,
     @ColumnInfo(name = TRIP_TABLE_ACTIVE) var active: Boolean = true
 )
 
@@ -100,17 +100,18 @@ enum class TripType (val typeNameId: Int, val iconId: Int) {
  * @property TWO_HOURS send updates every 2 hours
  *
  * @param frequencyMillisecond frequency in milliseconds
+ * @param nameResourceId
  *
- * @see Trip
+ * @see Trip ID of the String that represent the name of the [TripUpdateFrequency]
  *
  * @author Galou Minsini
  *
  */
-enum class TripUpdateFrequency(val frequencyMillisecond: Long){
-    FIFTEEN_MINUTES(1),
-    HALF_HOUR(2),
-    ONE_HOUR(3),
-    TWO_HOURS(4)
+enum class TripUpdateFrequency(val frequencyMillisecond: Long, val nameResourceId: Int){
+    FIFTEEN_MINUTES(1, R.string.fifteen_minutes),
+    HALF_HOUR(2, R.string.thirteen_minutes),
+    ONE_HOUR(3, R.string.hour),
+    TWO_HOURS(4, R.string.two_hours)
 }
 
 /**

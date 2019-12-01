@@ -11,7 +11,6 @@ import com.galou.watchmyback.Event
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import java.lang.Exception
 
 /**
  * Created by galou on 2019-10-25
@@ -124,4 +123,5 @@ fun TextInputLayout.iconFromResourceId(resourceId: Int?){
         } catch (e: Exception) { }
     }
 }
+
 

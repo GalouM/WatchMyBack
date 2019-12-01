@@ -88,24 +88,29 @@ class ViewExtUnitTest : KoinTest {
         editText.textFromResourceId(90)
         assertThat(editText.text.toString()).isEmpty()
     }
-    
+
+    @Test
     fun setEditTextWithResource0_showEmptyText(){
         val editText = TextInputEditText(context)
         editText.textFromResourceId(0)
         assertThat(editText.text.toString()).isEmpty()
     }
 
+    @Test
     fun setEditTextWithNull_showEmptyText(){
         val editText = TextInputEditText(context)
         editText.textFromResourceId(null)
         assertThat(editText.text.toString()).isEmpty()
     }
 
+    @Test
     fun setEditTextWithNonExistingResource_showEmptyText(){
         val editText = TextInputEditText(context)
         editText.textFromResourceId(90)
         assertThat(editText.text.toString()).isEmpty()
     }
+
+
 
 
 }

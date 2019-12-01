@@ -8,9 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import com.galou.watchmyback.AddTripActivity
 import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
+import com.galou.watchmyback.addTrip.AddTripActivity
 import com.galou.watchmyback.databinding.FragmentMapViewBinding
 import com.galou.watchmyback.utils.extension.setupSnackBar
 import com.google.android.material.snackbar.Snackbar

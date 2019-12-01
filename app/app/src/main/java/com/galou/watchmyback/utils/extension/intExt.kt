@@ -1,8 +1,7 @@
 package com.galou.watchmyback.utils.extension
 
 import com.galou.watchmyback.R
-import com.galou.watchmyback.data.entity.TimeDisplay
-import com.galou.watchmyback.data.entity.UnitSystem
+import com.galou.watchmyback.data.entity.*
 
 /**
  * @author galou
@@ -36,5 +35,33 @@ fun Int.onClickTimeDisplay(): TimeDisplay {
         R.id.settings_view_unit_system_time_24 -> TimeDisplay.H_24
         R.id.settings_view_unit_system_time_12 -> TimeDisplay.H_12
         else -> throw IllegalStateException("Unrecognized button")
+    }
+}
+
+/**
+ * Get ID of a button and return a [PointTripWithData] corresponding
+ *
+ * @param tripId Id of the trip from which the point belongs tp
+ * @return [PointTripWithData] of type [TypePoint.START] or [TypePoint.END]
+ */
+fun Int.idButtonToPointTrip(tripId: String): PointTripWithData {
+    return when(this){
+        R.id.add_trip_start_point_user_location, R.id.add_trip_start_point_pick -> {
+            PointTripWithData(
+                pointTrip = PointTrip(
+                    tripId = tripId,
+                    typePoint = TypePoint.START
+                )
+            )
+        }
+        R.id.add_trip_end_point_user_location, R.id.add_trip_end_point_pick -> {
+            PointTripWithData(
+                pointTrip = PointTrip(
+                    tripId = tripId,
+                    typePoint = TypePoint.END
+                )
+            )
+        }
+        else -> throw IllegalArgumentException("Unknown button")
     }
 }
