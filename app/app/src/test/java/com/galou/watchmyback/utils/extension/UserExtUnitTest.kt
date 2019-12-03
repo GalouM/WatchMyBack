@@ -60,6 +60,18 @@ class UserExtUnitTest {
         assertThat(listAllUsers[1].myFriend).isFalse()
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun convertListUserInWatcher_createCorrectWatcher(){
+        val tripId = "tripId"
+        val listUser = listOf(firstFriend, secondFriend)
+        val watchers = listUser.toWatchers(tripId)
+        assertThat(watchers).hasSize(listUser.size)
+        val watcher1 = watchers[0]
+        assertThat(watcher1.tripId).isEqualTo(tripId)
+        assertThat(watcher1.watcherId).isEqualTo(firstFriend.id)
+    }
+
 
 
 

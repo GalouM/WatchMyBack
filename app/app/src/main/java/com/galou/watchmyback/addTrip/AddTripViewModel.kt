@@ -11,7 +11,10 @@ import com.galou.watchmyback.data.repository.CheckListRepository
 import com.galou.watchmyback.data.repository.FriendRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.extension.idButtonToPointTrip
+import com.galou.watchmyback.utils.extension.emitNewValue
+import com.galou.watchmyback.utils.extension.filterOrCreateMainPoint
+import com.galou.watchmyback.utils.extension.filterScheduleStage
+import com.galou.watchmyback.utils.extension.toWatchers
 import kotlinx.coroutines.launch
 
 /**
@@ -35,6 +38,8 @@ class AddTripViewModel(
         points = mutableListOf(),
         watchers = mutableListOf()
     )
+
+    private var checkList: CheckListWithItems? = null
 
     private val tripeType = TripType.values().toList()
     private val tripUpdateFrequency = TripUpdateFrequency.values().toList()
@@ -60,6 +65,7 @@ class AddTripViewModel(
     val openPickCheckListLD: LiveData<Event<List<CheckListWithItems>>> = _openPickCheckListLD
 
     private val _itemsCheckListLD = MutableLiveData<List<ItemCheckList>>()
+        get() = field.apply { value = checkList?.items }
     val itemCheckListLD: LiveData<List<ItemCheckList>> = _itemsCheckListLD
 
     private val _openAddCheckListLD = MutableLiveData<Event<Unit>>()
@@ -69,13 +75,24 @@ class AddTripViewModel(
     val openAddFriendLD: LiveData<Event<Unit>> = _openAddFriendLD
 
     private val _startPointLD = MutableLiveData<PointTripWithData>()
+        get() {
+            if (field.value == null)  field.apply {
+                value = trip.points.filterOrCreateMainPoint(TypePoint.START, trip.trip.id)
+            }
+            return field
+        }
     val startPointLD: LiveData<PointTripWithData> = _startPointLD
 
     private val _endPointLD = MutableLiveData<PointTripWithData>()
+        get() = field.apply { value = trip.points.filterOrCreateMainPoint(TypePoint.END, trip.trip.id) }
     val endPointLD: LiveData<PointTripWithData> = _endPointLD
 
     private val _stagePointsLD = MutableLiveData<MutableList<PointTripWithData>>()
+        get() = field.apply { value = trip.points.filterScheduleStage() }
     val stagePointsLD: LiveData<MutableList<PointTripWithData>> = _stagePointsLD
+
+    private val _openMapLD = MutableLiveData<Event<PointTripWithData>>()
+    val openMapLD: LiveData<Event<PointTripWithData>> = _openMapLD
 
 
     fun showTripTypeDialog(){
@@ -102,7 +119,8 @@ class AddTripViewModel(
     }
 
     fun selectWatchers(watchers: List<User>){
-        _watchersLD.value = watchers
+        trip.watchers = watchers
+        _watchersLD.emitNewValue()
     }
 
     fun clickPickCheckList(){
@@ -126,20 +144,27 @@ class AddTripViewModel(
         
     }
 
-    fun selectCheckList(checkList: CheckListWithItems){
-        trip.trip.checkListId = checkList.checkList.id
-        _itemsCheckListLD.value = checkList.items
-        updateTripLDValue()
+    fun selectCheckList(checkListPicked: CheckListWithItems){
+        checkList = checkListPicked
+        trip.trip.checkListId = checkListPicked.checkList.id
+        checkList?.items?.forEach { it.checked = false }
+
+        _itemsCheckListLD.emitNewValue()
+        _tripLD.emitNewValue()
+    }
+
+    fun clickOnItemCheckListBox(items: ItemCheckList){
+        items.apply { checked = !checked }
     }
 
     fun selectUpdateFrequency(frequency: TripUpdateFrequency){
-        _tripLD.value!!.updateFrequency = frequency
-        updateTripLDValue()
+        trip.trip.updateFrequency = frequency
+        _tripLD.emitNewValue()
     }
 
     fun selectTripType(type: TripType){
         trip.trip.type = type
-        updateTripLDValue()
+        _tripLD.emitNewValue()
     }
 
     fun clickAddCheckList(){
@@ -152,24 +177,21 @@ class AddTripViewModel(
     }
 
     fun addStagePoint(){
-        if (stagePointsLD.value == null)_stagePointsLD.value = mutableListOf()
-        else {
-            _stagePointsLD.value?.add(PointTripWithData(
-                pointTrip = PointTrip(
-                    typePoint = TypePoint.SCHEDULE_STAGE,
-                    tripId = trip.trip.id
-                )
-            ))
-            _stagePointsLD.run { value = this.value }
-        }
+        trip.points.add(PointTripWithData(
+            pointTrip = PointTrip(
+                typePoint = TypePoint.SCHEDULE_STAGE,
+                tripId = trip.trip.id
+            )
+        ))
+        _stagePointsLD.emitNewValue()
     }
 
     fun setPointFromCurrentLocation(idButton: Int) {
-        fetchCurrentLocation(idButton.idButtonToPointTrip(trip.trip.id))
+        fetchCurrentLocation(getPointFromButtonId(idButton))
     }
 
     fun setPointFromMap(idButton: Int) {
-        displayMapWithMarker(idButton.idButtonToPointTrip(trip.trip.id))
+        displayMapWithMarker(getPointFromButtonId(idButton))
     }
 
     fun setStagePointFromCurrentLocation(point: PointTripWithData){
@@ -180,16 +202,50 @@ class AddTripViewModel(
         displayMapWithMarker(point)
     }
 
+    fun startTrip(){
+        _dataLoading.value = true
+        val tripWatcher = trip.watchers toWatchers trip.trip.id
+        fetchLocationInformation()
+        fetchWeatherDataForPoints()
+        with(trip.trip){
+            if (mainLocation.isNullOrBlank()){
+                val startPoint = trip.points.filterOrCreateMainPoint(TypePoint.START, trip.trip.id)
+                mainLocation = startPoint.location?.city
+            }
+        }
+
+    }
+
+    fun setPointLocation(lat: Double, lgn: Double, point: PointTripWithData){
+        point.location!!.apply {
+            latitude = lat
+            longitude = lgn
+        }
+        _tripLD.emitNewValue()
+    }
+
     private fun fetchCurrentLocation(point: PointTripWithData){
         TODO()
     }
 
     private fun displayMapWithMarker(point: PointTripWithData){
-        TODO()
+        _openMapLD.value = Event(point)
     }
 
-    private fun updateTripLDValue(){
-        _tripLD.run { value = this.value }
+    private fun getPointFromButtonId(idButton: Int): PointTripWithData{
+        return when(idButton) {
+            R.id.add_trip_start_point_user_location, R.id.add_trip_start_point_pick -> startPointLD.value!!
+            R.id.add_trip_end_point_user_location, R.id.add_trip_end_point_pick -> endPointLD.value!!
+            else -> throw IllegalArgumentException("Unknown button")
+        }
+    }
+
+    private fun fetchWeatherDataForPoints(){
+        TODO()
+    }
+    
+    private fun fetchLocationInformation(){
+        TODO()
     }
 
 

@@ -16,7 +16,7 @@ data class TripWithData(
         entityColumn = POINT_TRIP_TRIP_UUID,
         entity = PointTrip::class
     )
-    val points: List<PointTripWithData>,
+    val points: MutableList<PointTripWithData>,
     @Relation(
         parentColumn = TRIP_TABLE_UUID,
         entityColumn = USER_TABLE_UUID,
@@ -27,5 +27,5 @@ data class TripWithData(
         ),
         entity = User::class
     )
-    val watchers: List<User>
+    var watchers: List<User>
 )

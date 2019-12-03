@@ -139,4 +139,5 @@
     <string name="add_friends_first">Add a friend first</string>
     <string name="select_type_first">Select a type for your trip first</string>
     <string name="create_checklist_first">Create a check list first</string>
+    <string name="unknown">Unknown</string>
 </resources>

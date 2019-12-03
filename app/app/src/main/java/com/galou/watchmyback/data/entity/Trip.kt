@@ -61,7 +61,7 @@ data class Trip (
     @ColumnInfo(name = TRIP_TABLE_STATUS) var status: TripStatus = ON_GOING,
     @ColumnInfo(name = TRIP_TABLE_DETAILS) var details: String = "",
     @ColumnInfo(name = TRIP_TABLE_FREQUENCY) var updateFrequency:TripUpdateFrequency = FIFTEEN_MINUTES,
-    @ColumnInfo(name = TRIP_TABLE_MAIN_LOCATION) var mainLocation: String = "",
+    @ColumnInfo(name = TRIP_TABLE_MAIN_LOCATION) var mainLocation: String? = "",
     @ColumnInfo(name = TRIP_TABLE_TYPE) var type: TripType? = null,
     @ColumnInfo(name = TRIP_TABLE_ACTIVE) var active: Boolean = true
 )

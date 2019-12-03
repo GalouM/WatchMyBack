@@ -2,9 +2,7 @@ package com.galou.watchmyback.addTrip
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.galou.watchmyback.R
-import com.galou.watchmyback.data.entity.TripType
-import com.galou.watchmyback.data.entity.TripUpdateFrequency
-import com.galou.watchmyback.data.entity.User
+import com.galou.watchmyback.data.entity.*
 import com.galou.watchmyback.data.repository.FakeCheckListRepository
 import com.galou.watchmyback.data.repository.FakeFriendRepositoryImpl
 import com.galou.watchmyback.data.repository.FakeUserRepositoryImpl
@@ -106,10 +104,12 @@ class AddTripViewModelTest {
     @Test
     fun selectCheckList_setTripCheckList(){
         viewModel.selectCheckList(checkListWithItem1)
-        assertThat(LiveDataTestUtil.getValue(viewModel.itemCheckListLD))
-            .containsExactlyElementsIn(checkListWithItem1.items)
+        val items = LiveDataTestUtil.getValue(viewModel.itemCheckListLD)
+        assertThat(items).containsExactlyElementsIn(checkListWithItem1.items)
         assertThat(LiveDataTestUtil.getValue(viewModel.tripLD).checkListId)
             .isEqualTo(checkListWithItem1.checkList.id)
+        items.forEach { assertThat(it.checked).isFalse() }
+
     }
 
     @Test
@@ -144,12 +144,77 @@ class AddTripViewModelTest {
     fun clickAddStagePoint_addPointInList(){
         viewModel.addStagePoint()
         var points = LiveDataTestUtil.getValue(viewModel.stagePointsLD)
-        println(points)
         val pointsSize = points.size
         assertThat(points).isNotNull()
         viewModel.addStagePoint()
         points = LiveDataTestUtil.getValue(viewModel.stagePointsLD)
         assertThat(points).hasSize(pointsSize + 1)
+
+    }
+
+    @Test
+    fun clickStagePointFromMap_openMapActivity(){
+        val point = PointTripWithData(pointTrip = PointTrip())
+        viewModel.setStagePointFromMap(point)
+        val content = LiveDataTestUtil.getValue(viewModel.openMapLD).getContentIfNotHandled()
+        assertThat(content).isNotNull()
+        assertThat(content).isEqualTo(point)
+    }
+
+    @Test
+    fun clickStartPointFromMap_openMapActivity(){
+        viewModel.setPointFromMap(R.id.add_trip_start_point_pick)
+        val content = LiveDataTestUtil.getValue(viewModel.openMapLD).getContentIfNotHandled()
+        assertThat(content).isNotNull()
+        assertThat(content?.pointTrip?.typePoint).isEqualTo(TypePoint.START)
+
+    }
+
+    @Test
+    fun clickEndPointFromMap_openMapActivity(){
+        viewModel.setPointFromMap(R.id.add_trip_end_point_pick)
+        val content = LiveDataTestUtil.getValue(viewModel.openMapLD).getContentIfNotHandled()
+        assertThat(content).isNotNull()
+        assertThat(content?.pointTrip?.typePoint).isEqualTo(TypePoint.END)
+    }
+
+    @Test
+    fun updatePointLocation_changeLocationPointInList(){
+        viewModel.addStagePoint()
+        val pointToUpdate = LiveDataTestUtil.getValue(viewModel.stagePointsLD)[0]
+        val lat = 10.10
+        val lgn = 20.20
+        viewModel.setPointLocation(lat, lgn, pointToUpdate)
+
+        val pointWithNewData = LiveDataTestUtil.getValue(viewModel.stagePointsLD)[0]
+        assertThat(pointWithNewData.location?.latitude).isEqualTo(lat)
+        assertThat(pointWithNewData.location?.longitude).isEqualTo(lgn)
+    }
+
+    @Test
+    fun updateStartPointLocation_changeLocationStartPoint(){
+        val startPoint = LiveDataTestUtil.getValue(viewModel.startPointLD)
+        val lat = 123.456
+        val lgn = 89.098
+        viewModel.setPointLocation(lat, lgn, startPoint)
+
+        val startPointWithNewData = LiveDataTestUtil.getValue(viewModel.startPointLD)
+        assertThat(startPointWithNewData.location?.latitude).isEqualTo(lat)
+        assertThat(startPointWithNewData.location?.longitude).isEqualTo(lgn)
+
+    }
+
+    @Test
+    fun onClickItemCheckList_unCheckAndCheckAccordingly(){
+        viewModel.selectCheckList(checkListWithItem1)
+        var item = LiveDataTestUtil.getValue(viewModel.itemCheckListLD)[0]
+        assertThat(item.checked).isFalse()
+        viewModel.clickOnItemCheckListBox(item)
+        item = LiveDataTestUtil.getValue(viewModel.itemCheckListLD)[0]
+        assertThat(item.checked).isTrue()
+        viewModel.clickOnItemCheckListBox(item)
+        item = LiveDataTestUtil.getValue(viewModel.itemCheckListLD)[0]
+        assertThat(item.checked).isFalse()
 
     }
 

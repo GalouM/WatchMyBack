@@ -123,5 +123,3 @@ fun TextInputLayout.iconFromResourceId(resourceId: Int?){
         } catch (e: Exception) { }
     }
 }
-
-
