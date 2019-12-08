@@ -8,9 +8,13 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.galou.watchmyback.Event
+import com.galou.watchmyback.data.entity.User
+import com.galou.watchmyback.data.entity.UserPreferences
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by galou on 2019-10-25
@@ -49,7 +53,9 @@ fun View.setupSnackBar(
     timeLength: Int
 ){
     snackbarEvent.observe(lifecycleOwner, Observer { event ->
-        event.getContentIfNotHandled()?.let { showSnackBar(context.getString(it), timeLength) }
+        event.getContentIfNotHandled()?.let {
+            showSnackBar(context.getString(it), timeLength)
+        }
     })
 }
 
@@ -123,3 +129,34 @@ fun TextInputLayout.iconFromResourceId(resourceId: Int?){
         } catch (e: Exception) { }
     }
 }
+
+/**
+ * Set the text of a [TextInputEditText] with a list of users
+ * Display their username separated by "-"
+ *
+ * @param users list of user
+ *
+ * @see BindingAdapter
+ */
+@BindingAdapter("displayNameUsers")
+fun TextInputEditText.displayNameUsers(users: List<User>?) {
+    users?.let {
+        setText(users.joinToString(separator = " - ") { it.username.toString() })
+    }
+}
+
+/**
+ * Convert a [Date] into a [String] depending of the user's preference [TimeDisplay]
+ * and display it into a [TextInputEditText]
+ *
+ * @param userPreferences [UserPreferences] of the current user
+ * @param date  date to convert
+ */
+@BindingAdapter(value = ["userPreferences", "date"], requireAll = true)
+fun TextInputEditText.displayDate(userPreferences: UserPreferences?, date: Date?) {
+    if(userPreferences != null && date != null){
+        val formatter = SimpleDateFormat(userPreferences.timeDisplay.displayPattern)
+        setText(formatter.format(date))
+    }
+}
+

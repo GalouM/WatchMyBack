@@ -1,5 +1,6 @@
 package com.galou.watchmyback.utils.extension
 
+import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.testHelpers.firstFriend
 import com.galou.watchmyback.testHelpers.generateTestUser
 import com.galou.watchmyback.testHelpers.secondFriend
@@ -65,11 +66,23 @@ class UserExtUnitTest {
     fun convertListUserInWatcher_createCorrectWatcher(){
         val tripId = "tripId"
         val listUser = listOf(firstFriend, secondFriend)
-        val watchers = listUser.toWatchers(tripId)
+        val watchers = listUser.toTripWatchers(tripId)
         assertThat(watchers).hasSize(listUser.size)
         val watcher1 = watchers[0]
         assertThat(watcher1.tripId).isEqualTo(tripId)
         assertThat(watcher1.watcherId).isEqualTo(firstFriend.id)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun convertUserInWatcher_setProperly(){
+        val listWatchers = listOf(firstFriend, secondFriend)
+        val listFriends = listOf(firstFriend, User(), secondFriend, User())
+        val friendsToWatchers = listFriends toWatcher listWatchers
+        assertThat(friendsToWatchers[0].watchTrip).isTrue()
+        assertThat(friendsToWatchers[1].watchTrip).isFalse()
+        assertThat(friendsToWatchers[2].watchTrip).isTrue()
+        assertThat(friendsToWatchers[3].watchTrip).isFalse()
     }
 
 

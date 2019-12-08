@@ -14,11 +14,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
 import com.galou.watchmyback.addFriend.AddFriendActivity
-import com.galou.watchmyback.base.UsersListAdapter
 import com.galou.watchmyback.data.entity.OtherUser
 import com.galou.watchmyback.databinding.FragmentFriendsViewBinding
 import com.galou.watchmyback.utils.RC_ADD_FRIEND
 import com.galou.watchmyback.utils.extension.setupSnackBar
+import com.galou.watchmyback.utils.rvAdapter.UsersListAdapter
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -51,7 +51,10 @@ class FriendsView : Fragment() {
 
     private fun configureRecyclerView(){
         recyclerView = binding.friendsViewRv
-        adapterRv = UsersListAdapter(listOf(), viewModel)
+        adapterRv = UsersListAdapter(
+            listOf(),
+            viewModel
+        )
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapterRv
 

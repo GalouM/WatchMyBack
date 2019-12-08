@@ -5,35 +5,35 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.galou.watchmyback.data.entity.Trip
+import com.galou.watchmyback.data.entity.TripWatcher
 import com.galou.watchmyback.data.entity.User
-import com.galou.watchmyback.data.entity.Watcher
 import com.galou.watchmyback.utils.*
 
 /**
  * List all the actions possible on the [WatcherDao] table
  *
  * @see Dao
- * @see Watcher
+ * @see TripWatcher
  *
  */
 @Dao
 interface WatcherDao {
 
     /**
-     * Create a list of [Watcher] objects in the database
+     * Create a list of [TripWatcher] objects in the database
      *
      * If an object with the same Primary key exist in the database, it will be replace by this one
      *
-     * @param watchers object to create
+     * @param tripWatchers object to create
      *
      * @see OnConflictStrategy.REPLACE
      * @see Insert
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addWatchers(watchers: List<Watcher>)
+    suspend fun addWatchers(tripWatchers: List<TripWatcher>)
 
     /**
-     * Query all the [Watcher] of a [Trip]
+     * Query all the [TripWatcher] of a [Trip]
      *
      * @param tripId ID of the trip to query
      * @return List of [User] watching this trip

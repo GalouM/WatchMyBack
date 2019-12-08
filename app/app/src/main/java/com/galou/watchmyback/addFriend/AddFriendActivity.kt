@@ -2,6 +2,7 @@ package com.galou.watchmyback.addFriend
 
 import android.os.Bundle
 import android.os.Handler
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doAfterTextChanged
@@ -10,10 +11,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.galou.watchmyback.R
-import com.galou.watchmyback.base.UsersListAdapter
 import com.galou.watchmyback.data.entity.OtherUser
 import com.galou.watchmyback.databinding.ActivityAddFriendBinding
 import com.galou.watchmyback.utils.extension.setupSnackBar
+import com.galou.watchmyback.utils.rvAdapter.UsersListAdapter
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -43,6 +44,14 @@ class AddFriendActivity : AppCompatActivity() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            android.R.id.home -> finish()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun configureBinding(){
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_friend)
         binding.viewmodel = viewModel
@@ -51,7 +60,10 @@ class AddFriendActivity : AppCompatActivity() {
 
     private fun configureRecyclerView(){
         recyclerView = binding.addFriendViewRv
-        adapterRv = UsersListAdapter(listOf(), viewModel)
+        adapterRv = UsersListAdapter(
+            listOf(),
+            viewModel
+        )
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapterRv
 

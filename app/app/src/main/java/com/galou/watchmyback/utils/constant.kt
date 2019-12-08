@@ -102,11 +102,13 @@ const val RC_ADD_CHECKLIST = 800
 const val RESULT_ACCOUNT_DELETED = -100
 const val RESULT_CHECKLIST_DELETED = -200
 
-// ------ DIALOG CODE -------
-const val TRIP_TYPE_DIALOG = -1000
 
 // ------ TAG -------
 const val TRIP_TYPE_TAG = "tripTypeDialog"
+const val UPDATE_HZ_TAG = "updateFrequencyDialog"
+const val CHECKLIST_DIALOG = "checklistsDialog"
+const val WATCHER_DIALOG = "watcherDialog"
+const val TIME_PICKER_DIALOG = "timePickerDialog"
 
 // ------ PERMISSIONS -------
 const val PERMS_EXT_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE

@@ -12,20 +12,22 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.galou.watchmyback.addModifyCheckList.AddModifyCheckListActivity
 import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
-import com.galou.watchmyback.data.entity.CheckList
+import com.galou.watchmyback.addModifyCheckList.AddModifyCheckListActivity
+import com.galou.watchmyback.data.entity.CheckListWithItems
 import com.galou.watchmyback.databinding.FragmentCheckListViewBinding
 import com.galou.watchmyback.utils.RC_ADD_CHECKLIST
 import com.galou.watchmyback.utils.extension.setupSnackBar
+import com.galou.watchmyback.utils.rvAdapter.CheckListAdapter
+import com.galou.watchmyback.utils.rvAdapter.CheckListListener
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * A simple [Fragment] subclass.
  */
-class CheckListView : Fragment() {
+class CheckListView : Fragment(), CheckListListener {
 
     private val viewModel: CheckListViewModel by viewModel()
     private lateinit var binding: FragmentCheckListViewBinding
@@ -60,7 +62,7 @@ class CheckListView : Fragment() {
 
     private fun configureRecyclerView(){
         recyclerView = binding.checkListViewRv
-        adapterRv = CheckListAdapter(listOf(), viewModel)
+        adapterRv = CheckListAdapter(listOf(), this)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapterRv
     }
@@ -79,7 +81,7 @@ class CheckListView : Fragment() {
         viewModel.openAddModifyCheckList.observe(this, EventObserver { openAddModifyCheckList() })
     }
 
-    private fun updateCheckLists(checkLists: List<CheckList>){
+    private fun updateCheckLists(checkLists: List<CheckListWithItems>){
         adapterRv.checkLists =  checkLists
         adapterRv.notifyDataSetChanged()
     }
@@ -96,5 +98,9 @@ class CheckListView : Fragment() {
 
     }
 
+    override fun onClickCheckList(checkList: CheckListWithItems) {
+        viewModel.modifyCheckList(checkList)
+    }
 
+    override fun onClickCreateCheckList() {}
 }

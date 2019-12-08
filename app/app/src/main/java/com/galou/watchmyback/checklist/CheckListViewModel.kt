@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
 import com.galou.watchmyback.base.BaseViewModel
-import com.galou.watchmyback.data.entity.CheckList
+import com.galou.watchmyback.data.entity.CheckListWithItems
 import com.galou.watchmyback.data.repository.CheckListRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
@@ -25,8 +25,8 @@ class CheckListViewModel(
     private val checkListRepository: CheckListRepository
     ) : BaseViewModel() {
     
-    private val _checkListLD = MutableLiveData<List<CheckList>>()
-    val checkListLD: LiveData<List<CheckList>> = _checkListLD
+    private val _checkListLD = MutableLiveData<List<CheckListWithItems>>()
+    val checkListLD: LiveData<List<CheckListWithItems>> = _checkListLD
     
     private val _openAddModifyCheckList = MutableLiveData<Event<Unit>>()
     val openAddModifyCheckList: LiveData<Event<Unit>> = _openAddModifyCheckList
@@ -63,8 +63,8 @@ class CheckListViewModel(
      *
      * @param checkList check list selected by the user
      */
-    fun modifyCheckList(checkList: CheckList){
-        checkListRepository.checkList = checkList
+    fun modifyCheckList(checkList: CheckListWithItems){
+        checkListRepository.checkList = checkList.checkList
         _openAddModifyCheckList.value = Event(Unit)
 
     }
@@ -92,7 +92,7 @@ class CheckListViewModel(
         viewModelScope.launch {
             when(val checkListsResult = checkListRepository.fetchUserCheckLists(currentUser.id, refresh)){
                 is Result.Success ->{
-                    val checkLists = checkListsResult.data.map { it.checkList }
+                    val checkLists = checkListsResult.data
                     if (checkLists.isEmpty()) showSnackBarMessage(R.string.no_checkList)
                     else _checkListLD.value = checkLists
                 }

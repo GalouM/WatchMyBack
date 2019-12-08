@@ -16,14 +16,15 @@ import com.galou.watchmyback.data.entity.ItemCheckList
 import com.galou.watchmyback.data.entity.TripType
 import com.galou.watchmyback.databinding.ActivityAddModifyCheckListBinding
 import com.galou.watchmyback.selectTripTypeDialog.SelectTripTypeDialog
-import com.galou.watchmyback.selectTripTypeDialog.TripTypeSelectionListener
 import com.galou.watchmyback.utils.RESULT_CHECKLIST_DELETED
 import com.galou.watchmyback.utils.TRIP_TYPE_TAG
 import com.galou.watchmyback.utils.extension.setupSnackBar
+import com.galou.watchmyback.utils.rvAdapter.TripTypeSelectionListener
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class AddModifyCheckListActivity : AppCompatActivity(), TripTypeSelectionListener {
+class AddModifyCheckListActivity : AppCompatActivity(),
+    TripTypeSelectionListener {
 
     private val viewModel: AddModifyCheckListViewModel by viewModel()
     private lateinit var binding: ActivityAddModifyCheckListBinding
@@ -97,8 +98,6 @@ class AddModifyCheckListActivity : AppCompatActivity(), TripTypeSelectionListene
         checkListTypeDialog = SelectTripTypeDialog(types, this).apply {
             show(supportFragmentManager, TRIP_TYPE_TAG)
         }
-
-
     }
 
     //-------------------------

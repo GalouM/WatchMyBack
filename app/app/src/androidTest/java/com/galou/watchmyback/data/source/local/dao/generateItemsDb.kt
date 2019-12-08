@@ -109,9 +109,9 @@ val listWeatherTrip2 = listOf(
 )
 
 //watcher
-val watcher1Trip1 = Watcher(firstFriend.id, trip1.id)
-val watcher2Trip1 = Watcher(secondFriend.id, trip1.id)
-val watcher1Trip2 = Watcher(secondFriend.id, trip2.id)
+val watcher1Trip1 = TripWatcher(firstFriend.id, trip1.id)
+val watcher2Trip1 = TripWatcher(secondFriend.id, trip1.id)
+val watcher1Trip2 = TripWatcher(secondFriend.id, trip2.id)
 
 val listWatcherTrip1 = listOf(
     watcher1Trip1,

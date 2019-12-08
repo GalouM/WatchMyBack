@@ -98,7 +98,7 @@ class Converters {
                 if(system == it.systemName) return it
             }
 
-            throw Exception("Weather Condition not recognize")
+            throw Exception("Unit system not recognize")
         }
 
         @TypeConverter
@@ -112,7 +112,7 @@ class Converters {
                 if(pattern == it.displayPattern) return it
             }
 
-            throw Exception("Weather Condition not recognize")
+            throw Exception("Time Display not recognize")
         }
 
 

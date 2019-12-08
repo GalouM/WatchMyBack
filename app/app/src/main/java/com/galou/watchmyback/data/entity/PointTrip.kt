@@ -41,7 +41,7 @@ data class PointTrip (
     @ColumnInfo(name = POINT_TRIP_UUID) @PrimaryKey var id: String = idGenerated,
     @ColumnInfo(name = POINT_TRIP_TRIP_UUID) var tripId: String = "",
     @ColumnInfo(name = POINT_TRIP_TYPE) var typePoint: TypePoint = SCHEDULE_STAGE,
-    @ColumnInfo(name = POINT_TRIP_TIME) var time: Date = todaysDate
+    @ColumnInfo(name = POINT_TRIP_TIME) var time: Date? = null
 
 )
 

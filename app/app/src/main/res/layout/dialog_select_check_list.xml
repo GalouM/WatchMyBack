@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="listener"
+            type="com.galou.watchmyback.utils.rvAdapter.CheckListListener" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/dialog_select_checklist_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/dialog_checklists_rv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/check_list_rv_item"
+        tools:itemCount="3"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/icon_add"
+            android:text="@string/create_new_checklist"
+            android:textSize="10sp"
+            android:layout_gravity="center"
+            android:onClick="@{() -> listener.onClickCreateCheckList()}"
+            app:layout_constraintTop_toBottomOf="@id/dialog_checklists_rv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="@dimen/margin_small"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

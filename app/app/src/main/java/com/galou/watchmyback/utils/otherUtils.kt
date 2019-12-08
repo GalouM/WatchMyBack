@@ -18,11 +18,10 @@ var idGenerated: String = ""
         return field
     }
 
-
 /**
  * Generate todays date as [Date] using the class [Calendar]
  */
-var todaysDate: Date = Calendar.getInstance(Locale.CANADA).time
+var todaysDate: Date = Calendar.getInstance(TimeZone.getDefault()).time
 
 fun displayData(message: String) = Log.e("WMT DATA", message)
 
@@ -36,3 +35,5 @@ fun returnSuccessOrError(localResult: Result<Void?>, remoteResult: Result<Void?>
         else -> remoteResult
     }
 }
+
+

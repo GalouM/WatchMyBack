@@ -36,9 +36,9 @@ import com.galou.watchmyback.utils.*
 )
 data class Location(
     @ColumnInfo(name = LOCATION_TABLE_UUID) @PrimaryKey var pointId: String = "",
-    @ColumnInfo(name = LOCATION_TABLE_LATITUDE) var latitude: Double = 0.0,
-    @ColumnInfo(name = LOCATION_TABLE_LONGITUDE) var longitude: Double = 0.0,
-    @ColumnInfo(name = LOCATION_TABLE_CITY) var city: String = "",
-    @ColumnInfo(name = LOCATION_TABLE_COUNTRY) var country: String = ""
+    @ColumnInfo(name = LOCATION_TABLE_LATITUDE) var latitude: Double? = null,
+    @ColumnInfo(name = LOCATION_TABLE_LONGITUDE) var longitude: Double? = null,
+    @ColumnInfo(name = LOCATION_TABLE_CITY) var city: String? = null,
+    @ColumnInfo(name = LOCATION_TABLE_COUNTRY) var country: String? = null
 
 )

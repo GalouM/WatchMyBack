@@ -5,13 +5,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable
-            name="viewmodel"
-            type="com.galou.watchmyback.checklist.CheckListViewModel" />
 
         <variable
             name="checklist"
-            type="com.galou.watchmyback.data.entity.CheckList" />
+            type="com.galou.watchmyback.data.entity.CheckListWithItems" />
+
+        <variable
+            name="listener"
+            type="com.galou.watchmyback.utils.rvAdapter.CheckListListener" />
 
     </data>
 
@@ -19,7 +20,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/cardview_checklist"
     android:layout_margin="5dp"
-    android:onClick="@{() -> viewmodel.modifyCheckList(checklist)}">
+    android:onClick="@{() -> listener.onClickCheckList(checklist)}">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -27,16 +28,17 @@
 
         <TextView
             android:id="@+id/check_list_item_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/check_list_item_type"
-            android:text="@{checklist.name}"
+            android:text="@{checklist.checkList.name}"
             android:layout_marginStart="@dimen/margin_medium"
             android:textStyle="bold"
-            android:maxLines="1"
-            android:ellipsize="end"/>
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:layout_marginEnd="5dp"/>
 
         <ImageView
             android:id="@+id/check_list_item_type"
@@ -45,7 +47,7 @@
             app:layout_constraintStart_toStartOf="@id/check_list_item_name"
             app:layout_constraintTop_toBottomOf="@id/check_list_item_name"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:imageResouce="@{checklist.tripType.iconId}"/>
+            app:imageResouce="@{checklist.checkList.tripType.iconId}"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

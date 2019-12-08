@@ -3,7 +3,6 @@ package com.galou.watchmyback.data.repository
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.MutableLiveData
-import com.galou.watchmyback.data.entity.OtherUser
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.entity.UserWithPreferences
@@ -12,7 +11,6 @@ import com.galou.watchmyback.testHelpers.firstFriend
 import com.galou.watchmyback.testHelpers.generateUserWithPref
 import com.galou.watchmyback.testHelpers.secondFriend
 import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.extension.toOtherUser
 
 /**
  * Created by galou on 2019-10-25
@@ -41,13 +39,13 @@ open class FakeUserRepositoryImpl : UserRepository{
 
     override suspend fun updateUserPreferences(preferences: UserPreferences): Result<Void?> = Result.Success(null)
 
-    override suspend fun fetchAllUsers(): Result<List<OtherUser>> = Result.Success(listOf(
-        firstFriend.toOtherUser(false), secondFriend.toOtherUser(false)))
+    override suspend fun fetchAllUsers(): Result<List<User>> = Result.Success(listOf(
+        firstFriend, secondFriend))
 
-    override suspend fun fetchUserByUsername(name: String): Result<List<OtherUser>> = Result.Success(listOf(
-        firstFriend.toOtherUser(false)))
+    override suspend fun fetchUserByUsername(name: String): Result<List<User>> = Result.Success(listOf(
+        firstFriend))
 
-    override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<OtherUser>> = Result.Success(listOf(
-        secondFriend.toOtherUser(false)))
+    override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<User>> = Result.Success(listOf(
+        secondFriend))
 }
 

@@ -1,6 +1,5 @@
 package com.galou.watchmyback.data.repository
 
-import com.galou.watchmyback.data.entity.OtherUser
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.utils.Result
 
@@ -14,5 +13,5 @@ interface FriendRepository {
 
     suspend fun removeFriend(user: User, friendId: String): Result<Void?>
 
-    suspend fun fetchUserFriend(user: User, refresh: Boolean): Result<List<OtherUser>>
+    suspend fun fetchUserFriend(user: User, refresh: Boolean): Result<List<User>>
 }

@@ -60,7 +60,7 @@ data class Trip (
     @ColumnInfo(name = TRIP_TABLE_CHECK_LIST_UUID) var checkListId: String? = "",
     @ColumnInfo(name = TRIP_TABLE_STATUS) var status: TripStatus = ON_GOING,
     @ColumnInfo(name = TRIP_TABLE_DETAILS) var details: String = "",
-    @ColumnInfo(name = TRIP_TABLE_FREQUENCY) var updateFrequency:TripUpdateFrequency = FIFTEEN_MINUTES,
+    @ColumnInfo(name = TRIP_TABLE_FREQUENCY) var updateFrequency:TripUpdateFrequency? = null,
     @ColumnInfo(name = TRIP_TABLE_MAIN_LOCATION) var mainLocation: String? = "",
     @ColumnInfo(name = TRIP_TABLE_TYPE) var type: TripType? = null,
     @ColumnInfo(name = TRIP_TABLE_ACTIVE) var active: Boolean = true
@@ -94,6 +94,8 @@ enum class TripType (val typeNameId: Int, val iconId: Int) {
 /**
  * Represent the different frequency of update possible
  *
+ *
+ * @property NEVER never send updates
  * @property FIFTEEN_MINUTES send updates every 15 minutes
  * @property HALF_HOUR send updates every 30 minutes
  * @property ONE_HOUR send updates every hour
@@ -108,6 +110,7 @@ enum class TripType (val typeNameId: Int, val iconId: Int) {
  *
  */
 enum class TripUpdateFrequency(val frequencyMillisecond: Long, val nameResourceId: Int){
+    NEVER(0, R.string.never),
     FIFTEEN_MINUTES(1, R.string.fifteen_minutes),
     HALF_HOUR(2, R.string.thirteen_minutes),
     ONE_HOUR(3, R.string.hour),

@@ -1,11 +1,11 @@
-package com.galou.watchmyback.base
+package com.galou.watchmyback.utils.rvAdapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.galou.watchmyback.base.UserListBaseViewModel
 import com.galou.watchmyback.data.entity.OtherUser
 import com.galou.watchmyback.databinding.FriendsRvItemBinding
-import com.galou.watchmyback.utils.displayData
 
 /**
  * @author galou
@@ -17,7 +17,9 @@ class UsersListAdapter(
 ) : RecyclerView.Adapter<UsersViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder {
-         return UsersViewHolder.from(parent)
+         return UsersViewHolder.from(
+             parent
+         )
     }
 
     override fun getItemCount(): Int = users.size
@@ -35,9 +37,11 @@ class UsersListAdapter(
 class UsersViewHolder(private val binding: FriendsRvItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bindWithUser(viewModel: UserListBaseViewModel, user: OtherUser){
-        binding.friend = user
-        binding.viewmodel = viewModel
-        binding.executePendingBindings()
+        with(binding){
+            friend = user
+            viewmodel = viewModel
+            executePendingBindings()
+        }
     }
 
     companion object {

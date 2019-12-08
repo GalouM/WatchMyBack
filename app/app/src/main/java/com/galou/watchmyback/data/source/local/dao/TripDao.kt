@@ -58,7 +58,7 @@ abstract class TripDao(private val database: WatchMyBackDatabase) {
      * @param pointTrip List of all the [PointTrip] of the [Trip]
      * @param pointLocations List of the [Location] of the [PointTrip]
      * @param weatherData List of the [WeatherData] of the [PointTrip]
-     * @param watchers List of the [Watcher] of the [Trip]
+     * @param tripWatchers List of the [TripWatcher] of the [Trip]
      * @param items List of the [ItemCheckList] took in this [Trip]
      *
      * @see Transaction
@@ -75,11 +75,11 @@ abstract class TripDao(private val database: WatchMyBackDatabase) {
     @Transaction
     open suspend fun createTripAndData(
         trip: Trip, pointTrip: List<PointTrip>, pointLocations: List<Location>,
-        weatherData: List<WeatherData>, watchers: List<Watcher>, items: List<ItemCheckList>
+        weatherData: List<WeatherData>, tripWatchers: List<TripWatcher>, items: List<ItemCheckList>
     ){
         database.itemCheckListDao().updateItems(items)
         createTrip(trip)
-        database.watcherDao().addWatchers(watchers)
+        database.watcherDao().addWatchers(tripWatchers)
         database.pointTripDao().createPointsAndData(pointTrip, pointLocations, weatherData)
 
     }

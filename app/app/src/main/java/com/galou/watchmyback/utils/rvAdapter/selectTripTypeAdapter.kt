@@ -1,4 +1,4 @@
-package com.galou.watchmyback.selectTripTypeDialog
+package com.galou.watchmyback.utils.rvAdapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -28,7 +28,7 @@ class SelectTripTypeAdapter(
 
 class SelectTripTypeViewHolder(private val binding: TypeTripItemBinding) : RecyclerView.ViewHolder(binding.root){
     fun bindWithType(tripType: TripType, clickListener: TripTypeSelectionListener){
-        binding.apply {
+        with(binding){
             type = tripType
             listener = clickListener
             executePendingBindings()
@@ -36,10 +36,12 @@ class SelectTripTypeViewHolder(private val binding: TypeTripItemBinding) : Recyc
     }
 
     companion object {
-        fun from(parent: ViewGroup): SelectTripTypeViewHolder{
+        fun from(parent: ViewGroup): SelectTripTypeViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = TypeTripItemBinding.inflate(layoutInflater, parent,false)
-            return SelectTripTypeViewHolder(binding)
+            return SelectTripTypeViewHolder(
+                binding
+            )
         }
     }
 }

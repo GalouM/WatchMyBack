@@ -75,6 +75,25 @@
         <item name="boxBackgroundColor">@android:color/transparent</item>
         <item name="hintTextColor">@color/colorOnPrimaryAlpha</item>
     </style>
+    
+    <style name="CustomDialog" parent="WatchMyBackTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
+
+    <style name="MyTimePickerDialogTheme" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="buttonBarButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
+    </style>
+
+    <style name="ButtonAlertDialog" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="rippleColor">@color/colorAccent</item>
+    </style>
 
 
 </resources>

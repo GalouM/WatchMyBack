@@ -2,7 +2,6 @@ package com.galou.watchmyback.data.repository
 
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
-import com.galou.watchmyback.data.entity.OtherUser
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.entity.UserWithPreferences
@@ -10,7 +9,6 @@ import com.galou.watchmyback.data.source.local.UserLocalDataSource
 import com.galou.watchmyback.data.source.remote.FriendRemoteDataSource
 import com.galou.watchmyback.data.source.remote.UserRemoteDataSource
 import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.extension.toListOtherUser
 import com.galou.watchmyback.utils.returnSuccessOrError
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -183,15 +181,15 @@ class UserRepositoryImpl(
      * @see UserRemoteDataSource.fetchAllUsers
      * @see UserLocalDataSource.fetchAllUsers
      */
-    override suspend fun fetchAllUsers(): Result<List<OtherUser>> {
+    override suspend fun fetchAllUsers(): Result<List<User>> {
         when(val remoteResult = userRemoteSource.fetchAllUsers()){
             is Result.Success -> {
                 if (remoteResult.data.isNotEmpty())
-                    return Result.Success(remoteResult.data.toListOtherUser(false))
+                    return Result.Success(remoteResult.data)
             }
         }
         return when(val localResult = userLocalSource.fetchAllUsers()){
-            is Result.Success -> Result.Success(localResult.data.toListOtherUser(false))
+            is Result.Success -> Result.Success(localResult.data)
             is Result.Error -> Result.Error(localResult.exception)
             is Result.Canceled -> Result.Canceled(localResult.exception)
         }
@@ -209,15 +207,15 @@ class UserRepositoryImpl(
      * @see UserRemoteDataSource.fetchUserByUsername
      * @see UserLocalDataSource.fetchUserByUsername
      */
-    override suspend fun fetchUserByUsername(name: String): Result<List<OtherUser>> {
+    override suspend fun fetchUserByUsername(name: String): Result<List<User>> {
         when(val remoteResult = userRemoteSource.fetchUserByUsername(name)){
             is Result.Success -> {
                 if (remoteResult.data.isNotEmpty())
-                    return Result.Success(remoteResult.data.toListOtherUser(false))
+                    return Result.Success(remoteResult.data)
             }
         }
         return when(val localResult = userLocalSource.fetchUserByUsername(name)) {
-            is Result.Success -> Result.Success(localResult.data.toListOtherUser(false))
+            is Result.Success -> Result.Success(localResult.data)
             is Result.Error -> Result.Error(localResult.exception)
             is Result.Canceled -> Result.Canceled(localResult.exception)
         }
@@ -235,15 +233,15 @@ class UserRepositoryImpl(
      * @see UserRemoteDataSource.fetchUserByEmailAddress
      * @see UserLocalDataSource.fetchUserByEmailAddress
      */
-    override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<OtherUser>> {
+    override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<User>> {
         when(val remoteResult = userRemoteSource.fetchUserByEmailAddress(emailAddress)){
             is Result.Success -> {
                 if (remoteResult.data.isNotEmpty())
-                    return Result.Success(remoteResult.data.toListOtherUser(false))
+                    return Result.Success(remoteResult.data)
             }
         }
         return when(val localResult = userLocalSource.fetchUserByEmailAddress(emailAddress)) {
-            is Result.Success -> Result.Success(localResult.data.toListOtherUser(false))
+            is Result.Success -> Result.Success(localResult.data)
             is Result.Error -> Result.Error(localResult.exception)
             is Result.Canceled -> Result.Canceled(localResult.exception)
         }

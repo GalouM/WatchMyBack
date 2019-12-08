@@ -2,7 +2,6 @@ package com.galou.watchmyback.data.repository
 
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
-import com.galou.watchmyback.data.entity.OtherUser
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.entity.UserWithPreferences
@@ -29,10 +28,10 @@ interface UserRepository {
 
     suspend fun updateUserPreferences(preferences: UserPreferences): Result<Void?>
 
-    suspend fun fetchAllUsers(): Result<List<OtherUser>>
+    suspend fun fetchAllUsers(): Result<List<User>>
 
-    suspend fun fetchUserByUsername(name: String): Result<List<OtherUser>>
+    suspend fun fetchUserByUsername(name: String): Result<List<User>>
 
-    suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<OtherUser>>
+    suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<User>>
 
 }

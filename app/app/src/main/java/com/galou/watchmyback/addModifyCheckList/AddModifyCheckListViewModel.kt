@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 /**
  * [ViewModel] for [AddModifyCheckListActivity]
  *
- * Inehrit from [BaseViewModel]
+ * Inherit from [BaseViewModel]
  *
  * @property checkListRepository [CheckListRepository] reference
  * @property userRepository [UserRepositoryImpl] reference

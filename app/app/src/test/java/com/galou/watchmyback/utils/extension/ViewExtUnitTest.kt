@@ -9,6 +9,10 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galou.watchmyback.R
 import com.galou.watchmyback.WatchMyBackApplication
+import com.galou.watchmyback.data.entity.TimeDisplay
+import com.galou.watchmyback.data.entity.UserPreferences
+import com.galou.watchmyback.testHelpers.firstFriend
+import com.galou.watchmyback.testHelpers.secondFriend
 import com.google.android.material.textfield.TextInputEditText
 import com.google.common.truth.Truth.assertThat
 import org.junit.After
@@ -18,6 +22,7 @@ import org.junit.runner.RunWith
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
 import org.robolectric.annotation.Config
+import java.util.*
 
 /**
  * Created by galou on 2019-10-31
@@ -108,6 +113,47 @@ class ViewExtUnitTest : KoinTest {
         val editText = TextInputEditText(context)
         editText.textFromResourceId(90)
         assertThat(editText.text.toString()).isEmpty()
+    }
+
+    @Test
+    fun setEditTextWithDisplayNameUser_showUsername(){
+        val editText = TextInputEditText(context)
+        val users = listOf(firstFriend, secondFriend)
+        editText.displayNameUsers(users)
+        val textToDisplay = "${users[0].username} - ${users[1].username}"
+        assertThat(editText.text.toString()).contains(textToDisplay)
+    }
+
+    @Test
+    fun displayDateIntoEditText24h_rightFormat(){
+        val editText = TextInputEditText(context)
+        val userPreferences = UserPreferences(timeDisplay = TimeDisplay.H_24)
+        val date = Calendar.getInstance()
+        with(date){
+            set(Calendar.YEAR, 1900)
+            set(Calendar.MONTH, 1)
+            set(Calendar.DAY_OF_MONTH, 3)
+            set(Calendar.HOUR_OF_DAY, 4)
+            set(Calendar.MINUTE, 5)
+        }
+        editText.displayDate(userPreferences, date.time)
+        assertThat(editText.text.toString()).isEqualTo("03/02/1900 - 04:05")
+    }
+
+    @Test
+    fun displayDateIntoEditText12h_rightFormat(){
+        val editText = TextInputEditText(context)
+        val userPreferences = UserPreferences(timeDisplay = TimeDisplay.H_12)
+        val date = Calendar.getInstance()
+        with(date){
+            set(Calendar.YEAR, 1900)
+            set(Calendar.MONTH, 1)
+            set(Calendar.DAY_OF_MONTH, 3)
+            set(Calendar.HOUR, 4)
+            set(Calendar.MINUTE, 5)
+        }
+        editText.displayDate(userPreferences, date.time)
+        assertThat(editText.text.toString()).isEqualTo("02/03/1900 - 04:05 a.m")
     }
 
 

@@ -25,7 +25,7 @@ import com.galou.watchmyback.data.source.local.dao.*
 @Database(
     entities = [
         User::class, Trip::class, PointTrip::class, Location::class, UserPreferences::class,
-        WeatherData::class, CheckList::class, ItemCheckList::class, Friendship::class, Watcher::class
+        WeatherData::class, CheckList::class, ItemCheckList::class, Friendship::class, TripWatcher::class
     ],
     version = 1,
     exportSchema = false

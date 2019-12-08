@@ -74,7 +74,7 @@ class CheckListViewModelTest {
 
     @Test
     fun modifyCheckList_emitModify(){
-        viewModel.modifyCheckList(checkList1)
+        viewModel.modifyCheckList(checkListWithItem1)
         val value: Event<Unit> = LiveDataTestUtil.getValue(viewModel.openAddModifyCheckList)
         assertThat(value.getContentIfNotHandled()).isNotNull()
         assertThat(checkListRepository.checkList).isEqualTo(checkList1)

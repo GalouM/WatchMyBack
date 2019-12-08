@@ -12,6 +12,12 @@
             type="com.galou.watchmyback.settings.SettingsViewModel" />
     </data>
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/activity_settings_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -28,12 +34,6 @@
         android:id="@+id/activity_settings_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/activity_settings_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -300,8 +300,9 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
     </androidx.core.widget.NestedScrollView>
     </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

@@ -1,6 +1,7 @@
 package com.galou.watchmyback.utils.extension
 
 import com.galou.watchmyback.data.entity.OtherUser
+import com.galou.watchmyback.data.entity.TripWatcher
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.Watcher
 
@@ -59,17 +60,32 @@ infix fun List<OtherUser>.setIsMyFriend(myFriends: List<String>) =
     forEach { it.myFriend = myFriends.contains(it.user.id) }
 
 /**
- * Convert a list of [User] into a list of [Watcher]
+ * Convert a list of [User] into a list of [TripWatcher]
  *
  * @param tripId Id of the trip the user are watching
  * @return watcher object containing the user id and the trip id
  */
-infix fun List<User>.toWatchers(tripId: String): List<Watcher> {
-    val watchers = mutableListOf<Watcher>()
-    forEach { watchers.add(Watcher(
+infix fun List<User>.toTripWatchers(tripId: String): List<TripWatcher> {
+    val watchers = mutableListOf<TripWatcher>()
+    forEach { watchers.add(TripWatcher(
         watcherId = it.id,
         tripId = tripId
     ))
     }
     return watchers
 }
+
+/**
+ * Convert a list of user into [Watcher] and determine if they are watching the current trip or not
+ *
+ * @param tripWatchers list of the current watcher of the trip
+ * @return list of all user converted into [Watcher]
+ */
+infix fun List<User>.toWatcher(tripWatchers: List<User>): List<Watcher> {
+    val watchers = mutableListOf<Watcher>()
+    forEach {
+        watchers.add(Watcher(user = it, watchTrip = it in tripWatchers))
+    }
+    return watchers
+}
+

@@ -150,14 +150,16 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
                 is Result.Success -> {
                     val user = result.data
                     if(user != null){
-                        displayData("user $user")
                         setupUserInformation(user)
                     } else {
                         createUserToDB(firebaseUser)
                     }
 
                 }
-                is Result.Error -> showSnackBarMessage(R.string.error_fetching)
+                is Result.Error -> {
+                    displayData("$result")
+                    showSnackBarMessage(R.string.error_fetching)
+                }
                 is Result.Canceled -> showSnackBarMessage(R.string.canceled)
             }
         }

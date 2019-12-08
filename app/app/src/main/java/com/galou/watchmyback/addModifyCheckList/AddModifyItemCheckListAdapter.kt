@@ -29,10 +29,10 @@ class ModifyItemAdapter(
 class ModifyItemViewHolder(private val binding: AddModifyChecklistRvItemBinding) : RecyclerView.ViewHolder(binding.root){
 
     fun bindWithItem(viewModel: AddModifyCheckListViewModel, itemCheckList: ItemCheckList){
-        binding.apply {
+        with(binding){
             viewmodel = viewModel
             item = itemCheckList
-            binding.executePendingBindings()
+            executePendingBindings()
         }
     }
 

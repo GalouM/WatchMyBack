@@ -140,4 +140,12 @@
     <string name="select_type_first">Select a type for your trip first</string>
     <string name="create_checklist_first">Create a check list first</string>
     <string name="unknown">Unknown</string>
+    <string name="cant_be_empty">Can\'t be empty</string>
+    <string name="title_add_checklist">Create a CheckList</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="never">Never</string>
+    <string name="create_new_checklist">Create New Checklist</string>
+    <string name="add_friends">Add Friends</string>
 </resources>

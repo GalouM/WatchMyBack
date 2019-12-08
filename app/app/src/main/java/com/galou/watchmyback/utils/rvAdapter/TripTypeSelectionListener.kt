@@ -1,4 +1,4 @@
-package com.galou.watchmyback.selectTripTypeDialog
+package com.galou.watchmyback.utils.rvAdapter
 
 import com.galou.watchmyback.data.entity.TripType
 

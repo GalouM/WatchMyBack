@@ -8,7 +8,7 @@
             type="com.galou.watchmyback.data.entity.TripType" />
         <variable
             name="listener"
-            type="com.galou.watchmyback.selectTripTypeDialog.TripTypeSelectionListener" />
+            type="com.galou.watchmyback.utils.rvAdapter.TripTypeSelectionListener" />
     </data>
 
 <androidx.cardview.widget.CardView

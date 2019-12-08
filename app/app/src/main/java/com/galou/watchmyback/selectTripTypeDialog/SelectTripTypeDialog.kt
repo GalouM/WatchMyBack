@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.galou.watchmyback.R
 import com.galou.watchmyback.data.entity.TripType
-import com.galou.watchmyback.utils.displayData
+import com.galou.watchmyback.utils.rvAdapter.SelectTripTypeAdapter
+import com.galou.watchmyback.utils.rvAdapter.TripTypeSelectionListener
 
 /**
  * @author galou

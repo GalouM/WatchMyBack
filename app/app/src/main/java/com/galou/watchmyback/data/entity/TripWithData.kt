@@ -21,11 +21,11 @@ data class TripWithData(
         parentColumn = TRIP_TABLE_UUID,
         entityColumn = USER_TABLE_UUID,
         associateBy = Junction(
-            value = Watcher::class,
+            value = TripWatcher::class,
             parentColumn = WATCHER_TABLE_TRIP_UUID,
             entityColumn = WATCHER_TABLE_WATCHER_UUID
         ),
         entity = User::class
     )
-    var watchers: List<User>
+    var watchers: MutableList<User>
 )
