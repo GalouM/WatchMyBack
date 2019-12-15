@@ -189,10 +189,10 @@ fun TextView.textFromResourceId(resourceId: Int?){
         try {
             context.getText(resourceId)
         } catch (e: Exception){
-            ""
+            "N/A"
         }
     } else {
-        ""
+        "N/A"
     }
 }
 

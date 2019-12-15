@@ -200,21 +200,21 @@ class ViewExtUnitTest : KoinTest {
     fun setTextViewWithResource0_showEmptyText(){
         val textView = TextView(context)
         textView.textFromResourceId(0)
-        assertThat(textView.text.toString()).isEmpty()
+        assertThat(textView.text.toString()).contains("N/A")
     }
 
     @Test
     fun setTextViewWithNull_showEmptyText(){
         val textView = TextView(context)
         textView.textFromResourceId(null)
-        assertThat(textView.text.toString()).isEmpty()
+        assertThat(textView.text.toString()).contains("N/A")
     }
 
     @Test
     fun setTextViewWithNonExistingResource_showEmptyText(){
         val textView = TextView(context)
         textView.textFromResourceId(90)
-        assertThat(textView.text.toString()).isEmpty()
+        assertThat(textView.text.toString()).contains("N/A")
     }
 
 
