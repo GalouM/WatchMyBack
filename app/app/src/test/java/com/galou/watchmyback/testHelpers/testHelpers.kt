@@ -73,3 +73,9 @@ val checkListWithItem1 = CheckListWithItems(checkList = checkList1, items = item
 val checkListWithItems2 = CheckListWithItems(checkList = checkList2, items = itemList2)
 
 val checkLists = listOf(checkListWithItem1, checkListWithItems2)
+
+val tripWithData = TripWithData(
+    trip = Trip(),
+    points = mutableListOf(),
+    watchers = mutableListOf()
+)

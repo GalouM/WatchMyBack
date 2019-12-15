@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
@@ -15,9 +16,15 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/WatchMyBackTheme">
-        <activity android:name=".addFriend.AddFriendActivity"
-            android:label="Add Friends"/>
+        android:theme="@style/WatchMyBackTheme"
+        android:usesCleartextTraffic="true">
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <activity
+            android:name=".mapPickLocation.PickLocationActivity"
+            android:label="@string/pick_location_title"/>
+        <activity
+            android:name=".addFriend.AddFriendActivity"
+            android:label="Add Friends" />
         <activity
             android:name=".addTrip.AddTripActivity"
             android:label="@string/add_trip"
@@ -32,8 +39,7 @@
             android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".addModifyCheckList.AddModifyCheckListActivity"
-            android:label="@string/title_add_checklist"
-            />
+            android:label="@string/title_add_checklist" />
         <activity
             android:name=".DetailsTripActivity"
             android:label="@string/details_trip"

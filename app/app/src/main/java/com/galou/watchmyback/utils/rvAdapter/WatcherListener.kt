@@ -1,6 +1,6 @@
 package com.galou.watchmyback.utils.rvAdapter
 
-import com.galou.watchmyback.data.entity.Watcher
+import com.galou.watchmyback.data.applicationUse.Watcher
 
 /**
  * @author galou

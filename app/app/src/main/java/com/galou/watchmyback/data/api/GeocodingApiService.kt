@@ -1,9 +1,9 @@
 package com.galou.watchmyback.data.api
 
-import io.reactivex.Observable
+import com.galou.watchmyback.data.api.reponse.GeocodingApiResponse
+import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -12,22 +12,21 @@ import retrofit2.http.Query
  * 2019-12-07
  */
 
-const val geocodingApiBaseUrl = "http://open.mapquestapi.com"
-
 interface GeocodingApiService {
 
     @GET("geocoding/v1/reverse?thumbMaps=false&outFormat=json")
-    fun getAddressFromLocation(
+    suspend fun getAddressFromLocation(
         @Query("location") location: String,
         @Query("key") apiKey: String
-    ): Observable<GeocodingApiResponse>
+    ): Response<GeocodingApiResponse>
 
     companion object {
+        private const val baseUrl = "http://open.mapquestapi.com/"
+
         fun create(): GeocodingApiService {
             val retrofit = Retrofit.Builder()
-                .baseUrl(geocodingApiBaseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .baseUrl(baseUrl)
+                .addConverterFactory(MoshiConverterFactory.create())
                 .build()
 
             return retrofit.create(GeocodingApiService::class.java)

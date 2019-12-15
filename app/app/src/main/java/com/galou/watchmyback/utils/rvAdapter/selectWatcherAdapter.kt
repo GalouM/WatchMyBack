@@ -3,7 +3,7 @@ package com.galou.watchmyback.utils.rvAdapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.galou.watchmyback.data.entity.Watcher
+import com.galou.watchmyback.data.applicationUse.Watcher
 import com.galou.watchmyback.databinding.SelectWatcherItemBinding
 
 /**

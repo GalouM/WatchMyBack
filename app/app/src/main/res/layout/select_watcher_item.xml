@@ -5,7 +5,7 @@
     <data>
         <variable
             name="watcher"
-            type="com.galou.watchmyback.data.entity.Watcher" />
+            type="com.galou.watchmyback.data.applicationUse.Watcher" />
 
         <variable
             name="listener"
@@ -34,7 +34,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:loadUrl="@{watcher.user.pictureUrl}"/>
+            app:loadUrl="@{watcher.user.pictureUrl}"
+            android:contentDescription="@string/user_profile_picture"/>
 
         <TextView
             android:id="@+id/add_watcher_item_username"

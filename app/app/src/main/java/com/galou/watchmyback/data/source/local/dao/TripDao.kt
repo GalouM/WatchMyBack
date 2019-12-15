@@ -1,11 +1,15 @@
 package com.galou.watchmyback.data.source.local.dao
 
 import androidx.room.*
-import com.galou.watchmyback.data.entity.*
+import com.galou.watchmyback.data.entity.ItemCheckList
+import com.galou.watchmyback.data.entity.Trip
+import com.galou.watchmyback.data.entity.TripWithData
+import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.utils.TRIP_TABLE_ACTIVE
 import com.galou.watchmyback.utils.TRIP_TABLE_NAME
 import com.galou.watchmyback.utils.TRIP_TABLE_USER_UUID
+import com.galou.watchmyback.utils.extension.toTripWatchers
 
 /**
  * List all the actions possible on the [Trip] table
@@ -29,7 +33,7 @@ abstract class TripDao(private val database: WatchMyBackDatabase) {
     @Query("SELECT * FROM $TRIP_TABLE_NAME " +
             "WHERE $TRIP_TABLE_USER_UUID = :userId " +
             "AND $TRIP_TABLE_ACTIVE = 1")
-    abstract suspend fun getUserActiveTrip(userId: String): TripWithData
+    abstract suspend fun getUserActiveTrip(userId: String): TripWithData?
 
     /**
      * Create an object [Trip] in the database
@@ -52,19 +56,23 @@ abstract class TripDao(private val database: WatchMyBackDatabase) {
      */
 
     /**
+     * Delete all the user's trips that are active
+     *
+     * @param userId id of the user
+     *
+     * @see Query
+     */
+    @Query("DELETE FROM $TRIP_TABLE_NAME WHERE $TRIP_TABLE_USER_UUID =:userId AND $TRIP_TABLE_ACTIVE = 1")
+    abstract suspend fun deleteActiveTrips(userId: String)
+
+    /**
      * Create a [Trip] and all its data in the database
      *
-     * @param trip [Trip] to create
-     * @param pointTrip List of all the [PointTrip] of the [Trip]
-     * @param pointLocations List of the [Location] of the [PointTrip]
-     * @param weatherData List of the [WeatherData] of the [PointTrip]
-     * @param tripWatchers List of the [TripWatcher] of the [Trip]
+     * @param trip [TripWithData] to create
      * @param items List of the [ItemCheckList] took in this [Trip]
      *
      * @see Transaction
      * @see PointTripDao
-     * @see LocationDao
-     * @see WeatherDataDao
      * @see ItemCheckListDao
      * @see WatcherDao
      * @see ItemCheckListDao.updateItems
@@ -74,13 +82,12 @@ abstract class TripDao(private val database: WatchMyBackDatabase) {
      */
     @Transaction
     open suspend fun createTripAndData(
-        trip: Trip, pointTrip: List<PointTrip>, pointLocations: List<Location>,
-        weatherData: List<WeatherData>, tripWatchers: List<TripWatcher>, items: List<ItemCheckList>
+        trip: TripWithData, items: List<ItemCheckList>?
     ){
-        database.itemCheckListDao().updateItems(items)
-        createTrip(trip)
-        database.watcherDao().addWatchers(tripWatchers)
-        database.pointTripDao().createPointsAndData(pointTrip, pointLocations, weatherData)
+        items?.let { database.itemCheckListDao().updateItems(it) }
+        createTrip(trip.trip)
+        database.watcherDao().addWatchers(trip.watchers toTripWatchers trip.trip.id)
+        database.pointTripDao().createPointsAndData(trip.points)
 
     }
 

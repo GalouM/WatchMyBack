@@ -6,6 +6,7 @@ import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.utils.POINT_TRIP_TABLE_NAME
 import com.galou.watchmyback.utils.POINT_TRIP_TRIP_UUID
 import com.galou.watchmyback.utils.POINT_TRIP_TYPE
+import com.galou.watchmyback.utils.displayData
 
 /**
  * List of all the actions possible on the [PointTrip] table
@@ -31,14 +32,12 @@ abstract class PointTripDao(private val database: WatchMyBackDatabase) {
      * @see OnConflictStrategy.REPLACE
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun createPoints(pointTrips: List<PointTrip>)
+    abstract suspend fun createPoints(vararg pointTrips: PointTrip)
 
     /**
      * Create a [PointTrip] object and its data in the database
      *
-     * @param pointTrips [PointTrip] to create
-     * @param locations [Location] of the point
-     * @param weatherData [WeatherData] of the point
+     * @param pointTrips [PointTripWithData] to create
      *
      * @see Transaction
      * @see Location
@@ -48,12 +47,15 @@ abstract class PointTripDao(private val database: WatchMyBackDatabase) {
      * @see WeatherDataDao.createWeatherData
      */
     @Transaction
-    open suspend fun createPointsAndData(
-        pointTrips: List<PointTrip>, locations: List<Location>, weatherData: List<WeatherData>
-    ){
-        createPoints(pointTrips)
-        database.locationDao().createLocations(locations)
-        database.weatherDataDao().createWeatherData(weatherData)
+    open suspend fun createPointsAndData(pointTrips: List<PointTripWithData>){
+        pointTrips.forEach {
+            displayData("create point")
+            createPoints(it.pointTrip)
+            displayData("create location")
+            database.locationDao().createLocations(it.location!!)
+            displayData("create weather")
+            database.weatherDataDao().createWeatherData(it.weatherData!!)
+        }
     }
 
     /**

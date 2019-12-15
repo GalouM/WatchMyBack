@@ -6,12 +6,18 @@ import androidx.lifecycle.viewModelScope
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
 import com.galou.watchmyback.base.BaseViewModel
+import com.galou.watchmyback.data.applicationUse.Watcher
 import com.galou.watchmyback.data.entity.*
 import com.galou.watchmyback.data.repository.CheckListRepository
 import com.galou.watchmyback.data.repository.FriendRepository
+import com.galou.watchmyback.data.repository.TripRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.extension.*
+import com.galou.watchmyback.utils.displayData
+import com.galou.watchmyback.utils.extension.emitNewValue
+import com.galou.watchmyback.utils.extension.filterOrCreateMainPoint
+import com.galou.watchmyback.utils.extension.filterScheduleStage
+import com.galou.watchmyback.utils.extension.toWatcher
 import com.galou.watchmyback.utils.todaysDate
 import kotlinx.coroutines.launch
 import java.util.*
@@ -24,12 +30,14 @@ import java.util.*
  * @property friendRepository [FriendRepository] reference
  * @property userRepository [UserRepository] reference
  * @property checkListRepository [CheckListRepository] reference
+ * @property tripRepository [TripRepository] reference
  */
 
 class AddTripViewModel(
     private val friendRepository: FriendRepository,
     val userRepository: UserRepository,
-    private val checkListRepository: CheckListRepository
+    private val checkListRepository: CheckListRepository,
+    private val tripRepository: TripRepository
 ) : BaseViewModel(){
 
     private val currentUser = userRepository.currentUser.value ?: throw IllegalAccessException("No user set")
@@ -102,8 +110,11 @@ class AddTripViewModel(
         get() = field.apply { value = trip.points.filterScheduleStage() }
     val stagePointsLD: LiveData<MutableList<PointTripWithData>> = _stagePointsLD
 
-    private val _openMapLD = MutableLiveData<Event<PointTripWithData>>()
-    val openMapLD: LiveData<Event<PointTripWithData>> = _openMapLD
+    private val _openMapLD = MutableLiveData<Event<Unit>>()
+    val openMapLD: LiveData<Event<Unit>> = _openMapLD
+
+    private val _fetchCurrentLocationLD = MutableLiveData<Event<Unit>>()
+    val fetchCurrentLocationLD: LiveData<Event<Unit>> = _fetchCurrentLocationLD
     
     private val _typeError = MutableLiveData<Int?>()
     val typeError: LiveData<Int?> = _typeError
@@ -131,6 +142,9 @@ class AddTripViewModel(
 
     private val _endPointTimeError = MutableLiveData<Int?>()
     val endPointTimeError: LiveData<Int?> = _endPointTimeError
+
+    private val _tripSavedLD = MutableLiveData<Event<Unit>>()
+    val tripSavedLD: LiveData<Event<Unit>> = _tripSavedLD
 
 
     /**
@@ -306,6 +320,7 @@ class AddTripViewModel(
      * @see fetchCurrentLocation
      */
     fun setPointFromCurrentLocation(idButton: Int) {
+        _dataLoading.value = true
         fetchCurrentLocation(getPointFromButtonId(idButton))
     }
 
@@ -342,7 +357,26 @@ class AddTripViewModel(
             latitude = lat
             longitude = lgn
         }
-        _tripLD.emitNewValue()
+        emitNewValuePoint(point)
+        _dataLoading.value = false
+    }
+
+    /**
+     * Set the location of the latest selected point
+     *
+     * @see TripRepository.pointSelected
+     *
+     * @param lat latitude of the point
+     * @param lgn longitude of the point
+     */
+    fun setPointLocation(lat: Double, lgn: Double){
+        tripRepository.pointSelected?.location!!.apply {
+            latitude = lat
+            longitude = lgn
+        }
+        emitNewValuePoint(tripRepository.pointSelected ?: throw Exception("no point selected saved in repo"))
+        tripRepository.pointSelected = null
+        _dataLoading.value = false
     }
 
 
@@ -355,17 +389,41 @@ class AddTripViewModel(
     fun setTimeSchedulePoint(point: PointTripWithData, date: Calendar){
         if (date.time.before(todaysDate)) date.add(Calendar.DATE, 1)
         point.pointTrip.time = date.time
-        when(point){
-            _startPointLD.value -> _startPointLD.emitNewValue()
-            _endPointLD.value -> _endPointLD.emitNewValue()
+        emitNewValuePoint(point)
+    }
+
+    /**
+     * Emit the new value of a point
+     * Check the type of point and emit the live data accordingly
+     *
+     * @param point
+     */
+    private fun emitNewValuePoint(point: PointTripWithData){
+        when(point.pointTrip.typePoint){
+            TypePoint.START -> _startPointLD.emitNewValue()
+            TypePoint.END -> _endPointLD.emitNewValue()
             else -> _stagePointsLD.emitNewValue()
 
         }
     }
-    
 
+    /**
+     * Show message that GPS is off
+     *
+     */
+    fun gpsNotAvailable(){
+        showSnackBarMessage(R.string.turn_on_gps)
+    }
+
+
+    /**
+     * Emit LiveData to fetch the current location of the user
+     *
+     * @param point point to update location with
+     */
     private fun fetchCurrentLocation(point: PointTripWithData){
-        TODO()
+        tripRepository.pointSelected = point
+        _fetchCurrentLocationLD.value = Event(Unit)
     }
 
     /**
@@ -374,7 +432,9 @@ class AddTripViewModel(
      * @param point to update
      */
     private fun showMapWithMarker(point: PointTripWithData){
-        _openMapLD.value = Event(point)
+        tripRepository.pointSelected = point
+        tripRepository.tripPoints = trip.points
+        _openMapLD.value = Event(Unit)
     }
 
     /**
@@ -395,35 +455,73 @@ class AddTripViewModel(
         }
     }
 
+
     /**
      * Save the Trip to the database
      *
+     * @see checkErrors
+     * @see TripRepository.createTrip
+     *
      */
     fun startTrip(){
-        _dataLoading.value = true
-        if (!checkErrors()){
-            val tripWatcher = trip.watchers toTripWatchers trip.trip.id
-            //fetchLocationInformation()
-            //fetchWeatherDataForPoints()
+
+        fun createTripInDatabase(){
+            println(trip)
             with(trip.trip){
                 if (mainLocation.isNullOrBlank()){
                     val startPoint = _startPointLD.value!!
                     mainLocation = startPoint.location?.city ?: startPoint.location?.country
                 }
             }
+            _tripLD.emitNewValue()
+
+            viewModelScope.launch {
+                when(val task = tripRepository.createTrip(trip, checkList)){
+                    is Result.Success -> _tripSavedLD.value = Event(Unit)
+                    is Result.Error -> {
+                        displayData("${task.exception}")
+                        showSnackBarMessage(R.string.trip_creation_error)
+                    }
+                    is Result.Canceled -> {
+                        displayData("${task.exception}")
+                        showSnackBarMessage(R.string.trip_creation_error)
+                    }
+
+                }
+                _dataLoading.value = false
+            }
+        }
+
+        /**
+         * Fetch location and weather information for every points
+         *
+         * @see TripRepository.fetchPointLocationInformation
+         *
+         */
+        fun fetchPointLocationInformation(){
+            viewModelScope.launch {
+                when(val task = tripRepository.fetchPointLocationInformation(trip.points)){
+                    is Result.Error -> {
+                        displayData("${task.exception}")
+                        showSnackBarMessage(R.string.trip_creation_error)
+                    }
+                    is Result.Canceled -> {
+                        displayData("${task.exception}")
+                        showSnackBarMessage(R.string.trip_creation_error)
+                    }
+
+                    is Result.Success -> createTripInDatabase()
+
+                }
+
+            }
+        }
+        _dataLoading.value = true
+        if (!checkErrors()){
+            fetchPointLocationInformation()
         } else {
             _dataLoading.value = false
         }
-
-
-    }
-
-    private fun fetchWeatherDataForPoints(){
-        TODO()
-    }
-    
-    private fun fetchLocationInformation(){
-        TODO()
     }
 
     /**
@@ -452,13 +550,17 @@ class AddTripViewModel(
                 }
             }
 
+            // remove all the stage points with empty latitude or lon
+            val pointsToRemove = mutableListOf<PointTripWithData>()
             with(points.filterScheduleStage()) {
                 forEach {
                     if (it.location?.latitude == null || it.location.longitude == null) {
-                        this.remove(it)
+                        pointsToRemove.add(it)
                     }
                 }
             }
+            points.removeAll(pointsToRemove)
+            _stagePointsLD.emitNewValue()
 
 
         }

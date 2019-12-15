@@ -1,4 +1,6 @@
-package com.galou.watchmyback.data.entity
+package com.galou.watchmyback.data.applicationUse
+
+import com.galou.watchmyback.data.entity.User
 
 /**
  * @author galou

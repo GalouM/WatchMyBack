@@ -68,7 +68,9 @@ enum class WeatherCondition(val conditionNameId: Int){
     SCATTERED_CLOUDS(R.string.scattered_clouds),
     BROKEN_CLOUDS(R.string.broken_clouds),
     SHOWER_RAIN(R.string.shower_rain),
+    RAIN(R.string.rain),
     THUNDERSTORM(R.string.thunerstorm),
     SNOW(R.string.snow),
-    MIST(R.string.mist)
+    MIST(R.string.mist),
+    UNKNOWN(R.string.unknown_condition)
 }

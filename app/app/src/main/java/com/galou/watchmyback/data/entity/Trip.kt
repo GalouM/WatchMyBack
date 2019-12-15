@@ -57,7 +57,7 @@ import com.galou.watchmyback.utils.*
 data class Trip (
     @ColumnInfo(name = TRIP_TABLE_UUID) @PrimaryKey var id: String = idGenerated,
     @ColumnInfo(name = TRIP_TABLE_USER_UUID) var userId: String = "",
-    @ColumnInfo(name = TRIP_TABLE_CHECK_LIST_UUID) var checkListId: String? = "",
+    @ColumnInfo(name = TRIP_TABLE_CHECK_LIST_UUID) var checkListId: String? = null,
     @ColumnInfo(name = TRIP_TABLE_STATUS) var status: TripStatus = ON_GOING,
     @ColumnInfo(name = TRIP_TABLE_DETAILS) var details: String = "",
     @ColumnInfo(name = TRIP_TABLE_FREQUENCY) var updateFrequency:TripUpdateFrequency? = null,

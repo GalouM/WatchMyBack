@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.galou.watchmyback.R
-import com.galou.watchmyback.data.entity.OtherUser
+import com.galou.watchmyback.data.applicationUse.OtherUser
 import com.galou.watchmyback.databinding.ActivityAddFriendBinding
 import com.galou.watchmyback.utils.extension.setupSnackBar
 import com.galou.watchmyback.utils.rvAdapter.UsersListAdapter

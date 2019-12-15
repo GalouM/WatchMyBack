@@ -28,6 +28,6 @@ interface LocationDao{
      * @see OnConflictStrategy.REPLACE
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun createLocations(locations: List<Location>)
+    suspend fun createLocations(vararg locations: Location)
 
 }

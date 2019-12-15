@@ -28,7 +28,7 @@ interface WeatherDataDao {
      * @see Insert
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun createWeatherData(weatherData: List<WeatherData>)
+    suspend fun createWeatherData(vararg weatherData: WeatherData)
 
     /*
     @Query("SELECT * FROM $WEATHER_DATA_TABLE_NAME INNER JOIN $POINT_TRIP_TABLE_NAME ON ${POINT_TRIP_TABLE_NAME}.${POINT_TRIP_UUID} = ${WEATHER_DATA_TABLE_NAME}.${WEATHER_DATA_TABLE_POINT_UUID} WHERE ${POINT_TRIP_TABLE_NAME}.${POINT_TRIP_TRIP_UUID} = :tripId AND ${POINT_TRIP_TABLE_NAME}.${POINT_TRIP_TRIP_UUID} = :typePoint")

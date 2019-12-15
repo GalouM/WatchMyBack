@@ -1,5 +1,6 @@
 package com.galou.watchmyback.addTrip
 
+import android.app.Activity
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
@@ -15,28 +16,30 @@ import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
 import com.galou.watchmyback.addFriend.AddFriendActivity
 import com.galou.watchmyback.addModifyCheckList.AddModifyCheckListActivity
+import com.galou.watchmyback.data.applicationUse.Watcher
 import com.galou.watchmyback.data.entity.*
 import com.galou.watchmyback.databinding.ActivityAddTripBinding
+import com.galou.watchmyback.mapPickLocation.PickLocationActivity
 import com.galou.watchmyback.selectCheckListDialog.SelectCheckListDialog
 import com.galou.watchmyback.selectTripTypeDialog.SelectTripTypeDialog
 import com.galou.watchmyback.selectUpdateFrequencyDialog.SelectTripUpdateFrequencyDialog
 import com.galou.watchmyback.selectWatcherDialog.SelectWatchersDialog
-import com.galou.watchmyback.utils.CHECKLIST_DIALOG
-import com.galou.watchmyback.utils.TRIP_TYPE_TAG
-import com.galou.watchmyback.utils.UPDATE_HZ_TAG
-import com.galou.watchmyback.utils.WATCHER_DIALOG
+import com.galou.watchmyback.utils.*
 import com.galou.watchmyback.utils.extension.setupSnackBar
 import com.galou.watchmyback.utils.rvAdapter.CheckListListener
 import com.galou.watchmyback.utils.rvAdapter.TripTypeSelectionListener
 import com.galou.watchmyback.utils.rvAdapter.UpdateFrequencyListener
 import com.galou.watchmyback.utils.rvAdapter.WatcherListener
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
+import pub.devrel.easypermissions.EasyPermissions
 import java.util.*
 
 class AddTripActivity : AppCompatActivity(),
-    TripTypeSelectionListener, UpdateFrequencyListener, CheckListListener,
-        WatcherListener
+    TripTypeSelectionListener, UpdateFrequencyListener, CheckListListener, WatcherListener,
+    EasyPermissions.PermissionCallbacks
 {
 
     private val viewModel: AddTripViewModel by viewModel()
@@ -52,14 +55,43 @@ class AddTripActivity : AppCompatActivity(),
     private var checkListDialog: SelectCheckListDialog? = null
     private var watcherDialog: SelectWatchersDialog? = null
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
         configureBinding()
         configureToolbar()
         configureRecyclerViewItem()
         configureRecyclerViewStagePoint()
         setupObserverViewModel()
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode){
+            RC_PICK_LOCATION_MAP -> {
+                data?.let {
+                    val latitude = data.getDoubleExtra(POINT_LATITUDE, 0.0)
+                    val longitude = data.getDoubleExtra(POINT_LONGITUDE, 0.0)
+                    viewModel.setPointLocation(latitude, longitude)
+                }
+            }
+        }
+    }
+
+    private fun configureBinding() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_add_trip)
+        binding.viewmodel = viewModel
+        binding.lifecycleOwner = this
+
+    }
+
+    //-------------------------
+    //  SETUP OBSERVERS
+    //-------------------------
 
     private fun setupObserverViewModel() {
         setupSnackBar()
@@ -72,13 +104,9 @@ class AddTripActivity : AppCompatActivity(),
         setupItemChecklist()
         setupAddStagePoint()
         setupOpenTimePicker()
-
-    }
-
-    private fun configureBinding() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_add_trip)
-        binding.viewmodel = viewModel
-        binding.lifecycleOwner = this
+        setupFetchCurrentLocation()
+        setupTripSaved()
+        setupOpenMapPicker()
 
     }
 
@@ -123,6 +151,23 @@ class AddTripActivity : AppCompatActivity(),
         viewModel.openTimePickerLD.observe(this, EventObserver { showTimePicker(it) })
     }
 
+    private fun setupFetchCurrentLocation(){
+        viewModel.fetchCurrentLocationLD.observe(this, EventObserver { connectLocationService() })
+    }
+
+    private fun setupTripSaved(){
+        viewModel.tripSavedLD.observe(this, EventObserver { tripCreated() })
+    }
+
+    private fun setupOpenMapPicker(){
+        viewModel.openMapLD.observe(this, EventObserver {showMapPicker()})
+    }
+
+
+    //-------------------------
+    //  DIALOGS
+    //-------------------------
+
     private fun showTripTypeDialog(types: List<TripType>){
         tripTypeDialog = SelectTripTypeDialog(types, this).apply {
             show(supportFragmentManager, TRIP_TYPE_TAG)
@@ -141,24 +186,12 @@ class AddTripActivity : AppCompatActivity(),
         }
     }
 
-    private fun showAddCheckListActivity(){
-        with(Intent(this, AddModifyCheckListActivity::class.java)){
-            startActivity(this)
-        }
-    }
-
     private fun showWatcherDialog(watchers: List<Watcher>){
         watcherDialog = SelectWatchersDialog(watchers, this).apply {
             show(supportFragmentManager, WATCHER_DIALOG)
         }
     }
 
-    private fun showAddFriendsActivity(){
-        watcherDialog?.dismiss()
-        with(Intent(this, AddFriendActivity::class.java)){
-            startActivity(this)
-        }
-    }
 
     private fun showTimePicker(data: Map<TimeDisplay, PointTripWithData>){
         val point = data.values.first()
@@ -189,6 +222,10 @@ class AddTripActivity : AppCompatActivity(),
 
     }
 
+    //-------------------------
+    //  RECYCLERVIEWS
+    //-------------------------
+
     private fun updateItemsCheckList(items: List<ItemCheckList>?){
         items?.let{
             with(adapterItems){
@@ -205,6 +242,54 @@ class AddTripActivity : AppCompatActivity(),
             notifyDataSetChanged()
 
         }
+    }
+
+    //-------------------------
+    //
+    //-------------------------
+
+    private fun connectLocationService(){
+        when(isGPSAvailable(this)){
+            true -> if(requestPermissionLocation(this)){
+                fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                    viewModel.setPointLocation(location.latitude, location.longitude)
+                }
+            }
+            false -> viewModel.gpsNotAvailable()
+        }
+
+    }
+
+    //-------------------------
+    //  NAVIGATE OTHER ACTIVITIES
+    //-------------------------
+
+    private fun showAddCheckListActivity(){
+        with(Intent(this, AddModifyCheckListActivity::class.java)){
+            startActivity(this)
+        }
+    }
+
+    private fun showMapPicker(){
+        with(Intent(this, PickLocationActivity::class.java)){
+            startActivityForResult(this, RC_PICK_LOCATION_MAP)
+        }
+    }
+
+    private fun showAddFriendsActivity(){
+        watcherDialog?.dismiss()
+        with(Intent(this, AddFriendActivity::class.java)){
+            startActivity(this)
+        }
+    }
+
+    //-------------------------
+    //  TRIP CREATION
+    //-------------------------
+
+    private fun tripCreated(){
+        setResult(Activity.RESULT_OK)
+        finish()
     }
 
     //-------------------------
@@ -278,4 +363,16 @@ class AddTripActivity : AppCompatActivity(),
     override fun onClickAddFriends() {
         viewModel.openAddFriendsActivity()
     }
+
+    //-------------------------
+    //  PERMISSION CALLBACK
+    //-------------------------
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        when(requestCode){
+            RC_LOCATION_PERMS -> connectLocationService()
+        }
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {}
 }

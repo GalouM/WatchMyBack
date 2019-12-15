@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
 import com.galou.watchmyback.addFriend.AddFriendActivity
-import com.galou.watchmyback.data.entity.OtherUser
+import com.galou.watchmyback.data.applicationUse.OtherUser
 import com.galou.watchmyback.databinding.FragmentFriendsViewBinding
 import com.galou.watchmyback.utils.RC_ADD_FRIEND
 import com.galou.watchmyback.utils.extension.setupSnackBar

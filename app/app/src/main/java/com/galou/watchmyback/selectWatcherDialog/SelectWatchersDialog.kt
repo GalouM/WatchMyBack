@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.galou.watchmyback.R
-import com.galou.watchmyback.data.entity.Watcher
+import com.galou.watchmyback.data.applicationUse.Watcher
 import com.galou.watchmyback.databinding.DialogSelectWatcherBinding
 import com.galou.watchmyback.utils.rvAdapter.SelectWatcherAdapter
 import com.galou.watchmyback.utils.rvAdapter.WatcherListener

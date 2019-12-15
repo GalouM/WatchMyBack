@@ -149,11 +149,11 @@ class ViewExtUnitTest : KoinTest {
             set(Calendar.YEAR, 1900)
             set(Calendar.MONTH, 1)
             set(Calendar.DAY_OF_MONTH, 3)
-            set(Calendar.HOUR, 4)
+            set(Calendar.HOUR_OF_DAY, 4)
             set(Calendar.MINUTE, 5)
         }
         editText.displayDate(userPreferences, date.time)
-        assertThat(editText.text.toString()).isEqualTo("02/03/1900 - 04:05 a.m")
+        assertThat(editText.text.toString()).isEqualTo("02/03/1900 - 04:05 AM")
     }
 
 

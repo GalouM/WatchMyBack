@@ -47,6 +47,8 @@ val itemList2 = listOf(
     item2List2
 )
 
+val checkListWithItem1 = CheckListWithItems(checkList = checkList1, items = itemList1)
+
 //trips
 val trip1 = Trip(
     idGenerated, mainUser.id, checkList1.id, TripStatus.ON_GOING, "details about my trip",
@@ -62,7 +64,7 @@ val point1Trip1 = PointTrip(idGenerated, trip1.id, TypePoint.START, todaysDate)
 val point2Trip1 = PointTrip(idGenerated, trip1.id, TypePoint.END, todaysDate)
 val point3Trip1 = PointTrip(idGenerated, trip1.id, TypePoint.SCHEDULE_STAGE, todaysDate)
 val point1Trip2 = PointTrip(idGenerated, trip2.id, TypePoint.START, todaysDate)
-val Point2Trip2 = PointTrip(idGenerated, trip2.id, TypePoint.END, todaysDate)
+val point2Trip2 = PointTrip(idGenerated, trip2.id, TypePoint.END, todaysDate)
 
 val listPoint1 = listOf(
     point1Trip1,
@@ -71,7 +73,7 @@ val listPoint1 = listOf(
 )
 val listPoint2 = listOf(
     point1Trip2,
-    Point2Trip2
+    point2Trip2
 )
 
 //location
@@ -79,7 +81,7 @@ val location1Trip1 = Location(point1Trip1.id, 123.456, -98.654, "Sun peaks", "Ca
 val location2Trip1 = Location(point2Trip1.id, 178.09, -45.987, "Sun peaks", "Canada")
 val location3Trip1 = Location(point3Trip1.id, 465.076, -654.675, "Sun peaks", "Canada")
 val location1Trip2 = Location(point1Trip2.id, 676.456, -87.654, "Kamloops", "Canada")
-val location2Trip2 = Location(Point2Trip2.id, 546.09, -56.987, "Kamloops", "Canada")
+val location2Trip2 = Location(point2Trip2.id, 546.09, -56.987, "Kamloops", "Canada")
 
 val listLocationsTrip1 = listOf(
     location1Trip1,
@@ -96,7 +98,7 @@ val weather1Trip1 = WeatherData(idGenerated, point1Trip1.id, WeatherCondition.CL
 val weather2Trip1 = WeatherData(idGenerated, point2Trip1.id, WeatherCondition.BROKEN_CLOUDS, 300.0, todaysDate, "icon2")
 val weather3Trip1 = WeatherData(idGenerated, point3Trip1.id, WeatherCondition.SNOW, 400.0, todaysDate, "icon3")
 val weather1Trip2 = WeatherData(idGenerated, point1Trip2.id, WeatherCondition.SHOWER_RAIN, 500.0, todaysDate, "icon4")
-val weather2Trip2 = WeatherData(idGenerated, Point2Trip2.id, WeatherCondition.MIST, 600.0, todaysDate, "icon5")
+val weather2Trip2 = WeatherData(idGenerated, point2Trip2.id, WeatherCondition.MIST, 600.0, todaysDate, "icon5")
 
 val listWeatherTrip1 = listOf(
     weather1Trip1,
@@ -118,5 +120,28 @@ val listWatcherTrip1 = listOf(
     watcher2Trip1
 )
 val listWatcherTrip2 = listOf(watcher1Trip2)
+
+val listPointsWithDataTrip1 = mutableListOf(
+    PointTripWithData(pointTrip = point1Trip1, weatherData = weather1Trip1, location = location1Trip1),
+    PointTripWithData(pointTrip = point2Trip1, weatherData = weather2Trip1, location = location1Trip1),
+    PointTripWithData(pointTrip = point3Trip1, weatherData = weather3Trip1, location = location3Trip1)
+)
+
+val listPointWithDataTrip2 = mutableListOf(
+    PointTripWithData(pointTrip = point1Trip2, weatherData = weather1Trip2, location = location1Trip2),
+    PointTripWithData(pointTrip = point2Trip2, weatherData = weather2Trip2, location = location2Trip2)
+)
+
+val tripWithData1 = TripWithData(
+    trip = trip1,
+    watchers = mutableListOf(firstFriend, secondFriend),
+    points = listPointsWithDataTrip1
+)
+
+val tripWithData2 = TripWithData(
+    trip = trip2,
+    watchers = mutableListOf(secondFriend),
+    points = listPointWithDataTrip2
+)
 
 

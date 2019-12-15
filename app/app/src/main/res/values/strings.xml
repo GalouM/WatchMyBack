@@ -116,7 +116,7 @@
     <string name="error_delete_account">Something wrong happened</string>
     <string name="error_deletion">Unknown error, your account hasn\'t been deleted properly</string>
     <string name="error_fetch_friends">Error while fetching your friend</string>
-    <string name="error_occured">An error has occured</string>
+    <string name="error_occured">An error has occurred</string>
     <string name="no_friends_yet">You don\'t have any friends yet</string>
     <string name="search">Search</string>
     <string name="by_username">by username</string>
@@ -148,4 +148,13 @@
     <string name="never">Never</string>
     <string name="create_new_checklist">Create New Checklist</string>
     <string name="add_friends">Add Friends</string>
+    <string name="rain">Rain</string>
+    <string name="location_permission">This app need location permissions</string>
+    <string name="turn_on_gps">Turn on your GPS</string>
+    <string name="trip_creation_error">Something wrong happened, your trip was not created</string>
+    <string name="unknown_condition">Unknown condition</string>
+    <string name="pick_location_title">Pick Location</string>
+    <string name="click_on_map">Do a long click on the map to add a point</string>
+    <string name="user_profile_picture">User profile picture</string>
+    <string name="add_button">add button</string>
 </resources>

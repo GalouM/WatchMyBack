@@ -1,5 +1,7 @@
 package com.galou.watchmyback.utils.extension
 
+import com.galou.watchmyback.data.entity.WeatherCondition
+
 /**
  * Created by galou on 2019-10-25
  */
@@ -41,4 +43,19 @@ fun String.isCorrectPhoneNumber(): Boolean{
             this.length >= 10 &&
             this.length <= 13
 
+}
+
+fun String.toWeatherConditionName(): WeatherCondition {
+    return when(this){
+        "clear sky" -> WeatherCondition.CLEAR_SKY
+        "few clouds" -> WeatherCondition.FEW_CLOUDS
+        "scattered clouds" -> WeatherCondition.SCATTERED_CLOUDS
+        "broken clouds" -> WeatherCondition.BROKEN_CLOUDS
+        "shower rain" -> WeatherCondition.SHOWER_RAIN
+        "rain" -> WeatherCondition.RAIN
+        "thunderstorm" -> WeatherCondition.THUNDERSTORM
+        "snow" -> WeatherCondition.SNOW
+        "mist" -> WeatherCondition.MIST
+        else -> WeatherCondition.UNKNOWN
+    }
 }

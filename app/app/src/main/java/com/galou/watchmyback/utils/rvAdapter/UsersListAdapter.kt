@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.galou.watchmyback.base.UserListBaseViewModel
-import com.galou.watchmyback.data.entity.OtherUser
+import com.galou.watchmyback.data.applicationUse.OtherUser
 import com.galou.watchmyback.databinding.FriendsRvItemBinding
 
 /**

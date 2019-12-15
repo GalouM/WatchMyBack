@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.galou.watchmyback.R
-import com.galou.watchmyback.data.entity.OtherUser
+import com.galou.watchmyback.data.applicationUse.OtherUser
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.repository.FriendRepository
 import com.galou.watchmyback.data.repository.UserRepository

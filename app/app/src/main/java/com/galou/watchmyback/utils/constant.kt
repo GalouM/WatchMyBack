@@ -84,7 +84,7 @@ const val PREFERENCES_TABLE_TIME_DISPLAY = "time_display"
 // ------ COLLECTION FIRESTORE -------
 const val USER_COLLECTION_NAME = "userCollection"
 const val CHECKLIST_COLLECTION_NAME = "checkListCollection"
-const val ITEM_COLLECTION_NAME = "itemCheckListCollection"
+const val TRIP_COLLECTION_NAME = "tripCollection"
 
 // ------ STORAGE REFERENCE -------
 const val USER_PICTURE_REFERENCE = "images/userPicture/"
@@ -97,6 +97,8 @@ const val RC_PROFILE = 500
 const val RC_SETTINGS = 600
 const val RC_ADD_FRIEND = 700
 const val RC_ADD_CHECKLIST = 800
+const val RC_LOCATION_PERMS = 900
+const val RC_PICK_LOCATION_MAP = 1000
 
 // ------ RESULT CODE ACTIVITIES -------
 const val RESULT_ACCOUNT_DELETED = -100
@@ -108,8 +110,16 @@ const val TRIP_TYPE_TAG = "tripTypeDialog"
 const val UPDATE_HZ_TAG = "updateFrequencyDialog"
 const val CHECKLIST_DIALOG = "checklistsDialog"
 const val WATCHER_DIALOG = "watcherDialog"
-const val TIME_PICKER_DIALOG = "timePickerDialog"
 
 // ------ PERMISSIONS -------
 const val PERMS_EXT_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
+const val PERMS_LOCALISATION = Manifest.permission.ACCESS_FINE_LOCATION
+
+// ------ ID MAP ---------
+const val ICON_LOCATION_ACCENT = "iconLocationAccent"
+const val ICON_LOCATION_PRIMARY = "iconLocationPrimary"
+
+// ------ DATA INTENT KEY ---------
+const val POINT_LATITUDE = "pointLatitude"
+const val POINT_LONGITUDE = "pointLongitude"
 

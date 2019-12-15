@@ -60,19 +60,11 @@ class TripDaoTest {
             )
 
             tripDao.createTripAndData(
-                trip1,
-                listPoint1,
-                listLocationsTrip1,
-                listWeatherTrip1,
-                listWatcherTrip1,
+                tripWithData1,
                 itemList1
             )
             tripDao.createTripAndData(
-                trip2,
-                listPoint2,
-                listLocationTrip2,
-                listWeatherTrip2,
-                listWatcherTrip2,
+                tripWithData2,
                 itemList2
             )
         }
@@ -88,7 +80,7 @@ class TripDaoTest {
     @Throws(Exception::class)
     fun createAndGetTrip() = runBlocking {
         val tripFromDb = tripDao.getUserActiveTrip(mainUser.id)
-        assertThat(tripFromDb.trip, equalTo(trip1))
+        assertThat(tripFromDb?.trip, equalTo(trip1))
 
     }
 
@@ -140,6 +132,16 @@ class TripDaoTest {
             point1Trip1
         )
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun deleteAllActiveTripUser() = runBlocking {
+        tripDao.deleteActiveTrips(trip1.userId)
+        val activeTrip = tripDao.getUserActiveTrip(trip1.userId)
+        assertThat(activeTrip, `is` (nullValue()))
+    }
+
+
 
 
 }

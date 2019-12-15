@@ -2,11 +2,9 @@ package com.galou.watchmyback.addTrip
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.galou.watchmyback.R
+import com.galou.watchmyback.data.applicationUse.Watcher
 import com.galou.watchmyback.data.entity.*
-import com.galou.watchmyback.data.repository.FakeCheckListRepository
-import com.galou.watchmyback.data.repository.FakeFriendRepositoryImpl
-import com.galou.watchmyback.data.repository.FakeUserRepositoryImpl
-import com.galou.watchmyback.data.repository.FriendRepository
+import com.galou.watchmyback.data.repository.*
 import com.galou.watchmyback.testHelpers.*
 import com.galou.watchmyback.utils.todaysDate
 import com.google.common.truth.Truth.assertThat
@@ -31,6 +29,7 @@ class AddTripViewModelTest {
     private lateinit var fakeUser: User
     private lateinit var checkListRepository: FakeCheckListRepository
     private lateinit var friendRepository: FriendRepository
+    private lateinit var tripRepository: TripRepository
 
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
 
@@ -46,7 +45,8 @@ class AddTripViewModelTest {
         userRepository.userPreferences.value = preferencesTest
         checkListRepository = FakeCheckListRepository()
         friendRepository = FakeFriendRepositoryImpl()
-        viewModel = AddTripViewModel(friendRepository, userRepository, checkListRepository)
+        tripRepository = FakeTripRepositoryImpl()
+        viewModel = AddTripViewModel(friendRepository, userRepository, checkListRepository, tripRepository)
 
     }
 
@@ -83,7 +83,8 @@ class AddTripViewModelTest {
 
     @Test
     fun onWatcherSelected_listWatcherUpdated(){
-        val watcher = Watcher(firstFriend, true)
+        val watcher =
+            Watcher(firstFriend, true)
         viewModel.addRemoveWatcher(watcher)
         assertThat(LiveDataTestUtil.getValue(viewModel.watchersLD)).contains(firstFriend)
         watcher.watchTrip = false
@@ -162,7 +163,7 @@ class AddTripViewModelTest {
         viewModel.setPointFromMap(point)
         val content = LiveDataTestUtil.getValue(viewModel.openMapLD).getContentIfNotHandled()
         assertThat(content).isNotNull()
-        assertThat(content).isEqualTo(point)
+        assertThat(tripRepository.pointSelected).isEqualTo(point)
     }
 
     @Test
@@ -170,7 +171,8 @@ class AddTripViewModelTest {
         viewModel.setPointFromMap(R.id.add_trip_start_point_pick)
         val content = LiveDataTestUtil.getValue(viewModel.openMapLD).getContentIfNotHandled()
         assertThat(content).isNotNull()
-        assertThat(content?.pointTrip?.typePoint).isEqualTo(TypePoint.START)
+        val startPoint = LiveDataTestUtil.getValue(viewModel.startPointLD)
+        assertThat(tripRepository.pointSelected).isEqualTo(startPoint)
 
     }
 
@@ -179,7 +181,8 @@ class AddTripViewModelTest {
         viewModel.setPointFromMap(R.id.add_trip_end_point_pick)
         val content = LiveDataTestUtil.getValue(viewModel.openMapLD).getContentIfNotHandled()
         assertThat(content).isNotNull()
-        assertThat(content?.pointTrip?.typePoint).isEqualTo(TypePoint.END)
+        val endPoint = LiveDataTestUtil.getValue(viewModel.endPointLD)
+        assertThat(tripRepository.pointSelected).isEqualTo(endPoint)
     }
 
     @Test
@@ -205,6 +208,20 @@ class AddTripViewModelTest {
         val startPointWithNewData = LiveDataTestUtil.getValue(viewModel.startPointLD)
         assertThat(startPointWithNewData.location?.latitude).isEqualTo(lat)
         assertThat(startPointWithNewData.location?.longitude).isEqualTo(lgn)
+
+    }
+
+    @Test
+    fun updatePointSelectedLocation_changeLocationSelectedPoint(){
+        val startPoint = LiveDataTestUtil.getValue(viewModel.startPointLD)
+        tripRepository.pointSelected = startPoint
+        val newLatitude = 123.456
+        val newLongitude = 654.321
+        viewModel.setPointLocation(newLatitude, newLongitude)
+        val startPointWithNewLocation = LiveDataTestUtil.getValue(viewModel.startPointLD)
+        assertThat(startPointWithNewLocation.location?.latitude).isEqualTo(newLatitude)
+        assertThat(startPointWithNewLocation.location?.longitude).isEqualTo(newLongitude)
+        assertThat(tripRepository.pointSelected).isNull()
 
     }
 
@@ -256,7 +273,12 @@ class AddTripViewModelTest {
             location?.longitude = 123.453
             pointTrip.time = todaysDate
         }
-        viewModel.addRemoveWatcher(Watcher(firstFriend, true))
+        viewModel.addRemoveWatcher(
+            Watcher(
+                firstFriend,
+                true
+            )
+        )
         viewModel.startTrip()
         assertThat(LiveDataTestUtil.getValue(viewModel.tripLD).mainLocation).isEqualTo(city)
 
@@ -280,7 +302,12 @@ class AddTripViewModelTest {
             location?.longitude = 123.453
             pointTrip.time = todaysDate
         }
-        viewModel.addRemoveWatcher(Watcher(firstFriend, true))
+        viewModel.addRemoveWatcher(
+            Watcher(
+                firstFriend,
+                true
+            )
+        )
         viewModel.startTrip()
         viewModel.startTrip()
         assertThat(LiveDataTestUtil.getValue(viewModel.tripLD).mainLocation).isEqualTo(country)
@@ -319,6 +346,15 @@ class AddTripViewModelTest {
         assertThat(value).isNotNull()
         assertThat(value?.values?.first()).isEqualTo(point)
         assertThat(value?.keys?.first()).isEqualTo(userPref?.timeDisplay)
+    }
+
+    @Test
+    fun setPointFromCurrentLocation_getSelectedPoint(){
+        viewModel.setPointFromCurrentLocation(R.id.add_trip_start_point_user_location)
+        val startPoint = LiveDataTestUtil.getValue(viewModel.startPointLD)
+        assertThat(tripRepository.pointSelected).isEqualTo(startPoint)
+        assertThat(LiveDataTestUtil.getValue(viewModel.fetchCurrentLocationLD)).isNotNull()
+
     }
 
 

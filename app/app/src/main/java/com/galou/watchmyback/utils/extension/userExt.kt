@@ -1,9 +1,9 @@
 package com.galou.watchmyback.utils.extension
 
-import com.galou.watchmyback.data.entity.OtherUser
+import com.galou.watchmyback.data.applicationUse.OtherUser
+import com.galou.watchmyback.data.applicationUse.Watcher
 import com.galou.watchmyback.data.entity.TripWatcher
 import com.galou.watchmyback.data.entity.User
-import com.galou.watchmyback.data.entity.Watcher
 
 /**
  * @author galou
@@ -23,7 +23,7 @@ fun User.toOtherUser(myFriend: Boolean): OtherUser {
     return OtherUser(
         user = this,
         myFriend = myFriend
-        )
+    )
 }
 
 /**
@@ -84,7 +84,12 @@ infix fun List<User>.toTripWatchers(tripId: String): List<TripWatcher> {
 infix fun List<User>.toWatcher(tripWatchers: List<User>): List<Watcher> {
     val watchers = mutableListOf<Watcher>()
     forEach {
-        watchers.add(Watcher(user = it, watchTrip = it in tripWatchers))
+        watchers.add(
+            Watcher(
+                user = it,
+                watchTrip = it in tripWatchers
+            )
+        )
     }
     return watchers
 }
