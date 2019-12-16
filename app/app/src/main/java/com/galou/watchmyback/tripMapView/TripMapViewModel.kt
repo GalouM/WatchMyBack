@@ -44,8 +44,15 @@ class TripMapViewModel(
     private val _checkedPointsLD = MutableLiveData<Map<String, Coordinate>>()
     val checkedPointsLD: LiveData<Map<String, Coordinate>> = _checkedPointsLD
 
+    private val _showPointDetailsLD = MutableLiveData<Event<Unit>>()
+    val showPointDetailsLD: LiveData<Event<Unit>> = _showPointDetailsLD
+
     val userLD: LiveData<User> = userRepository.currentUser
 
+    /**
+     * Show activity to start a new trip
+     *
+     */
     fun clickStartNewTrip(){
         _openAddTripActivity.value = Event(Unit)
     }
@@ -73,15 +80,33 @@ class TripMapViewModel(
      *
      */
     fun fetchAndDisplayUserActiveTrip(){
+        _dataLoading.value = true
         viewModelScope.launch { 
             when(val activeTrip = tripRepository.fetchUserActiveTrip(userLD.value!!.id)){
                 is Result.Success -> activeTrip.data?.let {
                     currentTrip = it
                     emitPointTripLocation()
                 }
-                else -> showSnackBarMessage(R.string.error_fetching_current_trip)
+                else -> {
+                    showSnackBarMessage(R.string.error_fetching_current_trip)
+                    _dataLoading.value = false
+                }
             }
         }
+
+    }
+
+    /**
+     * Received the point id of the point selected by the user
+     * Show the details of this point
+     *
+     * @param pointId ID of the point
+     */
+    fun clickPointTrip(pointId: String){
+        val selectedPoint = currentTrip?.points?.first{ it.pointTrip.id == pointId }
+            ?: throw Exception("Error finding the point with id $pointId for the trip $currentTrip")
+        tripRepository.pointSelected = selectedPoint
+        _showPointDetailsLD.value = Event(Unit)
 
     }
 
@@ -108,6 +133,7 @@ class TripMapViewModel(
             _checkedPointsLD.value = checkedPoints
 
         }
+        _dataLoading.value = false
 
     }
 }

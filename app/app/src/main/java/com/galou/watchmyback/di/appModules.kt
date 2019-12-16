@@ -17,6 +17,7 @@ import com.galou.watchmyback.data.source.remote.CheckListRemoteDataSource
 import com.galou.watchmyback.data.source.remote.FriendRemoteDataSource
 import com.galou.watchmyback.data.source.remote.TripRemoteDataSource
 import com.galou.watchmyback.data.source.remote.UserRemoteDataSource
+import com.galou.watchmyback.detailsPoint.DetailsPointViewModel
 import com.galou.watchmyback.friends.FriendsViewModel
 import com.galou.watchmyback.main.MainActivityViewModel
 import com.galou.watchmyback.mapPickLocation.PickLocationMapViewModel
@@ -118,4 +119,5 @@ val appModules = module {
         checkListRepository = get(),
         tripRepository = get()) }
     viewModel { PickLocationMapViewModel(tripRepository = get()) }
+    viewModel { DetailsPointViewModel(tripRepository = get(), userRepository = get()) }
 }

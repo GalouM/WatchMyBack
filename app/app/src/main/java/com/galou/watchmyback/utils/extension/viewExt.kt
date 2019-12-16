@@ -160,3 +160,39 @@ fun TextInputEditText.displayDate(userPreferences: UserPreferences?, date: Date?
     }
 }
 
+/**
+ * Convert a [Date] into a [String] depending of the user's preference [TimeDisplay]
+ * and display it into a [TextView]
+ *
+ * @param userPreferences [UserPreferences] of the current user
+ * @param date  date to convert
+ */
+@BindingAdapter(value = ["userPreferences", "date"], requireAll = true)
+fun TextView.displayDate(userPreferences: UserPreferences?, date: Date?) {
+    if(userPreferences != null && date != null){
+        val formatter = SimpleDateFormat(userPreferences.timeDisplay.displayPattern)
+        text = formatter.format(date)
+    }
+}
+
+/**
+ * Set text of an [TextInputEditText] from a resource ID
+ *
+ * @param resourceId: ID of the string
+ *
+ * @see BindingAdapter
+ * @see TextInputEditText.setText
+ */
+@BindingAdapter("textFromResourceId")
+fun TextView.textFromResourceId(resourceId: Int?){
+    text = if (resourceId != 0 && resourceId != null){
+        try {
+            context.getText(resourceId)
+        } catch (e: Exception){
+            ""
+        }
+    } else {
+        ""
+    }
+}
+

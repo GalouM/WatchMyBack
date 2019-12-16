@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<layout>
+
+    <data>
+
+        <import type="com.galou.watchmyback.data.entity.TypePoint"/>
+
+        <variable
+            name="viewmodel"
+            type="com.galou.watchmyback.detailsPoint.DetailsPointViewModel" />
+    </data>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".DetailsTripPoint">
+    tools:context=".detailsPoint.DetailsTripPoint">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -43,21 +56,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_medium"
-                android:text="08:00 a.m"
+                app:userPreferences="@{viewmodel.userPreferencesLD}"
+                app:date="@{viewmodel.pointTripLD.pointTrip.time}"
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_time_pass_by_title"
                 app:layout_constraintTop_toTopOf="@id/details_trip_view_time_pass_by_title"
                 app:layout_constraintBottom_toBottomOf="@id/details_trip_view_time_pass_by_title"/>
-
-            <TextView
-                android:id="@+id/details_trip_view_time_status"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_medium"
-                android:text="LATE"
-                android:textColor="@color/colorAccent"
-                app:layout_constraintTop_toBottomOf="@id/details_trip_view_time_pass_by_title"
-                app:layout_constraintStart_toStartOf="@id/details_trip_view_time_pass_by_title"
-                app:layout_constraintEnd_toEndOf="parent"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -98,7 +101,7 @@
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_location_latitude_title"
                 android:textSize="@dimen/text_medium"
                 android:layout_marginEnd="@dimen/margin_big"
-                android:text="123.456"/>
+                android:text="@{viewmodel.pointTripLD.location.latitude.toString()}"/>
 
             <TextView
                 android:id="@+id/details_trip_view_location_longitude_title"
@@ -117,7 +120,7 @@
                 app:layout_constraintTop_toBottomOf="@id/details_trip_view_location_title"
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_location_longitude_title"
                 android:textSize="@dimen/text_medium"
-                android:text="-156.789"/>
+                android:text="@{viewmodel.pointTripLD.location.longitude.toString()}"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -137,3 +140,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

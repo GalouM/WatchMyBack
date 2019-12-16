@@ -5,6 +5,7 @@ import android.os.Build
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galou.watchmyback.R
@@ -154,6 +155,66 @@ class ViewExtUnitTest : KoinTest {
         }
         editText.displayDate(userPreferences, date.time)
         assertThat(editText.text.toString()).isEqualTo("02/03/1900 - 04:05 AM")
+    }
+
+    @Test
+    fun displayDateIntoTextView24h_rightFormat(){
+        val textView = TextView(context)
+        val userPreferences = UserPreferences(timeDisplay = TimeDisplay.H_24)
+        val date = Calendar.getInstance()
+        with(date){
+            set(Calendar.YEAR, 1900)
+            set(Calendar.MONTH, 1)
+            set(Calendar.DAY_OF_MONTH, 3)
+            set(Calendar.HOUR_OF_DAY, 4)
+            set(Calendar.MINUTE, 5)
+        }
+        textView.displayDate(userPreferences, date.time)
+        assertThat(textView.text.toString()).isEqualTo("03/02/1900 - 04:05")
+    }
+
+    @Test
+    fun displayDateIntoTextView12h_rightFormat(){
+        val textView = TextView(context)
+        val userPreferences = UserPreferences(timeDisplay = TimeDisplay.H_12)
+        val date = Calendar.getInstance()
+        with(date){
+            set(Calendar.YEAR, 1900)
+            set(Calendar.MONTH, 1)
+            set(Calendar.DAY_OF_MONTH, 3)
+            set(Calendar.HOUR_OF_DAY, 4)
+            set(Calendar.MINUTE, 5)
+        }
+        textView.displayDate(userPreferences, date.time)
+        assertThat(textView.text.toString()).isEqualTo("02/03/1900 - 04:05 AM")
+    }
+
+    @Test
+    fun setTextViewWithExistingResource_showText(){
+        val textView = TextView(context)
+        textView.textFromResourceId(R.string.test_message)
+        assertThat(textView.text.toString()).isEqualTo("Test Message")
+    }
+
+    @Test
+    fun setTextViewWithResource0_showEmptyText(){
+        val textView = TextView(context)
+        textView.textFromResourceId(0)
+        assertThat(textView.text.toString()).isEmpty()
+    }
+
+    @Test
+    fun setTextViewWithNull_showEmptyText(){
+        val textView = TextView(context)
+        textView.textFromResourceId(null)
+        assertThat(textView.text.toString()).isEmpty()
+    }
+
+    @Test
+    fun setTextViewWithNonExistingResource_showEmptyText(){
+        val textView = TextView(context)
+        textView.textFromResourceId(90)
+        assertThat(textView.text.toString()).isEmpty()
     }
 
 

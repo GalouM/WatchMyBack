@@ -15,6 +15,7 @@ import com.galou.watchmyback.R
 import com.galou.watchmyback.addTrip.AddTripActivity
 import com.galou.watchmyback.data.applicationUse.Coordinate
 import com.galou.watchmyback.databinding.FragmentMapViewBinding
+import com.galou.watchmyback.detailsPoint.DetailsPointActivity
 import com.galou.watchmyback.utils.*
 import com.galou.watchmyback.utils.extension.addIconLocationAccent
 import com.galou.watchmyback.utils.extension.addIconLocationPrimary
@@ -74,6 +75,7 @@ class TripMapView : Fragment() {
         setupEndPointObserver()
         setupSchedulePointsObserver()
         setupCheckUpPointsObserver()
+        setupShowDetailPointObserver()
 
     }
 
@@ -108,6 +110,10 @@ class TripMapView : Fragment() {
 
     private fun setupCheckUpPointsObserver(){
         viewModel.checkedPointsLD.observe(this, Observer { displayCheckedUpPoint(it) })
+    }
+
+    private fun setupShowDetailPointObserver(){
+        viewModel.showPointDetailsLD.observe(this, EventObserver { showPointDetails() })
     }
 
     private fun openStartNewTripActivity(){
@@ -188,6 +194,12 @@ class TripMapView : Fragment() {
             .withIconOffset(ICON_MAP_OFFSET)
             .withTextField(pointId)
         )
+    }
+
+    private fun showPointDetails(){
+        with(Intent(activity!!, DetailsPointActivity::class.java)){
+            startActivity(this)
+        }
     }
 
 

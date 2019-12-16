@@ -18,10 +18,15 @@
         android:supportsRtl="true"
         android:theme="@style/WatchMyBackTheme"
         android:usesCleartextTraffic="true">
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <activity android:name=".detailsPoint.DetailsPointActivity"></activity>
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
         <activity
             android:name=".mapPickLocation.PickLocationActivity"
-            android:label="@string/pick_location_title"/>
+            android:label="@string/pick_location_title" />
         <activity
             android:name=".addFriend.AddFriendActivity"
             android:label="Add Friends" />
