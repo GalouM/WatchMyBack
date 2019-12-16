@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.data.entity.*
 import com.galou.watchmyback.utils.idGenerated
+import com.galou.watchmyback.utils.todaysDate
 import org.junit.Assert.assertEquals
 
 /**
@@ -74,8 +75,38 @@ val checkListWithItems2 = CheckListWithItems(checkList = checkList2, items = ite
 
 val checkLists = listOf(checkListWithItem1, checkListWithItems2)
 
+val mainUser = User(idGenerated, "main-user@gmail.com", "Main User", "5556674567")
+
+val trip1 = Trip(
+    idGenerated, mainUser.id, checkList1.id, TripStatus.ON_GOING, "details about my trip",
+    TripUpdateFrequency.FIFTEEN_MINUTES, "Sun Peaks", TripType.BIKING, true
+)
+
+val point1Trip1 = PointTrip(idGenerated, trip1.id, TypePoint.START, todaysDate)
+val point2Trip1 = PointTrip(idGenerated, trip1.id, TypePoint.END, todaysDate)
+val point3Trip1 = PointTrip(idGenerated, trip1.id, TypePoint.SCHEDULE_STAGE, todaysDate)
+val point4Trip1 = PointTrip(idGenerated, trip1.id, TypePoint.CHECKED_UP, todaysDate)
+
+val location1Trip1 = Location(point1Trip1.id, 123.456, -98.654, "Sun peaks", "Canada")
+val location2Trip1 = Location(point2Trip1.id, 178.09, -45.987, "Sun peaks", "Canada")
+val location3Trip1 = Location(point3Trip1.id, 465.076, -654.675, "Sun peaks", "Canada")
+val location4Trip1 = Location(point4Trip1.id, 65.76, -87.34, "Sun peaks", "Canada")
+
+//weather
+val weather1Trip1 = WeatherData(idGenerated, point1Trip1.id, WeatherCondition.CLEAR_SKY, 200.0, todaysDate, "icon1")
+val weather2Trip1 = WeatherData(idGenerated, point2Trip1.id, WeatherCondition.BROKEN_CLOUDS, 300.0, todaysDate, "icon2")
+val weather3Trip1 = WeatherData(idGenerated, point3Trip1.id, WeatherCondition.SNOW, 400.0, todaysDate, "icon3")
+val weather4Trip1 = WeatherData(idGenerated, point4Trip1.id, WeatherCondition.SNOW, 400.0, todaysDate, "icon3")
+
+val listPointsWithDataTrip1 = mutableListOf(
+    PointTripWithData(pointTrip = point1Trip1, weatherData = weather1Trip1, location = location1Trip1),
+    PointTripWithData(pointTrip = point2Trip1, weatherData = weather2Trip1, location = location2Trip1),
+    PointTripWithData(pointTrip = point3Trip1, weatherData = weather3Trip1, location = location3Trip1),
+    PointTripWithData(pointTrip = point4Trip1, weatherData = weather4Trip1, location = location4Trip1)
+)
+
 val tripWithData = TripWithData(
-    trip = Trip(),
-    points = mutableListOf(),
-    watchers = mutableListOf()
+    trip = trip1,
+    points = listPointsWithDataTrip1,
+    watchers = mutableListOf(firstFriend, secondFriend)
 )

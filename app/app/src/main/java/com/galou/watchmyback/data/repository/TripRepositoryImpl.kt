@@ -151,4 +151,18 @@ class TripRepositoryImpl(
         return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
 
     }
+
+
+    /**
+     * Fetch the user active trip
+     *
+     * @param userId ID of the user
+     * @return [Result] of the operation with a [TripWithData]
+     */
+    override suspend fun fetchUserActiveTrip(userId: String): Result<TripWithData?> {
+        return when(val remoteTask = remoteSource.fetchActiveTrip(userId)){
+            is Result.Success -> remoteTask
+            else -> localSource.fetchActiveTrip(userId)
+            }
+    }
 }

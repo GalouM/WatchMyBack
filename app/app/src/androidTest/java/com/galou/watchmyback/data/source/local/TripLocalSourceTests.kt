@@ -86,4 +86,15 @@ class TripLocalSourceTests {
         assertThat(trip, `is` (nullValue()))
 
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun fetchUserActiveTrip_returnUserActiveTrip() = runBlocking {
+        tripDao.createTripAndData(tripWithData1, itemList1)
+        val task = localSource.fetchActiveTrip(trip1.userId)
+        val result = task is Result.Success
+        assertThat(result, `is`(true))
+        val trip = (task as Result.Success).data
+        assertThat(trip, `is` (tripWithData1))
+    }
 }

@@ -157,4 +157,5 @@
     <string name="click_on_map">Do a long click on the map to add a point</string>
     <string name="user_profile_picture">User profile picture</string>
     <string name="add_button">add button</string>
+    <string name="error_fetching_current_trip">An error occurred while fetching your current trip</string>
 </resources>

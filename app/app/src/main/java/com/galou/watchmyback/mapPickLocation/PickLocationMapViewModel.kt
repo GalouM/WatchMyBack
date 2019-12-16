@@ -86,6 +86,14 @@ class PickLocationMapViewModel(
     }
 
     /**
+     * Show message that GPS is off
+     *
+     */
+    fun gpsNotAvailable(){
+        showSnackBarMessage(R.string.turn_on_gps)
+    }
+
+    /**
      * Show the Location of the selected point on the map
      *
      */

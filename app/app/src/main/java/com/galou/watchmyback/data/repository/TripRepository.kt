@@ -18,4 +18,6 @@ interface TripRepository {
     suspend fun createTrip(trip: TripWithData, checkList: CheckListWithItems?): Result<Void?>
 
     suspend fun fetchPointLocationInformation(points: List<PointTripWithData>): Result<Void?>
+
+    suspend fun fetchUserActiveTrip(userId: String): Result<TripWithData?>
 }

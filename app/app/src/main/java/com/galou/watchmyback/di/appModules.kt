@@ -111,7 +111,7 @@ val appModules = module {
     viewModel { AddFriendViewModel(userRepository = get(), friendRepository = get()) }
     viewModel { CheckListViewModel(userRepository = get(), checkListRepository = get()) }
     viewModel { AddModifyCheckListViewModel(checkListRepository = get(), userRepository = get()) }
-    viewModel { TripMapViewModel() }
+    viewModel { TripMapViewModel(tripRepository = get(), userRepository = get()) }
     viewModel { AddTripViewModel(
         friendRepository = get(),
         userRepository = get(),

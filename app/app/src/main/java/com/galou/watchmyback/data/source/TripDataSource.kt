@@ -14,4 +14,6 @@ interface TripDataSource {
     suspend fun createTrip(trip: TripWithData, checkList: CheckListWithItems?): Result<Void?>
 
     suspend fun deleteActiveTrip(userId: String): Result<Void?>
+
+    suspend fun fetchActiveTrip(userId: String): Result<TripWithData?>
 }

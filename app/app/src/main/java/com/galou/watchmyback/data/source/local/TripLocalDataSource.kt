@@ -51,4 +51,18 @@ class TripLocalDataSource(
             Result.Error(e)
         }
     }
+
+    /**
+     * Fetch the user active trip from the database
+     *
+     * @param userId ID of the user
+     * @return [Result] of the operation with a [TripWithData]
+     */
+    override suspend fun fetchActiveTrip(userId: String): Result<TripWithData?> {
+        return try {
+            Result.Success(tripDao.getUserActiveTrip(userId))
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
 }

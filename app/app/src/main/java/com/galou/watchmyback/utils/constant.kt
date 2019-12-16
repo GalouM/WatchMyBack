@@ -123,3 +123,7 @@ const val ICON_LOCATION_PRIMARY = "iconLocationPrimary"
 const val POINT_LATITUDE = "pointLatitude"
 const val POINT_LONGITUDE = "pointLongitude"
 
+// ------ ICON MAP DATA ------
+const val ICON_MAP_SIZE = 1.3f
+val ICON_MAP_OFFSET = floatArrayOf(0f, -8f).toTypedArray()
+

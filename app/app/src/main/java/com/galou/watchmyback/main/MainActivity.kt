@@ -88,7 +88,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         viewModel.openSignInActivityEvent.observe(this, EventObserver { openSignInActivity()})
     }
 
-
     //-------------------------
     //  CONFIGURE UI ELEMENT
     //-------------------------

@@ -135,7 +135,10 @@ class PickLocationActivity : AppCompatActivity(), MapboxMap.OnMapLongClickListen
                 styleMap = style
                 styleMap.addIconLocationAccent(this)
                 styleMap.addIconLocationPrimary(this)
-                symbolManager = SymbolManager(mapView, mapBox, styleMap)
+                symbolManager = SymbolManager(mapView, mapBox, styleMap).apply {
+                    iconAllowOverlap = true
+                    iconPadding = 0.1f
+                }
                 displayUserLocation()
                 viewModel.onMapReady()
 
@@ -159,6 +162,8 @@ class PickLocationActivity : AppCompatActivity(), MapboxMap.OnMapLongClickListen
                 renderMode = RenderMode.COMPASS
                 zoomWhileTracking(15.0)
             }
+        } else {
+            viewModel.gpsNotAvailable()
         }
     }
 
@@ -177,8 +182,8 @@ class PickLocationActivity : AppCompatActivity(), MapboxMap.OnMapLongClickListen
         pointSelected = symbolManager.create(SymbolOptions()
             .withLatLng(LatLng(latitude, longitude))
             .withIconImage(ICON_LOCATION_ACCENT)
-            .withIconSize(1.3f)
-            .withIconOffset(floatArrayOf(0f, -8f).toTypedArray())
+            .withIconSize(ICON_MAP_SIZE)
+            .withIconOffset(ICON_MAP_OFFSET)
         )
     }
 

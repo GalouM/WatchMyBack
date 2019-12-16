@@ -1,7 +1,14 @@
 package com.galou.watchmyback.tripMapView
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.galou.watchmyback.R
+import com.galou.watchmyback.data.entity.TypePoint
+import com.galou.watchmyback.data.repository.FakeTripRepositoryImpl
+import com.galou.watchmyback.data.repository.FakeUserRepositoryImpl
 import com.galou.watchmyback.testHelpers.LiveDataTestUtil
+import com.galou.watchmyback.testHelpers.assertSnackBarMessage
+import com.galou.watchmyback.testHelpers.mainUser
+import com.galou.watchmyback.testHelpers.tripWithData
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.newSingleThreadContext
@@ -20,6 +27,8 @@ import org.koin.core.context.stopKoin
 class TripMapViewModelTest {
 
     private lateinit var viewModel: TripMapViewModel
+    private lateinit var tripRepository: FakeTripRepositoryImpl
+    private lateinit var userRepository: FakeUserRepositoryImpl
 
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
 
@@ -29,7 +38,10 @@ class TripMapViewModelTest {
     @Before
     fun setupViewModel(){
         Dispatchers.setMain(mainThreadSurrogate)
-        viewModel = TripMapViewModel()
+        tripRepository = FakeTripRepositoryImpl()
+        userRepository = FakeUserRepositoryImpl()
+        userRepository.currentUser.value = mainUser
+        viewModel = TripMapViewModel(tripRepository, userRepository)
     }
 
     @After
@@ -44,5 +56,31 @@ class TripMapViewModelTest {
         viewModel.clickStartNewTrip()
         val value = LiveDataTestUtil.getValue(viewModel.openAddTripActivity)
         assertThat(value.getContentIfNotHandled()).isNotNull()
+    }
+
+    @Test
+    fun clickCenterCameraOnUser_centerCameraOnUser(){
+        viewModel.centerCameraOnUser()
+        val value = LiveDataTestUtil.getValue(viewModel.centerCameraUserLD)
+        assertThat(value.getContentIfNotHandled()).isNotNull()
+    }
+
+    @Test
+    fun gpsNoeAvailable_showMessage(){
+        viewModel.gpsNotAvailable()
+        assertSnackBarMessage(viewModel.snackbarMessage, R.string.turn_on_gps)
+    }
+
+    @Test
+    fun fetchAndDisplayUserActiveTrip_showTripPoints(){
+        viewModel.fetchAndDisplayUserActiveTrip()
+        assertThat(LiveDataTestUtil.getValue(viewModel.startPointLD))
+            .isEqualTo(tripWithData.points.find { it.pointTrip.typePoint == TypePoint.START })
+        assertThat(LiveDataTestUtil.getValue(viewModel.endPointLD))
+            .isEqualTo(tripWithData.points.find { it.pointTrip.typePoint == TypePoint.END })
+        assertThat(LiveDataTestUtil.getValue(viewModel.schedulePointsLD))
+            .isEqualTo(tripWithData.points.filter { it.pointTrip.typePoint == TypePoint.SCHEDULE_STAGE })
+        assertThat(LiveDataTestUtil.getValue(viewModel.checkedPointsLD))
+            .isEqualTo(tripWithData.points.filter { it.pointTrip.typePoint == TypePoint.CHECKED_UP })
     }
 }

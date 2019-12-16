@@ -159,8 +159,12 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
                 is Result.Error -> {
                     displayData("$result")
                     showSnackBarMessage(R.string.error_fetching)
+                    showSignInActivity()
                 }
-                is Result.Canceled -> showSnackBarMessage(R.string.canceled)
+                is Result.Canceled -> {
+                    showSnackBarMessage(R.string.canceled)
+                    showSignInActivity()
+                }
             }
         }
     }
