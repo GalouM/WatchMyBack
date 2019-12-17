@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.galou.watchmyback.base.BaseViewModel
 import com.galou.watchmyback.data.entity.PointTripWithData
+import com.galou.watchmyback.data.entity.TypePoint
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.repository.TripRepository
 import com.galou.watchmyback.data.repository.UserRepository
@@ -13,14 +14,24 @@ import com.galou.watchmyback.data.repository.UserRepository
  * 2019-12-15
  */
 class DetailsPointViewModel(
-    private val tripRepository: TripRepository,
-    private val userRepository: UserRepository
+    tripRepository: TripRepository,
+    userRepository: UserRepository
 ) : BaseViewModel() {
 
     private val _pointTripLD = MutableLiveData<PointTripWithData>()
     val pointTripLD: LiveData<PointTripWithData> = _pointTripLD
 
-    private val _userPreferencesLD = MutableLiveData<UserPreferences>()
-    val userPreferencesLD: LiveData<UserPreferences> = _userPreferencesLD
+    val userPreferencesLD: LiveData<UserPreferences> = userRepository.userPreferences
+
+    private val _isScheduledPoint = MutableLiveData<Boolean>()
+    val isScheduledPoint: LiveData<Boolean> = _isScheduledPoint
+
+    init {
+        _pointTripLD.value = tripRepository.pointSelected
+        _isScheduledPoint.value = when(tripRepository.pointSelected?.pointTrip?.typePoint){
+            TypePoint.CHECKED_UP -> false
+            else -> true
+        }
+    }
 
 }

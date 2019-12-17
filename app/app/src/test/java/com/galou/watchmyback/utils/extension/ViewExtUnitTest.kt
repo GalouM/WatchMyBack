@@ -11,6 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galou.watchmyback.R
 import com.galou.watchmyback.WatchMyBackApplication
 import com.galou.watchmyback.data.entity.TimeDisplay
+import com.galou.watchmyback.data.entity.UnitSystem
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.testHelpers.firstFriend
 import com.galou.watchmyback.testHelpers.secondFriend
@@ -190,6 +191,38 @@ class ViewExtUnitTest : KoinTest {
     }
 
     @Test
+    fun displayTimeIntoTextView24h_rightFormat(){
+        val textView = TextView(context)
+        val userPreferences = UserPreferences(timeDisplay = TimeDisplay.H_24)
+        val date = Calendar.getInstance()
+        with(date){
+            set(Calendar.YEAR, 1900)
+            set(Calendar.MONTH, 1)
+            set(Calendar.DAY_OF_MONTH, 3)
+            set(Calendar.HOUR_OF_DAY, 4)
+            set(Calendar.MINUTE, 5)
+        }
+        textView.displayTime(userPreferences, date.time)
+        assertThat(textView.text.toString()).isEqualTo("04:05")
+    }
+
+    @Test
+    fun displayTimeIntoTextView12h_rightFormat(){
+        val textView = TextView(context)
+        val userPreferences = UserPreferences(timeDisplay = TimeDisplay.H_12)
+        val date = Calendar.getInstance()
+        with(date){
+            set(Calendar.YEAR, 1900)
+            set(Calendar.MONTH, 1)
+            set(Calendar.DAY_OF_MONTH, 3)
+            set(Calendar.HOUR_OF_DAY, 4)
+            set(Calendar.MINUTE, 5)
+        }
+        textView.displayTime(userPreferences, date.time)
+        assertThat(textView.text.toString()).isEqualTo("04:05 AM")
+    }
+
+    @Test
     fun setTextViewWithExistingResource_showText(){
         val textView = TextView(context)
         textView.textFromResourceId(R.string.test_message)
@@ -215,6 +248,24 @@ class ViewExtUnitTest : KoinTest {
         val textView = TextView(context)
         textView.textFromResourceId(90)
         assertThat(textView.text.toString()).contains("N/A")
+    }
+
+    @Test
+    fun setTextViewWithTemperatureCelsius(){
+        val textView = TextView(context)
+        val temperature = 345.54
+        val pref = UserPreferences(unitSystem = UnitSystem.METRIC)
+        textView.displayTemperature(pref, temperature)
+        assertThat(textView.text.toString()).isEqualTo(temperature.kelvinToCelsius().toString())
+    }
+
+    @Test
+    fun setTextViewWithTemperatureFahrenheit(){
+        val textView = TextView(context)
+        val temperature = 345.54
+        val pref = UserPreferences(unitSystem = UnitSystem.IMPERIAL)
+        textView.displayTemperature(pref, temperature)
+        assertThat(textView.text.toString()).isEqualTo(temperature.kelvinToFahrenheit().toString())
     }
 
 

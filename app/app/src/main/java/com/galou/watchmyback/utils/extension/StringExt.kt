@@ -47,15 +47,21 @@ fun String.isCorrectPhoneNumber(): Boolean{
 
 fun String.toWeatherConditionName(): WeatherCondition {
     return when(this){
-        "clear sky" -> WeatherCondition.CLEAR_SKY
-        "few clouds" -> WeatherCondition.FEW_CLOUDS
-        "scattered clouds" -> WeatherCondition.SCATTERED_CLOUDS
-        "broken clouds" -> WeatherCondition.BROKEN_CLOUDS
-        "shower rain" -> WeatherCondition.SHOWER_RAIN
-        "rain" -> WeatherCondition.RAIN
-        "thunderstorm" -> WeatherCondition.THUNDERSTORM
-        "snow" -> WeatherCondition.SNOW
-        "mist" -> WeatherCondition.MIST
+        "Rain" -> WeatherCondition.RAIN
+        "Thunderstorm" -> WeatherCondition.THUNDERSTORM
+        "Snow" -> WeatherCondition.SNOW
+        "Mist" -> WeatherCondition.MIST
+        "Drizzle" -> WeatherCondition.DRIZZLE
+        "Smoke" -> WeatherCondition.SMOKE
+        "Haze" -> WeatherCondition.HAZE
+        "Dust" -> WeatherCondition.DUST
+        "Fog" -> WeatherCondition.FOG
+        "Sand" -> WeatherCondition.SAND
+        "Ash" -> WeatherCondition.ASH
+        "Squall" -> WeatherCondition.SQUALL
+        "Tornado" -> WeatherCondition.TORNADO
+        "Clear" -> WeatherCondition.CLEAR
+        "Clouds" -> WeatherCondition.CLOUDS
         else -> WeatherCondition.UNKNOWN
     }
 }

@@ -60,10 +60,10 @@ enum class UnitSystem(val systemName: String) {
 /**
  * Way to display time
  *
- * @property displayPattern pattern of display
+ * @property displayDatePattern pattern of display
  */
-enum class TimeDisplay(val displayPattern: String){
-    H_24("dd/MM/yyyy - HH:mm"),
-    H_12("MM/dd/yyyy - hh:mm a")
+enum class TimeDisplay(val displayDatePattern: String, val displayTimePattern: String){
+    H_24("dd/MM/yyyy - HH:mm", "HH:mm"),
+    H_12("MM/dd/yyyy - hh:mm a", "hh:mm a")
 
 }

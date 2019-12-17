@@ -2,7 +2,7 @@ package com.galou.watchmyback.data.entity
 
 import androidx.room.*
 import com.galou.watchmyback.R
-import com.galou.watchmyback.data.entity.WeatherCondition.*
+import com.galou.watchmyback.data.entity.WeatherCondition.CLEAR
 import com.galou.watchmyback.utils.*
 import java.util.*
 
@@ -38,7 +38,7 @@ import java.util.*
 data class WeatherData(
     @ColumnInfo(name = WEATHER_DATA_TABLE_UUID) @PrimaryKey var id: String = idGenerated,
     @ColumnInfo(name = WEATHER_DATA_TABLE_POINT_UUID) var pointId: String = "",
-    @ColumnInfo(name = WEATHER_DATA_TABLE_CONDITION) var condition: WeatherCondition = CLEAR_SKY,
+    @ColumnInfo(name = WEATHER_DATA_TABLE_CONDITION) var condition: WeatherCondition = CLEAR,
     @ColumnInfo(name = WEATHER_DATA_TABLE_TEMPERATURE) var temperature: Double = 0.0,
     @ColumnInfo(name = WEATHER_DATA_TABLE_DATETIME) var dateTime: Date? = null,
     @ColumnInfo(name = WEATHER_DATA_TABLE_ICON) var iconName: String = ""
@@ -47,30 +47,25 @@ data class WeatherData(
 /**
  * Represent the different type of weather condition possible
  *
- * @property CLEAR_SKY
- * @property FEW_CLOUDS
- * @property SCATTERED_CLOUDS
- * @property BROKEN_CLOUDS
- * @property SHOWER_RAIN
- * @property THUNDERSTORM
- * @property SNOW
- * @property MIST
- *
  * @param conditionNameId ID of the String that represent the name of the condition
  *
  * @see WeatherData
- *
- * @author Galou Minisini
  */
-enum class WeatherCondition(val conditionNameId: Int){
-    CLEAR_SKY(R.string.clear_sky),
-    FEW_CLOUDS(R.string.few_clouds),
-    SCATTERED_CLOUDS(R.string.scattered_clouds),
-    BROKEN_CLOUDS(R.string.broken_clouds),
-    SHOWER_RAIN(R.string.shower_rain),
-    RAIN(R.string.rain),
-    THUNDERSTORM(R.string.thunerstorm),
-    SNOW(R.string.snow),
-    MIST(R.string.mist),
-    UNKNOWN(R.string.unknown_condition)
+enum class WeatherCondition(val conditionNameId: Int, val iconId: Int){
+    THUNDERSTORM(R.string.thunerstorm, R.drawable.icon_thunderstorm),
+    DRIZZLE(R.string.drizzle, R.drawable.icon_shower_rain),
+    RAIN(R.string.rain, R.drawable.icon_rain),
+    SNOW(R.string.snow, R.drawable.icon_snow),
+    MIST(R.string.mist, R.drawable.icon_mist),
+    SMOKE(R.string.smoke, R.drawable.icon_mist),
+    HAZE(R.string.Haze, R.drawable.icon_mist),
+    DUST(R.string.Dust, R.drawable.icon_mist),
+    FOG(R.string.fog, R.drawable.icon_mist),
+    SAND(R.string.sand, R.drawable.icon_mist),
+    ASH(R.string.ash, R.drawable.icon_mist),
+    SQUALL(R.string.squall, R.drawable.icon_mist),
+    TORNADO(R.string.tornado, R.drawable.icon_mist),
+    CLEAR(R.string.clear, R.drawable.icon_clear_sky),
+    CLOUDS(R.string.clouds, R.drawable.icon_few_clouds),
+    UNKNOWN(R.string.unknown_condition, R.drawable.icon_clear_sky)
 }

@@ -103,13 +103,13 @@ class Converters {
 
         @TypeConverter
         @JvmStatic
-        fun fromTimeDisplay(pattern: TimeDisplay) = pattern.displayPattern
+        fun fromTimeDisplay(pattern: TimeDisplay) = pattern.displayDatePattern
 
         @TypeConverter
         @JvmStatic
         fun toTimeDisplay(pattern: String): TimeDisplay {
             TimeDisplay.values().forEach {
-                if(pattern == it.displayPattern) return it
+                if(pattern == it.displayDatePattern) return it
             }
 
             throw Exception("Time Display not recognize")

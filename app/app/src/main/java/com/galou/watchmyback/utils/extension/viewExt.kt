@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.galou.watchmyback.Event
+import com.galou.watchmyback.data.entity.UnitSystem
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.google.android.material.snackbar.Snackbar
@@ -155,7 +156,7 @@ fun TextInputEditText.displayNameUsers(users: List<User>?) {
 @BindingAdapter(value = ["userPreferences", "date"], requireAll = true)
 fun TextInputEditText.displayDate(userPreferences: UserPreferences?, date: Date?) {
     if(userPreferences != null && date != null){
-        val formatter = SimpleDateFormat(userPreferences.timeDisplay.displayPattern)
+        val formatter = SimpleDateFormat(userPreferences.timeDisplay.displayDatePattern)
         setText(formatter.format(date))
     }
 }
@@ -170,13 +171,13 @@ fun TextInputEditText.displayDate(userPreferences: UserPreferences?, date: Date?
 @BindingAdapter(value = ["userPreferences", "date"], requireAll = true)
 fun TextView.displayDate(userPreferences: UserPreferences?, date: Date?) {
     if(userPreferences != null && date != null){
-        val formatter = SimpleDateFormat(userPreferences.timeDisplay.displayPattern)
+        val formatter = SimpleDateFormat(userPreferences.timeDisplay.displayDatePattern)
         text = formatter.format(date)
     }
 }
 
 /**
- * Set text of an [TextInputEditText] from a resource ID
+ * Set text of an [TextView] from a resource ID
  *
  * @param resourceId: ID of the string
  *
@@ -195,4 +196,43 @@ fun TextView.textFromResourceId(resourceId: Int?){
         "N/A"
     }
 }
+
+/**
+ * Convert kelvin into degree Fahrenheit or degree Celsius depending on the user preference
+ * And set the text of a [TextView] accordingly
+ *
+ * @param userPreferences [UserPreferences]
+ * @param temperatureInKelvin temperature in kelvin
+ *
+ * @see kelvinToCelsius
+ * @see kelvinToFahrenheit
+ * @see BindingAdapter
+ */
+@BindingAdapter(value = ["userPreferences", "kelvin"], requireAll = true)
+fun TextView.displayTemperature(userPreferences: UserPreferences?, temperatureInKelvin: Double?){
+    text = if (userPreferences != null && temperatureInKelvin != null){
+            when(userPreferences.unitSystem) {
+                UnitSystem.METRIC -> temperatureInKelvin.kelvinToCelsius().toString()
+                UnitSystem.IMPERIAL -> temperatureInKelvin.kelvinToFahrenheit().toString()
+            }
+        } else {
+            "N/A"
+        }
+}
+
+/**
+ * Convert a [Date] into a [String] depending of the user's preference [TimeDisplay]
+ * and display it into a [TextView]
+ *
+ * @param userPreferences [UserPreferences] of the current user
+ * @param time  date to convert
+ */
+@BindingAdapter(value = ["userPreferences", "time"], requireAll = true)
+fun TextView.displayTime(userPreferences: UserPreferences?, time: Date?) {
+    if(userPreferences != null && time != null){
+        val formatter = SimpleDateFormat(userPreferences.timeDisplay.displayTimePattern)
+        text = formatter.format(time)
+    }
+}
+
 

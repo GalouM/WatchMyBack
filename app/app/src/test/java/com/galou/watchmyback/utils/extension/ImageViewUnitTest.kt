@@ -46,7 +46,7 @@ class ImageViewUnitTest: KoinTest {
 
     @Test
     fun setImageFromResource_setImageCorrectly(){
-        imageView.imageResouce(resourceId)
+        imageView.imageResource(resourceId)
         val viewDrawable = imageView.drawable.constantState
         assertThat(viewDrawable).isEqualTo(drawableFromResource)
     }

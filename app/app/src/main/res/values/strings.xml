@@ -158,4 +158,18 @@
     <string name="user_profile_picture">User profile picture</string>
     <string name="add_button">add button</string>
     <string name="error_fetching_current_trip">An error occurred while fetching your current trip</string>
+    <string name="city">City:&#032;</string>
+    <string name="country">Country:&#032;</string>
+    <string name="drizzle">Drizzle</string>
+    <string name="smoke">Smoke</string>
+    <string name="Haze">Haze</string>
+    <string name="Dust">Dust</string>
+    <string name="fog">Fog</string>
+    <string name="sand">Sand</string>
+    <string name="ash">Ash</string>
+    <string name="squall">Squall</string>
+    <string name="tornado">Tornado</string>
+    <string name="clear">Clear</string>
+    <string name="clouds">Clouds</string>
+    <string name="weather_image">Weather Image</string>
 </resources>

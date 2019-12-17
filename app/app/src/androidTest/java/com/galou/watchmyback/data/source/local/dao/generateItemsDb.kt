@@ -94,10 +94,10 @@ val listLocationTrip2 = listOf(
 )
 
 //weather
-val weather1Trip1 = WeatherData(idGenerated, point1Trip1.id, WeatherCondition.CLEAR_SKY, 200.0, todaysDate, "icon1")
-val weather2Trip1 = WeatherData(idGenerated, point2Trip1.id, WeatherCondition.BROKEN_CLOUDS, 300.0, todaysDate, "icon2")
+val weather1Trip1 = WeatherData(idGenerated, point1Trip1.id, WeatherCondition.CLEAR, 200.0, todaysDate, "icon1")
+val weather2Trip1 = WeatherData(idGenerated, point2Trip1.id, WeatherCondition.CLOUDS, 300.0, todaysDate, "icon2")
 val weather3Trip1 = WeatherData(idGenerated, point3Trip1.id, WeatherCondition.SNOW, 400.0, todaysDate, "icon3")
-val weather1Trip2 = WeatherData(idGenerated, point1Trip2.id, WeatherCondition.SHOWER_RAIN, 500.0, todaysDate, "icon4")
+val weather1Trip2 = WeatherData(idGenerated, point1Trip2.id, WeatherCondition.RAIN, 500.0, todaysDate, "icon4")
 val weather2Trip2 = WeatherData(idGenerated, point2Trip2.id, WeatherCondition.MIST, 600.0, todaysDate, "icon5")
 
 val listWeatherTrip1 = listOf(

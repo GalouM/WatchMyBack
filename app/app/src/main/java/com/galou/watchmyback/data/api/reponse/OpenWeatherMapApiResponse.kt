@@ -41,7 +41,7 @@ data class Main(
  */
 @JsonClass(generateAdapter = true)
 data class Weather(
-    @Json(name = "description")
+    @Json(name = "main")
     val description: String,
     @Json(name = "icon")
     val icon: String

@@ -17,7 +17,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".detailsPoint.DetailsTripPoint">
+    tools:context=".detailsPoint.DetailsTripPointView">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_medium"
                 android:layout_marginStart="@dimen/margin_big"
-                android:text="@string/pass_by_planned_time"
+                android:text="@{viewmodel.isScheduledPoint() ? @string/pass_by_planned_time : @string/pass_by}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/details_trip_view_time_title"/>
 
@@ -121,6 +121,47 @@
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_location_longitude_title"
                 android:textSize="@dimen/text_medium"
                 android:text="@{viewmodel.pointTripLD.location.longitude.toString()}"/>
+
+            <TextView
+                android:id="@+id/details_trip_view_location_city_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/details_trip_view_location_latitude_title"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="@dimen/text_medium"
+                android:layout_marginStart="@dimen/margin_big"
+                android:text="@string/city"/>
+            <TextView
+                android:id="@+id/details_trip_view_location_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/details_trip_view_location_city_title"
+                app:layout_constraintBottom_toBottomOf="@id/details_trip_view_location_city_title"
+                app:layout_constraintStart_toEndOf="@id/details_trip_view_location_city_title"
+                android:textSize="@dimen/text_medium"
+                android:layout_marginEnd="@dimen/margin_big"
+                android:text="@{viewmodel.pointTripLD.location.city}"/>
+
+            <TextView
+                android:id="@+id/details_trip_view_location_country_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/details_trip_view_location_latitude_title"
+                app:layout_constraintStart_toEndOf="@id/details_trip_view_location_city"
+                android:textSize="@dimen/text_medium"
+                android:layout_marginStart="@dimen/margin_big"
+                android:text="@string/country"/>
+
+            <TextView
+                android:id="@+id/details_trip_view_location_country"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/details_trip_view_location_country_title"
+                app:layout_constraintBottom_toBottomOf="@id/details_trip_view_location_country_title"
+                app:layout_constraintStart_toEndOf="@id/details_trip_view_location_country_title"
+                android:textSize="@dimen/text_medium"
+                android:text="@{viewmodel.pointTripLD.location.country}"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -132,10 +173,61 @@
             app:layout_constraintTop_toBottomOf="@id/details_trip_view_location_group"
             android:layout_marginStart="@dimen/margin_small">
 
-            <include
-                layout="@layout/weather"
+            <TextView
+                android:id="@+id/weather_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/weather"
+                style="@style/TitleWatchMyBack"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginBottom="@dimen/margin_medium"/>
+
+            <TextView
+                android:id="@+id/weather_time_one"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weather_image_one"
+                app:layout_constraintEnd_toEndOf="@id/weather_image_one"
+                app:layout_constraintTop_toBottomOf="@id/weather_title"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_small"
+                android:layout_marginTop="@dimen/text_medium"
+                app:userPreferences="@{viewmodel.userPreferencesLD}"
+                app:time="@{viewmodel.pointTripLD.weatherData.dateTime}"/>
+
+            <ImageView
+                android:id="@+id/weather_image_one"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:imageResouce="@{viewmodel.pointTripLD.weatherData.condition.iconId}"
+                app:layout_constraintTop_toBottomOf="@id/weather_time_one"
+                app:layout_constraintStart_toStartOf="@id/weather_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:contentDescription="@string/weather_image"/>
+            <TextView
+                android:id="@+id/weather_condition_one"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weather_image_one"
+                app:layout_constraintEnd_toEndOf="@id/weather_image_one"
+                app:layout_constraintTop_toBottomOf="@id/weather_image_one"
+                app:textFromResourceId="@{viewmodel.pointTripLD.weatherData.condition.conditionNameId}"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_medium"/>
+            <TextView
+                android:id="@+id/weather_temperature_one"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weather_image_one"
+                app:layout_constraintEnd_toEndOf="@id/weather_image_one"
+                app:layout_constraintTop_toBottomOf="@id/weather_condition_one"
+                app:userPreferences="@{viewmodel.userPreferencesLD}"
+                app:kelvin="@{viewmodel.pointTripLD.weatherData.temperature}"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_medium"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
