@@ -212,8 +212,8 @@ fun TextView.textFromResourceId(resourceId: Int?){
 fun TextView.displayTemperature(userPreferences: UserPreferences?, temperatureInKelvin: Double?){
     text = if (userPreferences != null && temperatureInKelvin != null){
             when(userPreferences.unitSystem) {
-                UnitSystem.METRIC -> temperatureInKelvin.kelvinToCelsius().toString()
-                UnitSystem.IMPERIAL -> temperatureInKelvin.kelvinToFahrenheit().toString()
+                UnitSystem.METRIC -> temperatureInKelvin.kelvinToCelsius().toString() + "°C"
+                UnitSystem.IMPERIAL -> temperatureInKelvin.kelvinToFahrenheit().toString() + "°F"
             }
         } else {
             "N/A"

@@ -256,7 +256,7 @@ class ViewExtUnitTest : KoinTest {
         val temperature = 345.54
         val pref = UserPreferences(unitSystem = UnitSystem.METRIC)
         textView.displayTemperature(pref, temperature)
-        assertThat(textView.text.toString()).isEqualTo(temperature.kelvinToCelsius().toString())
+        assertThat(textView.text.toString()).isEqualTo(temperature.kelvinToCelsius().toString() + "°C")
     }
 
     @Test
@@ -265,7 +265,7 @@ class ViewExtUnitTest : KoinTest {
         val temperature = 345.54
         val pref = UserPreferences(unitSystem = UnitSystem.IMPERIAL)
         textView.displayTemperature(pref, temperature)
-        assertThat(textView.text.toString()).isEqualTo(temperature.kelvinToFahrenheit().toString())
+        assertThat(textView.text.toString()).isEqualTo(temperature.kelvinToFahrenheit().toString() + "°F")
     }
 
 
