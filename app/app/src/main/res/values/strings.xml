@@ -174,4 +174,5 @@
     <string name="weather_image">Weather Image</string>
     <string name="point_details_title">Point Details</string>
     <string name="add_friends_title">Add Friends</string>
+    <string name="trip_type_icon">Trip type icon</string>
 </resources>

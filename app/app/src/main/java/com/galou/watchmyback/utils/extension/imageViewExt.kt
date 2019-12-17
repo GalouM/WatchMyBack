@@ -59,7 +59,8 @@ fun ImageView.bindLoadUrl(url: String?){
  * @param imageResource
  */
 @BindingAdapter("imageResouce")
-fun ImageView.imageResource(imageResource: Int){
-    setImageResource(imageResource)
+fun ImageView.imageResource(imageResource: Int?){
+    if(imageResource != null && imageResource != 0)
+        setImageResource(imageResource)
 
 }

@@ -7,6 +7,7 @@ import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
 import com.galou.watchmyback.base.BaseViewModel
 import com.galou.watchmyback.data.applicationUse.Coordinate
+import com.galou.watchmyback.data.entity.Trip
 import com.galou.watchmyback.data.entity.TripWithData
 import com.galou.watchmyback.data.entity.TypePoint
 import com.galou.watchmyback.data.entity.User
@@ -49,6 +50,9 @@ class TripMapViewModel(
 
     val userLD: LiveData<User> = userRepository.currentUser
 
+    private val _tripLD = MutableLiveData<Trip>()
+    val tripLD: LiveData<Trip> = _tripLD
+
     /**
      * Show activity to start a new trip
      *
@@ -85,6 +89,7 @@ class TripMapViewModel(
             when(val activeTrip = tripRepository.fetchUserActiveTrip(userLD.value!!.id)){
                 is Result.Success -> activeTrip.data?.let {
                     currentTrip = it
+                    _tripLD.value = it.trip
                     emitPointTripLocation()
                 }
                 else -> {

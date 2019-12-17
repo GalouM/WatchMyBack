@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="viewmodel"
@@ -13,6 +14,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".tripMapView.TripMapView">
+
+    <ImageView
+        android:id="@+id/details_trip_map_picture_user"
+        android:layout_width="@dimen/image_medium"
+        android:layout_height="@dimen/image_medium"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/margin_big"
+        android:layout_marginTop="@dimen/margin_medium"
+        app:loadUrlInCircle="@{viewmodel.userLD.pictureUrl}"/>
+
+    <TextView
+        android:id="@+id/details_trip_map_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/details_trip_map_picture_user"
+        app:layout_constraintBottom_toBottomOf="@id/details_trip_map_picture_user"
+        app:layout_constraintStart_toEndOf="@id/details_trip_map_picture_user"
+        android:layout_marginStart="@dimen/margin_small"
+        android:textSize="@dimen/text_medium"
+        android:text="@{viewmodel.userLD.username}"/>
+
+    <ImageView
+        android:id="@+id/details_trip_map_type_trip"
+        android:layout_width="@dimen/image_small"
+        android:layout_height="@dimen/image_small"
+        app:layout_constraintTop_toTopOf="@id/details_trip_map_picture_user"
+        app:layout_constraintBottom_toBottomOf="@id/details_trip_map_picture_user"
+        app:layout_constraintStart_toEndOf="@id/details_trip_map_username"
+        android:layout_marginStart="@dimen/margin_medium"
+        app:imageResouce="@{viewmodel.tripLD.type.iconId}"
+        android:contentDescription="@string/trip_type_icon"/>
+
+    <TextView
+        android:id="@+id/details_trip_map_status_trip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/details_trip_map_picture_user"
+        app:layout_constraintBottom_toBottomOf="@id/details_trip_map_picture_user"
+        app:layout_constraintStart_toEndOf="@id/details_trip_map_type_trip"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:textSize="@dimen/text_medium"
+        app:textFromResourceId="@{viewmodel.tripLD.status.statusNameId}"/>
 
     <com.mapbox.mapboxsdk.maps.MapView
         android:layout_height="0dp"

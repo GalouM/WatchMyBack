@@ -89,6 +89,13 @@ class TripMapViewModelTest {
     }
 
     @Test
+    fun fetchAndDisplayUserActiveTrip_showTripInfo(){
+        viewModel.fetchAndDisplayUserActiveTrip()
+        assertThat(LiveDataTestUtil.getValue(viewModel.tripLD)).isEqualTo(tripWithData.trip)
+
+    }
+
+    @Test
     fun clickPointMap_selectPointAndShowDetails(){
         viewModel.fetchAndDisplayUserActiveTrip()
         LiveDataTestUtil.getValue(viewModel.startPointLD) //wait fro view model to fetch the current trip
