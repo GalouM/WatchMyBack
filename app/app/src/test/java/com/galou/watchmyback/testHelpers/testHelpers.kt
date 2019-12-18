@@ -39,7 +39,9 @@ fun generateTestUser(id: String): User = User(
     friendsId = mutableListOf(UUID_FIRST_FRIEND,UUID_SECOND_FRIEND)
 )
 
-val preferencesTest = UserPreferences(id = TEST_UID)
+val preferencesTest = UserPreferences(
+    id = TEST_UID,
+    emergencyNumber = "number")
 
 fun generateUserWithPref(id: String): UserWithPreferences{
     return UserWithPreferences(user = generateTestUser(id), preferences = preferencesTest)

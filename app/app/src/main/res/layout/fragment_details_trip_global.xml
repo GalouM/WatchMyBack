@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.galou.watchmyback.detailsTrip.DetailsTripViewModel" />
+    </data>
+
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -51,7 +59,8 @@
                 android:layout_height="@dimen/image_small"
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_detail_type_title"
                 app:layout_constraintTop_toBottomOf="@id/detail_trip_view_details_title"
-                app:srcCompat="@drawable/icon_ski"/>
+                app:srcCompat="@drawable/icon_ski"
+                app:imageResouce="@{viewmodel.tripLD.trip.type.iconId}"/>
 
             <TextView
                 android:id="@+id/details_trip_view_detail_update_hz_title"
@@ -71,19 +80,43 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_medium"
-                android:text="every 15min"
+                app:textFromResourceId="@{viewmodel.tripLD.trip.updateFrequency.nameResourceId}"
                 app:layout_constraintTop_toTopOf="@id/details_trip_view_detail_update_hz_title"
                 app:layout_constraintBottom_toBottomOf="@id/details_trip_view_detail_update_hz_title"
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_detail_update_hz_title"/>
 
             <TextView
+                android:id="@+id/details_trip_view_detail_main_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_medium"
+                android:text="@string/main_location"
+                app:layout_constraintTop_toBottomOf="@id/details_trip_view_detail_type_title"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_small"/>
+
+            <TextView
+                android:id="@+id/details_trip_view_detail_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_medium"
+                android:text="@{viewmodel.tripLD.trip.mainLocation}"
+                app:layout_constraintTop_toTopOf="@id/details_trip_view_detail_main_title"
+                app:layout_constraintBottom_toBottomOf="@id/details_trip_view_detail_main_title"
+                app:layout_constraintStart_toEndOf="@id/details_trip_view_detail_main_title"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_small"/>
+
+            <TextView
                 android:id="@+id/detail_trip_view_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/details_trip_view_detail_update_hz_title"
+                app:layout_constraintTop_toBottomOf="@id/details_trip_view_detail_main_title"
                 app:layout_constraintStart_toStartOf="parent"
                 android:textSize="@dimen/text_medium"
-                android:text="Some details about my trip where I'm going how I feel..."
+                android:text="@{viewmodel.tripLD.trip.details}"
                 android:layout_marginStart="@dimen/margin_small"
                 android:layout_marginTop="@dimen/margin_small"/>
 
@@ -127,7 +160,8 @@
                 app:layout_constraintTop_toTopOf="@id/details_trip_view_time_start_title"
                 app:layout_constraintBottom_toBottomOf="@id/details_trip_view_time_start_title"
                 android:textSize="@dimen/text_medium"
-                android:text="06:00 a.m"
+                app:userPreferences="@{viewmodel.userPrefsLD}"
+                app:time="@{viewmodel.startPointLD.pointTrip.time}"
                 android:layout_marginEnd="@dimen/margin_small"/>
 
             <TextView
@@ -137,7 +171,7 @@
                 android:textSize="@dimen/text_medium"
                 app:layout_constraintTop_toBottomOf="@id/details_trip_view_time_title"
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_time_start"
-                android:text="@string/back_at_planned"
+                android:text="@{viewmodel.tripIsDoneLD ? @string/back_at : @string/back_at_planned}"
                 android:layout_marginStart="@dimen/margin_small"/>
 
             <TextView
@@ -148,7 +182,8 @@
                 app:layout_constraintTop_toTopOf="@id/details_trip_view_time_start_title"
                 app:layout_constraintBottom_toBottomOf="@id/details_trip_view_time_start_title"
                 android:textSize="@dimen/text_medium"
-                android:text="08:00 a.m"/>
+                app:userPreferences="@{viewmodel.userPrefsLD}"
+                app:time="@{viewmodel.endPointLD.pointTrip.time}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -176,7 +211,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_medium"
-                android:text="On time"
+                app:textFromResourceId="@{viewmodel.tripLD.trip.status.statusNameId}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/details_trip_view_status_title"
                 android:layout_marginStart="@dimen/margin_small"/>
@@ -198,7 +233,8 @@
                 app:layout_constraintTop_toTopOf="@id/details_trip_view_status_update_title"
                 app:layout_constraintBottom_toBottomOf="@id/details_trip_view_status_update_title"
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_status_update_title"
-                android:text="7:30 a.m"/>
+                app:userPreferences="@{viewmodel.userPrefsLD}"
+                app:time="@{viewmodel.lastPointCheckedLD.pointTrip.time}"/>
 
             <TextView
                 android:id="@+id/details_trip_view_status_position_title"
@@ -219,7 +255,7 @@
                 app:layout_constraintTop_toTopOf="@id/details_trip_view_status_position_title"
                 app:layout_constraintBottom_toBottomOf="@id/details_trip_view_status_position_title"
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_status_position_title"
-                android:text="123.456"
+                app:showDoubleOrNA="@{viewmodel.lastPointCheckedLD.location.latitude}"
                 android:textColor="@color/colorAccent"/>
 
             <TextView
@@ -241,7 +277,7 @@
                 app:layout_constraintTop_toTopOf="@id/details_trip_view_status_position_title"
                 app:layout_constraintBottom_toBottomOf="@id/details_trip_view_status_position_title"
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_status_position_separator"
-                android:text="-98.765"
+                app:showDoubleOrNA="@{viewmodel.lastPointCheckedLD.location.longitude}"
                 android:textColor="@color/colorAccent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -256,8 +292,147 @@
             android:layout_marginTop="@dimen/margin_big"
             android:layout_marginEnd="@dimen/margin_small">
 
-            <include
-                layout="@layout/weather"/>
+            <TextView
+                android:id="@+id/weather_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/weather"
+                style="@style/TitleWatchMyBack"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginBottom="@dimen/margin_medium"/>
+
+            <TextView
+                android:id="@+id/weather_time_one"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weather_image_one"
+                app:layout_constraintEnd_toEndOf="@id/weather_image_one"
+                app:layout_constraintTop_toBottomOf="@id/weather_title"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_small"
+                android:layout_marginTop="@dimen/text_medium"
+                app:userPreferences="@{viewmodel.userPrefsLD}"
+                app:time="@{viewmodel.startPointLD.pointTrip.time}"/>
+
+            <ImageView
+                android:id="@+id/weather_image_one"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:imageResouce="@{viewmodel.startPointLD.weatherData.condition.iconId}"
+                app:layout_constraintTop_toBottomOf="@id/weather_time_one"
+                app:layout_constraintStart_toStartOf="@id/weather_title"
+                app:layout_constraintEnd_toStartOf="@id/weather_image_two"/>
+            <TextView
+                android:id="@+id/weather_condition_one"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weather_image_one"
+                app:layout_constraintEnd_toEndOf="@id/weather_image_one"
+                app:layout_constraintTop_toBottomOf="@id/weather_image_one"
+                android:text="@{viewmodel.startPointLD.weatherData.condition.conditionNameId}"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_medium"/>
+            <TextView
+                android:id="@+id/weather_temperature_one"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weather_image_one"
+                app:layout_constraintEnd_toEndOf="@id/weather_image_one"
+                app:layout_constraintTop_toBottomOf="@id/weather_condition_one"
+                app:userPreferences="@{viewmodel.userPrefsLD}"
+                app:kelvin="@{viewmodel.startPointLD.weatherData.temperature}"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_medium"/>
+
+            <TextView
+                android:id="@+id/weather_time_two"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weather_image_two"
+                app:layout_constraintEnd_toEndOf="@id/weather_image_two"
+                app:layout_constraintTop_toBottomOf="@id/weather_title"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_small"
+                android:layout_marginTop="@dimen/text_medium"
+                app:userPreferences="@{viewmodel.userPrefsLD}"
+                app:time="@{viewmodel.endPointLD.pointTrip.time}"/>
+
+            <ImageView
+                android:id="@+id/weather_image_two"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:imageResouce="@{viewmodel.endPointLD.weatherData.condition.iconId}"
+                app:layout_constraintTop_toBottomOf="@id/weather_time_one"
+                app:layout_constraintStart_toEndOf="@id/weather_image_one"
+                app:layout_constraintEnd_toStartOf="@id/weather_image_three"/>
+            <TextView
+                android:id="@+id/details_trip_view_weather_condition_two"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weather_image_two"
+                app:layout_constraintEnd_toEndOf="@id/weather_image_two"
+                app:layout_constraintTop_toBottomOf="@id/weather_image_two"
+                android:text="@{viewmodel.endPointLD.weatherData.condition.conditionNameId}"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_medium"/>
+            <TextView
+                android:id="@+id/weather_temperature_two"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weather_image_two"
+                app:layout_constraintEnd_toEndOf="@id/weather_image_two"
+                app:layout_constraintTop_toBottomOf="@id/details_trip_view_weather_condition_two"
+                app:userPreferences="@{viewmodel.userPrefsLD}"
+                app:kelvin="@{viewmodel.endPointLD.weatherData.temperature}"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_medium"/>
+
+            <TextView
+                android:id="@+id/weather_time_three"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weather_image_three"
+                app:layout_constraintEnd_toEndOf="@id/weather_image_three"
+                app:layout_constraintTop_toBottomOf="@id/weather_title"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_small"
+                android:layout_marginTop="@dimen/text_medium"
+                app:userPreferences="@{viewmodel.userPrefsLD}"
+                app:time="@{viewmodel.lastPointCheckedLD.pointTrip.time}"/>
+
+            <ImageView
+                android:id="@+id/weather_image_three"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:imageResouce="@{viewmodel.lastPointCheckedLD.weatherData.condition.iconId}"
+                app:layout_constraintTop_toBottomOf="@id/weather_time_three"
+                app:layout_constraintStart_toEndOf="@id/weather_image_two"
+                app:layout_constraintEnd_toEndOf="parent"/>
+            <TextView
+                android:id="@+id/weather_condition_three"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weather_image_three"
+                app:layout_constraintEnd_toEndOf="@id/weather_image_three"
+                app:layout_constraintTop_toBottomOf="@id/weather_image_three"
+                android:text="@{viewmodel.lastPointCheckedLD.weatherData.condition.conditionNameId}"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_medium"/>
+            <TextView
+                android:id="@+id/weather_temperature_three"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/weather_image_three"
+                app:layout_constraintEnd_toEndOf="@id/weather_image_three"
+                app:layout_constraintTop_toBottomOf="@id/weather_condition_three"
+                app:userPreferences="@{viewmodel.userPrefsLD}"
+                app:kelvin="@{viewmodel.lastPointCheckedLD.weatherData.temperature}"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_medium"/>
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -301,7 +476,9 @@
             app:layout_constraintEnd_toStartOf="@id/detail_trip_view_call_emergency"
             app:icon="@drawable/icon_phone"
             android:layout_marginTop="@dimen/margin_big"
-            android:text="Call Gaelle"/>
+            android:text="@{@string/call + viewmodel.tripOwnerNameLD}"
+            visibleOrInvisible="@{viewmodel.tripOwnerNameLD != null}"
+            android:onClick="@{() -> viewmodel.callTripOwner()}"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/detail_trip_view_call_emergency"
@@ -312,9 +489,11 @@
             app:layout_constraintStart_toEndOf="@id/detail_trip_view_call_user"
             app:layout_constraintEnd_toEndOf="parent"
             app:icon="@drawable/icon_phone"
-            android:text="@string/call_emergency"/>
+            android:text="@string/call_emergency"
+            android:onClick="@{() -> viewmodel.callEmergency()}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.core.widget.NestedScrollView>
+</layout>

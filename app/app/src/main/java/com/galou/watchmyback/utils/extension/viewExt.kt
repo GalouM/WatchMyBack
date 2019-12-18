@@ -235,4 +235,17 @@ fun TextView.displayTime(userPreferences: UserPreferences?, time: Date?) {
     }
 }
 
+/**
+ * Convert a Double into a String to be displayed into a [TextView]
+ * If hte double is null it ill displayed "N/A"
+ *
+ * @param number number to convert
+ *
+ * @see BindingAdapter
+ */
+@BindingAdapter("showDoubleOrNA")
+fun TextView.showDoubleOrNA(number: Double?) {
+    text = number?.toString() ?: "N/A"
+}
+
 

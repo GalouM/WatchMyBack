@@ -9,6 +9,7 @@ import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.utils.TRIP_TABLE_ACTIVE
 import com.galou.watchmyback.utils.TRIP_TABLE_NAME
 import com.galou.watchmyback.utils.TRIP_TABLE_USER_UUID
+import com.galou.watchmyback.utils.TRIP_TABLE_UUID
 import com.galou.watchmyback.utils.extension.toTripWatchers
 
 /**
@@ -23,10 +24,10 @@ import com.galou.watchmyback.utils.extension.toTripWatchers
 abstract class TripDao(private val database: WatchMyBackDatabase) {
 
     /**
-     * Query all the active [Trip] of a specific [User]
+     * Query the active [Trip] of a specific [User]
      *
      * @param userId ID of the user to query
-     * @return List of the active [Trip] of the [User]
+     * @return the last active [Trip] of the [User]
      *
      * @see Query
      */
@@ -34,6 +35,18 @@ abstract class TripDao(private val database: WatchMyBackDatabase) {
             "WHERE $TRIP_TABLE_USER_UUID = :userId " +
             "AND $TRIP_TABLE_ACTIVE = 1")
     abstract suspend fun getUserActiveTrip(userId: String): TripWithData?
+
+    /**
+     * Fetch a [TripWithData] by id
+     *
+     * @param tripId Id of the trip
+     * @return [TripWithData] with the corresponding id
+     *
+     * @see Query
+     */
+    @Query("SELECT * FROM $TRIP_TABLE_NAME " +
+            "WHERE $TRIP_TABLE_UUID = :tripId")
+    abstract suspend fun getTrip(tripId: String): TripWithData?
 
     /**
      * Create an object [Trip] in the database

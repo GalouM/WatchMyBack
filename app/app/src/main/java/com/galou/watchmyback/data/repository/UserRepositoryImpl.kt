@@ -101,7 +101,7 @@ class UserRepositoryImpl(
      */
     override suspend fun fetchUser(userId: String): Result<UserWithPreferences?> = coroutineScope {
         // fetch user from both database
-        val localUserTask =  async { userLocalSource.fetchUser(userId) }
+        val localUserTask = async { userLocalSource.fetchUser(userId) }
         val remoteUserTask = async { userRemoteSource.fetchUser(userId) }
         // wait for result DB and make sure fetch succeed
         val remoteResult = remoteUserTask.await()
@@ -109,15 +109,19 @@ class UserRepositoryImpl(
 
         when {
             remoteResult is Result.Success && localResult is Result.Success -> {
-                remoteResult.data?.let {remoteUser ->
+                remoteResult.data?.let { remoteUser ->
                     // fetch user's friends
                     // make sure friends fetch succeed and update or create the user with it data
                     when (val remoteFriendTask = friendRemoteSource.fetchUserFriend(remoteUser)) {
                         is Result.Success -> {
-                            when(val updateLocalDbResult =
-                                userLocalSource.updateOrCreateUser(remoteUser, localResult.data,
-                                    *remoteFriendTask.data.toTypedArray())) {
-                                is Result.Success -> return@coroutineScope Result.Success(updateLocalDbResult.data)
+                            when (val updateLocalDbResult =
+                                userLocalSource.updateOrCreateUser(
+                                    remoteUser, localResult.data,
+                                    *remoteFriendTask.data.toTypedArray()
+                                )) {
+                                is Result.Success -> return@coroutineScope Result.Success(
+                                    updateLocalDbResult.data
+                                )
 
                                 else -> return@coroutineScope localResult
                             }
@@ -145,7 +149,7 @@ class UserRepositoryImpl(
     override suspend fun updateUserPicture(user: User, internalUri: Uri): Result<Uri?> {
         val uriResult = userRemoteSource.createNewPictureInStorageAndGetUri(user.id, internalUri)
 
-        when(uriResult){
+        when (uriResult) {
             is Result.Success -> {
                 val uriRemotePicture = uriResult.data.toString()
                 user.pictureUrl = uriRemotePicture
@@ -182,13 +186,13 @@ class UserRepositoryImpl(
      * @see UserLocalDataSource.fetchAllUsers
      */
     override suspend fun fetchAllUsers(): Result<List<User>> {
-        when(val remoteResult = userRemoteSource.fetchAllUsers()){
+        when (val remoteResult = userRemoteSource.fetchAllUsers()) {
             is Result.Success -> {
                 if (remoteResult.data.isNotEmpty())
                     return Result.Success(remoteResult.data)
             }
         }
-        return when(val localResult = userLocalSource.fetchAllUsers()){
+        return when (val localResult = userLocalSource.fetchAllUsers()) {
             is Result.Success -> Result.Success(localResult.data)
             is Result.Error -> Result.Error(localResult.exception)
             is Result.Canceled -> Result.Canceled(localResult.exception)
@@ -208,13 +212,13 @@ class UserRepositoryImpl(
      * @see UserLocalDataSource.fetchUserByUsername
      */
     override suspend fun fetchUserByUsername(name: String): Result<List<User>> {
-        when(val remoteResult = userRemoteSource.fetchUserByUsername(name)){
+        when (val remoteResult = userRemoteSource.fetchUserByUsername(name)) {
             is Result.Success -> {
                 if (remoteResult.data.isNotEmpty())
                     return Result.Success(remoteResult.data)
             }
         }
-        return when(val localResult = userLocalSource.fetchUserByUsername(name)) {
+        return when (val localResult = userLocalSource.fetchUserByUsername(name)) {
             is Result.Success -> Result.Success(localResult.data)
             is Result.Error -> Result.Error(localResult.exception)
             is Result.Canceled -> Result.Canceled(localResult.exception)
@@ -234,16 +238,41 @@ class UserRepositoryImpl(
      * @see UserLocalDataSource.fetchUserByEmailAddress
      */
     override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<User>> {
-        when(val remoteResult = userRemoteSource.fetchUserByEmailAddress(emailAddress)){
+        when (val remoteResult = userRemoteSource.fetchUserByEmailAddress(emailAddress)) {
             is Result.Success -> {
                 if (remoteResult.data.isNotEmpty())
                     return Result.Success(remoteResult.data)
             }
         }
-        return when(val localResult = userLocalSource.fetchUserByEmailAddress(emailAddress)) {
+        return when (val localResult = userLocalSource.fetchUserByEmailAddress(emailAddress)) {
             is Result.Success -> Result.Success(localResult.data)
             is Result.Error -> Result.Error(localResult.exception)
             is Result.Canceled -> Result.Canceled(localResult.exception)
         }
+    }
+
+    /**
+     * Run async task to fetch the information of a trip owner
+     *
+     * @param ownerId Id of the user
+     * @return [Result] of the operation with a user's information
+     *
+     * @see UserRemoteDataSource.fetchUser
+     * @see UserLocalDataSource.fetchUser
+     */
+    override suspend fun fetchTripOwner(ownerId: String): Result<User> {
+        when (val remoteResult = userRemoteSource.fetchUser(ownerId)) {
+            is Result.Success -> remoteResult.data?.let {
+                return Result.Success(it)
+            }
+        }
+
+        when (val localResult = userLocalSource.fetchUser(ownerId)) {
+            is Result.Success -> localResult.data?.let {
+                return Result.Success(it.user)
+            }
+        }
+        return Result.Error(Exception("Error while fetching user $ownerId"))
+
     }
 }

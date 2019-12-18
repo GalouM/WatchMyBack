@@ -97,4 +97,16 @@ class TripLocalSourceTests {
         val trip = (task as Result.Success).data
         assertThat(trip, `is` (tripWithData1))
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun fetchTripByID_returnTripWithCorrectID() = runBlocking {
+        tripDao.createTripAndData(tripWithData1, itemList1)
+        val task = localSource.fetchTrip(tripWithData1.trip.id)
+        val result = task is Result.Success
+        assertThat(result, `is`(true))
+        val trip = (task as Result.Success).data
+        assertThat(trip?.trip?.id, `is` (tripWithData1.trip.id))
+
+    }
 }

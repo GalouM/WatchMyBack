@@ -65,4 +65,18 @@ class TripLocalDataSource(
             Result.Error(e)
         }
     }
+
+    /**
+     * Fetch the [TripWithData] with the corresponding ID
+     *
+     * @param tripId ID of the trip
+     * @return [Result] of the operation with a [TripWithData]
+     */
+    override suspend fun fetchTrip(tripId: String): Result<TripWithData?> {
+        return try {
+            Result.Success(tripDao.getTrip(tripId))
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
 }

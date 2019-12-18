@@ -16,4 +16,6 @@ interface TripDataSource {
     suspend fun deleteActiveTrip(userId: String): Result<Void?>
 
     suspend fun fetchActiveTrip(userId: String): Result<TripWithData?>
+
+    suspend fun fetchTrip(tripId: String): Result<TripWithData?>
 }

@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+        <variable
+            name="item"
+            type="com.galou.watchmyback.data.entity.ItemCheckList" />
+    </data>
+
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -18,13 +27,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="Helmet"
+            android:text="@{item.name}"
             android:layout_marginStart="@dimen/margin_big"/>
 
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            app:srcCompat="@drawable/icon_checkbox_checked"
+            app:srcCompat="@{item.checked ? @drawable/icon_checkbox_checked : @drawable/icon_checkbox_blank}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -33,3 +42,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
+</layout>

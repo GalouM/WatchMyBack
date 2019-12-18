@@ -2,6 +2,7 @@ package com.galou.watchmyback.data.repository
 
 import com.galou.watchmyback.data.entity.CheckListWithItems
 import com.galou.watchmyback.data.entity.PointTripWithData
+import com.galou.watchmyback.data.entity.Trip
 import com.galou.watchmyback.data.entity.TripWithData
 import com.galou.watchmyback.testHelpers.tripWithData
 import com.galou.watchmyback.utils.Result
@@ -24,5 +25,18 @@ class FakeTripRepositoryImpl : TripRepository {
         Result.Success(null)
 
     override suspend fun fetchUserActiveTrip(userId: String): Result<TripWithData> =
-        Result.Success(tripWithData)
+        Result.Success(
+            TripWithData(
+                trip = Trip(active = true, userId = userId),
+                points = tripWithData.points,
+                watchers = tripWithData.watchers))
+
+    override suspend fun fetchTrip(tripId: String): Result<TripWithData?> {
+        val trip = TripWithData(
+            trip = Trip(id = tripId),
+            points = tripWithData.points,
+            watchers = tripWithData.watchers)
+
+        return Result.Success(trip)
+    }
 }

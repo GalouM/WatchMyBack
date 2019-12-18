@@ -186,9 +186,6 @@ dependencies {
     implementation "androidx.core:core-ktx:$rootProject.coreKtxVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    //MAP ZEN
-    implementation "com.mapzen:mapzen-android-sdk:$rootProject.mapZenVersion"
-
     //MAP BOX
     implementation "com.mapbox.mapboxsdk:mapbox-android-sdk:$rootProject.mapBoxVersion"
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v8:0.7.0'

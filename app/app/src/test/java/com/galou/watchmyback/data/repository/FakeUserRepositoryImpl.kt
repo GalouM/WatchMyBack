@@ -6,10 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.entity.UserWithPreferences
-import com.galou.watchmyback.testHelpers.URI_STORAGE_REMOTE
-import com.galou.watchmyback.testHelpers.firstFriend
-import com.galou.watchmyback.testHelpers.generateUserWithPref
-import com.galou.watchmyback.testHelpers.secondFriend
+import com.galou.watchmyback.testHelpers.*
 import com.galou.watchmyback.utils.Result
 
 /**
@@ -47,5 +44,12 @@ open class FakeUserRepositoryImpl : UserRepository{
 
     override suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<User>> = Result.Success(listOf(
         secondFriend))
+
+    override suspend fun fetchTripOwner(ownerId: String): Result<User> = Result.Success(
+        User(
+            id = ownerId,
+            username = mainUser.username,
+            phoneNumber = mainUser.phoneNumber
+    ))
 }
 

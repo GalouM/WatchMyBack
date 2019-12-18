@@ -20,4 +20,6 @@ interface TripRepository {
     suspend fun fetchPointLocationInformation(points: List<PointTripWithData>): Result<Void?>
 
     suspend fun fetchUserActiveTrip(userId: String): Result<TripWithData?>
+
+    suspend fun fetchTrip(tripId: String): Result<TripWithData?>
 }

@@ -74,6 +74,7 @@ class TripMapViewModelTest {
     @Test
     fun fetchAndDisplayUserActiveTrip_showTripPoints(){
         viewModel.fetchAndDisplayUserActiveTrip()
+        println(LiveDataTestUtil.getValue(viewModel.startPointLD))
         assertThat(LiveDataTestUtil.getValue(viewModel.startPointLD).toList()[0].first)
             .isEqualTo(tripWithData.points.find { it.pointTrip.typePoint == TypePoint.START }?.pointTrip?.id)
         assertThat(LiveDataTestUtil.getValue(viewModel.endPointLD).toList()[0].first)
@@ -91,7 +92,8 @@ class TripMapViewModelTest {
     @Test
     fun fetchAndDisplayUserActiveTrip_showTripInfo(){
         viewModel.fetchAndDisplayUserActiveTrip()
-        assertThat(LiveDataTestUtil.getValue(viewModel.tripLD)).isEqualTo(tripWithData.trip)
+        assertThat(LiveDataTestUtil.getValue(viewModel.tripLD).userId).isEqualTo(tripWithData.trip.userId)
+        assertThat(LiveDataTestUtil.getValue(viewModel.tripLD).active).isTrue()
 
     }
 

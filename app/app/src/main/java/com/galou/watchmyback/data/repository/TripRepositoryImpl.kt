@@ -143,6 +143,9 @@ class TripRepositoryImpl(
      *
      * @param userId ID of the user
      * @return [Result] of the operation
+     *
+     * @see TripLocalDataSource.deleteActiveTrip
+     * @see TripRemoteDataSource.deleteActiveTrip
      */
     private suspend fun deletePreviousActiveTrip(userId: String): Result<Void?> = coroutineScope {
         val localTask = async { localSource.deleteActiveTrip(userId) }
@@ -154,10 +157,14 @@ class TripRepositoryImpl(
 
 
     /**
-     * Fetch the user active trip
+     * Fetch the user active trip from the remote database
+     * If an error happened the data will be fetched from the local database
      *
      * @param userId ID of the user
      * @return [Result] of the operation with a [TripWithData]
+     *
+     * @see TripRemoteDataSource.fetchActiveTrip
+     * @see TripLocalDataSource.fetchActiveTrip
      */
     override suspend fun fetchUserActiveTrip(userId: String): Result<TripWithData?> {
         return when(val remoteTask = remoteSource.fetchActiveTrip(userId)){
@@ -165,4 +172,23 @@ class TripRepositoryImpl(
             else -> localSource.fetchActiveTrip(userId)
             }
     }
+
+    /**
+     * Fetch a trip with the corresponding ID from the remote database
+     * If an error happended the data data will be fetched from the local database
+     *
+     * @param tripId Id of the trip to fetch
+     * @return [Result] of the operation with a [TripWithData]
+     *
+     * @see TripRemoteDataSource.fetchTrip
+     * @see TripLocalDataSource.fetchTrip
+     */
+    override suspend fun fetchTrip(tripId: String): Result<TripWithData?> {
+        return when(val remoteTask = remoteSource.fetchTrip(tripId)){
+            is Result.Success -> remoteTask
+            else -> localSource.fetchTrip(tripId)
+        }
+    }
+
+
 }

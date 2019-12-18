@@ -141,6 +141,14 @@ class TripDaoTest {
         assertThat(activeTrip, `is` (nullValue()))
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun fetchTripByID_getCorrectTrip() = runBlocking {
+        val trip = tripDao.getTrip(tripWithData1.trip.id)
+        assertThat(trip?.trip?.id, equalTo(tripWithData1.trip.id))
+
+    }
+
 
 
 

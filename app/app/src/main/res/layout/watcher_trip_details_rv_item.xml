@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+        <variable
+            name="watcher"
+            type="com.galou.watchmyback.data.entity.User" />
+    </data>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -17,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:srcCompat="@drawable/icon_my_profile"/>
+            app:loadUrl="@{watcher.pictureUrl}"/>
 
         <TextView
             android:id="@+id/watcher_trip_details_item_username"
@@ -26,7 +34,7 @@
             app:layout_constraintStart_toEndOf="@id/watcher_trip_details_picture"
             app:layout_constraintTop_toTopOf="@id/watcher_trip_details_picture"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="David Joneau"
+            android:text="@{watcher.username}"
             android:layout_marginStart="@dimen/margin_medium"
             android:textStyle="bold"/>
 
@@ -34,3 +42,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
+</layout>

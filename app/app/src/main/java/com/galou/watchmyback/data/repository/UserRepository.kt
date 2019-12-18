@@ -34,4 +34,6 @@ interface UserRepository {
 
     suspend fun fetchUserByEmailAddress(emailAddress: String): Result<List<User>>
 
+    suspend fun fetchTripOwner(ownerId: String): Result<User>
+
 }

@@ -268,6 +268,21 @@ class ViewExtUnitTest : KoinTest {
         assertThat(textView.text.toString()).isEqualTo(temperature.kelvinToFahrenheit().toString() + "°F")
     }
 
+    @Test
+    fun setTextWithDouble_showNumber(){
+        val textView = TextView(context)
+        val number = 345.54
+        textView.showDoubleOrNA(number)
+        assertThat(textView.text.toString()).isEqualTo(number.toString())
+    }
+
+    @Test
+    fun setTextWithNull_showNA(){
+        val textView = TextView(context)
+        textView.showDoubleOrNA(null)
+        assertThat(textView.text.toString()).isEqualTo("N/A")
+    }
+
 
 
 

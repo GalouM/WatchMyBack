@@ -175,4 +175,27 @@ class TripRemoteDataSource(
             false -> Result.Success(null)
         }
     }
+
+    /**
+     * Fetch the [TripWithDataRemoteDB] with the corrsponding ID and convert it into a [TripWithData]
+     *
+     * @param tripId trip ID to fetch
+     * @return [Result] of the operation with a [TripWithData] object
+     */
+    override suspend fun fetchTrip(tripId: String): Result<TripWithData?> = withContext(ioDispatcher) {
+        return@withContext when (val result = tripCollection.document(tripId).get().await()){
+            is Result.Success -> {
+                result.data.toObject(TripWithDataRemoteDB::class.java)?.let { trip ->
+                    when(val resultWatchers = fetchTripWatchers(trip.watchersId)){
+                        is Result.Success -> Result.Success(trip.convertForLocal(resultWatchers.data))
+                        is Result.Error -> Result.Error(resultWatchers.exception)
+                        is Result.Canceled -> Result.Canceled(resultWatchers.exception)
+                    }
+                }
+                Result.Success(null)
+            }
+            is Result.Error -> Result.Error(result.exception)
+            is Result.Canceled -> Result.Canceled(result.exception)
+        }
+    }
 }
