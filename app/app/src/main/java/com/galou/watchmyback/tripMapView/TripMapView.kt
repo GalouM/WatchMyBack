@@ -71,8 +71,6 @@ class TripMapView : Fragment() {
         setupOpenStartNewTrip()
         setupCenterCameraObserver()
         setupUserConnected()
-        setupStartPointObserver()
-        setupEndPointObserver()
         setupSchedulePointsObserver()
         setupCheckUpPointsObserver()
         setupShowDetailPointObserver()
@@ -93,15 +91,8 @@ class TripMapView : Fragment() {
         viewModel.centerCameraUserLD.observe(this, EventObserver { centerCameraOnUser() })
     }
 
-    private fun setupUserConnected(){
+    private fun setupUserConnected() {
         viewModel.userLD.observe(this, Observer { setupMap() })
-    }
-    private fun setupStartPointObserver(){
-        viewModel.startPointLD.observe(this, Observer { displaySchedulePoints(it) })
-    }
-
-    private fun setupEndPointObserver(){
-        viewModel.endPointLD.observe(this, Observer { displaySchedulePoints(it) })
     }
 
     private fun setupSchedulePointsObserver(){

@@ -72,21 +72,25 @@ class TripMapViewModelTest {
     }
 
     @Test
-    fun fetchAndDisplayUserActiveTrip_showTripPoints(){
+    fun fetchTrip_emitSchedulePointCoordinate(){
         viewModel.fetchAndDisplayUserActiveTrip()
-        println(LiveDataTestUtil.getValue(viewModel.startPointLD))
-        assertThat(LiveDataTestUtil.getValue(viewModel.startPointLD).toList()[0].first)
-            .isEqualTo(tripWithData.points.find { it.pointTrip.typePoint == TypePoint.START }?.pointTrip?.id)
-        assertThat(LiveDataTestUtil.getValue(viewModel.endPointLD).toList()[0].first)
-            .isEqualTo(tripWithData.points.find { it.pointTrip.typePoint == TypePoint.END }?.pointTrip?.id)
         assertThat(LiveDataTestUtil.getValue(viewModel.schedulePointsLD).keys)
-            .containsExactlyElementsIn(tripWithData.points
+            .containsAtLeastElementsIn(tripWithData.points
                 .filter { it.pointTrip.typePoint == TypePoint.SCHEDULE_STAGE }
                 .map { it.pointTrip.id })
+        assertThat(LiveDataTestUtil.getValue(viewModel.schedulePointsLD).keys)
+            .containsAtLeast(tripWithData.points.find { it.pointTrip.typePoint == TypePoint.START }?.pointTrip?.id,
+                tripWithData.points.find { it.pointTrip.typePoint == TypePoint.END }?.pointTrip?.id)
+    }
+
+    @Test
+    fun fetchTrip_emitCheckedUpPointCoordinate(){
+        viewModel.fetchAndDisplayUserActiveTrip()
         assertThat(LiveDataTestUtil.getValue(viewModel.checkedPointsLD).keys)
             .containsExactlyElementsIn(tripWithData.points
                 .filter { it.pointTrip.typePoint == TypePoint.CHECKED_UP }
                 .map { it.pointTrip.id })
+
     }
 
     @Test
@@ -100,7 +104,7 @@ class TripMapViewModelTest {
     @Test
     fun clickPointMap_selectPointAndShowDetails(){
         viewModel.fetchAndDisplayUserActiveTrip()
-        LiveDataTestUtil.getValue(viewModel.startPointLD) //wait fro view model to fetch the current trip
+        LiveDataTestUtil.getValue(viewModel.schedulePointsLD) //wait fro view model to fetch the current trip
         viewModel.clickPointTrip(tripWithData.points[0].pointTrip.id)
         assertThat(tripRepository.pointSelected).isEqualTo(tripWithData.points[0])
         val value = LiveDataTestUtil.getValue(viewModel.showPointDetailsLD)
