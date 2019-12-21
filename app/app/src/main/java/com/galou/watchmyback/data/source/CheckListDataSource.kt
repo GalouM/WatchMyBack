@@ -13,7 +13,7 @@ interface CheckListDataSource {
 
     suspend fun fetchUserCheckLists(userId: String): Result<List<CheckListWithItems>>
 
-    suspend fun fetchCheckList(checkList: CheckList): Result<CheckListWithItems?>
+    suspend fun fetchCheckList(checkListId: String): Result<CheckListWithItems?>
 
     suspend fun createCheckList(vararg checkLists: CheckListWithItems): Result<Void?>
 

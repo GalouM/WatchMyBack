@@ -17,7 +17,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".DetailsTripGlobal">
+    tools:context=".detailsTrip.DetailsTripGlobalView">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -60,7 +60,7 @@
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_detail_type_title"
                 app:layout_constraintTop_toBottomOf="@id/detail_trip_view_details_title"
                 app:srcCompat="@drawable/icon_ski"
-                app:imageResouce="@{viewmodel.tripLD.trip.type.iconId}"/>
+                app:imageResouce="@{viewmodel.tripLD.type.iconId}"/>
 
             <TextView
                 android:id="@+id/details_trip_view_detail_update_hz_title"
@@ -80,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_medium"
-                app:textFromResourceId="@{viewmodel.tripLD.trip.updateFrequency.nameResourceId}"
+                app:textFromResourceId="@{viewmodel.tripLD.updateFrequency.nameResourceId}"
                 app:layout_constraintTop_toTopOf="@id/details_trip_view_detail_update_hz_title"
                 app:layout_constraintBottom_toBottomOf="@id/details_trip_view_detail_update_hz_title"
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_detail_update_hz_title"/>
@@ -102,7 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_medium"
-                android:text="@{viewmodel.tripLD.trip.mainLocation}"
+                android:text="@{viewmodel.tripLD.mainLocation}"
                 app:layout_constraintTop_toTopOf="@id/details_trip_view_detail_main_title"
                 app:layout_constraintBottom_toBottomOf="@id/details_trip_view_detail_main_title"
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_detail_main_title"
@@ -116,7 +116,7 @@
                 app:layout_constraintTop_toBottomOf="@id/details_trip_view_detail_main_title"
                 app:layout_constraintStart_toStartOf="parent"
                 android:textSize="@dimen/text_medium"
-                android:text="@{viewmodel.tripLD.trip.details}"
+                android:text="@{viewmodel.tripLD.details}"
                 android:layout_marginStart="@dimen/margin_small"
                 android:layout_marginTop="@dimen/margin_small"/>
 
@@ -161,7 +161,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/details_trip_view_time_start_title"
                 android:textSize="@dimen/text_medium"
                 app:userPreferences="@{viewmodel.userPrefsLD}"
-                app:time="@{viewmodel.startPointLD.pointTrip.time}"
+                app:time="@{viewmodel.startPointTimeLD}"
                 android:layout_marginEnd="@dimen/margin_small"/>
 
             <TextView
@@ -183,7 +183,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/details_trip_view_time_start_title"
                 android:textSize="@dimen/text_medium"
                 app:userPreferences="@{viewmodel.userPrefsLD}"
-                app:time="@{viewmodel.endPointLD.pointTrip.time}"/>
+                app:time="@{viewmodel.endPointTimeLD}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -211,7 +211,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_medium"
-                app:textFromResourceId="@{viewmodel.tripLD.trip.status.statusNameId}"
+                app:textFromResourceId="@{viewmodel.tripLD.status.statusNameId}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/details_trip_view_status_title"
                 android:layout_marginStart="@dimen/margin_small"/>
@@ -256,7 +256,8 @@
                 app:layout_constraintBottom_toBottomOf="@id/details_trip_view_status_position_title"
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_status_position_title"
                 app:showDoubleOrNA="@{viewmodel.lastPointCheckedLD.location.latitude}"
-                android:textColor="@color/colorAccent"/>
+                android:textColor="@color/colorAccent"
+                android:onClick="@{() -> viewmodel.clickLatestPointLocation()}"/>
 
             <TextView
                 android:id="@+id/details_trip_view_status_position_separator"
@@ -267,7 +268,8 @@
                 app:layout_constraintBottom_toBottomOf="@id/details_trip_view_status_position_title"
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_status_position_latitude"
                 android:text="@string/separator"
-                android:textColor="@color/colorAccent"/>
+                android:textColor="@color/colorAccent"
+                android:onClick="@{() -> viewmodel.clickLatestPointLocation()}"/>
 
             <TextView
                 android:id="@+id/details_trip_view_status_position_longitude"
@@ -278,7 +280,8 @@
                 app:layout_constraintBottom_toBottomOf="@id/details_trip_view_status_position_title"
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_status_position_separator"
                 app:showDoubleOrNA="@{viewmodel.lastPointCheckedLD.location.longitude}"
-                android:textColor="@color/colorAccent"/>
+                android:textColor="@color/colorAccent"
+                android:onClick="@{() -> viewmodel.clickLatestPointLocation()}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -315,13 +318,13 @@
                 android:textSize="@dimen/text_small"
                 android:layout_marginTop="@dimen/text_medium"
                 app:userPreferences="@{viewmodel.userPrefsLD}"
-                app:time="@{viewmodel.startPointLD.pointTrip.time}"/>
+                app:time="@{viewmodel.startPointWeatherLD.dateTime}"/>
 
             <ImageView
                 android:id="@+id/weather_image_one"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                app:imageResouce="@{viewmodel.startPointLD.weatherData.condition.iconId}"
+                app:imageResouce="@{viewmodel.startPointWeatherLD.condition.iconId}"
                 app:layout_constraintTop_toBottomOf="@id/weather_time_one"
                 app:layout_constraintStart_toStartOf="@id/weather_title"
                 app:layout_constraintEnd_toStartOf="@id/weather_image_two"/>
@@ -332,7 +335,7 @@
                 app:layout_constraintStart_toStartOf="@id/weather_image_one"
                 app:layout_constraintEnd_toEndOf="@id/weather_image_one"
                 app:layout_constraintTop_toBottomOf="@id/weather_image_one"
-                android:text="@{viewmodel.startPointLD.weatherData.condition.conditionNameId}"
+                android:text="@{viewmodel.startPointWeatherLD.condition.conditionNameId}"
                 android:textAlignment="center"
                 android:textSize="@dimen/text_medium"/>
             <TextView
@@ -343,7 +346,7 @@
                 app:layout_constraintEnd_toEndOf="@id/weather_image_one"
                 app:layout_constraintTop_toBottomOf="@id/weather_condition_one"
                 app:userPreferences="@{viewmodel.userPrefsLD}"
-                app:kelvin="@{viewmodel.startPointLD.weatherData.temperature}"
+                app:kelvin="@{viewmodel.startPointWeatherLD.temperature}"
                 android:textAlignment="center"
                 android:textSize="@dimen/text_medium"/>
 
@@ -358,13 +361,13 @@
                 android:textSize="@dimen/text_small"
                 android:layout_marginTop="@dimen/text_medium"
                 app:userPreferences="@{viewmodel.userPrefsLD}"
-                app:time="@{viewmodel.endPointLD.pointTrip.time}"/>
+                app:time="@{viewmodel.endPointTimeLD}"/>
 
             <ImageView
                 android:id="@+id/weather_image_two"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                app:imageResouce="@{viewmodel.endPointLD.weatherData.condition.iconId}"
+                app:imageResouce="@{viewmodel.endPointWeatherLD.condition.iconId}"
                 app:layout_constraintTop_toBottomOf="@id/weather_time_one"
                 app:layout_constraintStart_toEndOf="@id/weather_image_one"
                 app:layout_constraintEnd_toStartOf="@id/weather_image_three"/>
@@ -375,7 +378,7 @@
                 app:layout_constraintStart_toStartOf="@id/weather_image_two"
                 app:layout_constraintEnd_toEndOf="@id/weather_image_two"
                 app:layout_constraintTop_toBottomOf="@id/weather_image_two"
-                android:text="@{viewmodel.endPointLD.weatherData.condition.conditionNameId}"
+                android:text="@{viewmodel.endPointWeatherLD.condition.conditionNameId}"
                 android:textAlignment="center"
                 android:textSize="@dimen/text_medium"/>
             <TextView
@@ -386,7 +389,7 @@
                 app:layout_constraintEnd_toEndOf="@id/weather_image_two"
                 app:layout_constraintTop_toBottomOf="@id/details_trip_view_weather_condition_two"
                 app:userPreferences="@{viewmodel.userPrefsLD}"
-                app:kelvin="@{viewmodel.endPointLD.weatherData.temperature}"
+                app:kelvin="@{viewmodel.endPointWeatherLD.temperature}"
                 android:textAlignment="center"
                 android:textSize="@dimen/text_medium"/>
 

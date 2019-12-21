@@ -33,7 +33,6 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            app:srcCompat="@{item.checked ? @drawable/icon_checkbox_checked : @drawable/icon_checkbox_blank}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

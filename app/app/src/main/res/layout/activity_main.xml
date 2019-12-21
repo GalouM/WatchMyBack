@@ -46,7 +46,7 @@
             app:layout_constraintBottom_toTopOf="@id/main_activity_bottom_nav"
 
             app:defaultNavHost="true"
-            app:navGraph="@navigation/nav_graph"/>
+            app:navGraph="@navigation/nav_graph_main"/>
 
 
 

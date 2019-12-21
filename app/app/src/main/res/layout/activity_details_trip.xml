@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DetailsTripActivity">
+    tools:context=".detailsTrip.DetailsTripActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,17 +20,32 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <com.google.android.material.tabs.TabLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            android:elevation="@dimen/normal_elevation"
-            app:layout_constraintTop_toBottomOf="@id/details_trip_activity_toolbar"
+        <fragment
+            android:id="@+id/details_trip_activity_nav_host"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
-            android:background="@color/colorPrimary"
-            app:tabIndicatorColor="@color/colorAccent"
-            app:tabTextColor="@color/colorOnPrimary"
-            app:tabSelectedTextColor="@color/colorAccent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/details_trip_activity_toolbar"
+            app:layout_constraintBottom_toTopOf="@id/details_trip_activity_bottom_nav"
+
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/nav_graph_trip_details"/>
+
+
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/details_trip_activity_bottom_nav"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:menu="@menu/bottom_nav_details_trip_menu"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:itemIconTint="@drawable/bottom_navigation_colors"
+            app:itemTextColor="@drawable/bottom_navigation_colors"
+            android:elevation="@dimen/normal_elevation"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

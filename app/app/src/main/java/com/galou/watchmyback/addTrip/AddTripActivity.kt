@@ -26,10 +26,7 @@ import com.galou.watchmyback.selectUpdateFrequencyDialog.SelectTripUpdateFrequen
 import com.galou.watchmyback.selectWatcherDialog.SelectWatchersDialog
 import com.galou.watchmyback.utils.*
 import com.galou.watchmyback.utils.extension.setupSnackBar
-import com.galou.watchmyback.utils.rvAdapter.CheckListListener
-import com.galou.watchmyback.utils.rvAdapter.TripTypeSelectionListener
-import com.galou.watchmyback.utils.rvAdapter.UpdateFrequencyListener
-import com.galou.watchmyback.utils.rvAdapter.WatcherListener
+import com.galou.watchmyback.utils.rvAdapter.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
@@ -46,7 +43,7 @@ class AddTripActivity : AppCompatActivity(),
     private lateinit var binding: ActivityAddTripBinding
 
     private lateinit var recyclerViewItems: RecyclerView
-    private lateinit var adapterItems: ItemCheckListAdapter
+    private lateinit var adapterItems: SelectItemCheckListAdapter
     private lateinit var recyclerViewStagePoint: RecyclerView
     private lateinit var adapterStagePoint: StagePointAdapter
 
@@ -321,7 +318,7 @@ class AddTripActivity : AppCompatActivity(),
 
     private fun configureRecyclerViewItem(){
         recyclerViewItems = binding.addTripChecklistItemRv
-        adapterItems = ItemCheckListAdapter(listOf(), viewModel)
+        adapterItems = SelectItemCheckListAdapter(listOf())
         recyclerViewItems.layoutManager = LinearLayoutManager(this)
         recyclerViewItems.adapter = adapterItems
     }

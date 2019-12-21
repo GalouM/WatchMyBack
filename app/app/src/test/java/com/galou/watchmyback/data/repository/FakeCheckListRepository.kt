@@ -24,10 +24,10 @@ class FakeCheckListRepository : CheckListRepository {
     }
 
     override suspend fun fetchCheckList(
-        checkList: CheckList,
+        checkListId: String,
         refresh: Boolean
     ): Result<CheckListWithItems?> {
-        val checkListWithItems = checkLists.find { it.checkList.id == checkList.id }
+        val checkListWithItems = checkLists.find { it.checkList.id == checkListId }
         return Result.Success(checkListWithItems)
     }
 

@@ -80,7 +80,7 @@ class CheckListLocalSourceTests {
     @Test
     @Throws(Exception::class)
     fun fetchCheckList_returnCheckListWithCorrectItems() = runBlocking {
-        val task = localSource.fetchCheckList(checkList1)
+        val task = localSource.fetchCheckList(checkList1.id)
         val result = task as? Result.Success
 
         //check operation was successful

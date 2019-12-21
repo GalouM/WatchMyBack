@@ -13,11 +13,11 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.firebase.ui.auth.AuthUI
-import com.galou.watchmyback.DetailsTripActivity
 import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
 import com.galou.watchmyback.databinding.ActivityMainBinding
 import com.galou.watchmyback.databinding.HeaderNavViewBinding
+import com.galou.watchmyback.detailsTrip.DetailsTripActivity
 import com.galou.watchmyback.profile.ProfileActivity
 import com.galou.watchmyback.settings.SettingsActivity
 import com.galou.watchmyback.utils.RC_PROFILE

@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:name=".WatchMyBackApplication"
@@ -48,7 +49,7 @@
             android:name=".addModifyCheckList.AddModifyCheckListActivity"
             android:label="@string/title_add_checklist" />
         <activity
-            android:name=".DetailsTripActivity"
+            android:name=".detailsTrip.DetailsTripActivity"
             android:label="@string/details_trip"
             android:parentActivityName=".main.MainActivity" />
         <activity android:name=".main.MainActivity">

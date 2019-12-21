@@ -16,7 +16,7 @@ interface CheckListRepository {
 
     suspend fun fetchUserCheckLists(userId: String, refresh: Boolean): Result<List<CheckListWithItems>>
 
-    suspend fun fetchCheckList(checkList: CheckList, refresh: Boolean): Result<CheckListWithItems?>
+    suspend fun fetchCheckList(checkListId: String, refresh: Boolean): Result<CheckListWithItems?>
 
     suspend fun createCheckList(checkList: CheckList, items: List<ItemCheckList>): Result<Void?>
 

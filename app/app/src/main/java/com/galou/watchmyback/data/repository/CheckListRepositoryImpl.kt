@@ -65,22 +65,22 @@ class CheckListRepositoryImpl(
      * If refresh is true the data will we fetched from the remote database.
      * If it fails or if refresh is false the data will be pulled from the local database
      *
-     * @param checkList [CheckList] to fetch
+     * @param checkListId Id of the checklist to fetch
      * @param refresh refresh parameter
      * @return [Result] of the operation with a [CheckListWithItems] object
      *
      * @see CheckListRemoteDataSource.fetchCheckList
      * @see CheckListLocalDataSource.fetchCheckList
      */
-    override suspend fun fetchCheckList(checkList: CheckList, refresh: Boolean): Result<CheckListWithItems?>  {
+    override suspend fun fetchCheckList(checkListId: String, refresh: Boolean): Result<CheckListWithItems?>  {
         return when(refresh){
             true -> {
-                when(val remoteResult = remoteSource.fetchCheckList(checkList)){
+                when(val remoteResult = remoteSource.fetchCheckList(checkListId)){
                     is Result.Success -> remoteResult
-                    is Result.Error, is Result.Canceled -> localSource.fetchCheckList(checkList)
+                    is Result.Error, is Result.Canceled -> localSource.fetchCheckList(checkListId)
                 }
             }
-            false -> localSource.fetchCheckList(checkList)
+            false -> localSource.fetchCheckList(checkListId)
         }
     }
 

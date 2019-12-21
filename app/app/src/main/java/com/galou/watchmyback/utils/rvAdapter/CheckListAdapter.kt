@@ -16,9 +16,7 @@ class CheckListAdapter(
 ) : RecyclerView.Adapter<CheckListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheckListViewHolder =
-        CheckListViewHolder.from(
-            parent
-        )
+        CheckListViewHolder.from(parent)
 
     override fun getItemCount(): Int = checkLists.size
 
@@ -41,9 +39,7 @@ class CheckListViewHolder(private val binding: CheckListRvItemBinding) : Recycle
         fun from(parent: ViewGroup): CheckListViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = CheckListRvItemBinding.inflate(layoutInflater, parent, false)
-            return CheckListViewHolder(
-                binding
-            )
+            return CheckListViewHolder(binding)
         }
     }
 

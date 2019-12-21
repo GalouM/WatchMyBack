@@ -122,6 +122,7 @@ const val ICON_LOCATION_PRIMARY = "iconLocationPrimary"
 // ------ DATA INTENT KEY ---------
 const val POINT_LATITUDE = "pointLatitude"
 const val POINT_LONGITUDE = "pointLongitude"
+const val TRIP_ID = "tripID"
 
 // ------ ICON MAP DATA ------
 const val ICON_MAP_SIZE = 1.3f

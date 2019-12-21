@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
  */
 class TripMapViewModel(
     private val tripRepository: TripRepository,
-    private val userRepository: UserRepository
+    userRepository: UserRepository
 ) : BaseViewModel(){
 
     private var currentTrip: TripWithData? = null

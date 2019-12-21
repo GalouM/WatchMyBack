@@ -19,6 +19,7 @@ import com.galou.watchmyback.selectTripTypeDialog.SelectTripTypeDialog
 import com.galou.watchmyback.utils.RESULT_CHECKLIST_DELETED
 import com.galou.watchmyback.utils.TRIP_TYPE_TAG
 import com.galou.watchmyback.utils.extension.setupSnackBar
+import com.galou.watchmyback.utils.rvAdapter.ModifyItemAdapter
 import com.galou.watchmyback.utils.rvAdapter.TripTypeSelectionListener
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel

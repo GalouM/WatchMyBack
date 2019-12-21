@@ -121,5 +121,9 @@ val appModules = module {
         tripRepository = get()) }
     viewModel { PickLocationMapViewModel(tripRepository = get()) }
     viewModel { DetailsPointViewModel(tripRepository = get(), userRepository = get()) }
-    viewModel { DetailsTripViewModel(tripRepository = get(), userRepository = get()) }
+    viewModel { DetailsTripViewModel(
+        tripRepository = get(),
+        userRepository = get(),
+        checkListRepository = get()
+    ) }
 }

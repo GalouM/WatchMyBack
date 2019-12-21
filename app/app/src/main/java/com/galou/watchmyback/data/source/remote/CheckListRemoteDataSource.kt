@@ -49,12 +49,12 @@ class CheckListRemoteDataSource(
     /**
      * Fetch a specific [CheckList] with its [ItemCheckList] from the database
      *
-     * @param checkList checklist to fetch
+     * @param checkListId  ID of the checklist to fetch
      * @return [Result] of the action containing a [CheckListWithItems] object
      */
-    override suspend fun fetchCheckList(checkList: CheckList): Result<CheckListWithItems?> = withContext(ioDispatcher) {
+    override suspend fun fetchCheckList(checkListId: String): Result<CheckListWithItems?> = withContext(ioDispatcher) {
         return@withContext when(val fetchCheckList = checkListCollection
-            .document(checkList.id)
+            .document(checkListId)
             .get().await()){
             is Result.Success -> Result.Success(fetchCheckList.data.toObject(CheckListWithItems::class.java))
             is Result.Error -> Result.Error(fetchCheckList.exception)

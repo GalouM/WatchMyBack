@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/detailsTripGlobalView"
+        android:icon="@drawable/icon_information"
+        android:title="@string/global"/>
+
+    <item
+        android:id="@+id/detailsTripMapView"
+        android:icon="@drawable/icon_map"
+        android:title="@string/menu_title"/>
+
+    <item
+        android:id="@+id/detailsTripCheckListView"
+        android:icon="@drawable/icon_check_list"
+        android:title="@string/check_list_title"/>
+
+</menu>

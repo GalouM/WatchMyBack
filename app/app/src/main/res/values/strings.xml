@@ -175,11 +175,13 @@
     <string name="point_details_title">Point Details</string>
     <string name="add_friends_title">Add Friends</string>
     <string name="trip_type_icon">Trip type icon</string>
-    <string name="error_fetch_trip">An error happended while fetching the trip</string>
+    <string name="error_fetch_trip">An error happened while fetching the trip</string>
     <string name="no_current_active_trip">You don\'t have any current active trip</string>
     <string name="main_location">Main Location:&#032;</string>
     <string name="no_checkup_yet">The user hasn\'t check up yet</string>
     <string name="no_emergency_number">No emergency number setup</string>
     <string name="call">Call</string>
     <string name="no_phone_number">This user hasn\'t set any phone number yet</string>
+    <string name="error_fetch_trip_checklist">Error while fetching the trip checklist</string>
+    <string name="global">Global</string>
 </resources>

@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
  * Inherit from [BaseViewModel]
  *
  * @property checkListRepository [CheckListRepository] reference
- * @property userRepository [UserRepositoryImpl] reference
+ * @property userRepository [UserRepository] reference
  */
 class AddModifyCheckListViewModel(
     private val checkListRepository: CheckListRepository,
@@ -64,7 +64,6 @@ class AddModifyCheckListViewModel(
      * of a check list or the creation of a new checklist
      * and fetch the information accordingly
      *
-     * @see CheckListRepository.checkList
      */
     init {
         _dataLoading.value = true
@@ -186,7 +185,7 @@ class AddModifyCheckListViewModel(
      */
     private fun fetchItemsCheckList(checkList: CheckList){
         viewModelScope.launch { 
-            when(val result = checkListRepository.fetchCheckList(checkList, false)){
+            when(val result = checkListRepository.fetchCheckList(checkList.id, false)){
                 is Result.Success -> _itemsCheckListLD.value = result.data?.items?.toMutableList() ?: throw IllegalAccessException("Items is null")
                 is Result.Canceled, is Result.Error -> showSnackBarMessage(R.string.error_fetch_checklist)
             }

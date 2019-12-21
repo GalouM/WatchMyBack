@@ -9,7 +9,6 @@ import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.displayData
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 /**
  * Implementation of [CheckListDataSource] for the local database
@@ -39,14 +38,14 @@ class CheckListLocalDataSource(private val checkListDao: CheckListDao) : CheckLi
     /**
      * Fetch a specific [CheckList] with its [ItemCheckList] from the database
      *
-     * @param checkList checklist to fetch
+     * @param checkListId checklist to fetch
      * @return [Result] of the action containing a [CheckListWithItems] object
      *
      * @see CheckListDao.getCheckListWithItems
      */
-    override suspend fun fetchCheckList(checkList: CheckList): Result<CheckListWithItems?> {
+    override suspend fun fetchCheckList(checkListId: String): Result<CheckListWithItems?> {
         return try {
-            Result.Success(checkListDao.getCheckListWithItems(checkList.id))
+            Result.Success(checkListDao.getCheckListWithItems(checkListId))
         } catch (e: Exception){
             Result.Error(e)
         }
