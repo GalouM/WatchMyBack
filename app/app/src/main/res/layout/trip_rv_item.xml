@@ -1,46 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+
+        <variable
+            name="trip"
+            type="com.galou.watchmyback.data.applicationUse.TripDisplay" />
+
+        <variable
+            name="viewmodel"
+            type="com.galou.watchmyback.tripsView.TripsViewModel" />
+    </data>
+
+
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/cardview_trips"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="@dimen/margin_small">
+    android:layout_margin="@dimen/margin_small"
+    android:onClick="@{() -> viewmodel.onClickTrip(trip)}">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/friends_item_username"
+            android:id="@+id/trip_item_username"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/trips_item_type"
-            android:text="Gaelle Minisini"
+            android:text="@{trip.tripOwnerName}"
             android:layout_marginStart="@dimen/margin_medium"
             android:textStyle="bold"
             android:textSize="@dimen/text_title_rv"/>
 
         <TextView
-            android:id="@+id/friends_item_is_in"
+            android:id="@+id/trip_item_is_in"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/friends_item_username"
-            app:layout_constraintTop_toTopOf="@+id/friends_item_username"
-            app:layout_constraintBottom_toBottomOf="@+id/friends_item_username"
+            app:layout_constraintStart_toEndOf="@id/trip_item_username"
+            app:layout_constraintTop_toTopOf="@+id/trip_item_username"
+            app:layout_constraintBottom_toBottomOf="@+id/trip_item_username"
             android:text="@string/is_in"
             android:textStyle="bold"
             android:textSize="@dimen/text_title_rv"/>
 
         <TextView
-            android:id="@+id/friends_item_location"
+            android:id="@+id/trip_item_location"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/friends_item_is_in"
-            app:layout_constraintTop_toTopOf="@+id/friends_item_username"
-            app:layout_constraintBottom_toBottomOf="@+id/friends_item_username"
-            android:text="Sun Peaks BC"
+            app:layout_constraintStart_toEndOf="@id/trip_item_is_in"
+            app:layout_constraintTop_toTopOf="@+id/trip_item_username"
+            app:layout_constraintBottom_toBottomOf="@+id/trip_item_username"
+            android:text="@{trip.tripLocation}"
             android:textStyle="bold"
             android:maxLines="2"
             android:ellipsize="end"
@@ -50,22 +66,22 @@
             android:id="@+id/trips_item_type"
             android:layout_width="@dimen/image_small"
             android:layout_height="@dimen/image_small"
-            app:srcCompat="@drawable/icon_run"
-            app:layout_constraintStart_toStartOf="@id/friends_item_username"
-            app:layout_constraintTop_toBottomOf="@id/friends_item_username"
+            app:layout_constraintStart_toStartOf="@id/trip_item_username"
+            app:layout_constraintTop_toBottomOf="@id/trip_item_username"
             app:layout_constraintBottom_toTopOf="@id/trips_item_status"
-            android:layout_marginEnd="@dimen/margin_small"/>
+            android:layout_marginEnd="@dimen/margin_small"
+            app:imageResouce="@{trip.tripType.iconId}"/>
 
         <ImageView
             android:id="@+id/trips_item_weather"
             android:layout_width="@dimen/image_small"
             android:layout_height="@dimen/image_small"
-            app:srcCompat="@drawable/icon_thunderstorm"
             app:layout_constraintStart_toEndOf="@id/trips_item_type"
             app:layout_constraintTop_toTopOf="@id/trips_item_type"
             app:layout_constraintBottom_toBottomOf="@id/trips_item_type"
             android:layout_marginStart="@dimen/margin_small"
-            android:layout_marginEnd="@dimen/margin_small"/>
+            android:layout_marginEnd="@dimen/margin_small"
+            app:imageResouce="@{trip.weatherCondition.iconId}"/>
 
         <TextView
             android:id="@+id/trips_item_temperature"
@@ -76,8 +92,8 @@
             app:layout_constraintBottom_toBottomOf="@id/trips_item_type"
             android:layout_marginStart="@dimen/margin_small"
             android:layout_marginEnd="@dimen/margin_small"
-            android:text="13°C"
-            android:textSize="@dimen/text_small"/>
+            android:textSize="@dimen/text_small"
+            android:text="@{trip.temperature}"/>
 
         <TextView
             android:id="@+id/trips_item_started_at_title"
@@ -97,7 +113,7 @@
             app:layout_constraintStart_toEndOf="@id/trips_item_started_at_title"
             app:layout_constraintTop_toTopOf="@id/trips_item_type"
             app:layout_constraintBottom_toBottomOf="@id/trips_item_type"
-            android:text="6:00 a.m"
+            android:text="@{trip.startTime}"
             android:textSize="@dimen/text_medium"/>
 
         <TextView
@@ -118,7 +134,7 @@
             app:layout_constraintStart_toEndOf="@id/trips_item_back_at_title"
             app:layout_constraintTop_toTopOf="@id/trips_item_type"
             app:layout_constraintBottom_toBottomOf="@id/trips_item_type"
-            android:text="8:00 a.m"
+            android:text="@{trip.endTime}"
             android:textSize="@dimen/text_medium"/>
 
 
@@ -126,13 +142,14 @@
             android:id="@+id/trips_item_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/friends_item_username"
+            app:layout_constraintStart_toStartOf="@id/trip_item_username"
             app:layout_constraintTop_toBottomOf="@id/trips_item_type"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="On Schedule"
+            app:textFromResourceId="@{trip.tripStatus.statusNameId}"
             android:textSize="@dimen/text_title_rv"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
+</layout>

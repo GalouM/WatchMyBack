@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.galou.watchmyback.tripsView.TripsViewModel" />
+    </data>
+
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:id="@+id/trip_view_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -6,29 +15,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".TripsView">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Trip View"/>
+    tools:context=".tripsView.TripsView">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:onRefreshListener="@{viewmodel::refreshTripList}"
+            app:refreshing="@{viewmodel.dataLoading}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/trips_view_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+
             tools:listitem="@layout/trip_rv_item"/>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

@@ -17,7 +17,7 @@
         tools:layout="@layout/fragment_friends_view" />
     <fragment
         android:id="@+id/tripsView"
-        android:name="com.galou.watchmyback.TripsView"
+        android:name="com.galou.watchmyback.tripsView.TripsView"
         android:label="fragment_trips_view"
         tools:layout="@layout/fragment_trips_view" />
     <fragment
