@@ -166,11 +166,24 @@ class TripRepositoryImpl(
      * @see TripRemoteDataSource.fetchActiveTrip
      * @see TripLocalDataSource.fetchActiveTrip
      */
-    override suspend fun fetchUserActiveTrip(userId: String): Result<TripWithData?> {
-        return when(val remoteTask = remoteSource.fetchActiveTrip(userId)){
-            is Result.Success -> remoteTask
-            else -> localSource.fetchActiveTrip(userId)
+    override suspend fun fetchUserActiveTrip(userId: String): Result<TripWithData?>  {
+        when(val localTask = localSource.fetchActiveTrip(userId)){
+            is Result.Success -> {
+                return if (localTask.data != null) localTask
+                else {
+                    when (val remoteTask = remoteSource.fetchActiveTrip(userId)){
+                        is Result.Success -> {
+                            remoteTask.data?.let { localSource.createTrip(it, null) }
+                            remoteTask
+                        }
+                        else -> remoteTask
+
+                    }
+
+                }
             }
+            else -> return remoteSource.fetchActiveTrip(userId)
+        }
     }
 
     /**
@@ -188,7 +201,22 @@ class TripRepositoryImpl(
             is Result.Success -> remoteTask
             else -> localSource.fetchTrip(tripId)
         }
+
     }
 
-
+    /**
+     * Fetch all the trips a user is watching
+     *
+     * @param userId Id of the user
+     * @return [Result] of the operation with a list of [TripWithData]
+     *
+     * @see TripLocalDataSource.fetchTripUserWatching
+     * @see TripRemoteDataSource.fetchTripUserWatching
+     */
+    override suspend fun fetchTripUserWatching(userId: String): Result<List<TripWithData>> {
+        return when(val remoteTask = remoteSource.fetchTripUserWatching(userId)){
+            is Result.Success -> remoteTask
+            else -> localSource.fetchTripUserWatching(userId)
+        }
+    }
 }

@@ -40,3 +40,24 @@ fun MutableList<PointTripWithData>.filterOrCreateMainPoint(typePoint: TypePoint,
         else -> point
     }
 }
+
+/**
+ * Find the most recent check up point in a list of of [PointTripWithData]
+ *
+ * @return [PointTripWithData] of type [TypePoint.CHECKED_UP] the most recent
+ */
+fun List<PointTripWithData>.findLatestCheckUpPoint(): PointTripWithData? {
+    val checkedUpPoints = filter { it.pointTrip.typePoint == TypePoint.CHECKED_UP }
+    return when {
+        checkedUpPoints.isEmpty() -> null
+        checkedUpPoints.size == 1 -> checkedUpPoints[0]
+        else -> checkedUpPoints.maxWith(Comparator { p0, p1 ->
+            when {
+                p0 === p1 -> 0
+                p0.pointTrip.time!!.after(p1.pointTrip.time) -> 1
+                p0.pointTrip.time == p1.pointTrip.time -> 0
+                else -> -1
+            }
+        })
+    }
+}

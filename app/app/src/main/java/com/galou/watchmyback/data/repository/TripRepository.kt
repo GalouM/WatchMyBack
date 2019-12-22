@@ -22,4 +22,6 @@ interface TripRepository {
     suspend fun fetchUserActiveTrip(userId: String): Result<TripWithData?>
 
     suspend fun fetchTrip(tripId: String): Result<TripWithData?>
+
+    suspend fun fetchTripUserWatching(userId: String): Result<List<TripWithData>>
 }

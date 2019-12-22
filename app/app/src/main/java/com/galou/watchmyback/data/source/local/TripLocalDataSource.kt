@@ -79,4 +79,18 @@ class TripLocalDataSource(
             Result.Error(e)
         }
     }
+
+    /**
+     * Fetch the list of [TripWithData] the user is watching
+     *
+     * @param userId ID of the user
+     * @return
+     */
+    override suspend fun fetchTripUserWatching(userId: String): Result<List<TripWithData>> {
+        return try {
+            Result.Success(tripDao.getTripsUserWatching(userId))
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
 }

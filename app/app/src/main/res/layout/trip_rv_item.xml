@@ -19,7 +19,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/cardview_trips"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="@dimen/margin_small">
+    android:layout_margin="@dimen/margin_small"
+    android:onClick="@{() -> viewmodel.onClickTrip(trip)}">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

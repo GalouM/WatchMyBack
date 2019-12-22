@@ -111,10 +111,10 @@ enum class TripType (val typeNameId: Int, val iconId: Int) {
  */
 enum class TripUpdateFrequency(val frequencyMillisecond: Long, val nameResourceId: Int){
     NEVER(0, R.string.never),
-    FIFTEEN_MINUTES(1, R.string.fifteen_minutes),
-    HALF_HOUR(2, R.string.thirteen_minutes),
-    ONE_HOUR(3, R.string.hour),
-    TWO_HOURS(4, R.string.two_hours)
+    FIFTEEN_MINUTES(900000, R.string.fifteen_minutes),
+    HALF_HOUR(1800000, R.string.thirteen_minutes),
+    ONE_HOUR(3600000, R.string.hour),
+    TWO_HOURS(7200000, R.string.two_hours)
 }
 
 /**

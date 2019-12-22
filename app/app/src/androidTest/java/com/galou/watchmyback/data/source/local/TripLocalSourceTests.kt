@@ -9,8 +9,7 @@ import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.source.local.dao.*
 import com.galou.watchmyback.utils.Result
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.nullValue
+import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
 import org.junit.Before
@@ -107,6 +106,21 @@ class TripLocalSourceTests {
         assertThat(result, `is`(true))
         val trip = (task as Result.Success).data
         assertThat(trip?.trip?.id, `is` (tripWithData1.trip.id))
+
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun fetchTripWatching_returnTripUserWatching() = runBlocking {
+        tripDao.createTripAndData(tripWithData1, itemList1)
+        tripDao.createTripAndData(tripWithData2, itemList2)
+        val task = localSource.fetchTripUserWatching(secondFriend.id)
+        val result = task is Result.Success
+        assertThat(result, `is`(true))
+        val trips = (task as Result.Success).data
+        trips.forEach {
+            assertThat(it.watchers, hasItem(secondFriend))
+        }
 
     }
 }

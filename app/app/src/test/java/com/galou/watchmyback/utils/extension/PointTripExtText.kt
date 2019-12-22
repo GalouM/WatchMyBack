@@ -5,6 +5,7 @@ import com.galou.watchmyback.data.entity.PointTripWithData
 import com.galou.watchmyback.data.entity.TypePoint
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
+import java.util.*
 
 /**
  * @author galou
@@ -67,5 +68,59 @@ class PointTripExtText {
         val startPointInList = listPointWithNoStart.find { it.pointTrip.typePoint == TypePoint.START }
         assertThat(startPointInList).isNotNull()
 
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun findLatestCheckUpPointNoCheckUpPoint_returnNull(){
+        val listPointWithNoCheckedUp = mutableListOf(
+            PointTripWithData(pointTrip = PointTrip(typePoint = TypePoint.SCHEDULE_STAGE)),
+            PointTripWithData(pointTrip = PointTrip(typePoint = TypePoint.SCHEDULE_STAGE)),
+            PointTripWithData(pointTrip = PointTrip(typePoint = TypePoint.SCHEDULE_STAGE)),
+            PointTripWithData(pointTrip = PointTrip(typePoint = TypePoint.END))
+        )
+        assertThat(listPointWithNoCheckedUp.findLatestCheckUpPoint()).isNull()
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun findLatestCheckUpPointOneCheckUpPoint_returnFirstPoint(){
+        val listPointWithOneCheckedUp = mutableListOf(
+            PointTripWithData(pointTrip = PointTrip(typePoint = TypePoint.SCHEDULE_STAGE)),
+            PointTripWithData(pointTrip = PointTrip(typePoint = TypePoint.SCHEDULE_STAGE)),
+            PointTripWithData(pointTrip = PointTrip(typePoint = TypePoint.SCHEDULE_STAGE)),
+            PointTripWithData(pointTrip = PointTrip(typePoint = TypePoint.END)),
+            PointTripWithData(pointTrip = PointTrip(typePoint = TypePoint.CHECKED_UP))
+        )
+        assertThat(listPointWithOneCheckedUp.findLatestCheckUpPoint()).isEqualTo(listPointWithOneCheckedUp[4])
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun findLatestCheckUpPointWithSeveralCheckUpPoint_returnLatestCheckUp(){
+        val calendar = Calendar.getInstance()
+        val today = calendar.time
+        val checkUp1 = PointTripWithData(pointTrip = PointTrip(
+            typePoint = TypePoint.CHECKED_UP,
+            time = today))
+        calendar.add(Calendar.DAY_OF_YEAR, -1)
+        val yesterday = calendar.time
+        val checkUp2 = PointTripWithData(pointTrip = PointTrip(
+            typePoint = TypePoint.CHECKED_UP,
+            time = yesterday))
+        calendar.add(Calendar.DAY_OF_YEAR, 2)
+        val tomorrow = calendar.time
+        val checkUp3 = PointTripWithData(pointTrip = PointTrip(
+            typePoint = TypePoint.CHECKED_UP,
+            time = tomorrow))
+        val listPoint = mutableListOf(
+            PointTripWithData(pointTrip = PointTrip(typePoint = TypePoint.SCHEDULE_STAGE)),
+            PointTripWithData(pointTrip = PointTrip(typePoint = TypePoint.SCHEDULE_STAGE)),
+            PointTripWithData(pointTrip = PointTrip(typePoint = TypePoint.SCHEDULE_STAGE)),
+            PointTripWithData(pointTrip = PointTrip(typePoint = TypePoint.START)),
+            PointTripWithData(pointTrip = PointTrip(typePoint = TypePoint.END)),
+            checkUp1, checkUp3, checkUp2
+        )
+        assertThat(listPoint.findLatestCheckUpPoint()).isEqualTo(checkUp3)
     }
 }

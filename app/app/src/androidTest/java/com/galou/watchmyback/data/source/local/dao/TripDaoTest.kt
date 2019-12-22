@@ -149,6 +149,16 @@ class TripDaoTest {
 
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun fetchTripWatching_getCorrectTrip() = runBlocking {
+        val watcher = secondFriend
+        val trips = tripDao.getTripsUserWatching(watcher.id)
+        trips.forEach { trip ->
+            assertThat(trip.watchers, contains(watcher))
+        }
+    }
+
 
 
 

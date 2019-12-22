@@ -12,6 +12,7 @@ import com.galou.watchmyback.data.repository.CheckListRepository
 import com.galou.watchmyback.data.repository.TripRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.extension.findLatestCheckUpPoint
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -186,11 +187,6 @@ class DetailsTripViewModel(
     private fun emitPointTripLocation(points: List<PointTripWithData>){
         val schedulePoints = mutableMapOf<String, Coordinate>()
         val checkedPoints = mutableMapOf<String, Coordinate>()
-        with(points.last()){
-             if (this.pointTrip.typePoint ==  TypePoint.CHECKED_UP){
-                 _lastPointCheckedLD.value = this
-             }
-         }
          points.forEach { point ->
              val coordinate = Coordinate(
                  latitude = point.location?.latitude ?: throw Exception("No latitude for this point $point") ,
@@ -214,6 +210,9 @@ class DetailsTripViewModel(
 
              }
          }
+        if(lastPointCheckedLD.value == null){
+            _lastPointCheckedLD.value = points.findLatestCheckUpPoint()
+        }
          _schedulePointsLD.value = schedulePoints
          _checkedPointsLD.value = checkedPoints
 

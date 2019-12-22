@@ -198,4 +198,34 @@ class TripRemoteDataSource(
             is Result.Canceled -> Result.Canceled(result.exception)
         }
     }
+
+    override suspend fun fetchTripUserWatching(userId: String): Result<List<TripWithData>> = withContext(ioDispatcher) {
+        return@withContext when(val result =
+            tripCollection.whereArrayContains("watchersId", userId).get().await()){
+            is Result.Success -> {
+                val tripsWithData = mutableListOf<TripWithData>()
+                var error = false
+                coroutineScope {
+                    result.data.toObjects(TripWithDataRemoteDB::class.java).forEach { trip ->
+                        launch {
+                            when (val resultWatchers = fetchTripWatchers(trip.watchersId)) {
+                                is Result.Success -> tripsWithData.add(
+                                    trip.convertForLocal(
+                                        resultWatchers.data
+                                    )
+                                )
+                                else -> error = true
+                            }
+                        }
+                    }
+                }
+                when (error){
+                    true -> Result.Error(Exception("Error while fetching the trip's watchers"))
+                    false -> Result.Success(tripsWithData)
+                }
+            }
+            is Result.Error -> Result.Error(result.exception)
+            is Result.Canceled -> Result.Canceled(result.exception)
+        }
+    }
 }

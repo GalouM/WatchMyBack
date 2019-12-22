@@ -19,7 +19,6 @@ import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.data.repository.UserRepositoryImpl
 import com.galou.watchmyback.utils.RESULT_ACCOUNT_DELETED
 import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.displayData
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -157,7 +156,6 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
 
                 }
                 is Result.Error -> {
-                    displayData("$result")
                     showSnackBarMessage(R.string.error_fetching)
                     showSignInActivity()
                 }
