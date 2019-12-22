@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.base.BaseViewModel
 import com.galou.watchmyback.data.applicationUse.TripDisplay
-import com.galou.watchmyback.data.entity.Trip
 
 /**
  * @author galou
@@ -20,7 +19,8 @@ class TripsViewModel : BaseViewModel(){
     private val _tripSelectedLD = MutableLiveData<Event<String>>()
     val tripSelectedLD: LiveData<Event<String>> = _tripSelectedLD
 
-    fun onClickTrip(trip: Trip){
+    fun onClickTrip(trip: TripDisplay){
+        _tripSelectedLD.value = Event(trip.tripId)
 
     }
 
