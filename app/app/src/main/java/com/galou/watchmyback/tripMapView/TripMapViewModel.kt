@@ -15,7 +15,7 @@ import com.galou.watchmyback.data.repository.UserRepository
  * 2019-11-29
  */
 class TripMapViewModel(
-    private val tripRepository: TripRepository,
+    tripRepository: TripRepository,
     userRepository: UserRepository
 ) : DetailsTripBaseViewModel(tripRepository, userRepository){
 
@@ -32,8 +32,7 @@ class TripMapViewModel(
 
     /**
      * Fetch the the user active trip and display the points
-     * @see TripRepository.fetchUserActiveTrip
-     * @see emitPointTripLocation
+     * @see fetchActiveTrip
      *
      */
     fun fetchAndDisplayUserActiveTrip(){

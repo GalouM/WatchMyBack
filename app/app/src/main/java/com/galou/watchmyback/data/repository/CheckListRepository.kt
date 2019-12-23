@@ -12,7 +12,6 @@ import com.galou.watchmyback.utils.Result
 interface CheckListRepository {
 
     var checkList: CheckList?
-    var checkListFetched: Boolean
 
     suspend fun fetchUserCheckLists(userId: String, refresh: Boolean): Result<List<CheckListWithItems>>
 

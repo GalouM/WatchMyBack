@@ -12,6 +12,7 @@ import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.repository.TripRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.extension.updateStatus
 import kotlinx.coroutines.launch
 
 /**
@@ -83,10 +84,10 @@ abstract class DetailsTripBaseViewModel(
     protected fun fetchActiveTrip(){
         viewModelScope.launch {
             val userId = userLD.value?.id ?: throw Exception("No current user set")
-            when(val trip = tripRepository.fetchUserActiveTrip(userId)){
+            when(val trip = tripRepository.fetchUserActiveTrip(userId, false)){
                 is Result.Success -> {
                     if (trip.data != null) {
-                        emitTripInfo(trip.data)
+                        emitTripInfo(trip.data.apply { updateStatus() })
                     }
                     else {
                         showSnackBarMessage(R.string.no_current_active_trip)

@@ -7,6 +7,7 @@ import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
 import com.galou.watchmyback.base.BaseViewModel
 import com.galou.watchmyback.data.entity.CheckListWithItems
+import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.repository.CheckListRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
@@ -30,20 +31,8 @@ class CheckListViewModel(
     
     private val _openAddModifyCheckList = MutableLiveData<Event<Unit>>()
     val openAddModifyCheckList: LiveData<Event<Unit>> = _openAddModifyCheckList
-    
-    private val currentUser = userRepository.currentUser.value!!
 
-    /**
-     *
-     *
-     * @see CheckListRespository.checkListFetched
-     * @see fetchCheckLists
-     */
-    init {
-        _dataLoading.value = true
-        fetchCheckLists(!checkListRepository.checkListFetched)
-        checkListRepository.checkListFetched = true
-    }
+    val userLD: LiveData<User> = userRepository.currentUser
 
     /**
      * Refresh the check list shown and make the repository fetch them from the remote database
@@ -52,7 +41,6 @@ class CheckListViewModel(
      *
      */
     fun refresh(){
-        _dataLoading.value = true
         fetchCheckLists(true)
     }
 
@@ -88,9 +76,10 @@ class CheckListViewModel(
      *
      * @see CheckListRepository.fetchUserCheckLists
      */
-    private fun fetchCheckLists(refresh: Boolean = false){
+    fun fetchCheckLists(refresh: Boolean = false){
+        _dataLoading.value = true
         viewModelScope.launch {
-            when(val checkListsResult = checkListRepository.fetchUserCheckLists(currentUser.id, refresh)){
+            when(val checkListsResult = checkListRepository.fetchUserCheckLists(userLD.value!!.id, refresh)){
                 is Result.Success ->{
                     val checkLists = checkListsResult.data
                     if (checkLists.isEmpty()) showSnackBarMessage(R.string.no_checkList)

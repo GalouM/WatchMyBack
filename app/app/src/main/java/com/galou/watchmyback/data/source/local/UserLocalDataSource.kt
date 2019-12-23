@@ -59,11 +59,11 @@ class UserLocalDataSource(
      * @see fetchUser
      * @see createUser
      */
-    suspend fun updateOrCreateUser(remoteUser: User, localUser: UserWithPreferences?, vararg friend: User): Result<UserWithPreferences?> {
+    suspend fun updateOrCreateUser(remoteUser: User, localUser: UserWithPreferences?): Result<UserWithPreferences?> {
         val createUser = localUser == null
         val defaultPreferences = UserPreferences(id = remoteUser.id)
         return try {
-            userDao.createOrUpdateUserWithData(createUser, remoteUser, defaultPreferences, *friend)
+            userDao.createOrUpdateUserWithData(createUser, remoteUser, defaultPreferences)
             val preferences = userPreferencesDao.getUserPreferences(remoteUser.id)
             Result.Success(UserWithPreferences(
             user = remoteUser,

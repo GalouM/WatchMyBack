@@ -9,7 +9,8 @@ import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.*
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -96,15 +97,6 @@ class CheckListDaoTest {
         checkListDao.deleteCheckList(checkList1)
         val checkListFromDB = checkListDao.getCheckListWithItems(checkList1.id)
         assertThat(checkListFromDB, `is` (nullValue()))
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun deleteAllCheckListOfAUser() = runBlocking {
-        checkListDao.deleteUserCheckList(mainUser.id)
-        val checkListFromDB = checkListDao.getUserCheckList(mainUser.id)
-        assertThat(checkListFromDB.size, equalTo(0))
-
     }
 
 }

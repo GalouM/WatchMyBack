@@ -166,23 +166,24 @@ class TripRepositoryImpl(
      * @see TripRemoteDataSource.fetchActiveTrip
      * @see TripLocalDataSource.fetchActiveTrip
      */
-    override suspend fun fetchUserActiveTrip(userId: String): Result<TripWithData?>  {
-        when(val localTask = localSource.fetchActiveTrip(userId)){
-            is Result.Success -> {
-                return if (localTask.data != null) localTask
-                else {
-                    when (val remoteTask = remoteSource.fetchActiveTrip(userId)){
-                        is Result.Success -> {
-                            remoteTask.data?.let { localSource.createTrip(it, null) }
-                            remoteTask
+    override suspend fun fetchUserActiveTrip(userId: String, refresh: Boolean): Result<TripWithData?> {
+        return if (refresh) {
+            when (val remoteTask = remoteSource.fetchActiveTrip(userId)) {
+                is Result.Success -> {
+                    remoteTask.data?.let {
+                        when(val localCopyTask = localSource.createTrip(it, null)){
+                            is Result.Canceled -> Result.Canceled(localCopyTask.exception)
+                            is Result.Error -> Result.Error(localCopyTask.exception)
+                            is Result.Success -> remoteTask
                         }
-                        else -> remoteTask
-
                     }
-
+                    remoteTask
                 }
+                else -> localSource.fetchActiveTrip(userId)
+
             }
-            else -> return remoteSource.fetchActiveTrip(userId)
+        } else {
+            localSource.fetchActiveTrip(userId)
         }
     }
 

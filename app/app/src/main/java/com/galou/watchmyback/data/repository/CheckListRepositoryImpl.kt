@@ -25,7 +25,6 @@ class CheckListRepositoryImpl(
 ) : CheckListRepository {
 
     override var checkList: CheckList? = null
-    override var checkListFetched: Boolean = false
 
     /**
      * Fetch all the [CheckListWithItems] of a specific user
@@ -40,7 +39,6 @@ class CheckListRepositoryImpl(
      *
      * @see CheckListLocalDataSource.fetchUserCheckLists
      * @see CheckListRemoteDataSource.fetchUserCheckLists
-     * @see CheckListLocalDataSource.deleteExistingChecklist
      * @see CheckListLocalDataSource.createCheckList
      */
     override suspend fun fetchUserCheckLists(userId: String, refresh: Boolean): Result<List<CheckListWithItems>> {
@@ -48,9 +46,12 @@ class CheckListRepositoryImpl(
             true -> {
                 when(val remoteResult = remoteSource.fetchUserCheckLists(userId)){
                     is Result.Success -> {
-                        localSource.deleteExistingChecklist(userId)
-                        localSource.createCheckList(*remoteResult.data.toTypedArray())
-                        remoteResult
+                        when(val localCopyTask = localSource.createCheckList(*remoteResult.data.toTypedArray())){
+                            is Result.Success -> remoteResult
+                            is Result.Error -> Result.Error(localCopyTask.exception)
+                            is Result.Canceled -> Result.Canceled(localCopyTask.exception)
+                        }
+
                     }
                     is Result.Error, is Result.Canceled -> localSource.fetchUserCheckLists(userId)
                 }

@@ -34,7 +34,7 @@ abstract class UserListBaseViewModel(
     private val _usersLD = MutableLiveData<List<OtherUser>>()
     val usersLD: LiveData<List<OtherUser>> = _usersLD
 
-    protected val currentUser = userRepository.currentUser.value!!
+    val userLD: LiveData<User> = userRepository.currentUser
 
     /**
      * Remove or add a friend to the current user
@@ -42,15 +42,15 @@ abstract class UserListBaseViewModel(
      *
      * @param friend friend to add or remove
      *
-     * @see FriendRepositoryImpl.addFriend
-     * @see FriendRepositoryImpl.removeFriend
+     * @see FriendRepository.addFriend
+     * @see FriendRepository.removeFriend
      */
     fun removeOrAddFriend(friend: OtherUser){
         _dataLoading.value = true
         viewModelScope.launch {
             when (friend.myFriend){
-                true -> friendRepository.removeFriend(currentUser, friend.user.id)
-                false -> friendRepository.addFriend(currentUser, friend.user)
+                true -> friendRepository.removeFriend(userLD.value!!, friend.user.id)
+                false -> friendRepository.addFriend(userLD.value!!, friend.user)
 
             }
             showUsersList(usersLD.value!!)
@@ -80,8 +80,8 @@ abstract class UserListBaseViewModel(
      * @param users lsit of users to display
      */
     private fun showUsersList(users: List<OtherUser>){
-        users setIsMyFriend currentUser.friendsId
-        _usersLD.value = users removeCurrentUser currentUser.id
+        users setIsMyFriend userLD.value!!.friendsId
+        _usersLD.value = users removeCurrentUser userLD.value!!.id
         if(users.isEmpty()) showSnackBarMessage(R.string.no_user)
         _dataLoading.value = false
     }

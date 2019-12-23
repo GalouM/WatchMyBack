@@ -64,7 +64,12 @@ class FriendsView : Fragment() {
         setupFriendsList()
         setupSnackBar()
         setupOpenAddFriend()
+        setupUserConnectedObserver()
 
+    }
+
+    private fun setupUserConnectedObserver(){
+        viewModel.userLD.observe(this, Observer { fetchFriends() })
     }
 
     private fun setupFriendsList(){
@@ -79,6 +84,10 @@ class FriendsView : Fragment() {
 
     private fun setupOpenAddFriend(){
         viewModel.openAddFriendLD.observe(this, EventObserver { openAddFriendActivity() })
+    }
+
+    private fun fetchFriends(){
+        viewModel.fetchFriends(false)
     }
 
     private fun updateFriendsList(friends: List<OtherUser>){

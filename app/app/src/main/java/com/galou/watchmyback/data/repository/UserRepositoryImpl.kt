@@ -6,7 +6,6 @@ import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.entity.UserWithPreferences
 import com.galou.watchmyback.data.source.local.UserLocalDataSource
-import com.galou.watchmyback.data.source.remote.FriendRemoteDataSource
 import com.galou.watchmyback.data.source.remote.UserRemoteDataSource
 import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.returnSuccessOrError
@@ -27,8 +26,7 @@ import kotlinx.coroutines.coroutineScope
 
 class UserRepositoryImpl(
     private val userLocalSource: UserLocalDataSource,
-    private val userRemoteSource: UserRemoteDataSource,
-    private val friendRemoteSource: FriendRemoteDataSource
+    private val userRemoteSource: UserRemoteDataSource
 ) : UserRepository {
 
     /**
@@ -110,23 +108,13 @@ class UserRepositoryImpl(
         when {
             remoteResult is Result.Success && localResult is Result.Success -> {
                 remoteResult.data?.let { remoteUser ->
-                    // fetch user's friends
-                    // make sure friends fetch succeed and update or create the user with it data
-                    when (val remoteFriendTask = friendRemoteSource.fetchUserFriend(remoteUser)) {
-                        is Result.Success -> {
-                            when (val updateLocalDbResult =
-                                userLocalSource.updateOrCreateUser(
-                                    remoteUser, localResult.data,
-                                    *remoteFriendTask.data.toTypedArray()
-                                )) {
-                                is Result.Success -> return@coroutineScope Result.Success(
-                                    updateLocalDbResult.data
-                                )
+                    when (val updateLocalDbResult = userLocalSource.updateOrCreateUser(
+                            remoteUser, localResult.data
+                        )) {
+                        is Result.Success -> return@coroutineScope Result.Success(
+                            updateLocalDbResult.data
+                        )
 
-                                else -> return@coroutineScope localResult
-                            }
-
-                        }
                         else -> return@coroutineScope localResult
                     }
                 }

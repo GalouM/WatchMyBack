@@ -79,18 +79,6 @@ abstract class CheckListDao(private val database: WatchMyBackDatabase) {
     @Delete
     abstract suspend fun deleteCheckList(checkList: CheckList)
 
-
-    /**
-     * Delete all the [CheckList] that belongs to a specific [User]
-     *
-     * @param userId ID of the user
-     *
-     * @see Query
-     */
-    @Query("DELETE FROM $CHECK_LIST_TABLE_NAME WHERE $CHECK_LIST_TABLE_USER_UUID = :userId")
-    abstract suspend fun deleteUserCheckList(userId: String)
-
-
     /**
      * Create a [CheckList] object and its data in the database
      *

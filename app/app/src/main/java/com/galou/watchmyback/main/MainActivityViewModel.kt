@@ -15,8 +15,7 @@ import com.galou.watchmyback.R
 import com.galou.watchmyback.base.BaseViewModel
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserWithPreferences
-import com.galou.watchmyback.data.repository.UserRepository
-import com.galou.watchmyback.data.repository.UserRepositoryImpl
+import com.galou.watchmyback.data.repository.*
 import com.galou.watchmyback.utils.RESULT_ACCOUNT_DELETED
 import com.galou.watchmyback.utils.Result
 import com.google.firebase.auth.FirebaseUser
@@ -33,7 +32,12 @@ import kotlinx.coroutines.launch
  *
  * @property userRepository [UserRepositoryImpl] reference
  */
-class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel() {
+class MainActivityViewModel(
+    private val userRepository: UserRepository,
+    private val checkListRepository: CheckListRepository,
+    private val tripRepository: TripRepository,
+    private val friendRepository: FriendRepository
+) : BaseViewModel() {
 
     private var getUserJob: Job? = null
     private var createUserJob: Job? = null
@@ -70,6 +74,28 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
     }
 
     /**
+     * Log out user from the app
+     *
+     * @param context app's [Context]
+     */
+    fun logOutUser(context: Context){
+        AuthUI.getInstance().signOut(context)
+            .addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    userRepository.currentUser.value = null
+                    showSignInActivity()
+                } else {
+                    showSnackBarMessage(R.string.failed_signout)
+                }
+                
+            }
+    }
+
+    //-----------------------
+    // ACTIVITY RESULTS
+    //-----------------------
+
+    /**
      * Handle the information after the user has sig in
      * It either connect the user to the application or show the potential error
      *
@@ -96,24 +122,6 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
     }
 
     /**
-     * Log out user from the app
-     *
-     * @param context app's [Context]
-     */
-    fun logOutUser(context: Context){
-        AuthUI.getInstance().signOut(context)
-            .addOnCompleteListener { task ->
-                if(task.isSuccessful){
-                    userRepository.currentUser.value = null
-                    showSignInActivity()
-                } else {
-                    showSnackBarMessage(R.string.failed_signout)
-                }
-                
-            }
-    }
-
-    /**
      * Show a message when the [User]'s information were updated
      *
      * @param resultCode
@@ -134,6 +142,10 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
         }
     }
 
+    //-----------------------
+    // CREATE / FETCH / EMIT USER INFOS
+    //-----------------------
+
     /**
      * Fetch the users information from the database
      *
@@ -149,7 +161,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
                 is Result.Success -> {
                     val user = result.data
                     if(user != null){
-                        setupUserInformation(user)
+                        fetchCheckLists(user)
                     } else {
                         createUserToDB(firebaseUser)
                     }
@@ -163,6 +175,7 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
                     showSnackBarMessage(R.string.canceled)
                     showSignInActivity()
                 }
+
             }
         }
     }
@@ -198,6 +211,70 @@ class MainActivityViewModel(val userRepository: UserRepository) : BaseViewModel(
         showSnackBarMessage(R.string.welcome)
     }
 
+    //-----------------------
+    // CREATE / FETCH CHECKLIST
+    //-----------------------
+
+    /**
+     * Fetch all the check list of the current user
+     *
+     * @param userId Id of the user
+     *
+     * @see CheckListRepository.fetchUserCheckLists
+     */
+    private fun fetchCheckLists(user: UserWithPreferences){
+        viewModelScope.launch {
+            when(checkListRepository.fetchUserCheckLists(user.user.id, true)){
+                is Result.Success -> fetchActiveTrip(user)
+                is Result.Canceled, is Result.Error -> showSnackBarMessage(R.string.error_fetch_check_lists)
+            }
+        }
+
+    }
+
+    //-----------------------
+    // CREATE / FETCH  ACTIVE TRIP
+    //-----------------------
+
+    /**
+     * Fetch the active trip of the current user
+     *
+     * @see TripRepository.fetchUserActiveTrip
+     *
+     */
+    private fun fetchActiveTrip(user: UserWithPreferences){
+        viewModelScope.launch {
+            when(tripRepository.fetchUserActiveTrip(user.user.id, true)){
+                is Result.Success -> fetchFriends(user)
+                else -> showSnackBarMessage(R.string.error_fetch_trip)
+            }
+            _dataLoading.value = false
+        }
+
+    }
+
+    //-----------------------
+    // CREATE / FETCH / FRIENDS
+    //-----------------------
+
+    /**
+     * Fetch all the friends of the current user
+     *
+     * @see setupUserInformation
+     * @see FriendRepository.fetchUserFriend
+     */
+    private fun fetchFriends(user: UserWithPreferences){
+        viewModelScope.launch {
+            when(friendRepository.fetchUserFriend(user.user, true)) {
+                is Result.Success -> setupUserInformation(user)
+                else -> showSnackBarMessage(R.string.error_fetch_friends)
+            }
+        }
+    }
+
+    //-----------------------
+    // OPEN ACTIVITIES
+    //-----------------------
 
     /**
      * Emit the [Event] to show the sign in activity

@@ -172,9 +172,7 @@ class AddTripViewModel(
     fun showFriendsList(){
         _dataLoading.value = true
         viewModelScope.launch {
-            when(val result = friendRepository.fetchUserFriend(
-                currentUser,
-                false)){
+            when(val result = friendRepository.fetchUserFriend(currentUser, false)){
                 is Result.Success -> _friendsLD.value = Event(result.data.toWatcher(trip.watchers))
                 is Result.Error, is Result.Canceled -> showSnackBarMessage(R.string.error_fetch_friends)
             }
@@ -196,10 +194,8 @@ class AddTripViewModel(
         } else {
             _dataLoading.value = true
             viewModelScope.launch {
-                val refresh = !checkListRepository.checkListFetched
-                when(val result = checkListRepository.fetchUserCheckLists(currentUser.id, refresh)){
+                when(val result = checkListRepository.fetchUserCheckLists(currentUser.id, false)){
                     is Result.Success -> {
-                        checkListRepository.checkListFetched = true
                         _openPickCheckListLD.value = Event(result.data.filter { it.checkList.tripType == tripType })
                     }
                     is Result.Error, is Result.Canceled -> showSnackBarMessage(R.string.error_fetch_check_lists)

@@ -147,18 +147,5 @@ class CheckListLocalSourceTests {
 
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun deleteAllCheckLists_deleteInDB() = runBlocking {
-        val task = localSource.deleteExistingChecklist(mainUser.id)
-        //check operation was successful
-        val result = task as? Result.Success
-        assertThat(result, `is` (notNullValue()))
-
-        val listsFromDB = checkListDao.getUserCheckList(mainUser.id)
-        assertThat(listsFromDB, hasSize(0))
-
-    }
-
 
 }

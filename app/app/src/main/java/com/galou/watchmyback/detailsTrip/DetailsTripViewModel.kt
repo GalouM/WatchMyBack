@@ -13,6 +13,7 @@ import com.galou.watchmyback.data.repository.TripRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.extension.findLatestCheckUpPoint
+import com.galou.watchmyback.utils.extension.updateStatus
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -128,7 +129,7 @@ class DetailsTripViewModel(
         viewModelScope.launch {
             val trip = tripRepository.fetchTrip(tripId)
             if (trip is Result.Success && trip.data != null){
-                emitTripInfo(trip.data)
+                emitTripInfo(trip.data.apply { updateStatus() })
                 fetchUserInfo(trip.data.trip.userId)
             } else {
                 showSnackBarMessage(R.string.error_fetch_trip)

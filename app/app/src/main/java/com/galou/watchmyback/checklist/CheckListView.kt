@@ -71,6 +71,17 @@ class CheckListView : Fragment(), CheckListListener {
         setupCheckLists()
         setupOpenModifyCheckList()
         setupSnackBar()
+        setupUserConnectedObserver()
+    }
+
+    private fun setupSnackBar(){
+        val rooView = binding.checkListViewContainer
+        rooView.setupSnackBar(this, viewModel.snackbarMessage, Snackbar.LENGTH_LONG)
+
+    }
+
+    private fun setupUserConnectedObserver(){
+        viewModel.userLD.observe(this, Observer { fetchCheckList() })
     }
 
     private fun setupCheckLists(){
@@ -79,6 +90,10 @@ class CheckListView : Fragment(), CheckListListener {
 
     private fun setupOpenModifyCheckList(){
         viewModel.openAddModifyCheckList.observe(this, EventObserver { openAddModifyCheckList() })
+    }
+
+    private fun fetchCheckList(){
+        viewModel.fetchCheckLists()
     }
 
     private fun updateCheckLists(checkLists: List<CheckListWithItems>){
@@ -90,12 +105,6 @@ class CheckListView : Fragment(), CheckListListener {
         with(Intent(activity!!, AddModifyCheckListActivity::class.java)){
             startActivityForResult(this, RC_ADD_CHECKLIST)
         }
-    }
-
-    private fun setupSnackBar(){
-        val rooView = binding.checkListViewContainer
-        rooView.setupSnackBar(this, viewModel.snackbarMessage, Snackbar.LENGTH_LONG)
-
     }
 
     override fun onClickCheckList(checkList: CheckListWithItems) {

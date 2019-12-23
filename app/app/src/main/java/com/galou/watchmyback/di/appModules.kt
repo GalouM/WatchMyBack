@@ -88,7 +88,7 @@ val appModules = module {
 
     // Repos
     single<UserRepository> {
-        UserRepositoryImpl(userLocalSource = get(), userRemoteSource = get(), friendRemoteSource = get())
+        UserRepositoryImpl(userLocalSource = get(), userRemoteSource = get())
     }
     single<FriendRepository> {
         FriendRepositoryImpl(localSource = get(), remoteSource = get())
@@ -107,7 +107,12 @@ val appModules = module {
     }
 
     // ViewModels
-    viewModel { MainActivityViewModel(userRepository = get()) }
+    viewModel { MainActivityViewModel(
+        userRepository = get(),
+        checkListRepository = get(),
+        tripRepository = get(),
+        friendRepository = get()
+        ) }
     viewModel { ProfileViewModel(userRepository = get()) }
     viewModel { SettingsViewModel(userRepository = get()) }
     viewModel { FriendsViewModel(userRepository = get(), friendRepository = get()) }

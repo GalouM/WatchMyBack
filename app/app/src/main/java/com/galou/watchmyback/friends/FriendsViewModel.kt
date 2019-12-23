@@ -25,11 +25,6 @@ class FriendsViewModel(
     private val _openAddFriendLD = MutableLiveData<Event<Unit>>()
     val openAddFriendLD: LiveData<Event<Unit>> = _openAddFriendLD
 
-
-    init {
-        fetchFriends()
-    }
-
     /**
      * Refresh the list of friend
      *
@@ -56,8 +51,8 @@ class FriendsViewModel(
      * @see fetchResultUsers
      * @see FriendRepository.fetchUserFriend
      */
-    private fun fetchFriends(refresh: Boolean = false){
-        viewModelScope.launch { fetchResultUsers(friendRepository.fetchUserFriend(currentUser, refresh)) }
+    fun fetchFriends(refresh: Boolean = false){
+        viewModelScope.launch { fetchResultUsers(friendRepository.fetchUserFriend(userLD.value!!, refresh)) }
     }
 
 

@@ -113,21 +113,4 @@ class CheckListLocalDataSource(private val checkListDao: CheckListDao) : CheckLi
             Result.Error(e)
         }
     }
-
-    /**
-     * Delete all the existing [CheckList] of a specific user from the database
-     *
-     * @param userId Id of the user
-     * @return [Result] of the operation
-     *
-     * @see CheckListDao.deleteUserCheckList
-     */
-    suspend fun deleteExistingChecklist(userId: String): Result<Void?> {
-        return try {
-            checkListDao.deleteUserCheckList(userId)
-            Result.Success(null)
-        } catch (e: Exception){
-            Result.Error(e)
-        }
-    }
 }

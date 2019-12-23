@@ -67,7 +67,7 @@ class AddFriendViewModel(
      * Fetch all the users from the database
      *
      * @see fetchResultUsers
-     * @see UserRepositoryImpl.fetchAllUsers
+     * @see UserRepository.fetchAllUsers
      *
      */
     private fun fetchAllUsers(){
@@ -79,7 +79,7 @@ class AddFriendViewModel(
      * Fetch all users who have a specific username
      *
      * @see fetchResultUsers
-     * @see UserRepositoryImpl.fetchUserByUsername
+     * @see UserRepository.fetchUserByUsername
      *
      */
     private fun fetchUserByUsername() {
@@ -92,7 +92,7 @@ class AddFriendViewModel(
      * Fetch all users who have a specific email address
      *
      * @see fetchResultUsers
-     * @see UserRepositoryImpl.fetchUserByEmailAddress
+     * @see UserRepository.fetchUserByEmailAddress
      *
      */
     private fun fetchUserByEmailAddress() {

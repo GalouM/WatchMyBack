@@ -118,14 +118,13 @@ abstract class UserDao(private val database: WatchMyBackDatabase) {
      * @see FriendDao.addFriend
      */
     @Transaction
-    open suspend fun createOrUpdateUserWithData(createUser: Boolean, user: User, preferences: UserPreferences, vararg friend: User){
+    open suspend fun createOrUpdateUserWithData(createUser: Boolean, user: User, preferences: UserPreferences){
         if(createUser){
             createUser(user)
             database.userPreferencesDao().createUserPreferences(preferences)
         } else {
             updateUser(user)
         }
-        database.friendDao().addFriend(user.id, *friend)
 
     }
 
