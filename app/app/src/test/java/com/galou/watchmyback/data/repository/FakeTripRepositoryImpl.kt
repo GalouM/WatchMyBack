@@ -25,7 +25,7 @@ class FakeTripRepositoryImpl : TripRepository {
     override suspend fun fetchPointLocationInformation(points: List<PointTripWithData>): Result<Void?> =
         Result.Success(null)
 
-    override suspend fun fetchUserActiveTrip(userId: String): Result<TripWithData> =
+    override suspend fun fetchUserActiveTrip(userId: String, refresh: Boolean): Result<TripWithData> =
         Result.Success(
             TripWithData(
                 trip = Trip(active = true, userId = userId, checkListId = checkList1.id),
