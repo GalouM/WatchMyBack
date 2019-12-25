@@ -111,9 +111,7 @@ class UserRepositoryImpl(
                     when (val updateLocalDbResult = userLocalSource.updateOrCreateUser(
                             remoteUser, localResult.data
                         )) {
-                        is Result.Success -> return@coroutineScope Result.Success(
-                            updateLocalDbResult.data
-                        )
+                        is Result.Success -> return@coroutineScope Result.Success(updateLocalDbResult.data)
 
                         else -> return@coroutineScope localResult
                     }

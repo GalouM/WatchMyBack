@@ -6,7 +6,6 @@ import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.utils.POINT_TRIP_TABLE_NAME
 import com.galou.watchmyback.utils.POINT_TRIP_TRIP_UUID
 import com.galou.watchmyback.utils.POINT_TRIP_TYPE
-import com.galou.watchmyback.utils.displayData
 
 /**
  * List of all the actions possible on the [PointTrip] table
@@ -49,11 +48,8 @@ abstract class PointTripDao(private val database: WatchMyBackDatabase) {
     @Transaction
     open suspend fun createPointsAndData(pointTrips: List<PointTripWithData>){
         pointTrips.forEach {
-            displayData("create point")
             createPoints(it.pointTrip)
-            displayData("create location")
             database.locationDao().createLocations(it.location!!)
-            displayData("create weather")
             database.weatherDataDao().createWeatherData(it.weatherData!!)
         }
     }

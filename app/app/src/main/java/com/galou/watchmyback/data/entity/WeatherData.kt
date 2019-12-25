@@ -39,7 +39,7 @@ data class WeatherData(
     @ColumnInfo(name = WEATHER_DATA_TABLE_UUID) @PrimaryKey var id: String = idGenerated,
     @ColumnInfo(name = WEATHER_DATA_TABLE_POINT_UUID) var pointId: String = "",
     @ColumnInfo(name = WEATHER_DATA_TABLE_CONDITION) var condition: WeatherCondition = CLEAR,
-    @ColumnInfo(name = WEATHER_DATA_TABLE_TEMPERATURE) var temperature: Double = 0.0,
+    @ColumnInfo(name = WEATHER_DATA_TABLE_TEMPERATURE) var temperature: Double? = null,
     @ColumnInfo(name = WEATHER_DATA_TABLE_DATETIME) var dateTime: Date? = null,
     @ColumnInfo(name = WEATHER_DATA_TABLE_ICON) var iconName: String = ""
 )

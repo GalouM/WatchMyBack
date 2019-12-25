@@ -66,8 +66,8 @@ fun TripWithData.convertForDisplay(userPreferences: UserPreferences, ownerName: 
         tripOwnerName = ownerName,
         weatherCondition = latestPoint.weatherData?.condition ?: throw Exception("Missing weather condition $this"),
         temperature = when(userPreferences.unitSystem){
-            UnitSystem.METRIC -> "${latestPoint.weatherData.temperature.kelvinToCelsius()}°C"
-            UnitSystem.IMPERIAL -> "${latestPoint.weatherData.temperature.kelvinToFahrenheit()}°F"
+            UnitSystem.METRIC -> "${latestPoint.weatherData.temperature?.kelvinToCelsius()}°C"
+            UnitSystem.IMPERIAL -> "${latestPoint.weatherData.temperature?.kelvinToFahrenheit()}°F"
         }
     )
 }
@@ -90,4 +90,8 @@ fun TripWithData.updateStatus(){
             else -> TripStatus.ON_GOING
         }
     }
+}
+
+fun List<TripWithData>.updateStatus(){
+    forEach { it.updateStatus() }
 }

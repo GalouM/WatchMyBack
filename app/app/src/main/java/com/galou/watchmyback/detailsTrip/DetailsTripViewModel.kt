@@ -12,6 +12,7 @@ import com.galou.watchmyback.data.repository.CheckListRepository
 import com.galou.watchmyback.data.repository.TripRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.extension.emitNewValue
 import com.galou.watchmyback.utils.extension.findLatestCheckUpPoint
 import com.galou.watchmyback.utils.extension.updateStatus
 import kotlinx.coroutines.launch
@@ -88,7 +89,6 @@ class DetailsTripViewModel(
     fun callEmergency(){
         with(userPrefsLD.value ?: throw Exception("No user prefs setup")){
             if (emergencyNumber.isBlank()){
-                println("blank")
                 showSnackBarMessage(R.string.no_emergency_number)
             } else {
                 println(userPrefsLD.value)
@@ -116,6 +116,11 @@ class DetailsTripViewModel(
         lastPointCheckedLD.value?.pointTrip?.id?.let {
             clickPointTrip(it)
         }
+    }
+
+    fun reEmitPointLocation(){
+        _checkedPointsLD.emitNewValue()
+        _schedulePointsLD.emitNewValue()
     }
 
     /**

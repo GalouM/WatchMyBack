@@ -19,18 +19,50 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".detailsPoint.DetailsTripPointView">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/margin_big">
+        android:layout_marginTop="@dimen/margin_medium">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/details_point_view_type_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="@dimen/margin_small">
+
+            <TextView
+                android:id="@+id/details_trip_view_type_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TitleWatchMyBack"
+                android:text="@string/type_point"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/details_trip_view_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/details_trip_view_type_title"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="@dimen/text_medium"
+                android:layout_marginStart="@dimen/margin_big"
+                app:textFromResourceId="@{viewmodel.pointTripLD.pointTrip.typePoint.nameResourceId}"
+                android:layout_marginTop="@dimen/margin_small"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/details_trip_view_time_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="@dimen/margin_small">
+            app:layout_constraintTop_toBottomOf="@id/details_point_view_type_group"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_medium">
 
             <TextView
                 android:id="@+id/details_trip_view_time_title"
@@ -49,7 +81,8 @@
                 android:layout_marginStart="@dimen/margin_big"
                 android:text="@{viewmodel.isScheduledPoint() ? @string/pass_by_planned_time : @string/pass_by}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/details_trip_view_time_title"/>
+                app:layout_constraintTop_toBottomOf="@id/details_trip_view_time_title"
+                android:layout_marginTop="@dimen/margin_small"/>
 
             <TextView
                 android:id="@+id/details_trip_view_time_pass_by_time"
@@ -71,7 +104,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/details_trip_view_time_group"
-            android:layout_marginStart="@dimen/margin_small">
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_medium">
 
             <TextView
                 android:id="@+id/details_trip_view_location_title"
@@ -91,13 +125,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:textSize="@dimen/text_medium"
                 android:layout_marginStart="@dimen/margin_big"
-                android:text="@string/latitude"/>
+                android:text="@string/latitude"
+                android:layout_marginTop="@dimen/margin_small"/>
 
             <TextView
                 android:id="@+id/details_trip_view_location_latitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/details_trip_view_location_title"
+                app:layout_constraintTop_toTopOf="@id/details_trip_view_location_latitude_title"
+                app:layout_constraintBottom_toBottomOf="@id/details_trip_view_location_latitude_title"
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_location_latitude_title"
                 android:textSize="@dimen/text_medium"
                 android:layout_marginEnd="@dimen/margin_big"
@@ -111,13 +147,15 @@
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_location_latitude"
                 android:textSize="@dimen/text_medium"
                 android:layout_marginStart="@dimen/margin_big"
-                android:text="@string/longitude"/>
+                android:text="@string/longitude"
+                android:layout_marginTop="@dimen/margin_small"/>
 
             <TextView
                 android:id="@+id/details_trip_view_location_longitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/details_trip_view_location_title"
+                app:layout_constraintTop_toTopOf="@id/details_trip_view_location_longitude_title"
+                app:layout_constraintBottom_toBottomOf="@id/details_trip_view_location_longitude_title"
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_location_longitude_title"
                 android:textSize="@dimen/text_medium"
                 android:text="@{viewmodel.pointTripLD.location.longitude.toString()}"/>
@@ -130,6 +168,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:textSize="@dimen/text_medium"
                 android:layout_marginStart="@dimen/margin_big"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/city"/>
             <TextView
                 android:id="@+id/details_trip_view_location_city"
@@ -150,6 +189,7 @@
                 app:layout_constraintStart_toEndOf="@id/details_trip_view_location_city"
                 android:textSize="@dimen/text_medium"
                 android:layout_marginStart="@dimen/margin_big"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/country"/>
 
             <TextView
@@ -171,7 +211,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/details_trip_view_location_group"
-            android:layout_marginStart="@dimen/margin_small">
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_medium">
 
             <TextView
                 android:id="@+id/weather_title"
@@ -182,7 +223,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="@dimen/margin_medium"
                 android:layout_marginBottom="@dimen/margin_medium"/>
 
             <TextView

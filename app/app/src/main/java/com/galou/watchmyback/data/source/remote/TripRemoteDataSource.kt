@@ -185,20 +185,26 @@ class TripRemoteDataSource(
     override suspend fun fetchTrip(tripId: String): Result<TripWithData?> = withContext(ioDispatcher) {
         return@withContext when (val result = tripCollection.document(tripId).get().await()){
             is Result.Success -> {
-                result.data.toObject(TripWithDataRemoteDB::class.java)?.let { trip ->
+                val trip = result.data.toObject(TripWithDataRemoteDB::class.java)
+                if (trip != null){
                     when(val resultWatchers = fetchTripWatchers(trip.watchersId)){
                         is Result.Success -> Result.Success(trip.convertForLocal(resultWatchers.data))
                         is Result.Error -> Result.Error(resultWatchers.exception)
                         is Result.Canceled -> Result.Canceled(resultWatchers.exception)
                     }
-                }
-                Result.Success(null)
+                } else Result.Success(null)
             }
             is Result.Error -> Result.Error(result.exception)
             is Result.Canceled -> Result.Canceled(result.exception)
         }
     }
 
+    /**
+     * Fetch the list of [TripWithData] the user is watching
+     *
+     * @param userId ID of the user
+     * @return
+     */
     override suspend fun fetchTripUserWatching(userId: String): Result<List<TripWithData>> = withContext(ioDispatcher) {
         return@withContext when(val result =
             tripCollection.whereArrayContains("watchersId", userId).get().await()){
@@ -226,6 +232,27 @@ class TripRemoteDataSource(
             }
             is Result.Error -> Result.Error(result.exception)
             is Result.Canceled -> Result.Canceled(result.exception)
+        }
+    }
+
+    /**
+     * Fetch the information of a owner of a trip
+     *
+     * @param ownerId ID of the user
+     * @return [Result] of the operation with a [User] object
+     */
+    override suspend fun fetchTripOwner(ownerId: String): Result<User> = withContext(ioDispatcher) {
+        return@withContext when (val task = userCollection.document(ownerId).get().await()){
+            is Result.Success -> {
+                if (task.data != null){
+                    Result.Success(task.data.toObject(User::class.java)!!)
+                } else {
+                    Result.Error(Exception("no user found with id $ownerId ${task.data}"))
+                }
+
+            }
+            is Result.Error -> Result.Error(task.exception)
+            is Result.Canceled -> Result.Canceled(task.exception)
         }
     }
 }

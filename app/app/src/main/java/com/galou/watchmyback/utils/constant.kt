@@ -99,6 +99,7 @@ const val RC_ADD_FRIEND = 700
 const val RC_ADD_CHECKLIST = 800
 const val RC_LOCATION_PERMS = 900
 const val RC_PICK_LOCATION_MAP = 1000
+const val RC_PHONE_CALL_PERMS = 1100
 
 // ------ RESULT CODE ACTIVITIES -------
 const val RESULT_ACCOUNT_DELETED = -100
@@ -114,6 +115,7 @@ const val WATCHER_DIALOG = "watcherDialog"
 // ------ PERMISSIONS -------
 const val PERMS_EXT_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
 const val PERMS_LOCALISATION = Manifest.permission.ACCESS_FINE_LOCATION
+const val PERMS_PHONE_CALL = Manifest.permission.CALL_PHONE
 
 // ------ ID MAP ---------
 const val ICON_LOCATION_ACCENT = "iconLocationAccent"

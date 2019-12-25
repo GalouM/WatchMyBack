@@ -36,7 +36,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="@dimen/margin_big"/>
+            android:layout_marginEnd="@dimen/margin_big"
+            android:src="@{item.checked ? @drawable/icon_checkbox_checked : @drawable/icon_checkbox_blank}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -13,13 +13,13 @@ import com.galou.watchmyback.data.repository.FriendRepository
 import com.galou.watchmyback.data.repository.TripRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.displayData
 import com.galou.watchmyback.utils.extension.emitNewValue
 import com.galou.watchmyback.utils.extension.filterOrCreateMainPoint
 import com.galou.watchmyback.utils.extension.filterScheduleStage
 import com.galou.watchmyback.utils.extension.toWatcher
 import com.galou.watchmyback.utils.todaysDate
 import kotlinx.coroutines.launch
+import java.math.RoundingMode
 import java.util.*
 
 /**
@@ -350,8 +350,8 @@ class AddTripViewModel(
      */
     fun setPointLocation(lat: Double, lgn: Double, point: PointTripWithData){
         point.location!!.apply {
-            latitude = lat
-            longitude = lgn
+            latitude = lat.toBigDecimal().setScale(4, RoundingMode.HALF_UP).toDouble()
+            longitude = lgn.toBigDecimal().setScale(4, RoundingMode.HALF_UP).toDouble()
         }
         emitNewValuePoint(point)
         _dataLoading.value = false
@@ -367,8 +367,8 @@ class AddTripViewModel(
      */
     fun setPointLocation(lat: Double, lgn: Double){
         tripRepository.pointSelected?.location!!.apply {
-            latitude = lat
-            longitude = lgn
+            latitude = lat.toBigDecimal().setScale(4, RoundingMode.UP).toDouble()
+            longitude = lgn.toBigDecimal().setScale(4, RoundingMode.UP).toDouble()
         }
         emitNewValuePoint(tripRepository.pointSelected ?: throw Exception("no point selected saved in repo"))
         tripRepository.pointSelected = null
@@ -474,14 +474,8 @@ class AddTripViewModel(
             viewModelScope.launch {
                 when(val task = tripRepository.createTrip(trip, checkList)){
                     is Result.Success -> _tripSavedLD.value = Event(Unit)
-                    is Result.Error -> {
-                        displayData("${task.exception}")
-                        showSnackBarMessage(R.string.trip_creation_error)
-                    }
-                    is Result.Canceled -> {
-                        displayData("${task.exception}")
-                        showSnackBarMessage(R.string.trip_creation_error)
-                    }
+                    is Result.Error -> showSnackBarMessage(R.string.trip_creation_error)
+                    is Result.Canceled -> showSnackBarMessage(R.string.trip_creation_error)
 
                 }
                 _dataLoading.value = false
@@ -497,14 +491,8 @@ class AddTripViewModel(
         fun fetchPointLocationInformation(){
             viewModelScope.launch {
                 when(val task = tripRepository.fetchPointLocationInformation(trip.points)){
-                    is Result.Error -> {
-                        displayData("${task.exception}")
-                        showSnackBarMessage(R.string.trip_creation_error)
-                    }
-                    is Result.Canceled -> {
-                        displayData("${task.exception}")
-                        showSnackBarMessage(R.string.trip_creation_error)
-                    }
+                    is Result.Error -> showSnackBarMessage(R.string.trip_creation_error)
+                    is Result.Canceled -> showSnackBarMessage(R.string.trip_creation_error)
 
                     is Result.Success -> createTripInDatabase()
 

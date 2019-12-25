@@ -45,7 +45,7 @@ class TripLocalSourceTests {
 
         userDao = db.userDao()
         tripDao = db.tripDao()
-        localSource = TripLocalDataSource(tripDao)
+        localSource = TripLocalDataSource(tripDao, userDao)
 
         runBlocking {
             userDao.createUser(mainUser)
@@ -121,6 +121,18 @@ class TripLocalSourceTests {
         trips.forEach {
             assertThat(it.watchers, hasItem(secondFriend))
         }
+
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun fetchTripOwner_returnTripOwnerInfo() = runBlocking{
+        tripDao.createTripAndData(tripWithData1, itemList1)
+        val task = localSource.fetchTripOwner(tripWithData1.trip.userId)
+        val result = task is Result.Success
+        assertThat(result, `is`(true))
+        val user = (task as Result.Success).data
+        assertThat(user.id, `is` (tripWithData1.trip.userId))
 
     }
 }

@@ -114,3 +114,5 @@ val tripWithData = TripWithData(
     points = listPointsWithDataTrip1,
     watchers = mutableListOf(firstFriend, secondFriend)
 )
+
+val listUsers = listOf(mainUser, firstFriend, secondFriend)

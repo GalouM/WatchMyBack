@@ -3,12 +3,15 @@ package com.galou.watchmyback.data.repository
 import com.galou.watchmyback.BuildConfig
 import com.galou.watchmyback.data.api.GeocodingApiService
 import com.galou.watchmyback.data.api.OpenWeatherService
+import com.galou.watchmyback.data.applicationUse.TripDisplay
 import com.galou.watchmyback.data.entity.CheckListWithItems
 import com.galou.watchmyback.data.entity.PointTripWithData
 import com.galou.watchmyback.data.entity.TripWithData
+import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.source.local.TripLocalDataSource
 import com.galou.watchmyback.data.source.remote.TripRemoteDataSource
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.extension.convertForDisplay
 import com.galou.watchmyback.utils.extension.toWeatherConditionName
 import com.galou.watchmyback.utils.returnSuccessOrError
 import kotlinx.coroutines.async
@@ -167,24 +170,23 @@ class TripRepositoryImpl(
      * @see TripLocalDataSource.fetchActiveTrip
      */
     override suspend fun fetchUserActiveTrip(userId: String, refresh: Boolean): Result<TripWithData?> {
-        return if (refresh) {
+        if (refresh) {
             when (val remoteTask = remoteSource.fetchActiveTrip(userId)) {
                 is Result.Success -> {
                     remoteTask.data?.let {
-                        when(val localCopyTask = localSource.createTrip(it, null)){
+                         return when(val localCopyTask = localSource.createTrip(it, null)){
                             is Result.Canceled -> Result.Canceled(localCopyTask.exception)
                             is Result.Error -> Result.Error(localCopyTask.exception)
                             is Result.Success -> remoteTask
                         }
                     }
-                    remoteTask
+                    return remoteTask
                 }
-                else -> localSource.fetchActiveTrip(userId)
 
             }
-        } else {
-            localSource.fetchActiveTrip(userId)
         }
+        return localSource.fetchActiveTrip(userId)
+
     }
 
     /**
@@ -219,5 +221,33 @@ class TripRepositoryImpl(
             is Result.Success -> remoteTask
             else -> localSource.fetchTripUserWatching(userId)
         }
+    }
+
+    /**
+     * Convert a list [TripWithData] into [TripDisplay] to be displayed by the view with all the necessary info
+     *
+     * @param trips [TripWithData] to convert
+     * @param userPrefs [UserPreferences] to convert temperature and time according to the user's preferences
+     * @return [Result] of the operation with a list of [TripDisplay]
+     */
+    override suspend fun convertTripForDisplay(trips: List<TripWithData>, userPrefs: UserPreferences): Result<List<TripDisplay>> = coroutineScope {
+        val tripsForDisplay = mutableListOf<TripDisplay>()
+        var error = false
+        trips.forEach { trip ->
+            launch {
+                when(val remoteResult = remoteSource.fetchTripOwner(trip.trip.userId)){
+                    is Result.Success ->
+                        tripsForDisplay.add(
+                            trip.convertForDisplay(
+                                userPreferences = userPrefs,
+                                ownerName = remoteResult.data.username ?: throw Exception("No username for user ${remoteResult.data}")))
+
+                    else -> error = true
+                }
+            }
+        }
+        return@coroutineScope if (!error) Result.Success(tripsForDisplay)
+        else Result.Error(Exception("Error while fetching trip's owner"))
+
     }
 }

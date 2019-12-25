@@ -12,7 +12,7 @@ import com.galou.watchmyback.databinding.WatcherTripDetailsRvItemBinding
  */
 
 class DisplayWatcherAdapter(
-    val watchers: List<User>
+    var watchers: List<User>
 ) : RecyclerView.Adapter<DisplayWatcherViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DisplayWatcherViewHolder =
         DisplayWatcherViewHolder.from(parent)

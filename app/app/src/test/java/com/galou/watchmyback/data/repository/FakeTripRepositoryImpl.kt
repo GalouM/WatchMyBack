@@ -1,12 +1,12 @@
 package com.galou.watchmyback.data.repository
 
-import com.galou.watchmyback.data.entity.CheckListWithItems
-import com.galou.watchmyback.data.entity.PointTripWithData
-import com.galou.watchmyback.data.entity.Trip
-import com.galou.watchmyback.data.entity.TripWithData
+import com.galou.watchmyback.data.applicationUse.TripDisplay
+import com.galou.watchmyback.data.entity.*
 import com.galou.watchmyback.testHelpers.checkList1
+import com.galou.watchmyback.testHelpers.listUsers
 import com.galou.watchmyback.testHelpers.tripWithData
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.extension.convertForDisplay
 
 /**
  * @author galou
@@ -41,7 +41,18 @@ class FakeTripRepositoryImpl : TripRepository {
         return Result.Success(trip)
     }
 
-    override suspend fun fetchTripUserWatching(userId: String): Result<List<TripWithData>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun fetchTripUserWatching(userId: String): Result<List<TripWithData>> =
+        Result.Success(listOf(tripWithData))
+
+    override suspend fun convertTripForDisplay(
+        trips: List<TripWithData>,
+        userPrefs: UserPreferences
+    ): Result<List<TripDisplay>> {
+        val tripForDisplay = mutableListOf<TripDisplay>()
+        trips.forEach {trip ->
+            val owner = listUsers.find { it.id ==  trip.trip.userId}!!
+            tripForDisplay.add(trip.convertForDisplay(userPrefs, owner.username!!))
+        }
+        return Result.Success(tripForDisplay)
     }
 }

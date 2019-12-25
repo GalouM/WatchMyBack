@@ -19,7 +19,6 @@ import com.galou.watchmyback.data.repository.*
 import com.galou.watchmyback.utils.RESULT_ACCOUNT_DELETED
 import com.galou.watchmyback.utils.Result
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 /**
@@ -39,13 +38,13 @@ class MainActivityViewModel(
     private val friendRepository: FriendRepository
 ) : BaseViewModel() {
 
-    private var getUserJob: Job? = null
-    private var createUserJob: Job? = null
-
     // -- Live data
 
     private val _openSignInActivityEvent = MutableLiveData<Event<Unit>>()
     val openSignInActivityEvent: LiveData<Event<Unit>> = _openSignInActivityEvent
+
+    private val _openMyTripActivityLD = MutableLiveData<Event<Unit>>()
+    val openMyTripActivityLD: LiveData<Event<Unit>> = _openMyTripActivityLD
 
     val userLD: LiveData<User> = userRepository.currentUser
 
@@ -155,13 +154,12 @@ class MainActivityViewModel(
      * @param firebaseUser user connected to the app through Firebase Authentification
      */
     private fun fetchCurrentUserInformation(firebaseUser: FirebaseUser) {
-        if (getUserJob?.isActive == true) getUserJob?.cancel()
-        getUserJob = viewModelScope.launch {
+        viewModelScope.launch {
             when (val result = userRepository.fetchUser(firebaseUser.uid)) {
                 is Result.Success -> {
                     val user = result.data
                     if(user != null){
-                        fetchCheckLists(user)
+                        fetchFriends(user)
                     } else {
                         createUserToDB(firebaseUser)
                     }
@@ -190,8 +188,7 @@ class MainActivityViewModel(
     private fun createUserToDB(firebaseUser: FirebaseUser){
         val urlPhoto = firebaseUser.photoUrl?.toString()
         val user = User(firebaseUser.uid, firebaseUser.email, firebaseUser.displayName, firebaseUser.phoneNumber, urlPhoto)
-        if(createUserJob?.isActive == true) createUserJob?.cancel()
-        createUserJob = viewModelScope.launch {
+        viewModelScope.launch {
             when(userRepository.createNewUser(user)){
                 is Result.Success -> fetchCurrentUserInformation(firebaseUser)
                 is Result.Error -> showSnackBarMessage(R.string.error_creatng_user_remote)
@@ -245,7 +242,7 @@ class MainActivityViewModel(
     private fun fetchActiveTrip(user: UserWithPreferences){
         viewModelScope.launch {
             when(tripRepository.fetchUserActiveTrip(user.user.id, true)){
-                is Result.Success -> fetchFriends(user)
+                is Result.Success -> setupUserInformation(user)
                 else -> showSnackBarMessage(R.string.error_fetch_trip)
             }
             _dataLoading.value = false
@@ -266,7 +263,7 @@ class MainActivityViewModel(
     private fun fetchFriends(user: UserWithPreferences){
         viewModelScope.launch {
             when(friendRepository.fetchUserFriend(user.user, true)) {
-                is Result.Success -> setupUserInformation(user)
+                is Result.Success -> fetchCheckLists(user)
                 else -> showSnackBarMessage(R.string.error_fetch_friends)
             }
         }
@@ -283,6 +280,35 @@ class MainActivityViewModel(
     private fun showSignInActivity(){
         _openSignInActivityEvent.value = Event(Unit)
     }
+
+    /**
+     * TODOEmit the [Event] to hsow My Trip Activity
+     * if the user has an active trip
+     *
+     */
+    fun showMyTripActivity(){
+
+        fun openActivity(){
+            _openMyTripActivityLD.value = Event(Unit)
+        }
+
+        fun checkIsUserHasActiveTrip(){
+            viewModelScope.launch {
+                when(val result = tripRepository.fetchUserActiveTrip(userLD.value!!.id, false)){
+                    is Result.Success -> {
+                        if (result.data != null) openActivity()
+                        else showSnackBarMessage(R.string.no_current_active_trip)
+                    }
+                    else -> showSnackBarMessage(R.string.error_fetch_trip)
+                }
+            }
+        }
+
+        checkIsUserHasActiveTrip()
+
+    }
+
+
 
 
 }

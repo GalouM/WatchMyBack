@@ -2,6 +2,7 @@ package com.galou.watchmyback.utils.extension
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
+import kotlin.math.roundToInt
 
 /**
  * @author galou
@@ -13,13 +14,13 @@ class DoubleExtTest {
     @Throws(Exception::class)
     fun kelvinToCelsius(){
         val temperatureInKelvin = 500.0
-        assertThat(temperatureInKelvin.kelvinToCelsius()).isEqualTo(temperatureInKelvin - 273.15)
+        assertThat(temperatureInKelvin.kelvinToCelsius()).isEqualTo((temperatureInKelvin - 273.15).roundToInt())
     }
 
     @Test
     @Throws(Exception::class)
     fun kelvinToFahrenheit(){
         val temperatureInKelvin = 500.0
-        assertThat(temperatureInKelvin.kelvinToFahrenheit()).isEqualTo(temperatureInKelvin * 1.8 - 459.67)
+        assertThat(temperatureInKelvin.kelvinToFahrenheit()).isEqualTo((temperatureInKelvin * 1.8 - 459.67).roundToInt())
     }
 }

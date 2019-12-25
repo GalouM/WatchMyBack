@@ -67,7 +67,7 @@ class UserLocalDataSource(
             val preferences = userPreferencesDao.getUserPreferences(remoteUser.id)
             Result.Success(UserWithPreferences(
             user = remoteUser,
-            preferences = preferences
+            preferences = preferences ?: defaultPreferences
             ))
         } catch (e: Exception) {
             Result.Error(e)

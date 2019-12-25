@@ -335,7 +335,7 @@
                 app:layout_constraintStart_toStartOf="@id/weather_image_one"
                 app:layout_constraintEnd_toEndOf="@id/weather_image_one"
                 app:layout_constraintTop_toBottomOf="@id/weather_image_one"
-                android:text="@{viewmodel.startPointWeatherLD.condition.conditionNameId}"
+                app:textFromResourceId="@{viewmodel.startPointWeatherLD.condition.conditionNameId}"
                 android:textAlignment="center"
                 android:textSize="@dimen/text_medium"/>
             <TextView
@@ -378,7 +378,7 @@
                 app:layout_constraintStart_toStartOf="@id/weather_image_two"
                 app:layout_constraintEnd_toEndOf="@id/weather_image_two"
                 app:layout_constraintTop_toBottomOf="@id/weather_image_two"
-                android:text="@{viewmodel.endPointWeatherLD.condition.conditionNameId}"
+                app:textFromResourceId="@{viewmodel.endPointWeatherLD.condition.conditionNameId}"
                 android:textAlignment="center"
                 android:textSize="@dimen/text_medium"/>
             <TextView
@@ -421,7 +421,7 @@
                 app:layout_constraintStart_toStartOf="@id/weather_image_three"
                 app:layout_constraintEnd_toEndOf="@id/weather_image_three"
                 app:layout_constraintTop_toBottomOf="@id/weather_image_three"
-                android:text="@{viewmodel.lastPointCheckedLD.weatherData.condition.conditionNameId}"
+                app:textFromResourceId="@{viewmodel.lastPointCheckedLD.weatherData.condition.conditionNameId}"
                 android:textAlignment="center"
                 android:textSize="@dimen/text_medium"/>
             <TextView
@@ -480,15 +480,14 @@
             app:icon="@drawable/icon_phone"
             android:layout_marginTop="@dimen/margin_big"
             android:text="@{@string/call + viewmodel.tripOwnerNameLD}"
-            visibleOrInvisible="@{viewmodel.tripOwnerNameLD != null}"
             android:onClick="@{() -> viewmodel.callTripOwner()}"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/detail_trip_view_call_emergency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/detail_trip_view_call_user"
-            app:layout_constraintBottom_toBottomOf="@id/detail_trip_view_call_user"
+            android:layout_marginTop="@dimen/margin_big"
+            app:layout_constraintTop_toBottomOf="@id/details_trip_global_view_watchers_group"
             app:layout_constraintStart_toEndOf="@id/detail_trip_view_call_user"
             app:layout_constraintEnd_toEndOf="parent"
             app:icon="@drawable/icon_phone"

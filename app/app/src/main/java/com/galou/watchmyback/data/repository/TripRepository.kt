@@ -1,8 +1,10 @@
 package com.galou.watchmyback.data.repository
 
+import com.galou.watchmyback.data.applicationUse.TripDisplay
 import com.galou.watchmyback.data.entity.CheckListWithItems
 import com.galou.watchmyback.data.entity.PointTripWithData
 import com.galou.watchmyback.data.entity.TripWithData
+import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.utils.Result
 
 /**
@@ -24,4 +26,6 @@ interface TripRepository {
     suspend fun fetchTrip(tripId: String): Result<TripWithData?>
 
     suspend fun fetchTripUserWatching(userId: String): Result<List<TripWithData>>
+
+    suspend fun convertTripForDisplay(trips: List<TripWithData>, userPrefs: UserPreferences): Result<List<TripDisplay>>
 }

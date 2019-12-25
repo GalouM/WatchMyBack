@@ -4,6 +4,9 @@ import android.app.Activity.RESULT_OK
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
+import com.galou.watchmyback.data.repository.FakeCheckListRepository
+import com.galou.watchmyback.data.repository.FakeFriendRepositoryImpl
+import com.galou.watchmyback.data.repository.FakeTripRepositoryImpl
 import com.galou.watchmyback.data.repository.FakeUserRepositoryImpl
 import com.galou.watchmyback.testHelpers.FakeAuthResult
 import com.galou.watchmyback.testHelpers.LiveDataTestUtil
@@ -38,7 +41,7 @@ class MainActivityViewModelTest {
     @Before
     fun setupViewModel(){
         Dispatchers.setMain(mainThreadSurrogate)
-        viewModel = MainActivityViewModel(FakeUserRepositoryImpl())
+        viewModel = MainActivityViewModel(FakeUserRepositoryImpl(), FakeCheckListRepository(), FakeTripRepositoryImpl(), FakeFriendRepositoryImpl() )
     }
 
     @After
@@ -95,6 +98,15 @@ class MainActivityViewModelTest {
         val value: Event<Unit> = LiveDataTestUtil.getValue(viewModel.openSignInActivityEvent)
         assertThat(value.getContentIfNotHandled()).isNotNull()
         assertThat(viewModel.userLD.value).isNull()
+    }
+
+    @Test
+    fun clickMyTripHasActiveTrip_showMyTripActivity(){
+        val firebaseUser = FakeAuthResult.user
+        viewModel.checkIfUserIsConnected(firebaseUser)
+        LiveDataTestUtil.getValue(viewModel.userLD)
+        viewModel.showMyTripActivity()
+        assertThat(LiveDataTestUtil.getValue(viewModel.openMyTripActivityLD).getContentIfNotHandled()).isNotNull()
     }
 
 

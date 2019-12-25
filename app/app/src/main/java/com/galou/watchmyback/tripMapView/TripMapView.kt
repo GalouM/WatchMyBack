@@ -29,21 +29,24 @@ import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
+import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolClickListener
+import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import org.koin.android.viewmodel.ext.android.viewModel
+import pub.devrel.easypermissions.EasyPermissions
 
 /**
  * A simple [Fragment] subclass.
  */
-class TripMapView : Fragment() {
+class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolClickListener {
 
     private val viewModel: TripMapViewModel by viewModel()
     private lateinit var binding: FragmentMapViewBinding
 
     private lateinit var mapView: MapView
     private lateinit var mapBox: MapboxMap
-    private lateinit var symbolManager: SymbolManager
+    private var symbolManager: SymbolManager? = null
     private lateinit var styleMap: Style
 
     override fun onCreateView(
@@ -124,11 +127,18 @@ class TripMapView : Fragment() {
                     iconAllowOverlap = true
                     iconPadding = 0.1f
                 }
+                symbolManager?.addClickListener(this)
                 displayUserLocation()
                 viewModel.fetchAndDisplayUserActiveTrip()
 
             }
 
+        }
+    }
+
+    override fun onAnnotationClick(symbol: Symbol?) {
+        symbol?.textField?.let { tripId ->
+            viewModel.clickPointTrip(tripId)
         }
     }
 
@@ -168,22 +178,24 @@ class TripMapView : Fragment() {
     }
 
     private fun displayPointAccentColor(pointId: String, coordinate: Coordinate){
-        symbolManager.create(SymbolOptions()
+        symbolManager?.create(SymbolOptions()
             .withLatLng(LatLng(coordinate.latitude, coordinate.longitude))
             .withIconImage(ICON_LOCATION_ACCENT)
             .withIconSize(ICON_MAP_SIZE)
             .withIconOffset(ICON_MAP_OFFSET)
             .withTextField(pointId)
+            .withTextOpacity(0f)
         )
     }
 
     private fun displayPointPrimaryColor(pointId: String, coordinate: Coordinate){
-        symbolManager.create(SymbolOptions()
+        symbolManager?.create(SymbolOptions()
             .withLatLng(LatLng(coordinate.latitude, coordinate.longitude))
             .withIconImage(ICON_LOCATION_PRIMARY)
             .withIconSize(ICON_MAP_SIZE)
             .withIconOffset(ICON_MAP_OFFSET)
             .withTextField(pointId)
+            .withTextOpacity(0f)
         )
     }
 
@@ -193,6 +205,22 @@ class TripMapView : Fragment() {
         }
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {}
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+        when (requestCode){
+            RC_LOCATION_PERMS -> displayUserLocation()
+        }
+    }
 
     override fun onResume() {
         super.onResume()

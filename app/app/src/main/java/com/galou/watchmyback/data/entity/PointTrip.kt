@@ -1,6 +1,7 @@
 package com.galou.watchmyback.data.entity
 
 import androidx.room.*
+import com.galou.watchmyback.R
 import com.galou.watchmyback.data.entity.TypePoint.*
 import com.galou.watchmyback.utils.*
 import java.util.*
@@ -59,9 +60,9 @@ data class PointTrip (
  *
  * @author Galou Minisini
  */
-enum class TypePoint(val typeName: String) {
-    START("start"),
-    END("end"),
-    SCHEDULE_STAGE("schedule_stage"),
-    CHECKED_UP("checked_up")
+enum class TypePoint(val typeName: String, val nameResourceId: Int) {
+    START("start", R.string.start_point),
+    END("end", R.string.end_point),
+    SCHEDULE_STAGE("schedule_stage", R.string.scheduled_point),
+    CHECKED_UP("checked_up", R.string.checked_up_point)
 }

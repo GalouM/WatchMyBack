@@ -15,6 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <fragment
+        android:id="@+id/details_point_activity_fragment"
         android:name="com.galou.watchmyback.detailsPoint.DetailsTripPointView"
         android:layout_width="match_parent"
         android:layout_height="0dp"

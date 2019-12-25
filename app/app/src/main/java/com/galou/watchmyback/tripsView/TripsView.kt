@@ -60,6 +60,11 @@ class TripsView : Fragment() {
     private fun setupViewModelObserver(){
         setupTripsObserver()
         setupOpenDetailsObserver()
+        setupUsrConnectedObserver()
+    }
+
+    private fun setupUsrConnectedObserver(){
+        viewModel.userLD.observe(this, Observer { fetchTrips() })
     }
 
     private fun setupTripsObserver(){
@@ -68,6 +73,10 @@ class TripsView : Fragment() {
 
     private fun setupOpenDetailsObserver(){
         viewModel.tripSelectedLD.observe(this, EventObserver { openTripDetails(it) })
+    }
+
+    private fun fetchTrips(){
+        viewModel.fetchTripsWatching()
     }
 
     private fun displayTrips(trips: List<TripDisplay>){

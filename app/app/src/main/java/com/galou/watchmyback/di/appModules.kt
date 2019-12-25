@@ -55,7 +55,7 @@ val appModules = module {
         Room.databaseBuilder(
             androidApplication(),
             WatchMyBackDatabase::class.java,
-            "watchMyBack_db_test12.db"
+            "watchMyBack_db_test13.db"
         )
         .build()
     }
@@ -78,7 +78,7 @@ val appModules = module {
         CheckListRemoteDataSource(remoteDB = get())
     }
     // Trip sources
-    single { TripLocalDataSource(tripDao = get<WatchMyBackDatabase>().tripDao()) }
+    single { TripLocalDataSource(tripDao = get<WatchMyBackDatabase>().tripDao(), userDao = get<WatchMyBackDatabase>().userDao()) }
     single { TripRemoteDataSource(remoteDB = get()) }
 
     // API Services
@@ -132,5 +132,8 @@ val appModules = module {
         userRepository = get(),
         checkListRepository = get()
     ) }
-    viewModel { TripsViewModel() }
+    viewModel { TripsViewModel(
+        userRepository = get(),
+        tripRepository = get()
+    ) }
 }

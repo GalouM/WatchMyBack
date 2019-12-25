@@ -66,7 +66,7 @@ class TripExtTest {
         assertThat(tripForDisplay.tripOwnerName).isEqualTo(owner.username)
         assertThat(tripForDisplay.startTime).isEqualTo(formatter.format(startPoint.pointTrip.time!!))
         assertThat(tripForDisplay.endTime).isEqualTo(formatter.format(endPoint.pointTrip.time!!))
-        assertThat(tripForDisplay.temperature).isEqualTo("${checkUp.weatherData!!.temperature.kelvinToCelsius()}°C")
+        assertThat(tripForDisplay.temperature).isEqualTo("${checkUp.weatherData!!.temperature?.kelvinToCelsius()}°C")
         assertThat(tripForDisplay.weatherCondition).isEqualTo(checkUp.weatherData!!.condition)
     }
 

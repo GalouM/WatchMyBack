@@ -55,7 +55,6 @@ class CheckListViewModelTest {
     @Test
     fun init_showUserCheckLists(){
         assertThat(LiveDataTestUtil.getValue(viewModel.checkListLD)).hasSize(2)
-        assertThat(checkListRepository.checkListFetched).isTrue()
     }
 
     @Test

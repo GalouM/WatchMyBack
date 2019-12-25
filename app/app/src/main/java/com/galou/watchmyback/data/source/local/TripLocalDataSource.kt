@@ -2,8 +2,10 @@ package com.galou.watchmyback.data.source.local
 
 import com.galou.watchmyback.data.entity.CheckListWithItems
 import com.galou.watchmyback.data.entity.TripWithData
+import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.source.TripDataSource
 import com.galou.watchmyback.data.source.local.dao.TripDao
+import com.galou.watchmyback.data.source.local.dao.UserDao
 import com.galou.watchmyback.utils.Result
 
 /**
@@ -11,7 +13,8 @@ import com.galou.watchmyback.utils.Result
  * 2019-12-08
  */
 class TripLocalDataSource(
-    private val tripDao: TripDao
+    private val tripDao: TripDao,
+    private val userDao: UserDao
 ) : TripDataSource {
 
     /**
@@ -89,6 +92,24 @@ class TripLocalDataSource(
     override suspend fun fetchTripUserWatching(userId: String): Result<List<TripWithData>> {
         return try {
             Result.Success(tripDao.getTripsUserWatching(userId))
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    /**
+     * Fetch the information of a owner of a trip
+     *
+     * @param ownerId ID of the user
+     * @return [Result] of the operation with a [User] object
+     */
+    override suspend fun fetchTripOwner(ownerId: String): Result<User> {
+        return try {
+            userDao.getUser(ownerId)?.let {
+                Result.Success(it)
+            }
+            Result.Error(Exception("No user with ID $ownerId"))
+
         } catch (e: Exception) {
             Result.Error(e)
         }

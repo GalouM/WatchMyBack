@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         configureToolbar()
         configureBottomNavigation()
         configureNavigationView()
+        setupOpenMyTripActivityObserver()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -86,6 +87,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setupOpenSignInActivity(){
         viewModel.openSignInActivityEvent.observe(this, EventObserver { openSignInActivity()})
+    }
+
+    private fun setupOpenMyTripActivityObserver(){
+        viewModel.openMyTripActivityLD.observe(this, EventObserver { openMyTripActivity() })
     }
 
     //-------------------------
@@ -141,7 +146,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(item.itemId){
             R.id.nav_view_menu_settings -> openSettingsActivity()
             R.id.nav_view_menu_my_profile -> openProfileActivity()
-            R.id.nav_view_menu_my_trip -> openMyTripActivity()
+            R.id.nav_view_menu_my_trip -> viewModel.showMyTripActivity()
             R.id.nav_view_menu_logout -> logOutAction()
         }
         drawerLayout.closeDrawer(GravityCompat.START)

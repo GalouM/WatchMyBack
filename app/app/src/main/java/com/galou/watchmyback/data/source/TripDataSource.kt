@@ -2,6 +2,7 @@ package com.galou.watchmyback.data.source
 
 import com.galou.watchmyback.data.entity.CheckListWithItems
 import com.galou.watchmyback.data.entity.TripWithData
+import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.utils.Result
 
 /**
@@ -20,4 +21,6 @@ interface TripDataSource {
     suspend fun fetchTrip(tripId: String): Result<TripWithData?>
 
     suspend fun fetchTripUserWatching(userId: String): Result<List<TripWithData>>
+
+    suspend fun fetchTripOwner(ownerId: String): Result<User>
 }

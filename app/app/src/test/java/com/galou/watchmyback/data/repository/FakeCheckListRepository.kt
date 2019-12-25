@@ -13,7 +13,6 @@ import com.galou.watchmyback.utils.Result
 class FakeCheckListRepository : CheckListRepository {
 
     override var checkList: CheckList? = null
-    override var checkListFetched: Boolean = false
 
     override suspend fun fetchUserCheckLists(
         userId: String,

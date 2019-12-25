@@ -34,7 +34,7 @@
         app:layout_constraintStart_toEndOf="@id/details_trip_map_picture_user"
         android:layout_marginStart="@dimen/margin_small"
         android:textSize="@dimen/text_medium"
-        android:text="@{viewmodel.userLD.username}"/>
+        android:text="Galou Minisini"/>
 
     <ImageView
         android:id="@+id/details_trip_map_type_trip"
