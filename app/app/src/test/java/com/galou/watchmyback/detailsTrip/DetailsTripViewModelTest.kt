@@ -174,8 +174,8 @@ class DetailsTripViewModelTest {
         viewModel.fetchTripInfo(tripWithData.trip.id)
         LiveDataTestUtil.getValue(viewModel.tripOwnerNameLD)
         viewModel.callTripOwner()
-        val value = LiveDataTestUtil.getValue(viewModel.tripOwnerNumberLD).getContentIfNotHandled()
-        assertThat(value).isEqualTo(mainUser.phoneNumber)
+        val value = LiveDataTestUtil.getValue(viewModel.tripOwnerNumberLD)
+        assertThat(value.getContentIfNotHandled()).isEqualTo(mainUser.phoneNumber)
     }
 
     @Test
