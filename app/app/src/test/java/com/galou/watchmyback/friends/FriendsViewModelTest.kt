@@ -52,7 +52,8 @@ class FriendsViewModelTest {
     }
 
     @Test
-    fun init_emitSuccessAndFriends(){
+    fun fetch_emitSuccessAndFriends(){
+        viewModel.fetchFriends(false)
         assertThat(LiveDataTestUtil.getValue(viewModel.usersLD)).hasSize(2)
         assertThat(LiveDataTestUtil.getValue(viewModel.usersLD)).contains(firstFriend.toOtherUser(true))
         assertThat(LiveDataTestUtil.getValue(viewModel.usersLD)).contains(secondFriend.toOtherUser(true))
@@ -60,6 +61,8 @@ class FriendsViewModelTest {
 
     @Test
     fun removeFriend_emitSuccessAndFriends(){
+        viewModel.fetchFriends(false)
+        LiveDataTestUtil.getValue(viewModel.usersLD)
         viewModel.removeOrAddFriend(firstFriend.toOtherUser(true))
         assertThat(LiveDataTestUtil.getValue(viewModel.usersLD)).hasSize(2)
     }

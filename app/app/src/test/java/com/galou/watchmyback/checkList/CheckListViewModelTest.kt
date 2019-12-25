@@ -53,7 +53,8 @@ class CheckListViewModelTest {
     }
 
     @Test
-    fun init_showUserCheckLists(){
+    fun fetch_showUserCheckLists(){
+        viewModel.fetchCheckLists(false)
         assertThat(LiveDataTestUtil.getValue(viewModel.checkListLD)).hasSize(2)
     }
 

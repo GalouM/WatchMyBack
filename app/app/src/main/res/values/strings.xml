@@ -55,8 +55,8 @@
     <string name="delete_all_my_data">Delete all My data</string>
     <string name="friend_late">Notify when a friend is late</string>
     <string name="friend_back">Notify when a friend is back safe</string>
-    <string name="friend_update">Notify when a friend update is location</string>
-    <string name="friend_emergency">Notify when a friend is in emergency</string>
+    <string name="friend_update">Notify when a friend update his/her location</string>
+    <string name="friend_emergency">Notify when a friend is in an emergency</string>
     <string name="add_trip">Add Trip</string>
     <string name="trip_main_location">Trip main location</string>
     <string name="send_location_every">Send location every &#160;</string>
