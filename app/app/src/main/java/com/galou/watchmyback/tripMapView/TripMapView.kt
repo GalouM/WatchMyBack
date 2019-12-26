@@ -17,12 +17,11 @@ import com.galou.watchmyback.data.applicationUse.Coordinate
 import com.galou.watchmyback.databinding.FragmentMapViewBinding
 import com.galou.watchmyback.detailsPoint.DetailsPointActivity
 import com.galou.watchmyback.utils.*
-import com.galou.watchmyback.utils.extension.addIconLocationAccent
-import com.galou.watchmyback.utils.extension.addIconLocationPrimary
+import com.galou.watchmyback.utils.extension.addIconsLocation
+import com.galou.watchmyback.utils.extension.displayPointsOnMap
 import com.galou.watchmyback.utils.extension.setupSnackBar
 import com.google.android.material.snackbar.Snackbar
 import com.mapbox.mapboxsdk.Mapbox
-import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
 import com.mapbox.mapboxsdk.location.modes.CameraMode
 import com.mapbox.mapboxsdk.location.modes.RenderMode
@@ -32,7 +31,6 @@ import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolClickListener
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import org.koin.android.viewmodel.ext.android.viewModel
 import pub.devrel.easypermissions.EasyPermissions
 
@@ -77,6 +75,7 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
         setupSchedulePointsObserver()
         setupCheckUpPointsObserver()
         setupShowDetailPointObserver()
+        setupStartEndPointObserver()
 
     }
 
@@ -106,6 +105,10 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
         viewModel.checkedPointsLD.observe(this, Observer { displayCheckedUpPoint(it) })
     }
 
+    private fun setupStartEndPointObserver(){
+        viewModel.startEndPointsLD.observe(this, Observer { displayStartEndPoints(it) })
+    }
+
     private fun setupShowDetailPointObserver(){
         viewModel.showPointDetailsLD.observe(this, EventObserver { showPointDetails() })
     }
@@ -121,8 +124,7 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
             mapBox = mapboxMap
             mapBox.setStyle(Style.SATELLITE) {style ->
                 styleMap = style
-                styleMap.addIconLocationAccent(activity!!)
-                styleMap.addIconLocationPrimary(activity!!)
+                styleMap.addIconsLocation(activity!!)
                 symbolManager = SymbolManager(mapView, mapBox, styleMap).apply {
                     iconAllowOverlap = true
                     iconPadding = 0.1f
@@ -166,37 +168,15 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
     }
 
     private fun displaySchedulePoints(pointData: Map<String, Coordinate>){
-        for((id, coordinate) in pointData){
-            displayPointPrimaryColor(id, coordinate)
-        }
+        pointData.displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY)
     }
 
     private fun displayCheckedUpPoint(pointData: Map<String, Coordinate>){
-        for((id, coordinate) in pointData){
-            displayPointAccentColor(id, coordinate)
-        }
+        pointData.displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY_LIGHT)
     }
 
-    private fun displayPointAccentColor(pointId: String, coordinate: Coordinate){
-        symbolManager?.create(SymbolOptions()
-            .withLatLng(LatLng(coordinate.latitude, coordinate.longitude))
-            .withIconImage(ICON_LOCATION_ACCENT)
-            .withIconSize(ICON_MAP_SIZE)
-            .withIconOffset(ICON_MAP_OFFSET)
-            .withTextField(pointId)
-            .withTextOpacity(0f)
-        )
-    }
-
-    private fun displayPointPrimaryColor(pointId: String, coordinate: Coordinate){
-        symbolManager?.create(SymbolOptions()
-            .withLatLng(LatLng(coordinate.latitude, coordinate.longitude))
-            .withIconImage(ICON_LOCATION_PRIMARY)
-            .withIconSize(ICON_MAP_SIZE)
-            .withIconOffset(ICON_MAP_OFFSET)
-            .withTextField(pointId)
-            .withTextOpacity(0f)
-        )
+    private fun displayStartEndPoints(pointData: Map<String, Coordinate>){
+        pointData.displayPointsOnMap(symbolManager, ICON_LOCATION_ACCENT)
     }
 
     private fun showPointDetails(){

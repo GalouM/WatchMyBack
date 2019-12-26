@@ -35,6 +35,9 @@ abstract class DetailsTripBaseViewModel(
     protected val _checkedPointsLD = MutableLiveData<Map<String, Coordinate>>()
     val checkedPointsLD: LiveData<Map<String, Coordinate>> = _checkedPointsLD
 
+    protected val _startEndPointsLD = MutableLiveData<Map<String, Coordinate>>()
+    val startEndPointsLD: LiveData<Map<String, Coordinate>> = _startEndPointsLD
+
     private val _showPointDetailsLD = MutableLiveData<Event<Unit>>()
     val showPointDetailsLD: LiveData<Event<Unit>> = _showPointDetailsLD
 

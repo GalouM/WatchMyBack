@@ -78,9 +78,15 @@ class TripMapViewModelTest {
             .containsAtLeastElementsIn(tripWithData.points
                 .filter { it.pointTrip.typePoint == TypePoint.SCHEDULE_STAGE }
                 .map { it.pointTrip.id })
-        assertThat(LiveDataTestUtil.getValue(viewModel.schedulePointsLD).keys)
+    }
+
+    @Test
+    fun fetchTrip_emitStartAndEndPointCoordinate(){
+        viewModel.fetchAndDisplayUserActiveTrip()
+        assertThat(LiveDataTestUtil.getValue(viewModel.startEndPointsLD).keys)
             .containsAtLeast(tripWithData.points.find { it.pointTrip.typePoint == TypePoint.START }?.pointTrip?.id,
                 tripWithData.points.find { it.pointTrip.typePoint == TypePoint.END }?.pointTrip?.id)
+
     }
 
     @Test

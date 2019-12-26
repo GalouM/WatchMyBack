@@ -193,18 +193,19 @@ class DetailsTripViewModel(
     private fun emitPointTripLocation(points: List<PointTripWithData>){
         val schedulePoints = mutableMapOf<String, Coordinate>()
         val checkedPoints = mutableMapOf<String, Coordinate>()
+        val startEndPoints = mutableMapOf<String, Coordinate>()
          points.forEach { point ->
              val coordinate = Coordinate(
                  latitude = point.location?.latitude ?: throw Exception("No latitude for this point $point") ,
                  longitude = point.location.longitude ?: throw Exception("No longitude for this point $point"))
              when(point.pointTrip.typePoint){
                  TypePoint.START -> {
-                     schedulePoints[point.pointTrip.id] = coordinate
+                     startEndPoints[point.pointTrip.id] = coordinate
                      _startPointTimeLD.value = point.pointTrip.time
                      _startPointWeatherLD.value = point.weatherData
                  }
                  TypePoint.END -> {
-                     schedulePoints[point.pointTrip.id] = coordinate
+                     startEndPoints[point.pointTrip.id] = coordinate
                      _endPointTimeLD.value = point.pointTrip.time
                      _endPointWeatherLD.value = point.weatherData
                      if (currentTrip?.trip?.status == TripStatus.BACK_SAFE) {
@@ -221,6 +222,7 @@ class DetailsTripViewModel(
         }
          _schedulePointsLD.value = schedulePoints
          _checkedPointsLD.value = checkedPoints
+        _startEndPointsLD.value = startEndPoints
 
         _dataLoading.value = false
 

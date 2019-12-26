@@ -120,6 +120,7 @@ const val PERMS_PHONE_CALL = Manifest.permission.CALL_PHONE
 // ------ ID MAP ---------
 const val ICON_LOCATION_ACCENT = "iconLocationAccent"
 const val ICON_LOCATION_PRIMARY = "iconLocationPrimary"
+const val ICON_LOCATION_PRIMARY_LIGHT = "iconLocationPrimaryLight"
 
 // ------ DATA INTENT KEY ---------
 const val POINT_LATITUDE = "pointLatitude"

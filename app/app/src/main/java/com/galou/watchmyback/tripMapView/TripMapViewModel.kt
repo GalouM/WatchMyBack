@@ -49,18 +49,21 @@ class TripMapViewModel(
         _tripLD.value = trip.trip
         val schedulePoints = mutableMapOf<String, Coordinate>()
         val checkedPoints = mutableMapOf<String, Coordinate>()
+        val startEndPoints = mutableMapOf<String, Coordinate>()
         trip.points.forEach { point ->
             val coordinate = Coordinate(
                 latitude = point.location?.latitude ?: throw Exception("No latitude for this point $point") ,
                 longitude = point.location.longitude ?: throw Exception("No longitude for this point $point"))
             when(point.pointTrip.typePoint){
-                TypePoint.START, TypePoint.END, TypePoint.SCHEDULE_STAGE ->
+                TypePoint.SCHEDULE_STAGE ->
                     schedulePoints[point.pointTrip.id] = coordinate
                 TypePoint.CHECKED_UP -> checkedPoints[point.pointTrip.id] = coordinate
+                TypePoint.START, TypePoint.END -> startEndPoints[point.pointTrip.id] = coordinate
             }
         }
         _schedulePointsLD.value = schedulePoints
         _checkedPointsLD.value = checkedPoints
+        _startEndPointsLD.value = startEndPoints
         _dataLoading.value = false
 
     }

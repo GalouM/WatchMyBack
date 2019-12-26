@@ -55,8 +55,8 @@ class DetailsTripGlobalView : Fragment(){
     private fun configurePhoneButtonVisibility(){
         if(!deviceCanMakePhoneCall(activity!!)){
             binding.detailTripViewCallEmergency.visibleOrInvisible(false)
-            binding.detailTripViewCallUser.visibility = View.GONE
         }
+        binding.detailTripViewCallUser.visibility = View.GONE
     }
 
     private fun configureRecyclerViewWatcher(){
