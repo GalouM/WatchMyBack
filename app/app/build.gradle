@@ -192,6 +192,9 @@ dependencies {
 
     // GOOGLE PLAY LOCATION
     implementation "com.google.android.gms:play-services-location:$rootProject.googleLocation"
+
+    // WORK MANAGER
+    implementation "androidx.work:work-runtime-ktx:$rootProject.work_version"
 }
 
 project.afterEvaluate {

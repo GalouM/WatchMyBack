@@ -1,12 +1,6 @@
 package com.galou.watchmyback.utils
 
-import android.app.Activity
-import android.content.Context
-import android.content.pm.PackageManager
 import android.util.Log
-import com.galou.watchmyback.R
-import pub.devrel.easypermissions.AfterPermissionGranted
-import pub.devrel.easypermissions.EasyPermissions
 import java.util.*
 
 /**
@@ -42,32 +36,6 @@ fun returnSuccessOrError(localResult: Result<Void?>, remoteResult: Result<Void?>
     }
 }
 
-/**
- * Check if the application has Phone call permission and ask for it otherwise
- *
- * @param activity
- * @return True if the application already has permission, false otherwise
- */
-@AfterPermissionGranted(RC_PHONE_CALL_PERMS)
-fun requestPermissionPhoneCall(activity: Activity): Boolean{
-    if(! EasyPermissions.hasPermissions(activity, PERMS_PHONE_CALL)) {
-        EasyPermissions.requestPermissions(
-            activity, activity.getString(R.string.phone_call_permission), RC_PHONE_CALL_PERMS, PERMS_PHONE_CALL)
-        return false
-    }
-    return true
-}
 
-
-/**
- * Check if the device can make phone call or not
- *
- * @param context context of the activity
- * @return
- */
-fun deviceCanMakePhoneCall(context: Context): Boolean{
-    val packageManager = context.packageManager
-    return packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)
-}
 
 

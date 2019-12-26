@@ -1,5 +1,6 @@
 package com.galou.watchmyback.utils.extension
 
+import com.galou.watchmyback.data.applicationUse.Coordinate
 import com.galou.watchmyback.data.entity.*
 import com.galou.watchmyback.data.remoteDBObject.TripWithDataRemoteDB
 import com.galou.watchmyback.testHelpers.tripWithData
@@ -215,5 +216,16 @@ class TripExtTest {
 
         assertThat(trip.isRecent(fiveDayAgo)).isTrue()
 
+    }
+
+    @Test
+    fun addCheckUpPoint_addPointCorrectly(){
+        val newCoordinate = Coordinate(234.543,654.434)
+        val newPoint = tripWithData.addCheckUpPoint(newCoordinate)
+        assertThat(tripWithData.points).contains(newPoint)
+        assertThat(newPoint.location?.latitude).isEqualTo(newCoordinate.latitude)
+        assertThat(newPoint.location?.longitude).isEqualTo(newCoordinate.longitude)
+        assertThat(newPoint.pointTrip.typePoint).isEqualTo(TypePoint.CHECKED_UP)
+        assertThat(newPoint.pointTrip.tripId).isEqualTo(tripWithData.trip.id)
     }
 }

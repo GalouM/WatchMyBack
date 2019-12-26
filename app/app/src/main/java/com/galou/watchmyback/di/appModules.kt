@@ -78,7 +78,11 @@ val appModules = module {
         CheckListRemoteDataSource(remoteDB = get())
     }
     // Trip sources
-    single { TripLocalDataSource(tripDao = get<WatchMyBackDatabase>().tripDao(), userDao = get<WatchMyBackDatabase>().userDao()) }
+    single { TripLocalDataSource(
+        tripDao = get<WatchMyBackDatabase>().tripDao(),
+        userDao = get<WatchMyBackDatabase>().userDao(),
+        pointTripDao = get<WatchMyBackDatabase>().pointTripDao()
+    ) }
     single { TripRemoteDataSource(remoteDB = get()) }
 
     // API Services

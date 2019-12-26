@@ -16,9 +16,7 @@ import com.galou.watchmyback.R
 import com.galou.watchmyback.data.applicationUse.Coordinate
 import com.galou.watchmyback.databinding.ActivityPickLocationBinding
 import com.galou.watchmyback.utils.*
-import com.galou.watchmyback.utils.extension.addIconLocationAccent
-import com.galou.watchmyback.utils.extension.addIconLocationPrimary
-import com.galou.watchmyback.utils.extension.setupSnackBar
+import com.galou.watchmyback.utils.extension.*
 import com.google.android.material.snackbar.Snackbar
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
@@ -149,7 +147,7 @@ class PickLocationActivity : AppCompatActivity(), MapboxMap.OnMapLongClickListen
     }
 
     private fun displayUserLocation() {
-        if(requestPermissionLocation(this) && isGPSAvailable(this)) {
+        if(requestPermissionLocation() && isGPSEnabled()) {
             with(mapBox.locationComponent) {
                 activateLocationComponent(
                     LocationComponentActivationOptions.builder(

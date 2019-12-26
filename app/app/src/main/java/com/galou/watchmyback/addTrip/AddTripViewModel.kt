@@ -472,7 +472,7 @@ class AddTripViewModel(
             _tripLD.emitNewValue()
 
             viewModelScope.launch {
-                when(val task = tripRepository.createTrip(trip, checkList)){
+                when(tripRepository.createTrip(trip, checkList)){
                     is Result.Success -> _tripSavedLD.value = Event(Unit)
                     is Result.Error -> showSnackBarMessage(R.string.trip_creation_error)
                     is Result.Canceled -> showSnackBarMessage(R.string.trip_creation_error)
@@ -490,7 +490,7 @@ class AddTripViewModel(
          */
         fun fetchPointLocationInformation(){
             viewModelScope.launch {
-                when(val task = tripRepository.fetchPointLocationInformation(trip.points)){
+                when(tripRepository.fetchPointLocationInformation(*trip.points.toTypedArray())){
                     is Result.Error -> showSnackBarMessage(R.string.trip_creation_error)
                     is Result.Canceled -> showSnackBarMessage(R.string.trip_creation_error)
 

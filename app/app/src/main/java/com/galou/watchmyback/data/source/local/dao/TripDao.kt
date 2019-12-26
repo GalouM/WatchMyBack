@@ -131,7 +131,7 @@ abstract class TripDao(private val database: WatchMyBackDatabase) {
         items?.let { database.itemCheckListDao().updateItems(it) }
         createTrip(trip.trip)
         database.watcherDao().addWatchers(trip.watchers toTripWatchers trip.trip.id)
-        database.pointTripDao().createPointsAndData(trip.points)
+        database.pointTripDao().createPointsAndData(*trip.points.toTypedArray())
 
     }
 

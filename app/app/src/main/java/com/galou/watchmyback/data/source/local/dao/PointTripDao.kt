@@ -46,7 +46,7 @@ abstract class PointTripDao(private val database: WatchMyBackDatabase) {
      * @see WeatherDataDao.createWeatherData
      */
     @Transaction
-    open suspend fun createPointsAndData(pointTrips: List<PointTripWithData>){
+    open suspend fun createPointsAndData(vararg pointTrips: PointTripWithData){
         pointTrips.forEach {
             createPoints(it.pointTrip)
             database.locationDao().createLocations(it.location!!)

@@ -17,9 +17,9 @@ import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.databinding.FragmentDetailsTripGlobalBinding
-import com.galou.watchmyback.utils.deviceCanMakePhoneCall
+import com.galou.watchmyback.utils.extension.canMakePhoneCall
+import com.galou.watchmyback.utils.extension.requestPermissionPhoneCall
 import com.galou.watchmyback.utils.extension.visibleOrInvisible
-import com.galou.watchmyback.utils.requestPermissionPhoneCall
 import com.galou.watchmyback.utils.rvAdapter.DisplayWatcherAdapter
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -53,7 +53,7 @@ class DetailsTripGlobalView : Fragment(){
     }
 
     private fun configurePhoneButtonVisibility(){
-        if(!deviceCanMakePhoneCall(activity!!)){
+        if(activity!!.canMakePhoneCall()){
             binding.detailTripViewCallEmergency.visibleOrInvisible(false)
         }
         binding.detailTripViewCallUser.visibility = View.GONE
@@ -99,14 +99,14 @@ class DetailsTripGlobalView : Fragment(){
     }
 
     private fun configureCallTripOwnerButtonVisibility(){
-        if (deviceCanMakePhoneCall(activity!!)){
+        if (activity!!.canMakePhoneCall()){
             binding.detailTripViewCallUser.visibleOrInvisible(true)
         }
 
     }
 
     private fun openPhoneActivity(number: String){
-        if(requestPermissionPhoneCall(activity!!)){
+        if(activity!!.requestPermissionPhoneCall()){
             with(Intent(ACTION_CALL)){
                 data = "tel:$number".toUri()
                 startActivity(this)

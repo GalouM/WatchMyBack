@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galou.watchmyback.testHelpers.setLocationShadow
+import com.galou.watchmyback.utils.extension.isGPSEnabled
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,12 +21,12 @@ class NetworkUtilTest {
     @Test
     fun whenGPSActive_sendTrue(){
         setLocationShadow(true)
-        assertThat(isGPSAvailable(context)).isTrue()
+        assertThat(context.isGPSEnabled()).isTrue()
     }
 
     @Test
     fun whenGPSInactive_sendFalse(){
         setLocationShadow(false)
-        assertThat(isGPSAvailable(context)).isFalse()
+        assertThat(context.isGPSEnabled()).isFalse()
     }
 }

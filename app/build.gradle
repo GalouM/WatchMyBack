@@ -74,4 +74,5 @@ ext {
     mapQuestVersion = '2.0.10'
     googleLocation = '17.0.0'
     mapBoxVersion = '8.5.0'
+    work_version = "2.3.0-beta02"
 }

@@ -26,5 +26,7 @@ interface TripDataSource {
 
     suspend fun updateTripStatus(trip: TripWithData): Result<Void?>
 
+    suspend fun updateTripPoints(trip: TripWithData): Result<Void?>
+
     suspend fun deleteTrip(trip: TripWithData): Result<Void?>
 }

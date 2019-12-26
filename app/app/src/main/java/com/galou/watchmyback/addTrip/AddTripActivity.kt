@@ -25,6 +25,8 @@ import com.galou.watchmyback.selectTripTypeDialog.SelectTripTypeDialog
 import com.galou.watchmyback.selectUpdateFrequencyDialog.SelectTripUpdateFrequencyDialog
 import com.galou.watchmyback.selectWatcherDialog.SelectWatchersDialog
 import com.galou.watchmyback.utils.*
+import com.galou.watchmyback.utils.extension.isGPSEnabled
+import com.galou.watchmyback.utils.extension.requestPermissionLocation
 import com.galou.watchmyback.utils.extension.setupSnackBar
 import com.galou.watchmyback.utils.rvAdapter.*
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -246,8 +248,8 @@ class AddTripActivity : AppCompatActivity(),
     //-------------------------
 
     private fun connectLocationService(){
-        when(isGPSAvailable(this)){
-            true -> if(requestPermissionLocation(this)){
+        when(isGPSEnabled()){
+            true -> if(requestPermissionLocation()){
                 fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                     viewModel.setPointLocation(location.latitude, location.longitude)
                 }

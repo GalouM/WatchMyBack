@@ -126,6 +126,7 @@ const val ICON_LOCATION_PRIMARY_LIGHT = "iconLocationPrimaryLight"
 const val POINT_LATITUDE = "pointLatitude"
 const val POINT_LONGITUDE = "pointLongitude"
 const val TRIP_ID = "tripID"
+const val USER_ID_DATA = "userIdData"
 
 // ------ ICON MAP DATA ------
 const val ICON_MAP_SIZE = 1.3f

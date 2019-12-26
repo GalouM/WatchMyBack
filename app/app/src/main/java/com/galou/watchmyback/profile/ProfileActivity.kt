@@ -12,9 +12,9 @@ import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
 import com.galou.watchmyback.databinding.ActivityProfileBinding
 import com.galou.watchmyback.utils.RC_LIBRARY_PICK
+import com.galou.watchmyback.utils.extension.requestPermissionStorage
 import com.galou.watchmyback.utils.extension.setupSnackBar
 import com.galou.watchmyback.utils.intentSinglePicture
-import com.galou.watchmyback.utils.requestPermissionStorage
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -96,8 +96,8 @@ class ProfileActivity : AppCompatActivity() {
     //-------------------------
 
     private fun openPhotoLibrary(){
-        requestPermissionStorage(this)
-        if(requestPermissionStorage(this)) {
+        requestPermissionStorage()
+        if(requestPermissionStorage()) {
             startActivityForResult(intentSinglePicture(), RC_LIBRARY_PICK)
         }
 

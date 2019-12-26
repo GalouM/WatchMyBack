@@ -4,6 +4,7 @@ import com.galou.watchmyback.data.entity.CheckListWithItems
 import com.galou.watchmyback.data.entity.TripWithData
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.source.TripDataSource
+import com.galou.watchmyback.data.source.local.dao.PointTripDao
 import com.galou.watchmyback.data.source.local.dao.TripDao
 import com.galou.watchmyback.data.source.local.dao.UserDao
 import com.galou.watchmyback.utils.Result
@@ -14,7 +15,8 @@ import com.galou.watchmyback.utils.Result
  */
 class TripLocalDataSource(
     private val tripDao: TripDao,
-    private val userDao: UserDao
+    private val userDao: UserDao,
+    private val pointTripDao: PointTripDao
 ) : TripDataSource {
 
     /**
@@ -131,7 +133,7 @@ class TripLocalDataSource(
     }
 
     /**
-     * TODODelete a [Trip] from the database
+     * Delete a [Trip] from the database
      *
      * @param trip trip to delete
      * @return [Result] of the operation
@@ -139,6 +141,21 @@ class TripLocalDataSource(
     override suspend fun deleteTrip(trip: TripWithData): Result<Void?> {
         return try {
             tripDao.deleteTrip(trip.trip)
+            Result.Success(null)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    /**
+     * Update the list of [TripPoint] of the trip
+     *
+     * @param trip trip to update
+     * @return [ Result of the operation]
+     */
+    override suspend fun updateTripPoints(trip: TripWithData): Result<Void?> {
+        return try {
+            pointTripDao.createPointsAndData(*trip.points.toTypedArray())
             Result.Success(null)
         } catch (e: Exception) {
             Result.Error(e)

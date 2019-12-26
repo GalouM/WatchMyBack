@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
+import com.galou.watchmyback.data.entity.PointTripWithData
 import com.galou.watchmyback.data.entity.TripStatus
 import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.source.local.dao.*
@@ -35,6 +36,7 @@ class TripLocalSourceTests {
     private lateinit var localSource: TripLocalDataSource
     private lateinit var tripDao: TripDao
     private lateinit var userDao: UserDao
+    private lateinit var pointTripDao: PointTripDao
 
     @Before
     fun createDatabase(){
@@ -46,7 +48,8 @@ class TripLocalSourceTests {
 
         userDao = db.userDao()
         tripDao = db.tripDao()
-        localSource = TripLocalDataSource(tripDao, userDao)
+        pointTripDao = db.pointTripDao()
+        localSource = TripLocalDataSource(tripDao, userDao, pointTripDao)
 
         runBlocking {
             userDao.createUser(mainUser)
@@ -158,5 +161,18 @@ class TripLocalSourceTests {
         assertThat(result, `is`(true))
         val trip = tripDao.getTrip(tripWithData1.trip.id)
         assertThat(trip, `is` (nullValue()))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun updateListPoints_updateInDB() = runBlocking {
+        tripDao.createTripAndData(tripWithData1, itemList1)
+        val newPoint = PointTripWithData()
+        tripWithData1.points.add(newPoint)
+        val task = localSource.updateTripPoints(tripWithData1)
+        val result = task is Result.Success
+        assertThat(result, `is`(true))
+        val trip = tripDao.getTrip(tripWithData1.trip.id)
+        assertThat(trip?.points, hasItem(newPoint))
     }
 }

@@ -16,10 +16,11 @@ import com.galou.watchmyback.addTrip.AddTripActivity
 import com.galou.watchmyback.data.applicationUse.Coordinate
 import com.galou.watchmyback.databinding.FragmentMapViewBinding
 import com.galou.watchmyback.detailsPoint.DetailsPointActivity
-import com.galou.watchmyback.utils.*
-import com.galou.watchmyback.utils.extension.addIconsLocation
-import com.galou.watchmyback.utils.extension.displayPointsOnMap
-import com.galou.watchmyback.utils.extension.setupSnackBar
+import com.galou.watchmyback.utils.ICON_LOCATION_ACCENT
+import com.galou.watchmyback.utils.ICON_LOCATION_PRIMARY
+import com.galou.watchmyback.utils.ICON_LOCATION_PRIMARY_LIGHT
+import com.galou.watchmyback.utils.RC_LOCATION_PERMS
+import com.galou.watchmyback.utils.extension.*
 import com.google.android.material.snackbar.Snackbar
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
@@ -149,7 +150,7 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
     }
 
     private fun displayUserLocation() {
-        if(requestPermissionLocation(activity!!) && isGPSAvailable(activity!!)) {
+        if(activity!!.requestPermissionLocation() && activity!!.isGPSEnabled()) {
             with(mapBox.locationComponent) {
                 activateLocationComponent(
                     LocationComponentActivationOptions.builder(

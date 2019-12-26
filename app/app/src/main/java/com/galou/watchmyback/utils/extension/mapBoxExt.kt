@@ -4,12 +4,11 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import com.galou.watchmyback.R
 import com.galou.watchmyback.data.applicationUse.Coordinate
-import com.galou.watchmyback.utils.ICON_LOCATION_ACCENT
-import com.galou.watchmyback.utils.ICON_LOCATION_PRIMARY
-import com.galou.watchmyback.utils.ICON_LOCATION_PRIMARY_LIGHT
-import com.galou.watchmyback.utils.createMapMarker
+import com.galou.watchmyback.utils.*
+import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 
 /**
  * @author galou
@@ -34,9 +33,20 @@ fun Style.addIconsLocation(context: Context){
     addIconLocationPrimaryLight(context)
 }
 
+fun SymbolManager.createMapMarker(coordinate: Coordinate, pointId: String, iconImage: String){
+    this.create(SymbolOptions()
+        .withLatLng(LatLng(coordinate.latitude, coordinate.longitude))
+        .withIconImage(iconImage)
+        .withIconSize(ICON_MAP_SIZE)
+        .withIconOffset(ICON_MAP_OFFSET)
+        .withTextField(pointId)
+        .withTextOpacity(0f)
+    )
+
+}
 
 fun Map<String, Coordinate>.displayPointsOnMap(symbolManager: SymbolManager?, iconImage: String){
     for((id, coordinate) in this){
-        symbolManager?.create(createMapMarker(coordinate, id, iconImage))
+        symbolManager?.createMapMarker(coordinate, id, iconImage)
     }
 }

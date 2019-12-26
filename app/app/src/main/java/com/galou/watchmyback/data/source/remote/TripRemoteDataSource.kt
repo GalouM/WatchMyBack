@@ -270,12 +270,24 @@ class TripRemoteDataSource(
     }
 
     /**
-     * TODODelete a [TripWithData] from the database
+     * Delete a [TripWithData] from the database
      *
      * @param trip trip to delete
      * @return [Result] of the operation
      */
     override suspend fun deleteTrip(trip: TripWithData): Result<Void?> = withContext(ioDispatcher) {
         return@withContext tripCollection.document(trip.trip.id).delete().await()
+    }
+
+    /**
+     * Update the list of [TripPoint] of the trip
+     *
+     * @param trip trip to update
+     * @return [ Result of the operation]
+     */
+    override suspend fun updateTripPoints(trip: TripWithData): Result<Void?> = withContext(ioDispatcher) {
+        return@withContext tripCollection.document(trip.trip.id).update(
+            "trip.points", trip.points
+        ).await()
     }
 }

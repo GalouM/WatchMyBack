@@ -3,6 +3,7 @@ package com.galou.watchmyback.data.repository
 import com.galou.watchmyback.BuildConfig
 import com.galou.watchmyback.data.api.GeocodingApiService
 import com.galou.watchmyback.data.api.OpenWeatherService
+import com.galou.watchmyback.data.applicationUse.Coordinate
 import com.galou.watchmyback.data.applicationUse.TripDisplay
 import com.galou.watchmyback.data.entity.CheckListWithItems
 import com.galou.watchmyback.data.entity.PointTripWithData
@@ -11,6 +12,7 @@ import com.galou.watchmyback.data.entity.UserPreferences
 import com.galou.watchmyback.data.source.local.TripLocalDataSource
 import com.galou.watchmyback.data.source.remote.TripRemoteDataSource
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.extension.addCheckUpPoint
 import com.galou.watchmyback.utils.extension.convertForDisplay
 import com.galou.watchmyback.utils.extension.isRecent
 import com.galou.watchmyback.utils.extension.toWeatherConditionName
@@ -64,9 +66,9 @@ class TripRepositoryImpl(
      * @see getPointLocationInformation
      * @see getPointWeatherData
      */
-    override suspend fun fetchPointLocationInformation(points: List<PointTripWithData>): Result<Void?> = coroutineScope {
-        val locationTask = async { getPointLocationInformation(points) }
-        val weatherTask = async { getPointWeatherData(points) }
+    override suspend fun fetchPointLocationInformation(vararg points: PointTripWithData): Result<Void?> = coroutineScope {
+        val locationTask = async { getPointLocationInformation(*points) }
+        val weatherTask = async { getPointWeatherData(*points) }
         return@coroutineScope returnSuccessOrError(locationTask.await(), weatherTask.await())
     }
 
@@ -78,7 +80,7 @@ class TripRepositoryImpl(
      *
      * @see GeocodingApiService.getAddressFromLocation
      */
-    private suspend fun getPointLocationInformation(pointTrips: List<PointTripWithData>): Result<Void?> = coroutineScope {
+    private suspend fun getPointLocationInformation(vararg pointTrips: PointTripWithData): Result<Void?> = coroutineScope {
         var error: Int? = null
         pointTrips.forEach { point ->
             val location = "${point.location?.latitude},${point.location?.longitude}"
@@ -111,7 +113,7 @@ class TripRepositoryImpl(
      *
      * @see OpenWeatherService.getWeatherLocation
      */
-    private suspend fun getPointWeatherData(pointTrips: List<PointTripWithData>) = coroutineScope {
+    private suspend fun getPointWeatherData(vararg pointTrips: PointTripWithData) = coroutineScope {
         var error: Int? = null
         pointTrips.forEach { point ->
             launch {
@@ -224,6 +226,12 @@ class TripRepositoryImpl(
         }
     }
 
+    /**
+     * Delete all the trips from the database that have been finished for over a week
+     *
+     * @param trips trips from the database
+     * @return list of all the trips kept
+     */
     private suspend fun keepOnlyRecentTrip(trips: List<TripWithData>): List<TripWithData>{
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, -7)
@@ -277,5 +285,31 @@ class TripRepositoryImpl(
         val remoteTask = async { remoteSource.updateTripStatus(trip) }
         return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
 
+    }
+
+    override suspend fun createCheckUpPoint(currentUserId: String, coordinate: Coordinate): Result<Void?> {
+        return when (val tripFetch = fetchUserActiveTrip(currentUserId, false)){
+            is Result.Success -> {
+                if (tripFetch.data != null){
+                    val point = tripFetch.data.addCheckUpPoint(coordinate)
+                    when(val fetchLocationTask = fetchPointLocationInformation(point)){
+                        is Result.Success -> updatePointsTrip(tripFetch.data)
+                        else -> fetchLocationTask
+                    }
+
+                } else {
+                    Result.Error(Exception("No Trip found"))
+                }
+
+            }
+            is Result.Error -> Result.Error(tripFetch.exception)
+            is Result.Canceled -> Result.Canceled(tripFetch.exception)
+        }
+    }
+
+    override suspend fun updatePointsTrip(trip: TripWithData): Result<Void?> = coroutineScope {
+        val localTask = async { localSource.updateTripPoints(trip) }
+        val remoteTask = async { remoteSource.updateTripPoints(trip) }
+        return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
     }
 }
