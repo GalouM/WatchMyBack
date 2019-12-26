@@ -55,4 +55,6 @@ class FakeTripRepositoryImpl : TripRepository {
         }
         return Result.Success(tripForDisplay)
     }
+
+    override suspend fun updateTripStatus(trip: TripWithData): Result<Void?> = Result.Success(null)
 }

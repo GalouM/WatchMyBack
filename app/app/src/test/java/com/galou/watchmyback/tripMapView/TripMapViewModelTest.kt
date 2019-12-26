@@ -53,9 +53,19 @@ class TripMapViewModelTest {
 
     @Test
     fun clickStartTrip_openAddTripActivity(){
-        viewModel.clickStartNewTrip()
+        viewModel.clickStartStop()
         val value = LiveDataTestUtil.getValue(viewModel.openAddTripActivity)
         assertThat(value.getContentIfNotHandled()).isNotNull()
+    }
+
+    @Test
+    fun clickStopTrip_showMessage(){
+        viewModel.fetchAndDisplayUserActiveTrip()
+        LiveDataTestUtil.getValue(viewModel.tripLD)
+        viewModel.clickStartStop()
+        val value = LiveDataTestUtil.getValue(viewModel.openAddTripActivity)
+        assertThat(value).isNull()
+        assertSnackBarMessage(viewModel.snackbarMessage, R.string.back_home_safe)
     }
 
     @Test

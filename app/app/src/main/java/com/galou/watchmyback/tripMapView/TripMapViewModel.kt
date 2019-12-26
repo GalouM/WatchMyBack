@@ -2,20 +2,25 @@ package com.galou.watchmyback.tripMapView
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.galou.watchmyback.Event
+import com.galou.watchmyback.R
 import com.galou.watchmyback.base.DetailsTripBaseViewModel
 import com.galou.watchmyback.data.applicationUse.Coordinate
+import com.galou.watchmyback.data.entity.TripStatus
 import com.galou.watchmyback.data.entity.TripWithData
 import com.galou.watchmyback.data.entity.TypePoint
 import com.galou.watchmyback.data.repository.TripRepository
 import com.galou.watchmyback.data.repository.UserRepository
+import com.galou.watchmyback.utils.Result
+import kotlinx.coroutines.launch
 
 /**
  * @author galou
  * 2019-11-29
  */
 class TripMapViewModel(
-    tripRepository: TripRepository,
+    private val tripRepository: TripRepository,
     userRepository: UserRepository
 ) : DetailsTripBaseViewModel(tripRepository, userRepository){
 
@@ -26,8 +31,13 @@ class TripMapViewModel(
      * Show activity to start a new trip
      *
      */
-    fun clickStartNewTrip(){
-        _openAddTripActivity.value = Event(Unit)
+    fun clickStartStop(){
+        if (currentTrip == null){
+            startNewTrip()
+        } else {
+            stopCurrentTrip()
+        }
+
     }
 
     /**
@@ -65,6 +75,25 @@ class TripMapViewModel(
         _checkedPointsLD.value = checkedPoints
         _startEndPointsLD.value = startEndPoints
         _dataLoading.value = false
+
+    }
+
+    private fun startNewTrip(){
+        _openAddTripActivity.value = Event(Unit)
+    }
+
+    private fun stopCurrentTrip(){
+        viewModelScope.launch {
+            currentTrip?.trip?.let { trip ->
+                trip.status = TripStatus.BACK_SAFE
+                trip.active = false
+            }
+            when(tripRepository.updateTripStatus(currentTrip!!)){
+                is Result.Error, is Result.Canceled -> showSnackBarMessage(R.string.error_update_trip)
+                is Result.Success -> showSnackBarMessage(R.string.back_home_safe)
+                
+            }
+        }
 
     }
 }

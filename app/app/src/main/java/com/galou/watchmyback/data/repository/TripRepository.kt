@@ -28,4 +28,6 @@ interface TripRepository {
     suspend fun fetchTripUserWatching(userId: String): Result<List<TripWithData>>
 
     suspend fun convertTripForDisplay(trips: List<TripWithData>, userPrefs: UserPreferences): Result<List<TripDisplay>>
+
+    suspend fun updateTripStatus(trip: TripWithData): Result<Void?>
 }

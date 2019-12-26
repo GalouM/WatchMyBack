@@ -190,4 +190,6 @@
     <string name="type_point">Type</string>
     <string name="scheduled_point">Scheduled Point</string>
     <string name="checked_up_point">Checked Up Point</string>
+    <string name="error_update_trip">Error while updating your trip status</string>
+    <string name="back_home_safe">You are back home safe</string>
 </resources>

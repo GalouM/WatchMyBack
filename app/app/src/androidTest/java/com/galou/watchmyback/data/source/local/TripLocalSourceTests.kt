@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
+import com.galou.watchmyback.data.entity.TripStatus
 import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import com.galou.watchmyback.data.source.local.dao.*
 import com.galou.watchmyback.utils.Result
@@ -126,7 +127,7 @@ class TripLocalSourceTests {
 
     @Test
     @Throws(Exception::class)
-    fun fetchTripOwner_returnTripOwnerInfo() = runBlocking{
+    fun fetchTripOwner_returnTripOwnerInfo() = runBlocking {
         tripDao.createTripAndData(tripWithData1, itemList1)
         val task = localSource.fetchTripOwner(tripWithData1.trip.userId)
         val result = task is Result.Success
@@ -134,5 +135,17 @@ class TripLocalSourceTests {
         val user = (task as Result.Success).data
         assertThat(user.id, `is` (tripWithData1.trip.userId))
 
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun updateTripStatus_updateStatus() = runBlocking {
+        tripDao.createTripAndData(tripWithData1, itemList1)
+        tripWithData1.trip.status = TripStatus.BACK_SAFE
+        val task = localSource.updateTripStatus(tripWithData1)
+        val result = task is Result.Success
+        assertThat(result, `is`(true))
+        val trip = tripDao.getTrip(tripWithData1.trip.id)
+        assertThat(trip?.trip?.status, `is`(TripStatus.BACK_SAFE))
     }
 }

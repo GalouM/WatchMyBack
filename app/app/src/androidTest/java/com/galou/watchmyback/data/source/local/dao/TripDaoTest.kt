@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
+import com.galou.watchmyback.data.entity.TripStatus
 import com.galou.watchmyback.data.entity.TypePoint
 import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
 import junit.framework.Assert.assertEquals
@@ -157,6 +158,16 @@ class TripDaoTest {
         trips.forEach { trip ->
             assertThat(trip.watchers, contains(watcher))
         }
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun updateTrip_updateInDB() = runBlocking {
+        tripWithData1.trip.status = TripStatus.BACK_SAFE
+        tripDao.updateTrip(tripWithData1.trip)
+        val trip = tripDao.getTrip(tripWithData1.trip.id)
+        assertThat(trip?.trip?.status, `is` (TripStatus.BACK_SAFE))
+
     }
 
 

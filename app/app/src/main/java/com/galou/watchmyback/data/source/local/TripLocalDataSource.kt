@@ -114,4 +114,19 @@ class TripLocalDataSource(
             Result.Error(e)
         }
     }
+
+    /**
+     * Update a [TripWithData] status
+     *
+     * @param trip trip to update
+     * @return [Result] of the operation
+     */
+    override suspend fun updateTripStatus(trip: TripWithData): Result<Void?> {
+        return try {
+            tripDao.updateTrip(trip.trip)
+            Result.Success(null)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
 }

@@ -255,4 +255,17 @@ class TripRemoteDataSource(
             is Result.Canceled -> Result.Canceled(task.exception)
         }
     }
+
+    /**
+     * Update a [TripWithData] status
+     *
+     * @param trip trip to update
+     * @return [Result] of the operation
+     */
+    override suspend fun updateTripStatus(trip: TripWithData): Result<Void?> = withContext(ioDispatcher) {
+        return@withContext tripCollection.document(trip.trip.id).update(
+            "trip.status", trip.trip.status,
+            "trip.active", trip.trip.active
+        ).await()
+    }
 }

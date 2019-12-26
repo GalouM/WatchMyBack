@@ -250,4 +250,11 @@ class TripRepositoryImpl(
         else Result.Error(Exception("Error while fetching trip's owner"))
 
     }
+
+    override suspend fun updateTripStatus(trip: TripWithData): Result<Void?> = coroutineScope {
+        val localTask = async { localSource.updateTripStatus(trip) }
+        val remoteTask = async { remoteSource.updateTripStatus(trip) }
+        return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
+
+    }
 }

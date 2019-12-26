@@ -82,12 +82,12 @@
         android:id="@+id/trip_map_view_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/icon_start"
+        android:src="@{viewmodel.tripLD == null ? @drawable/icon_start : @drawable/icon_stop}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="70dp"
         android:layout_marginEnd="50dp"
-        android:onClick="@{() -> viewmodel.clickStartNewTrip()}"/>
+        android:onClick="@{() -> viewmodel.clickStartStop()}"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

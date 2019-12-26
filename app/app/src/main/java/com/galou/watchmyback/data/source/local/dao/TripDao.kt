@@ -88,6 +88,17 @@ abstract class TripDao(private val database: WatchMyBackDatabase) {
     @Query("DELETE FROM $TRIP_TABLE_NAME WHERE $TRIP_TABLE_USER_UUID =:userId AND $TRIP_TABLE_ACTIVE = 1")
     abstract suspend fun deleteActiveTrips(userId: String)
 
+
+    /**
+     * Update a [Trip] object
+     *
+     * @param trip [Trip] to update
+     *
+     * @see Update
+     */
+    @Update
+    abstract suspend fun updateTrip(trip: Trip)
+
     /**
      * Create a [Trip] and all its data in the database
      *
