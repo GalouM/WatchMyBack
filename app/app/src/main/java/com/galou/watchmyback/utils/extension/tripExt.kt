@@ -5,6 +5,7 @@ import com.galou.watchmyback.data.entity.*
 import com.galou.watchmyback.data.remoteDBObject.TripWithDataRemoteDB
 import com.galou.watchmyback.utils.todaysDate
 import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * @author galou
@@ -94,4 +95,16 @@ fun TripWithData.updateStatus(){
 
 fun List<TripWithData>.updateStatus(){
     forEach { it.updateStatus() }
+}
+
+/**
+ * Check if a [TripWithData] end point is after a certain date
+ *
+ * @param limitDate Date to check
+ * @return
+ */
+fun TripWithData.isRecent(limitDate: Date): Boolean{
+    val endPointTime = this.points.find { it.pointTrip.typePoint == TypePoint.END }?.pointTrip?.time ?: throw Exception("No end point time for $this")
+    return endPointTime.after(limitDate)
+
 }

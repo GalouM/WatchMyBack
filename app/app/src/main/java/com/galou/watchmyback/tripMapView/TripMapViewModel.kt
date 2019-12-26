@@ -13,6 +13,7 @@ import com.galou.watchmyback.data.entity.TypePoint
 import com.galou.watchmyback.data.repository.TripRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.displayData
 import kotlinx.coroutines.launch
 
 /**
@@ -83,16 +84,26 @@ class TripMapViewModel(
     }
 
     private fun stopCurrentTrip(){
+        _dataLoading.value = true
         viewModelScope.launch {
             currentTrip?.trip?.let { trip ->
                 trip.status = TripStatus.BACK_SAFE
                 trip.active = false
             }
-            when(tripRepository.updateTripStatus(currentTrip!!)){
-                is Result.Error, is Result.Canceled -> showSnackBarMessage(R.string.error_update_trip)
-                is Result.Success -> showSnackBarMessage(R.string.back_home_safe)
+            when(val result = tripRepository.updateTripStatus(currentTrip!!)){
+                is Result.Error -> displayData("${result.exception}")
+                is Result.Canceled -> showSnackBarMessage(R.string.error_update_trip)
+                is Result.Success -> {
+                    _tripLD.value = null
+                    _schedulePointsLD.value = null
+                    _startEndPointsLD.value = null
+                    _checkedPointsLD.value = null
+                    currentTrip = null
+                    showSnackBarMessage(R.string.back_home_safe)
+                }
                 
             }
+            _dataLoading.value = false
         }
 
     }

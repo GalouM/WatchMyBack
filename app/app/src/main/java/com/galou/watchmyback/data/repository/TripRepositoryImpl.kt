@@ -12,6 +12,7 @@ import com.galou.watchmyback.data.source.local.TripLocalDataSource
 import com.galou.watchmyback.data.source.remote.TripRemoteDataSource
 import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.extension.convertForDisplay
+import com.galou.watchmyback.utils.extension.isRecent
 import com.galou.watchmyback.utils.extension.toWeatherConditionName
 import com.galou.watchmyback.utils.returnSuccessOrError
 import kotlinx.coroutines.async
@@ -218,9 +219,29 @@ class TripRepositoryImpl(
      */
     override suspend fun fetchTripUserWatching(userId: String): Result<List<TripWithData>> {
         return when(val remoteTask = remoteSource.fetchTripUserWatching(userId)){
-            is Result.Success -> remoteTask
+            is Result.Success -> Result.Success(keepOnlyRecentTrip(remoteTask.data))
             else -> localSource.fetchTripUserWatching(userId)
         }
+    }
+
+    private suspend fun keepOnlyRecentTrip(trips: List<TripWithData>): List<TripWithData>{
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, -7)
+        val lastWeek = calendar.time
+        val recentTrip = mutableListOf<TripWithData>()
+        coroutineScope {
+            trips.forEach { trip ->
+                if (!trip.isRecent(lastWeek)){
+                    launch { localSource.deleteTrip(trip) }
+                    launch { remoteSource.deleteTrip(trip ) }
+
+                } else {
+                    recentTrip.add(trip)
+                }
+            }
+        }
+        return recentTrip
+
     }
 
     /**

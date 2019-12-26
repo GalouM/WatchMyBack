@@ -100,6 +100,16 @@ abstract class TripDao(private val database: WatchMyBackDatabase) {
     abstract suspend fun updateTrip(trip: Trip)
 
     /**
+     * Delete a [Trip] from the database
+     *
+     * @param trip trip to delete
+     *
+     * @see Delete
+     */
+    @Delete
+    abstract suspend fun deleteTrip(trip: Trip)
+
+    /**
      * Create a [Trip] and all its data in the database
      *
      * @param trip [TripWithData] to create

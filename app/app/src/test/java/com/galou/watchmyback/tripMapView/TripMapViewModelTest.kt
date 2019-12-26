@@ -66,6 +66,10 @@ class TripMapViewModelTest {
         val value = LiveDataTestUtil.getValue(viewModel.openAddTripActivity)
         assertThat(value).isNull()
         assertSnackBarMessage(viewModel.snackbarMessage, R.string.back_home_safe)
+        assertThat(LiveDataTestUtil.getValue(viewModel.tripLD)).isNull()
+        assertThat(LiveDataTestUtil.getValue(viewModel.schedulePointsLD)).isNull()
+        assertThat(LiveDataTestUtil.getValue(viewModel.startEndPointsLD)).isNull()
+        assertThat(LiveDataTestUtil.getValue(viewModel.checkedPointsLD)).isNull()
     }
 
     @Test

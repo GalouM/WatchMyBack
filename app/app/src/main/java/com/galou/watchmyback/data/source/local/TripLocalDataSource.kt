@@ -129,4 +129,19 @@ class TripLocalDataSource(
             Result.Error(e)
         }
     }
+
+    /**
+     * TODODelete a [Trip] from the database
+     *
+     * @param trip trip to delete
+     * @return [Result] of the operation
+     */
+    override suspend fun deleteTrip(trip: TripWithData): Result<Void?> {
+        return try {
+            tripDao.deleteTrip(trip.trip)
+            Result.Success(null)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
 }

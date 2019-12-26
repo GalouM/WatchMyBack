@@ -36,7 +36,7 @@ import com.galou.watchmyback.utils.*
     tableName = TRIP_TABLE_NAME,
     indices = [
         Index(value = [TRIP_TABLE_STATUS], unique = false),
-        Index(value = [TRIP_TABLE_USER_UUID, TRIP_TABLE_ACTIVE], unique = true)
+        Index(value = [TRIP_TABLE_USER_UUID, TRIP_TABLE_ACTIVE], unique = false)
     ],
     foreignKeys = [
     ForeignKey(

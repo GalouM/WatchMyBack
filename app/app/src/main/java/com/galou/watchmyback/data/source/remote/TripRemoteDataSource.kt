@@ -268,4 +268,14 @@ class TripRemoteDataSource(
             "trip.active", trip.trip.active
         ).await()
     }
+
+    /**
+     * TODODelete a [TripWithData] from the database
+     *
+     * @param trip trip to delete
+     * @return [Result] of the operation
+     */
+    override suspend fun deleteTrip(trip: TripWithData): Result<Void?> = withContext(ioDispatcher) {
+        return@withContext tripCollection.document(trip.trip.id).delete().await()
+    }
 }

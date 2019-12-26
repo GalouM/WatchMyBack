@@ -148,4 +148,15 @@ class TripLocalSourceTests {
         val trip = tripDao.getTrip(tripWithData1.trip.id)
         assertThat(trip?.trip?.status, `is`(TripStatus.BACK_SAFE))
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun deleteTrip_deleteTripFromDB() = runBlocking {
+        tripDao.createTripAndData(tripWithData1, itemList1)
+        val task = localSource.deleteTrip(tripWithData1)
+        val result = task is Result.Success
+        assertThat(result, `is`(true))
+        val trip = tripDao.getTrip(tripWithData1.trip.id)
+        assertThat(trip, `is` (nullValue()))
+    }
 }

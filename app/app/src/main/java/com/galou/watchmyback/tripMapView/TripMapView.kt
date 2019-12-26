@@ -167,16 +167,29 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
         }
     }
 
-    private fun displaySchedulePoints(pointData: Map<String, Coordinate>){
-        pointData.displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY)
+    private fun displaySchedulePoints(pointData: Map<String, Coordinate>?){
+        if (pointData != null){
+            pointData.displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY)
+        } else {
+            symbolManager?.deleteAll()
+        }
     }
 
-    private fun displayCheckedUpPoint(pointData: Map<String, Coordinate>){
-        pointData.displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY_LIGHT)
+    private fun displayCheckedUpPoint(pointData: Map<String, Coordinate>?){
+        if (pointData != null){
+            pointData.displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY_LIGHT)
+        } else {
+            symbolManager?.deleteAll()
+        }
     }
 
-    private fun displayStartEndPoints(pointData: Map<String, Coordinate>){
-        pointData.displayPointsOnMap(symbolManager, ICON_LOCATION_ACCENT)
+    private fun displayStartEndPoints(pointData: Map<String, Coordinate>?){
+        if (pointData != null){
+            pointData.displayPointsOnMap(symbolManager, ICON_LOCATION_ACCENT)
+        } else {
+            symbolManager?.deleteAll()
+        }
+
     }
 
     private fun showPointDetails(){

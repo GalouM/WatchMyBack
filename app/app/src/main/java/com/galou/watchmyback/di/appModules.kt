@@ -55,7 +55,7 @@ val appModules = module {
         Room.databaseBuilder(
             androidApplication(),
             WatchMyBackDatabase::class.java,
-            "watchMyBack_db_test13.db"
+            "watchMyBack_db_test14.db"
         )
         .build()
     }

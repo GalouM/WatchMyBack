@@ -25,4 +25,6 @@ interface TripDataSource {
     suspend fun fetchTripOwner(ownerId: String): Result<User>
 
     suspend fun updateTripStatus(trip: TripWithData): Result<Void?>
+
+    suspend fun deleteTrip(trip: TripWithData): Result<Void?>
 }

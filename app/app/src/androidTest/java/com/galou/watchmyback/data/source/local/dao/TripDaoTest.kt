@@ -170,6 +170,14 @@ class TripDaoTest {
 
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun deleteTrip_deleteFromDB() = runBlocking{
+        tripDao.deleteTrip(tripWithData1.trip)
+        val trip = tripDao.getTrip(tripWithData1.trip.id)
+        assertThat(trip, `is` (nullValue()))
+    }
+
 
 
 

@@ -184,4 +184,36 @@ class TripExtTest {
         trip.updateStatus()
         assertThat(trip.trip.status).isEqualTo(TripStatus.ON_GOING)
     }
+
+    @Test
+    fun tripAfterCertainDate_returnFalse(){
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, -5)
+        val fiveDayAgo = calendar.time
+
+
+        val calendarEndPoint = Calendar.getInstance()
+        calendarEndPoint.add(Calendar.DAY_OF_YEAR, -7)
+        val endPoint = PointTripWithData(pointTrip = PointTrip(typePoint = TypePoint.END, time = calendarEndPoint.time))
+        val trip = TripWithData(trip = Trip(), points = mutableListOf(endPoint), watchers = mutableListOf())
+
+        assertThat(trip.isRecent(fiveDayAgo)).isFalse()
+
+    }
+
+    @Test
+    fun tripBeforeCertainDate_returnTrue(){
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, -5)
+        val fiveDayAgo = calendar.time
+
+
+        val calendarEndPoint = Calendar.getInstance()
+        calendarEndPoint.add(Calendar.DAY_OF_YEAR, -3)
+        val endPoint = PointTripWithData(pointTrip = PointTrip(typePoint = TypePoint.END, time = calendarEndPoint.time))
+        val trip = TripWithData(trip = Trip(), points = mutableListOf(endPoint), watchers = mutableListOf())
+
+        assertThat(trip.isRecent(fiveDayAgo)).isTrue()
+
+    }
 }
