@@ -199,7 +199,7 @@ class UserLocalSourceTests{
         mainUser.friendsId.add(firstFriend.id)
         mainUser.friendsId.add(secondFriend.id)
         // create user locally
-        val task = localSource.updateOrCreateUser(mainUser, null, firstFriend, secondFriend)
+        val task = localSource.updateOrCreateUser(mainUser, null)
         //check user was created
         val taskResult = task is Result.Success
         assertThat(taskResult, `is` (true))
