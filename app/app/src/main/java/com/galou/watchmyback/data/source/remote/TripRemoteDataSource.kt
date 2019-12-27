@@ -287,7 +287,7 @@ class TripRemoteDataSource(
      */
     override suspend fun updateTripPoints(trip: TripWithData): Result<Void?> = withContext(ioDispatcher) {
         return@withContext tripCollection.document(trip.trip.id).update(
-            "trip.points", trip.points
+            "points", trip.points
         ).await()
     }
 }

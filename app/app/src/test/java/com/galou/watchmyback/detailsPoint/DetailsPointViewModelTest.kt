@@ -10,6 +10,7 @@ import com.galou.watchmyback.testHelpers.LiveDataTestUtil
 import com.galou.watchmyback.testHelpers.preferencesTest
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -34,6 +35,7 @@ class DetailsPointViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setup(){
         Dispatchers.setMain(mainThreadSurrogate)
@@ -44,6 +46,7 @@ class DetailsPointViewModelTest {
         viewModel = DetailsPointViewModel(tripRepository, userRepository)
     }
 
+    @ExperimentalCoroutinesApi
     @After
     fun close(){
         Dispatchers.resetMain()

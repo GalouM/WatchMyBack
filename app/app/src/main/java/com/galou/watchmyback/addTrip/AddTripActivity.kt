@@ -311,7 +311,7 @@ class AddTripActivity : AppCompatActivity(),
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.validate_menu_validate -> viewModel.startTrip()
+            R.id.validate_menu_validate -> viewModel.startTrip(applicationContext)
             android.R.id.home -> finish()
         }
 

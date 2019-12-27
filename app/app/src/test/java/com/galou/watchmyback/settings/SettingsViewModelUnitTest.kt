@@ -1,17 +1,13 @@
 package com.galou.watchmyback.settings
 
-import android.os.Build
-import android.widget.RadioButton
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galou.watchmyback.R
-import com.galou.watchmyback.WatchMyBackApplication
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.repository.FakeUserRepositoryImpl
 import com.galou.watchmyback.testHelpers.*
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -19,11 +15,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
-import org.robolectric.annotation.Config
 
 /**
  * Created by galou on 2019-10-31
@@ -39,6 +32,7 @@ class SettingsViewModelUnitTest : KoinTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setupViewModel(){
         Dispatchers.setMain(mainThreadSurrogate)
@@ -50,6 +44,7 @@ class SettingsViewModelUnitTest : KoinTest {
 
     }
 
+    @ExperimentalCoroutinesApi
     @After
     fun close(){
         Dispatchers.resetMain()

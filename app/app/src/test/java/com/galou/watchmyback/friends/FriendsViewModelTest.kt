@@ -9,6 +9,7 @@ import com.galou.watchmyback.testHelpers.*
 import com.galou.watchmyback.utils.extension.toOtherUser
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -33,6 +34,7 @@ class FriendsViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setupViewModel(){
         Dispatchers.setMain(mainThreadSurrogate)
@@ -44,6 +46,7 @@ class FriendsViewModelTest {
 
     }
 
+    @ExperimentalCoroutinesApi
     @After
     fun close(){
         Dispatchers.resetMain()

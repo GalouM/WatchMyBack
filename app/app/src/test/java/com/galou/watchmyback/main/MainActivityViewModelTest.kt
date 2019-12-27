@@ -14,6 +14,7 @@ import com.galou.watchmyback.testHelpers.assertSnackBarMessage
 import com.galou.watchmyback.utils.RESULT_ACCOUNT_DELETED
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
@@ -38,12 +39,14 @@ class MainActivityViewModelTest {
     var instantExecutorRule = InstantTaskExecutorRule()
 
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setupViewModel(){
         Dispatchers.setMain(mainThreadSurrogate)
         viewModel = MainActivityViewModel(FakeUserRepositoryImpl(), FakeCheckListRepository(), FakeTripRepositoryImpl(), FakeFriendRepositoryImpl() )
     }
 
+    @ExperimentalCoroutinesApi
     @After
     fun tearDown() {
         Dispatchers.resetMain()

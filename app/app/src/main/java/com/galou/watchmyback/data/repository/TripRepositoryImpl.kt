@@ -297,9 +297,7 @@ class TripRepositoryImpl(
                         else -> fetchLocationTask
                     }
 
-                } else {
-                    Result.Error(Exception("No Trip found"))
-                }
+                } else Result.Error(Exception("No Trip found"))
 
             }
             is Result.Error -> Result.Error(tripFetch.exception)

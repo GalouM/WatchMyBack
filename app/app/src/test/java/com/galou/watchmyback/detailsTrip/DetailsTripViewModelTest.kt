@@ -12,6 +12,7 @@ import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.testHelpers.*
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -37,6 +38,7 @@ class DetailsTripViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setup(){
         Dispatchers.setMain(mainThreadSurrogate)
@@ -48,6 +50,7 @@ class DetailsTripViewModelTest {
         viewModel = DetailsTripViewModel(tripRepository, userRepository, checkListRepository)
     }
 
+    @ExperimentalCoroutinesApi
     @After
     fun close(){
         Dispatchers.resetMain()
@@ -167,7 +170,7 @@ class DetailsTripViewModelTest {
     @Test
     fun fetchTripWithId_emitTripOwnerName(){
         viewModel.fetchTripInfo(tripWithData.trip.id)
-        //assertThat(LiveDataTestUtil.getValue(viewModel.tripOwnerNameLD)).isEqualTo(mainUser.username)
+        assertThat(LiveDataTestUtil.getValue(viewModel.tripOwnerNameLD)).isEqualTo(mainUser.username)
     }
 
     @Test
@@ -182,7 +185,7 @@ class DetailsTripViewModelTest {
         LiveDataTestUtil.getValue(viewModel.tripOwnerNameLD)
         viewModel.callTripOwner()
         val value = LiveDataTestUtil.getValue(viewModel.tripOwnerNumberLD)
-        //assertThat(value.getContentIfNotHandled()).isEqualTo(mainUser.phoneNumber)
+        assertThat(value.getContentIfNotHandled()).isEqualTo(mainUser.phoneNumber)
     }
 
     @Test

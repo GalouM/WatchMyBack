@@ -10,6 +10,7 @@ import com.galou.watchmyback.data.repository.FakeUserRepositoryImpl
 import com.galou.watchmyback.testHelpers.*
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -35,6 +36,7 @@ class AddModifyCheckListViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setupViewModel(){
         Dispatchers.setMain(mainThreadSurrogate)
@@ -48,6 +50,7 @@ class AddModifyCheckListViewModelTest {
 
     }
 
+    @ExperimentalCoroutinesApi
     @After
     fun close(){
         Dispatchers.resetMain()

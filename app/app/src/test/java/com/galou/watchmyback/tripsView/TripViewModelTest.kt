@@ -11,6 +11,7 @@ import com.galou.watchmyback.testHelpers.tripWithData
 import com.galou.watchmyback.utils.extension.convertForDisplay
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -36,6 +37,7 @@ class TripViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setupViewModel(){
         Dispatchers.setMain(mainThreadSurrogate)
@@ -46,6 +48,7 @@ class TripViewModelTest {
         viewModel = TripsViewModel(userRepository, tripRepository)
     }
 
+    @ExperimentalCoroutinesApi
     @After
     fun close(){
         Dispatchers.resetMain()

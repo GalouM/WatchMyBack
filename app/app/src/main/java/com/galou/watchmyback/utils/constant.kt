@@ -100,6 +100,7 @@ const val RC_ADD_CHECKLIST = 800
 const val RC_LOCATION_PERMS = 900
 const val RC_PICK_LOCATION_MAP = 1000
 const val RC_PHONE_CALL_PERMS = 1100
+const val RC_ADD_TRIP = 1200
 
 // ------ RESULT CODE ACTIVITIES -------
 const val RESULT_ACCOUNT_DELETED = -100
@@ -111,6 +112,7 @@ const val TRIP_TYPE_TAG = "tripTypeDialog"
 const val UPDATE_HZ_TAG = "updateFrequencyDialog"
 const val CHECKLIST_DIALOG = "checklistsDialog"
 const val WATCHER_DIALOG = "watcherDialog"
+const val CHECK_UP_WORKER_TAG = "checkUpWorkerTag"
 
 // ------ PERMISSIONS -------
 const val PERMS_EXT_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE

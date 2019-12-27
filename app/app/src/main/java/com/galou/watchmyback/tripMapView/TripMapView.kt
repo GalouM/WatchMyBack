@@ -16,10 +16,7 @@ import com.galou.watchmyback.addTrip.AddTripActivity
 import com.galou.watchmyback.data.applicationUse.Coordinate
 import com.galou.watchmyback.databinding.FragmentMapViewBinding
 import com.galou.watchmyback.detailsPoint.DetailsPointActivity
-import com.galou.watchmyback.utils.ICON_LOCATION_ACCENT
-import com.galou.watchmyback.utils.ICON_LOCATION_PRIMARY
-import com.galou.watchmyback.utils.ICON_LOCATION_PRIMARY_LIGHT
-import com.galou.watchmyback.utils.RC_LOCATION_PERMS
+import com.galou.watchmyback.utils.*
 import com.galou.watchmyback.utils.extension.*
 import com.google.android.material.snackbar.Snackbar
 import com.mapbox.mapboxsdk.Mapbox
@@ -61,11 +58,20 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
         return binding.root
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode){
+            RC_ADD_TRIP -> viewModel.fetchAndDisplayUserActiveTrip()
+        }
+    }
+
     private fun configureBinding(inflater: LayoutInflater, container: ViewGroup?){
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map_view, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this.viewLifecycleOwner
         mapView = binding.tripMapViewMap
+
+        binding.tripMapViewFab.setOnClickListener { viewModel.clickStartStop(activity!!.applicationContext) }
     }
 
     private fun setupObserverViewModel(){
@@ -116,7 +122,7 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
 
     private fun openStartNewTripActivity(){
         with(Intent(activity!!, AddTripActivity::class.java)){
-            startActivity(this)
+            startActivityForResult(this, RC_ADD_TRIP)
         }
     }
 

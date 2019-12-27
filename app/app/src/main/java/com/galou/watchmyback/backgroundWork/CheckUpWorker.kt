@@ -28,6 +28,7 @@ class CheckUpWorker(appContext: Context, workerParams: WorkerParameters)
     private val tripRepository: TripRepository by inject()
 
     override suspend fun doWork(): Result = coroutineScope {
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(applicationContext)
 
         val userId = inputData.getString(USER_ID_DATA)
@@ -39,6 +40,7 @@ class CheckUpWorker(appContext: Context, workerParams: WorkerParameters)
                         val coordinate = Coordinate(location.data.latitude, location.data.longitude)
                         when(tripRepository.createCheckUpPoint(userId, coordinate)){
                             is Success -> Result.success()
+
                             else -> Result.failure()
                         }
                     } else Result.failure()
@@ -46,9 +48,8 @@ class CheckUpWorker(appContext: Context, workerParams: WorkerParameters)
                 }
                 else -> Result.failure()
             }
-        } else {
-            Result.failure()
-        }
+        } else Result.failure()
+
 
 
     }

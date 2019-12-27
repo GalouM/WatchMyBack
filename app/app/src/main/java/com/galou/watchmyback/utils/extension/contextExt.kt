@@ -14,7 +14,7 @@ import pub.devrel.easypermissions.EasyPermissions
  * 2019-12-26
  */
 
-fun Context.isGPSEnabled(): Boolean = (getSystemService(Context.LOCATION_SERVICE) as LocationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)
+fun Context.isGPSEnabled(): Boolean = (applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)
 
 fun Context.isLocationPermission(): Boolean = checkCallingOrSelfPermission(PERMS_LOCALISATION) == PackageManager.PERMISSION_GRANTED
 

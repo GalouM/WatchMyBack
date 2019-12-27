@@ -1,7 +1,10 @@
 package com.galou.watchmyback.addTrip
 
+import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.core.app.ApplicationProvider
 import com.galou.watchmyback.R
+import com.galou.watchmyback.WatchMyBackApplication
 import com.galou.watchmyback.data.applicationUse.Watcher
 import com.galou.watchmyback.data.entity.*
 import com.galou.watchmyback.data.repository.*
@@ -9,6 +12,7 @@ import com.galou.watchmyback.testHelpers.*
 import com.galou.watchmyback.utils.todaysDate
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -30,15 +34,18 @@ class AddTripViewModelTest {
     private lateinit var checkListRepository: FakeCheckListRepository
     private lateinit var friendRepository: FriendRepository
     private lateinit var tripRepository: TripRepository
+    private lateinit var context: Context
 
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setupViewModel(){
         Dispatchers.setMain(mainThreadSurrogate)
+        context = ApplicationProvider.getApplicationContext<WatchMyBackApplication>()
         userRepository = FakeUserRepositoryImpl()
         fakeUser = generateTestUser(TEST_UID)
         userRepository.currentUser.value = fakeUser
@@ -50,6 +57,7 @@ class AddTripViewModelTest {
 
     }
 
+    @ExperimentalCoroutinesApi
     @After
     fun close(){
         Dispatchers.resetMain()
@@ -227,7 +235,7 @@ class AddTripViewModelTest {
 
     @Test
     fun onSaveTripWithFieldsEmptyAndNoStagePoint_showError(){
-        viewModel.startTrip()
+        viewModel.startTrip(context)
         assertThat(LiveDataTestUtil.getValue(viewModel.typeError)).isNotNull()
         assertThat(LiveDataTestUtil.getValue(viewModel.updateFrequencyError)).isNotNull()
         assertThat(LiveDataTestUtil.getValue(viewModel.watchersLD)).isNotNull()
@@ -247,7 +255,7 @@ class AddTripViewModelTest {
         viewModel.addStagePoint()
         val point2 = LiveDataTestUtil.getValue(viewModel.stagePointsLD)[1]
         viewModel.setPointLocation(123.344, 567.432, point1)
-        viewModel.startTrip()
+        viewModel.startTrip(context)
         val points = LiveDataTestUtil.getValue(viewModel.stagePointsLD)
         assertThat(points).contains(point1)
         assertThat(points).doesNotContain(point2)
@@ -279,7 +287,7 @@ class AddTripViewModelTest {
                 true
             )
         )
-        viewModel.startTrip()
+        viewModel.startTrip(context)
         //assertThat(LiveDataTestUtil.getValue(viewModel.tripLD).mainLocation).isEqualTo(city)
 
     }
@@ -308,7 +316,7 @@ class AddTripViewModelTest {
                 true
             )
         )
-        viewModel.startTrip()
+        viewModel.startTrip(context)
         //assertThat(LiveDataTestUtil.getValue(viewModel.tripLD).mainLocation).isEqualTo(country)
     }
 
