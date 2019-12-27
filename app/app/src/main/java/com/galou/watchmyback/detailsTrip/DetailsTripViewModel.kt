@@ -12,9 +12,7 @@ import com.galou.watchmyback.data.repository.CheckListRepository
 import com.galou.watchmyback.data.repository.TripRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.extension.emitNewValue
-import com.galou.watchmyback.utils.extension.findLatestCheckUpPoint
-import com.galou.watchmyback.utils.extension.updateStatus
+import com.galou.watchmyback.utils.extension.*
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -45,6 +43,9 @@ class DetailsTripViewModel(
 
     private val _lastPointCheckedLD = MutableLiveData<PointTripWithData>()
     val lastPointCheckedLD: LiveData<PointTripWithData> = _lastPointCheckedLD
+
+    private val _lastPointCoordinate = MutableLiveData<Map<String, Coordinate>>()
+    val lastPointCoordinate: LiveData<Map<String, Coordinate>> = _lastPointCoordinate
 
     private val _tripIsDoneLD = MutableLiveData<Boolean>()
     val tripIsDoneLD: LiveData<Boolean> = _tripIsDoneLD
@@ -121,6 +122,7 @@ class DetailsTripViewModel(
     fun reEmitPointLocation(){
         _checkedPointsLD.emitNewValue()
         _schedulePointsLD.emitNewValue()
+        _lastPointCoordinate.emitNewValue()
     }
 
     /**
@@ -195,31 +197,35 @@ class DetailsTripViewModel(
         val checkedPoints = mutableMapOf<String, Coordinate>()
         val startEndPoints = mutableMapOf<String, Coordinate>()
          points.forEach { point ->
-             val coordinate = Coordinate(
-                 latitude = point.location?.latitude ?: throw Exception("No latitude for this point $point") ,
-                 longitude = point.location.longitude ?: throw Exception("No longitude for this point $point"))
              when(point.pointTrip.typePoint){
                  TypePoint.START -> {
-                     startEndPoints[point.pointTrip.id] = coordinate
+                     startEndPoints[point.pointTrip.id] = point.getCoordinate()
                      _startPointTimeLD.value = point.pointTrip.time
                      _startPointWeatherLD.value = point.weatherData
+                     if(currentTrip?.trip?.status != TripStatus.BACK_SAFE){
+                         _lastPointCoordinate.value = point.createMapCoordinate()
+                     }
                  }
                  TypePoint.END -> {
-                     startEndPoints[point.pointTrip.id] = coordinate
+                     startEndPoints[point.pointTrip.id] = point.getCoordinate()
                      _endPointTimeLD.value = point.pointTrip.time
                      _endPointWeatherLD.value = point.weatherData
                      if (currentTrip?.trip?.status == TripStatus.BACK_SAFE) {
                          _lastPointCheckedLD.value = point
+                         _lastPointCoordinate.value = point.createMapCoordinate()
                      }
                  }
-                 TypePoint.SCHEDULE_STAGE -> schedulePoints[point.pointTrip.id] = coordinate
-                 TypePoint.CHECKED_UP -> checkedPoints[point.pointTrip.id] = coordinate
+                 TypePoint.SCHEDULE_STAGE -> schedulePoints[point.pointTrip.id] = point.getCoordinate()
+                 TypePoint.CHECKED_UP -> checkedPoints[point.pointTrip.id] = point.getCoordinate()
 
              }
          }
-        if(lastPointCheckedLD.value == null){
-            _lastPointCheckedLD.value = points.findLatestCheckUpPoint()
+        if(checkedPoints.isNotEmpty()){
+            val latestPoint = points.findLatestCheckUpPoint()
+            if(currentTrip?.trip?.status != TripStatus.BACK_SAFE) _lastPointCheckedLD.value = latestPoint
+            _lastPointCoordinate.value = latestPoint?.createMapCoordinate()
         }
+
          _schedulePointsLD.value = schedulePoints
          _checkedPointsLD.value = checkedPoints
         _startEndPointsLD.value = startEndPoints

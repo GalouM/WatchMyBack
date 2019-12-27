@@ -86,6 +86,7 @@ class ProfileActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.validate_menu_validate -> viewModel.updateUserInformation()
+            android.R.id.home -> finish()
         }
 
         return super.onOptionsItemSelected(item)

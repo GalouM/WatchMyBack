@@ -1,5 +1,6 @@
 package com.galou.watchmyback.utils.extension
 
+import com.galou.watchmyback.data.applicationUse.Coordinate
 import com.galou.watchmyback.data.entity.PointTrip
 import com.galou.watchmyback.data.entity.PointTripWithData
 import com.galou.watchmyback.data.entity.TypePoint
@@ -61,3 +62,10 @@ fun List<PointTripWithData>.findLatestCheckUpPoint(): PointTripWithData? {
         })
     }
 }
+
+fun PointTripWithData.getCoordinate(): Coordinate = Coordinate(
+    latitude = location?.latitude ?: throw Exception("No latitude for this point $this") ,
+    longitude = location.longitude ?: throw Exception("No longitude for this point $this"))
+
+fun PointTripWithData.createMapCoordinate(): Map<String, Coordinate> = mapOf(pointTrip.id to getCoordinate())
+

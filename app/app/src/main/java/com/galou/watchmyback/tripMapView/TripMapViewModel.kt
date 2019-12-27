@@ -17,6 +17,7 @@ import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.CHECK_UP_WORKER_TAG
 import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.displayData
+import com.galou.watchmyback.utils.extension.getCoordinate
 import kotlinx.coroutines.launch
 
 /**
@@ -65,14 +66,11 @@ class TripMapViewModel(
         val checkedPoints = mutableMapOf<String, Coordinate>()
         val startEndPoints = mutableMapOf<String, Coordinate>()
         trip.points.forEach { point ->
-            val coordinate = Coordinate(
-                latitude = point.location?.latitude ?: throw Exception("No latitude for this point $point") ,
-                longitude = point.location.longitude ?: throw Exception("No longitude for this point $point"))
             when(point.pointTrip.typePoint){
                 TypePoint.SCHEDULE_STAGE ->
-                    schedulePoints[point.pointTrip.id] = coordinate
-                TypePoint.CHECKED_UP -> checkedPoints[point.pointTrip.id] = coordinate
-                TypePoint.START, TypePoint.END -> startEndPoints[point.pointTrip.id] = coordinate
+                    schedulePoints[point.pointTrip.id] = point.getCoordinate()
+                TypePoint.CHECKED_UP -> checkedPoints[point.pointTrip.id] = point.getCoordinate()
+                TypePoint.START, TypePoint.END -> startEndPoints[point.pointTrip.id] = point.getCoordinate()
             }
         }
         _schedulePointsLD.value = schedulePoints

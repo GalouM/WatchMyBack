@@ -20,9 +20,9 @@ import com.galou.watchmyback.utils.extension.addIconsLocation
 import com.galou.watchmyback.utils.extension.displayPointsOnMap
 import com.galou.watchmyback.utils.extension.isGPSEnabled
 import com.galou.watchmyback.utils.extension.requestPermissionLocation
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
+import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
-import com.mapbox.mapboxsdk.location.modes.CameraMode
-import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
@@ -41,7 +41,7 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
     private lateinit var binding: FragmentDetailsTripMapBinding
 
     private lateinit var mapView: MapView
-    private lateinit var mapBox: MapboxMap
+    private  var mapBox: MapboxMap? = null
     private var symbolManager: SymbolManager? = null
     private lateinit var styleMap: Style
 
@@ -68,10 +68,10 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
     private fun setupMap(){
         mapView.getMapAsync { mapboxMap ->
             mapBox = mapboxMap
-            mapBox.setStyle(Style.SATELLITE) {style ->
+            mapBox?.setStyle(Style.SATELLITE) {style ->
                 styleMap = style
                 styleMap.addIconsLocation(activity!!)
-                symbolManager = SymbolManager(mapView, mapBox, styleMap).apply {
+                symbolManager = SymbolManager(mapView, mapBox!!, styleMap).apply {
                     iconAllowOverlap = true
                     iconPadding = 0.1f
                 }
@@ -96,6 +96,7 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
         setupSchedulePointsObserver()
         setupCheckUpPointsObserver()
         setupStartEndPointObserver()
+        setupLatestPointObserver()
 
     }
 
@@ -119,13 +120,17 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
         viewModel.startEndPointsLD.observe(this, Observer { displayStartEndPoints(it) })
     }
 
+    private fun setupLatestPointObserver(){
+        viewModel.lastPointCoordinate.observe(this, Observer { focusCameraOnLatestPoint(it) })
+    }
+
     private fun centerCameraOnUser(){
         displayUserLocation()
     }
 
     private fun displayUserLocation() {
         if(activity!!.requestPermissionLocation() && activity!!.isGPSEnabled()) {
-            with(mapBox.locationComponent) {
+            with(mapBox!!.locationComponent) {
                 activateLocationComponent(
                     LocationComponentActivationOptions.builder(
                         activity!!.applicationContext,
@@ -133,9 +138,6 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
                     ).build()
                 )
                 isLocationComponentEnabled = true
-                cameraMode = CameraMode.TRACKING
-                renderMode = RenderMode.COMPASS
-                zoomWhileTracking(15.0)
             }
         } else {
             viewModel.gpsNotAvailable()
@@ -153,6 +155,11 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
 
     private fun displayStartEndPoints(pointData: Map<String, Coordinate>){
         pointData.displayPointsOnMap(symbolManager, ICON_LOCATION_ACCENT)
+    }
+
+    private fun focusCameraOnLatestPoint(pointData: Map<String, Coordinate>){
+        val coordinate = pointData.entries.first().value
+        mapBox?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(coordinate.latitude, coordinate.longitude), 15.0))
     }
 
     override fun onRequestPermissionsResult(
