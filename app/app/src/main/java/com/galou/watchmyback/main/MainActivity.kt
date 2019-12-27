@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
-            RC_SIGN_IN -> viewModel.handleSignIngActivityResult(resultCode, data, authFirebase.currentUser)
+            RC_SIGN_IN -> viewModel.handleSignIngActivityResult(resultCode, data, authFirebase.currentUser, applicationContext)
             RC_PROFILE ->  viewModel.handleResultAfterProfileActivityClosed(resultCode)
             RC_SETTINGS -> viewModel.handleResultSettingsActivity(resultCode)
         }
@@ -183,7 +183,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun configureFirebase(){
         authFirebase = FirebaseAuth.getInstance()
-        viewModel.checkIfUserIsConnected(authFirebase.currentUser)
+        viewModel.checkIfUserIsConnected(authFirebase.currentUser, applicationContext)
 
     }
 

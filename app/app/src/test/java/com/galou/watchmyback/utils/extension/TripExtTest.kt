@@ -154,7 +154,7 @@ class TripExtTest {
             pointTrip = PointTrip(typePoint = TypePoint.END, time = calendar.time)
         )
         val calendarCheckUp = Calendar.getInstance()
-        calendarCheckUp.add(Calendar.MINUTE, -20)
+        calendarCheckUp.add(Calendar.MINUTE, -25)
         val checkPoint = PointTripWithData(
             pointTrip = PointTrip(typePoint = TypePoint.CHECKED_UP, time = calendarCheckUp.time)
         )

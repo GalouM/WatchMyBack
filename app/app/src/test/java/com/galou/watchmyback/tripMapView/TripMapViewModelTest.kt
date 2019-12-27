@@ -1,8 +1,10 @@
 package com.galou.watchmyback.tripMapView
 
 import android.content.Context
+import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galou.watchmyback.R
 import com.galou.watchmyback.WatchMyBackApplication
 import com.galou.watchmyback.data.entity.TypePoint
@@ -22,12 +24,16 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.koin.core.context.stopKoin
+import org.robolectric.annotation.Config
 
 /**
  * @author galou
  * 2019-11-30
  */
+@Config(sdk = [Build.VERSION_CODES.P])
+@RunWith(AndroidJUnit4::class)
 class TripMapViewModelTest {
 
     private lateinit var viewModel: TripMapViewModel

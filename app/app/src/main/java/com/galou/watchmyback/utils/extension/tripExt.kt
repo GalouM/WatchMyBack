@@ -85,7 +85,7 @@ fun TripWithData.updateStatus(){
             checkedUpPoints.isEmpty() -> TripStatus.ON_GOING_NO_NEWS
             todaysDate.after(backTime) -> {
                 val latestCheckup = checkedUpPoints.findLatestCheckUpPoint()!!.pointTrip.time!!
-                if (todaysDate.time - latestCheckup.time > trip.updateFrequency!!.frequencyMillisecond){
+                if (todaysDate.time - latestCheckup.time > trip.updateFrequency!!.frequencyMillisecond + 300000){
                     TripStatus.LATE_NO_NEWS
                 } else TripStatus.LATE_EMITTING
             }

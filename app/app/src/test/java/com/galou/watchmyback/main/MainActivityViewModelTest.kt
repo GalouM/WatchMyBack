@@ -1,7 +1,11 @@
 package com.galou.watchmyback.main
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
+import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
 import com.galou.watchmyback.data.repository.FakeCheckListRepository
@@ -24,14 +28,19 @@ import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 /**
  * Created by galou on 2019-10-24
  */
 
+@Config(sdk = [Build.VERSION_CODES.P])
+@RunWith(AndroidJUnit4::class)
 class MainActivityViewModelTest {
 
     private lateinit var viewModel: MainActivityViewModel
+    private val context: Context =  ApplicationProvider.getApplicationContext()
 
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
 
@@ -56,7 +65,7 @@ class MainActivityViewModelTest {
     @Test
     fun checkUserNotConnected_openSignInActivityEmitted(){
         val firebaseUser = null
-        viewModel.checkIfUserIsConnected(firebaseUser)
+        viewModel.checkIfUserIsConnected(firebaseUser, context)
         val value: Event<Unit> = LiveDataTestUtil.getValue(viewModel.openSignInActivityEvent)
         assertThat(value.getContentIfNotHandled()).isNotNull()
 
@@ -65,7 +74,7 @@ class MainActivityViewModelTest {
     @Test
     fun checkUserIsConnected_isWelcomeBack() = runBlocking {
         val firebaseUser = FakeAuthResult.user
-        viewModel.checkIfUserIsConnected(firebaseUser)
+        viewModel.checkIfUserIsConnected(firebaseUser, context)
         assertNull(LiveDataTestUtil.getValue(viewModel.openSignInActivityEvent))
         val userValue = LiveDataTestUtil.getValue(viewModel.userLD)
         assertThat(userValue.email).isEqualTo(firebaseUser.email)
@@ -78,7 +87,7 @@ class MainActivityViewModelTest {
     @Test
     fun checkUserIsCreated_AfterSignIn(){
         val firebaseUser = FakeAuthResult.user
-        viewModel.handleSignIngActivityResult(RESULT_OK, null, firebaseUser)
+        viewModel.handleSignIngActivityResult(RESULT_OK, null, firebaseUser, context)
         assertNull(LiveDataTestUtil.getValue(viewModel.openSignInActivityEvent))
         val userValue = LiveDataTestUtil.getValue(viewModel.userLD)
         assertThat(userValue.email).isEqualTo(firebaseUser.email)
@@ -106,7 +115,7 @@ class MainActivityViewModelTest {
     @Test
     fun clickMyTripHasActiveTrip_showMyTripActivity(){
         val firebaseUser = FakeAuthResult.user
-        viewModel.checkIfUserIsConnected(firebaseUser)
+        viewModel.checkIfUserIsConnected(firebaseUser, context)
         LiveDataTestUtil.getValue(viewModel.userLD)
         viewModel.showMyTripActivity()
         assertThat(LiveDataTestUtil.getValue(viewModel.openMyTripActivityLD).getContentIfNotHandled()).isNotNull()

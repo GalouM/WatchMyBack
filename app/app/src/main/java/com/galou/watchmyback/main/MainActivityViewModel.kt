@@ -7,17 +7,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.WorkManager
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
 import com.galou.watchmyback.base.BaseViewModel
+import com.galou.watchmyback.data.entity.TripUpdateFrequency
+import com.galou.watchmyback.data.entity.TripWithData
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserWithPreferences
 import com.galou.watchmyback.data.repository.*
+import com.galou.watchmyback.utils.CHECK_UP_WORKER_TAG
 import com.galou.watchmyback.utils.RESULT_ACCOUNT_DELETED
 import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.createCheckUpWorker
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 
@@ -62,9 +68,9 @@ class MainActivityViewModel(
      *
      * @param firebaseUser user connected to the app through Firebase Authentification
      */
-    fun checkIfUserIsConnected(firebaseUser: FirebaseUser?){
+    fun checkIfUserIsConnected(firebaseUser: FirebaseUser?, context: Context){
         if (firebaseUser != null) {
-            if (userLD.value == null) fetchCurrentUserInformation(firebaseUser)
+            if (userLD.value == null) fetchCurrentUserInformation(firebaseUser, context)
 
         } else {
             showSignInActivity()
@@ -104,9 +110,9 @@ class MainActivityViewModel(
      * @param data data from the connection
      * @param firebaseUser user connected to the app through Firebase Authentification
      */
-    fun handleSignIngActivityResult(resultCode: Int, data: Intent?, firebaseUser: FirebaseUser?){
+    fun handleSignIngActivityResult(resultCode: Int, data: Intent?, firebaseUser: FirebaseUser?, context: Context){
         if(resultCode == RESULT_OK){
-            checkIfUserIsConnected(firebaseUser)
+            checkIfUserIsConnected(firebaseUser, context)
         }
         else {
             val response = IdpResponse.fromResultIntent(data)
@@ -153,15 +159,15 @@ class MainActivityViewModel(
      *
      * @param firebaseUser user connected to the app through Firebase Authentification
      */
-    private fun fetchCurrentUserInformation(firebaseUser: FirebaseUser) {
+    private fun fetchCurrentUserInformation(firebaseUser: FirebaseUser, context: Context) {
         viewModelScope.launch {
             when (val result = userRepository.fetchUser(firebaseUser.uid)) {
                 is Result.Success -> {
                     val user = result.data
                     if(user != null){
-                        fetchFriends(user)
+                        fetchFriends(user, context)
                     } else {
-                        createUserToDB(firebaseUser)
+                        createUserToDB(firebaseUser, context)
                     }
 
                 }
@@ -185,12 +191,12 @@ class MainActivityViewModel(
      *
      * @param firebaseUser user connected to the app through Firebase Authentification
      */
-    private fun createUserToDB(firebaseUser: FirebaseUser){
+    private fun createUserToDB(firebaseUser: FirebaseUser, context: Context){
         val urlPhoto = firebaseUser.photoUrl?.toString()
         val user = User(firebaseUser.uid, firebaseUser.email, firebaseUser.displayName, firebaseUser.phoneNumber, urlPhoto)
         viewModelScope.launch {
             when(userRepository.createNewUser(user)){
-                is Result.Success -> fetchCurrentUserInformation(firebaseUser)
+                is Result.Success -> fetchCurrentUserInformation(firebaseUser, context)
                 is Result.Error -> showSnackBarMessage(R.string.error_creatng_user_remote)
                 is Result.Canceled -> showSnackBarMessage(R.string.canceled)
             }
@@ -219,10 +225,10 @@ class MainActivityViewModel(
      *
      * @see CheckListRepository.fetchUserCheckLists
      */
-    private fun fetchCheckLists(user: UserWithPreferences){
+    private fun fetchCheckLists(user: UserWithPreferences, context: Context){
         viewModelScope.launch {
             when(checkListRepository.fetchUserCheckLists(user.user.id, true)){
-                is Result.Success -> fetchActiveTrip(user)
+                is Result.Success -> fetchActiveTrip(user, context)
                 is Result.Canceled, is Result.Error -> showSnackBarMessage(R.string.error_fetch_check_lists)
             }
         }
@@ -239,15 +245,29 @@ class MainActivityViewModel(
      * @see TripRepository.fetchUserActiveTrip
      *
      */
-    private fun fetchActiveTrip(user: UserWithPreferences){
+    private fun fetchActiveTrip(user: UserWithPreferences, context: Context){
         viewModelScope.launch {
-            when(tripRepository.fetchUserActiveTrip(user.user.id, true)){
-                is Result.Success -> setupUserInformation(user)
+            when(val trip = tripRepository.fetchUserActiveTrip(user.user.id, true)){
+                is Result.Success -> {
+                    trip.data?.let { configureCheckUpWorkManager(context, trip.data) }
+                    setupUserInformation(user)
+                }
                 else -> showSnackBarMessage(R.string.error_fetch_trip)
             }
             _dataLoading.value = false
         }
 
+    }
+
+    private fun configureCheckUpWorkManager(context: Context, trip: TripWithData){
+        if (trip.trip.updateFrequency != TripUpdateFrequency.NEVER){
+            WorkManager.getInstance(context)
+                .enqueueUniquePeriodicWork(
+                    CHECK_UP_WORKER_TAG,
+                    ExistingPeriodicWorkPolicy.KEEP,
+                    createCheckUpWorker(trip)
+                )
+        }
     }
 
     //-----------------------
@@ -260,10 +280,10 @@ class MainActivityViewModel(
      * @see setupUserInformation
      * @see FriendRepository.fetchUserFriend
      */
-    private fun fetchFriends(user: UserWithPreferences){
+    private fun fetchFriends(user: UserWithPreferences, context: Context){
         viewModelScope.launch {
             when(friendRepository.fetchUserFriend(user.user, true)) {
-                is Result.Success -> fetchCheckLists(user)
+                is Result.Success -> fetchCheckLists(user, context)
                 else -> showSnackBarMessage(R.string.error_fetch_friends)
             }
         }

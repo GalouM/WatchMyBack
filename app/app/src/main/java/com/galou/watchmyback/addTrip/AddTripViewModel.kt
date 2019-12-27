@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.work.*
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.WorkManager
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
-import com.galou.watchmyback.backgroundWork.CheckUpWorker
 import com.galou.watchmyback.base.BaseViewModel
 import com.galou.watchmyback.data.applicationUse.Watcher
 import com.galou.watchmyback.data.entity.*
@@ -17,7 +17,7 @@ import com.galou.watchmyback.data.repository.TripRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.CHECK_UP_WORKER_TAG
 import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.USER_ID_DATA
+import com.galou.watchmyback.utils.createCheckUpWorker
 import com.galou.watchmyback.utils.extension.emitNewValue
 import com.galou.watchmyback.utils.extension.filterOrCreateMainPoint
 import com.galou.watchmyback.utils.extension.filterScheduleStage
@@ -26,7 +26,6 @@ import com.galou.watchmyback.utils.todaysDate
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 /**
  * ViewModel for [AddTripActivity]
@@ -518,18 +517,11 @@ class AddTripViewModel(
 
     private fun configureCheckUpWorkManager(context: Context){
         if (trip.trip.updateFrequency != TripUpdateFrequency.NEVER){
-            val constraints = Constraints.Builder()
-                .setRequiresBatteryNotLow(true)
-                .setRequiredNetworkType(NetworkType.CONNECTED).build()
-            val frequencyUpdate = trip.trip.updateFrequency?.frequencyMillisecond ?: throw Exception("No frequency setup for $trip")
-            val checkUpWorker = PeriodicWorkRequestBuilder<CheckUpWorker>(frequencyUpdate, TimeUnit.MILLISECONDS)
-                .setConstraints(constraints)
-                .setInputData(Data.Builder().putString(USER_ID_DATA, trip.trip.userId).build())
-                .setInitialDelay(frequencyUpdate, TimeUnit.MILLISECONDS)
-                .addTag(CHECK_UP_WORKER_TAG)
-                .build()
             WorkManager.getInstance(context)
-                .enqueueUniquePeriodicWork(CHECK_UP_WORKER_TAG, ExistingPeriodicWorkPolicy.REPLACE, checkUpWorker)
+                .enqueueUniquePeriodicWork(
+                    CHECK_UP_WORKER_TAG,
+                    ExistingPeriodicWorkPolicy.REPLACE,
+                    createCheckUpWorker(trip))
         }
     }
 
