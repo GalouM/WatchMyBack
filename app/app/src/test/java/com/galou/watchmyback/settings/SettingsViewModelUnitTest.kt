@@ -1,6 +1,9 @@
 package com.galou.watchmyback.settings
 
+import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.work.Configuration
+import androidx.work.impl.utils.SynchronousExecutor
 import com.galou.watchmyback.R
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.repository.FakeUserRepositoryImpl
@@ -36,6 +39,12 @@ class SettingsViewModelUnitTest : KoinTest {
     @Before
     fun setupViewModel(){
         Dispatchers.setMain(mainThreadSurrogate)
+
+        val config = Configuration.Builder()
+            .setMinimumLoggingLevel(Log.DEBUG)
+            .setExecutor(SynchronousExecutor())
+            .build()
+
         userRepository = FakeUserRepositoryImpl()
         fakeUser = generateTestUser(TEST_UID)
         userRepository.currentUser.value = fakeUser
@@ -98,6 +107,44 @@ class SettingsViewModelUnitTest : KoinTest {
         assertSnackBarMessage(viewModel.snackbarMessage,
             R.string.error_deletion
         )
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun enableNotificationLate_modifyPrefs(){
+        viewModel.clickNotificationLate(true)
+        assertThat(userRepository.userPreferences.value?.notificationLate).isTrue()
+        val value = LiveDataTestUtil.getValue(viewModel.enableLateNotificationLD)
+        assertThat(value.getContentIfNotHandled()).contains(userRepository.currentUser.value?.id)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun disableNotificationLate_modifyPrefs(){
+        viewModel.clickNotificationLate(false)
+        assertThat(userRepository.userPreferences.value?.notificationLate).isFalse()
+        val value = LiveDataTestUtil.getValue(viewModel.disableLateNotificationLD)
+        assertThat(value.getContentIfNotHandled()).isNotNull()
+
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun enableNotificationBackHome_modifyPrefs(){
+        viewModel.clickNotificationBackHome(true)
+        assertThat(userRepository.userPreferences.value?.notificationBackSafe).isTrue()
+        val value = LiveDataTestUtil.getValue(viewModel.enableBackHomeNotificationLD)
+        assertThat(value.getContentIfNotHandled()).contains(userRepository.currentUser.value?.id)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun disableNotificationBackHome_modifyPrefs(){
+        viewModel.clickNotificationBackHome(false)
+        assertThat(userRepository.userPreferences.value?.notificationBackSafe).isFalse()
+        val value = LiveDataTestUtil.getValue(viewModel.disableBackHomeNotificationLD)
+        assertThat(value.getContentIfNotHandled()).isNotNull()
+
     }
 
 

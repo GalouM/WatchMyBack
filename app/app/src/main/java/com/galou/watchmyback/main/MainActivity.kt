@@ -16,9 +16,13 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.WorkManager
 import com.firebase.ui.auth.AuthUI
 import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
+import com.galou.watchmyback.data.entity.Trip
+import com.galou.watchmyback.data.entity.TripUpdateFrequency
 import com.galou.watchmyback.databinding.ActivityMainBinding
 import com.galou.watchmyback.databinding.HeaderNavViewBinding
 import com.galou.watchmyback.detailsTrip.DetailsTripActivity
@@ -60,12 +64,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         configureBottomNavigation()
         configureNavigationView()
         setupOpenMyTripActivityObserver()
+        setupLateNotificationObserver()
+        setupBackHomeNotificationObserver()
+        setupConfigureCheckUpObserver()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
-            RC_SIGN_IN -> viewModel.handleSignIngActivityResult(resultCode, data, authFirebase.currentUser, applicationContext)
+            RC_SIGN_IN -> viewModel.handleSignIngActivityResult(resultCode, data, authFirebase.currentUser)
             RC_PROFILE ->  viewModel.handleResultAfterProfileActivityClosed(resultCode)
             RC_SETTINGS -> viewModel.handleResultSettingsActivity(resultCode)
         }
@@ -98,6 +105,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setupOpenMyTripActivityObserver(){
         viewModel.openMyTripActivityLD.observe(this, EventObserver { openMyTripActivity() })
+    }
+
+    private fun setupLateNotificationObserver(){
+        viewModel.enableLateNotificationLD.observe(this, EventObserver { configureLateNotification(it) })
+    }
+
+    private fun setupBackHomeNotificationObserver(){
+        viewModel.enableBackHomeNotificationLD.observe(this, EventObserver { configureBackHomeNotification(it) })
+    }
+
+    private fun setupConfigureCheckUpObserver(){
+        viewModel.configureTripCheckUpLD.observe(this, EventObserver { configureCheckUpWorkManager(it) })
     }
 
     //-------------------------
@@ -190,7 +209,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun configureFirebase(){
         authFirebase = FirebaseAuth.getInstance()
-        viewModel.checkIfUserIsConnected(authFirebase.currentUser, applicationContext)
+        viewModel.checkIfUserIsConnected(authFirebase.currentUser)
 
     }
 
@@ -229,6 +248,39 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 description = descriptionText
             }
             notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    //-----------------------
+    // TRIP WATCHING NOTIFICATION
+    //-----------------------
+
+    private fun configureLateNotification(userId: String){
+        WorkManager.getInstance(applicationContext)
+            .enqueueUniquePeriodicWork(
+                LATE_NOTIFICATION_WORKER_TAG,
+                ExistingPeriodicWorkPolicy.KEEP,
+                createLateNotificationWorker(userId)
+            )
+    }
+
+    private fun configureBackHomeNotification(userId: String){
+        WorkManager.getInstance(applicationContext)
+            .enqueueUniquePeriodicWork(
+                BACK_NOTIFICATION_WORKER_TAG,
+                ExistingPeriodicWorkPolicy.KEEP,
+                createBackNotificationWorker(userId)
+            )
+    }
+
+    private fun configureCheckUpWorkManager(trip: Trip){
+        if (trip.updateFrequency != TripUpdateFrequency.NEVER){
+            WorkManager.getInstance(applicationContext)
+                .enqueueUniquePeriodicWork(
+                    CHECK_UP_WORKER_TAG,
+                    ExistingPeriodicWorkPolicy.KEEP,
+                    createCheckUpWorker(trip)
+                )
         }
     }
 

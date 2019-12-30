@@ -1,12 +1,7 @@
 package com.galou.watchmyback.addTrip
 
-import android.content.Context
-import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galou.watchmyback.R
-import com.galou.watchmyback.WatchMyBackApplication
 import com.galou.watchmyback.data.applicationUse.Watcher
 import com.galou.watchmyback.data.entity.*
 import com.galou.watchmyback.data.repository.*
@@ -22,16 +17,12 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.koin.core.context.stopKoin
-import org.robolectric.annotation.Config
 
 /**
  * @author galou
  * 2019-12-01
  */
-@Config(sdk = [Build.VERSION_CODES.P])
-@RunWith(AndroidJUnit4::class)
 class AddTripViewModelTest {
 
     private lateinit var viewModel: AddTripViewModel
@@ -40,7 +31,6 @@ class AddTripViewModelTest {
     private lateinit var checkListRepository: FakeCheckListRepository
     private lateinit var friendRepository: FriendRepository
     private lateinit var tripRepository: TripRepository
-    private lateinit var context: Context
 
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
 
@@ -51,7 +41,6 @@ class AddTripViewModelTest {
     @Before
     fun setupViewModel(){
         Dispatchers.setMain(mainThreadSurrogate)
-        context = ApplicationProvider.getApplicationContext<WatchMyBackApplication>()
         userRepository = FakeUserRepositoryImpl()
         fakeUser = generateTestUser(TEST_UID)
         userRepository.currentUser.value = fakeUser
@@ -241,7 +230,7 @@ class AddTripViewModelTest {
 
     @Test
     fun onSaveTripWithFieldsEmptyAndNoStagePoint_showError(){
-        viewModel.startTrip(context)
+        viewModel.startTrip()
         assertThat(LiveDataTestUtil.getValue(viewModel.typeError)).isNotNull()
         assertThat(LiveDataTestUtil.getValue(viewModel.updateFrequencyError)).isNotNull()
         assertThat(LiveDataTestUtil.getValue(viewModel.watchersLD)).isNotNull()
@@ -261,7 +250,7 @@ class AddTripViewModelTest {
         viewModel.addStagePoint()
         val point2 = LiveDataTestUtil.getValue(viewModel.stagePointsLD)[1]
         viewModel.setPointLocation(123.344, 567.432, point1)
-        viewModel.startTrip(context)
+        viewModel.startTrip()
         val points = LiveDataTestUtil.getValue(viewModel.stagePointsLD)
         assertThat(points).contains(point1)
         assertThat(points).doesNotContain(point2)
@@ -293,7 +282,7 @@ class AddTripViewModelTest {
                 true
             )
         )
-        viewModel.startTrip(context)
+        viewModel.startTrip()
         //assertThat(LiveDataTestUtil.getValue(viewModel.tripLD).mainLocation).isEqualTo(city)
 
     }
@@ -322,7 +311,7 @@ class AddTripViewModelTest {
                 true
             )
         )
-        viewModel.startTrip(context)
+        viewModel.startTrip()
         //assertThat(LiveDataTestUtil.getValue(viewModel.tripLD).mainLocation).isEqualTo(country)
     }
 
@@ -367,6 +356,70 @@ class AddTripViewModelTest {
         val startPoint = LiveDataTestUtil.getValue(viewModel.startPointLD)
         assertThat(tripRepository.pointSelected).isEqualTo(startPoint)
         assertThat(LiveDataTestUtil.getValue(viewModel.fetchCurrentLocationLD)).isNotNull()
+
+    }
+
+    @Test
+    fun onClickSaveTripNoUpdate_emitTripSaved(){
+        val city = "Sun Peaks"
+        val country = "Canada"
+        with(viewModel.tripLD.value!!){
+            type = TripType.HIKING
+            updateFrequency = TripUpdateFrequency.NEVER
+        }
+        with(viewModel.startPointLD.value!!){
+            location?.city = city
+            location?.country = country
+            location?.latitude = 123.455
+            location?.longitude = 123.453
+            pointTrip.time = todaysDate
+        }
+        with(viewModel.endPointLD.value!!){
+            location?.latitude = 123.455
+            location?.longitude = 123.453
+            pointTrip.time = todaysDate
+        }
+        viewModel.addRemoveWatcher(
+            Watcher(
+                firstFriend,
+                true
+            )
+        )
+        viewModel.startTrip()
+        val value = LiveDataTestUtil.getValue(viewModel.tripSavedLD)
+        assertThat(value.getContentIfNotHandled()).isNotNull()
+
+    }
+
+    @Test
+    fun onClickSaveTripUpdates_emitTripSavedWithNotification(){
+        val city = "Sun Peaks"
+        val country = "Canada"
+        with(viewModel.tripLD.value!!){
+            type = TripType.HIKING
+            updateFrequency = TripUpdateFrequency.FIFTEEN_MINUTES
+        }
+        with(viewModel.startPointLD.value!!){
+            location?.city = city
+            location?.country = country
+            location?.latitude = 123.455
+            location?.longitude = 123.453
+            pointTrip.time = todaysDate
+        }
+        with(viewModel.endPointLD.value!!){
+            location?.latitude = 123.455
+            location?.longitude = 123.453
+            pointTrip.time = todaysDate
+        }
+        viewModel.addRemoveWatcher(
+            Watcher(
+                firstFriend,
+                true
+            )
+        )
+        viewModel.startTrip()
+        val value = LiveDataTestUtil.getValue(viewModel.tripSavedWithNotificationLD)
+        assertThat(value.getContentIfNotHandled()).isEqualTo(viewModel.tripLD.value)
 
     }
 

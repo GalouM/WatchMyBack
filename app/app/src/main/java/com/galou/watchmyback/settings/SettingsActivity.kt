@@ -7,11 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.WorkManager
 import com.firebase.ui.auth.AuthUI
 import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
 import com.galou.watchmyback.databinding.ActivitySettingsBinding
-import com.galou.watchmyback.utils.RESULT_ACCOUNT_DELETED
+import com.galou.watchmyback.utils.*
 import com.galou.watchmyback.utils.extension.setupSnackBar
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -56,10 +58,10 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun configureClickListener(){
         binding.settingsViewNotificationBackSwitch.apply {
-            setOnClickListener { viewModel.clickNotificationBackHome(isChecked, applicationContext) }
+            setOnClickListener { viewModel.clickNotificationBackHome(isChecked) }
         }
         binding.settingsViewNotificationLateSwitch.apply {
-            setOnClickListener { viewModel.clickNotificationLate(isChecked, applicationContext) }
+            setOnClickListener { viewModel.clickNotificationLate(isChecked) }
         }
 
     }
@@ -76,6 +78,8 @@ class SettingsActivity : AppCompatActivity() {
     private fun setupObserverViewModel(){
         setupSnackBar()
         setupDataDeleted()
+        setupLateNotificationEnableObserver()
+        setupBackHomeNotificationEnableObserver()
     }
 
     private fun setupSnackBar(){
@@ -86,6 +90,24 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun setupDataDeleted(){
         viewModel.dataDeleted.observe(this, EventObserver { closeActivityAndEmitDeleted() })
+    }
+
+    private fun setupLateNotificationEnableObserver(){
+        viewModel.enableLateNotificationLD.observe(this, EventObserver{ turnOnNotificationLate(it) })
+
+    }
+
+    private fun setupBackHomeNotificationEnableObserver(){
+        viewModel.enableBackHomeNotificationLD.observe(this, EventObserver { turnOnNotificationBack(it) })
+
+    }
+
+    private fun setupLateNotificationDisableObserver(){
+        viewModel.disableLateNotificationLD.observe(this, EventObserver { turnOffNotificationLate() })
+    }
+
+    private fun setupBackHomeNotificationDisableObserver(){
+        viewModel.disableBackHomeNotificationLD.observe(this, EventObserver { turnOffNotificationBack() })
     }
 
     private fun closeActivityAndEmitDeleted(){
@@ -101,5 +123,31 @@ class SettingsActivity : AppCompatActivity() {
 
             }
 
+    }
+
+    private fun turnOnNotificationLate(userId: String){
+        WorkManager.getInstance(applicationContext)
+            .enqueueUniquePeriodicWork(
+                LATE_NOTIFICATION_WORKER_TAG,
+                ExistingPeriodicWorkPolicy.KEEP,
+                createLateNotificationWorker(userId)
+            )
+    }
+
+    private fun turnOffNotificationLate(){
+        WorkManager.getInstance(applicationContext).cancelAllWorkByTag(LATE_NOTIFICATION_WORKER_TAG)
+    }
+
+    private fun turnOnNotificationBack(userId: String){
+        WorkManager.getInstance(applicationContext)
+            .enqueueUniquePeriodicWork(
+                BACK_NOTIFICATION_WORKER_TAG,
+                ExistingPeriodicWorkPolicy.KEEP,
+                createBackNotificationWorker(userId)
+            )
+    }
+
+    private fun turnOffNotificationBack(){
+        WorkManager.getInstance(applicationContext).cancelAllWorkByTag(BACK_NOTIFICATION_WORKER_TAG)
     }
 }

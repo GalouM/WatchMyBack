@@ -12,6 +12,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.WorkManager
 import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
 import com.galou.watchmyback.addFriend.AddFriendActivity
@@ -106,6 +108,7 @@ class AddTripActivity : AppCompatActivity(),
         setupFetchCurrentLocation()
         setupTripSaved()
         setupOpenMapPicker()
+        setupTripSavedWithNotification()
 
     }
 
@@ -156,6 +159,10 @@ class AddTripActivity : AppCompatActivity(),
 
     private fun setupTripSaved(){
         viewModel.tripSavedLD.observe(this, EventObserver { tripCreated() })
+    }
+
+    private fun setupTripSavedWithNotification(){
+        viewModel.tripSavedWithNotificationLD.observe(this, EventObserver { configureCheckUpWorkManager(it) })
     }
 
     private fun setupOpenMapPicker(){
@@ -291,6 +298,15 @@ class AddTripActivity : AppCompatActivity(),
         finish()
     }
 
+    private fun configureCheckUpWorkManager(trip: Trip){
+        WorkManager.getInstance(applicationContext)
+            .enqueueUniquePeriodicWork(
+                CHECK_UP_WORKER_TAG,
+                ExistingPeriodicWorkPolicy.REPLACE,
+                createCheckUpWorker(trip))
+        tripCreated()
+    }
+
     //-------------------------
     //  CONFIGURE UI
     //-------------------------
@@ -311,7 +327,7 @@ class AddTripActivity : AppCompatActivity(),
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.validate_menu_validate -> viewModel.startTrip(applicationContext)
+            R.id.validate_menu_validate -> viewModel.startTrip()
             android.R.id.home -> finish()
         }
 

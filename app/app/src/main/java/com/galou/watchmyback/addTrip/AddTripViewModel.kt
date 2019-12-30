@@ -1,11 +1,8 @@
 package com.galou.watchmyback.addTrip
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.WorkManager
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
 import com.galou.watchmyback.base.BaseViewModel
@@ -15,9 +12,7 @@ import com.galou.watchmyback.data.repository.CheckListRepository
 import com.galou.watchmyback.data.repository.FriendRepository
 import com.galou.watchmyback.data.repository.TripRepository
 import com.galou.watchmyback.data.repository.UserRepository
-import com.galou.watchmyback.utils.CHECK_UP_WORKER_TAG
 import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.createCheckUpWorker
 import com.galou.watchmyback.utils.extension.emitNewValue
 import com.galou.watchmyback.utils.extension.filterOrCreateMainPoint
 import com.galou.watchmyback.utils.extension.filterScheduleStage
@@ -150,6 +145,9 @@ class AddTripViewModel(
 
     private val _tripSavedLD = MutableLiveData<Event<Unit>>()
     val tripSavedLD: LiveData<Event<Unit>> = _tripSavedLD
+
+    private val _tripSavedWithNotificationLD = MutableLiveData<Event<Trip>>()
+    val tripSavedWithNotificationLD: LiveData<Event<Trip>> = _tripSavedWithNotificationLD
 
 
     /**
@@ -464,7 +462,7 @@ class AddTripViewModel(
      * @see TripRepository.createTrip
      *
      */
-    fun startTrip(context: Context){
+    fun startTrip(){
 
         fun createTripInDatabase(){
             with(trip.trip){
@@ -478,8 +476,10 @@ class AddTripViewModel(
             viewModelScope.launch {
                 when(tripRepository.createTrip(trip, checkList)){
                     is Result.Success -> {
-                        configureCheckUpWorkManager(context)
-                        _tripSavedLD.value = Event(Unit)
+                        if(trip.trip.updateFrequency != TripUpdateFrequency.NEVER){
+                            _tripSavedWithNotificationLD.value = Event(trip.trip)
+                        } else _tripSavedLD.value = Event(Unit)
+
                     }
                     is Result.Error -> showSnackBarMessage(R.string.trip_creation_error)
                     is Result.Canceled -> showSnackBarMessage(R.string.trip_creation_error)
@@ -512,16 +512,6 @@ class AddTripViewModel(
             fetchPointLocationInformation()
         } else {
             _dataLoading.value = false
-        }
-    }
-
-    private fun configureCheckUpWorkManager(context: Context){
-        if (trip.trip.updateFrequency != TripUpdateFrequency.NEVER){
-            WorkManager.getInstance(context)
-                .enqueueUniquePeriodicWork(
-                    CHECK_UP_WORKER_TAG,
-                    ExistingPeriodicWorkPolicy.REPLACE,
-                    createCheckUpWorker(trip))
         }
     }
 

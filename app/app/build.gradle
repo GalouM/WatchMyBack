@@ -198,6 +198,7 @@ dependencies {
 
     // WORK MANAGER
     implementation "androidx.work:work-runtime-ktx:$rootProject.work_version"
+    androidTestImplementation "androidx.work:work-testing:$rootProject.work_version"
 }
 
 project.afterEvaluate {
