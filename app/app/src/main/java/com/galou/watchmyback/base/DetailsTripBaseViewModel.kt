@@ -29,14 +29,8 @@ abstract class DetailsTripBaseViewModel(
     private val _centerCameraUserLD = MutableLiveData<Event<Unit>>()
     val centerCameraUserLD: LiveData<Event<Unit>> = _centerCameraUserLD
 
-    protected val _schedulePointsLD = MutableLiveData<Map<String, Coordinate>>()
-    val schedulePointsLD: LiveData<Map<String, Coordinate>> = _schedulePointsLD
-
-    protected val _checkedPointsLD = MutableLiveData<Map<String, Coordinate>>()
-    val checkedPointsLD: LiveData<Map<String, Coordinate>> = _checkedPointsLD
-
-    protected val _startEndPointsLD = MutableLiveData<Map<String, Coordinate>>()
-    val startEndPointsLD: LiveData<Map<String, Coordinate>> = _startEndPointsLD
+    protected val _pointsCoordinateLD = MutableLiveData<List<Map<String, Coordinate>>>()
+    val pointsCoordinateLD: LiveData<List<Map<String, Coordinate>>> = _pointsCoordinateLD
 
     private val _showPointDetailsLD = MutableLiveData<Event<Unit>>()
     val showPointDetailsLD: LiveData<Event<Unit>> = _showPointDetailsLD

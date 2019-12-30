@@ -72,9 +72,7 @@ class TripMapViewModel(
                 TypePoint.START, TypePoint.END -> startEndPoints[point.pointTrip.id] = point.getCoordinate()
             }
         }
-        _schedulePointsLD.value = schedulePoints
-        _checkedPointsLD.value = checkedPoints
-        _startEndPointsLD.value = startEndPoints
+        _pointsCoordinateLD.value = listOf(startEndPoints, schedulePoints, checkedPoints)
         _dataLoading.value = false
 
     }
@@ -91,12 +89,10 @@ class TripMapViewModel(
                 trip.status = TripStatus.BACK_SAFE
                 trip.active = false
             }
-            when(val result = tripRepository.updateTripStatus(currentTrip!!)){
+            when(tripRepository.updateTripStatus(currentTrip!!)){
                 is Result.Success -> {
                     _tripLD.value = null
-                    _schedulePointsLD.value = null
-                    _startEndPointsLD.value = null
-                    _checkedPointsLD.value = null
+                    _pointsCoordinateLD.value = null
                     currentTrip = null
                     showSnackBarMessage(R.string.back_home_safe)
                 }

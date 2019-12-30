@@ -120,8 +120,7 @@ class DetailsTripViewModel(
     }
 
     fun reEmitPointLocation(){
-        _checkedPointsLD.emitNewValue()
-        _schedulePointsLD.emitNewValue()
+        _pointsCoordinateLD.emitNewValue()
         _lastPointCoordinate.emitNewValue()
     }
 
@@ -226,9 +225,7 @@ class DetailsTripViewModel(
             _lastPointCoordinate.value = latestPoint?.createMapCoordinate()
         }
 
-         _schedulePointsLD.value = schedulePoints
-         _checkedPointsLD.value = checkedPoints
-        _startEndPointsLD.value = startEndPoints
+        _pointsCoordinateLD.value = listOf(startEndPoints, schedulePoints, checkedPoints)
 
         _dataLoading.value = false
 

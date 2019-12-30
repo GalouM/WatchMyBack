@@ -79,10 +79,8 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
         setupOpenStartNewTrip()
         setupCenterCameraObserver()
         setupUserConnected()
-        setupSchedulePointsObserver()
-        setupCheckUpPointsObserver()
+        setupPointsCoordinateObserver()
         setupShowDetailPointObserver()
-        setupStartEndPointObserver()
 
     }
 
@@ -104,16 +102,8 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
         viewModel.userLD.observe(this, Observer { if (it != null) setupMap() })
     }
 
-    private fun setupSchedulePointsObserver(){
-        viewModel.schedulePointsLD.observe(this, Observer { displaySchedulePoints(it) })
-    }
-
-    private fun setupCheckUpPointsObserver(){
-        viewModel.checkedPointsLD.observe(this, Observer { displayCheckedUpPoint(it) })
-    }
-
-    private fun setupStartEndPointObserver(){
-        viewModel.startEndPointsLD.observe(this, Observer { displayStartEndPoints(it) })
+    private fun setupPointsCoordinateObserver(){
+        viewModel.pointsCoordinateLD.observe(this, Observer { displayPointsOnMap(it) })
     }
 
     private fun setupShowDetailPointObserver(){
@@ -174,28 +164,17 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
         }
     }
 
-    private fun displaySchedulePoints(pointData: Map<String, Coordinate>?){
-        if (pointData != null){
-            pointData.displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY)
+    private fun displayPointsOnMap(pointsCoordinate: List<Map<String, Coordinate>>?){
+        if(pointsCoordinate != null){
+            displayData("$pointsCoordinate")
+            pointsCoordinate[0].displayPointsOnMap(symbolManager, ICON_LOCATION_ACCENT)
+            pointsCoordinate[1].displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY)
+            pointsCoordinate[2].displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY_LIGHT)
+            displayData("${symbolManager?.annotations}")
         } else {
             symbolManager?.deleteAll()
         }
-    }
 
-    private fun displayCheckedUpPoint(pointData: Map<String, Coordinate>?){
-        if (pointData != null){
-            pointData.displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY_LIGHT)
-        } else {
-            symbolManager?.deleteAll()
-        }
-    }
-
-    private fun displayStartEndPoints(pointData: Map<String, Coordinate>?){
-        if (pointData != null){
-            pointData.displayPointsOnMap(symbolManager, ICON_LOCATION_ACCENT)
-        } else {
-            symbolManager?.deleteAll()
-        }
 
     }
 

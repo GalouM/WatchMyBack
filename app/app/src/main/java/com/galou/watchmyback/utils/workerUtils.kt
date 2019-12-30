@@ -29,7 +29,7 @@ fun createCheckUpWorker(trip: TripWithData): PeriodicWorkRequest{
 fun createLateNotificationWorker(userId: String): PeriodicWorkRequest {
     val constraints = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED).build()
-    return PeriodicWorkRequestBuilder<LateTripWorker>(15, TimeUnit.MINUTES)
+    return PeriodicWorkRequestBuilder<LateTripWorker>(1, TimeUnit.HOURS)
         .setConstraints(constraints)
         .setInputData(Data.Builder().putString(USER_ID_DATA, userId).build())
         .addTag(LATE_NOTIFICATION_WORKER_TAG)
@@ -39,7 +39,7 @@ fun createLateNotificationWorker(userId: String): PeriodicWorkRequest {
 fun createBackNotificationWorker(userId: String): PeriodicWorkRequest {
     val constraints = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED).build()
-    return PeriodicWorkRequestBuilder<BackHomeWorker>(15, TimeUnit.MINUTES)
+    return PeriodicWorkRequestBuilder<BackHomeWorker>(1, TimeUnit.HOURS)
         .setConstraints(constraints)
         .setInputData(Data.Builder().putString(USER_ID_DATA, userId).build())
         .addTag(BACK_NOTIFICATION_WORKER_TAG)

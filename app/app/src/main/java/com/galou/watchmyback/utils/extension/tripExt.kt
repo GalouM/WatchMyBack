@@ -4,7 +4,6 @@ import com.galou.watchmyback.data.applicationUse.Coordinate
 import com.galou.watchmyback.data.applicationUse.TripDisplay
 import com.galou.watchmyback.data.entity.*
 import com.galou.watchmyback.data.remoteDBObject.TripWithDataRemoteDB
-import com.galou.watchmyback.utils.idGenerated
 import com.galou.watchmyback.utils.todaysDate
 import java.text.SimpleDateFormat
 import java.util.*
@@ -112,18 +111,15 @@ fun TripWithData.isRecent(limitDate: Date): Boolean{
 }
 
 infix fun TripWithData.addCheckUpPoint(coordinate: Coordinate): PointTripWithData{
-    val id = idGenerated
     val checkUpPoint = PointTripWithData(
         pointTrip = PointTrip(
-            id = id,
             tripId = trip.id,
             typePoint = TypePoint.CHECKED_UP,
-            time = todaysDate),
-        location = Location(
-            pointId = id,
-            latitude = coordinate.latitude,
-            longitude = coordinate.longitude)
-    )
+            time = todaysDate)
+    ).apply {
+        location?.newLongitude = coordinate.longitude
+        location?.newLatitude = coordinate.latitude
+    }
     points.add(checkUpPoint)
     return checkUpPoint
 }

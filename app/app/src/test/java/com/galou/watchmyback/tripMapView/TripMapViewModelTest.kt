@@ -81,9 +81,7 @@ class TripMapViewModelTest {
         assertThat(value).isNull()
         assertSnackBarMessage(viewModel.snackbarMessage, R.string.back_home_safe)
         assertThat(LiveDataTestUtil.getValue(viewModel.tripLD)).isNull()
-        assertThat(LiveDataTestUtil.getValue(viewModel.schedulePointsLD)).isNull()
-        assertThat(LiveDataTestUtil.getValue(viewModel.startEndPointsLD)).isNull()
-        assertThat(LiveDataTestUtil.getValue(viewModel.checkedPointsLD)).isNull()
+        assertThat(LiveDataTestUtil.getValue(viewModel.pointsCoordinateLD)).isNull()
     }
 
     @Test
@@ -102,7 +100,7 @@ class TripMapViewModelTest {
     @Test
     fun fetchTrip_emitSchedulePointCoordinate(){
         viewModel.fetchAndDisplayUserActiveTrip()
-        assertThat(LiveDataTestUtil.getValue(viewModel.schedulePointsLD).keys)
+        assertThat(LiveDataTestUtil.getValue(viewModel.pointsCoordinateLD)[1].keys)
             .containsAtLeastElementsIn(tripWithData.points
                 .filter { it.pointTrip.typePoint == TypePoint.SCHEDULE_STAGE }
                 .map { it.pointTrip.id })
@@ -111,7 +109,7 @@ class TripMapViewModelTest {
     @Test
     fun fetchTrip_emitStartAndEndPointCoordinate(){
         viewModel.fetchAndDisplayUserActiveTrip()
-        assertThat(LiveDataTestUtil.getValue(viewModel.startEndPointsLD).keys)
+        assertThat(LiveDataTestUtil.getValue(viewModel.pointsCoordinateLD)[0].keys)
             .containsAtLeast(tripWithData.points.find { it.pointTrip.typePoint == TypePoint.START }?.pointTrip?.id,
                 tripWithData.points.find { it.pointTrip.typePoint == TypePoint.END }?.pointTrip?.id)
 
@@ -120,7 +118,7 @@ class TripMapViewModelTest {
     @Test
     fun fetchTrip_emitCheckedUpPointCoordinate(){
         viewModel.fetchAndDisplayUserActiveTrip()
-        assertThat(LiveDataTestUtil.getValue(viewModel.checkedPointsLD).keys)
+        assertThat(LiveDataTestUtil.getValue(viewModel.pointsCoordinateLD)[2].keys)
             .containsExactlyElementsIn(tripWithData.points
                 .filter { it.pointTrip.typePoint == TypePoint.CHECKED_UP }
                 .map { it.pointTrip.id })
@@ -138,7 +136,7 @@ class TripMapViewModelTest {
     @Test
     fun clickPointMap_selectPointAndShowDetails(){
         viewModel.fetchAndDisplayUserActiveTrip()
-        LiveDataTestUtil.getValue(viewModel.schedulePointsLD) //wait fro view model to fetch the current trip
+        LiveDataTestUtil.getValue(viewModel.pointsCoordinateLD) //wait fro view model to fetch the current trip
         viewModel.clickPointTrip(tripWithData.points[0].pointTrip.id)
         assertThat(tripRepository.pointSelected).isEqualTo(tripWithData.points[0])
         val value = LiveDataTestUtil.getValue(viewModel.showPointDetailsLD)

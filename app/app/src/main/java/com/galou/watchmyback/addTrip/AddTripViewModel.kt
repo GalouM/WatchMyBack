@@ -355,8 +355,8 @@ class AddTripViewModel(
      */
     fun setPointLocation(lat: Double, lgn: Double, point: PointTripWithData){
         point.location!!.apply {
-            latitude = lat.toBigDecimal().setScale(4, RoundingMode.HALF_UP).toDouble()
-            longitude = lgn.toBigDecimal().setScale(4, RoundingMode.HALF_UP).toDouble()
+            newLatitude = lat.toBigDecimal().setScale(4, RoundingMode.HALF_UP).toDouble()
+            newLongitude = lgn.toBigDecimal().setScale(4, RoundingMode.HALF_UP).toDouble()
         }
         emitNewValuePoint(point)
         _dataLoading.value = false

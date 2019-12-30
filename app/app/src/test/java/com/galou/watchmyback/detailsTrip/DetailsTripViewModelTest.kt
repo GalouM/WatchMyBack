@@ -109,7 +109,7 @@ class DetailsTripViewModelTest {
     @Test
     fun fetchTrip_emitSchedulePointCoordinate(){
         viewModel.fetchTripInfo(tripWithData.trip.id)
-        assertThat(LiveDataTestUtil.getValue(viewModel.schedulePointsLD).keys)
+        assertThat(LiveDataTestUtil.getValue(viewModel.pointsCoordinateLD)[1].keys)
             .containsAtLeastElementsIn(tripWithData.points
                 .filter { it.pointTrip.typePoint == TypePoint.SCHEDULE_STAGE }
                 .map { it.pointTrip.id })
@@ -118,7 +118,7 @@ class DetailsTripViewModelTest {
     @Test
     fun fetchTrip_emitStartAndEndPointCoordinate(){
         viewModel.fetchTripInfo(tripWithData.trip.id)
-        assertThat(LiveDataTestUtil.getValue(viewModel.startEndPointsLD).keys)
+        assertThat(LiveDataTestUtil.getValue(viewModel.pointsCoordinateLD)[0].keys)
             .containsAtLeast(tripWithData.points.find { it.pointTrip.typePoint == TypePoint.START }?.pointTrip?.id,
                 tripWithData.points.find { it.pointTrip.typePoint == TypePoint.END }?.pointTrip?.id)
 
@@ -128,7 +128,7 @@ class DetailsTripViewModelTest {
     @Test
     fun fetchTrip_emitCheckedUpPointCoordinate(){
         viewModel.fetchTripInfo(tripWithData.trip.id)
-        assertThat(LiveDataTestUtil.getValue(viewModel.checkedPointsLD).keys)
+        assertThat(LiveDataTestUtil.getValue(viewModel.pointsCoordinateLD)[2].keys)
             .containsExactlyElementsIn(tripWithData.points
                 .filter { it.pointTrip.typePoint == TypePoint.CHECKED_UP }
                 .map { it.pointTrip.id })

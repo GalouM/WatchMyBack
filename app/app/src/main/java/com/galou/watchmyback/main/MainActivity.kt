@@ -1,6 +1,10 @@
 package com.galou.watchmyback.main
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -20,9 +24,7 @@ import com.galou.watchmyback.databinding.HeaderNavViewBinding
 import com.galou.watchmyback.detailsTrip.DetailsTripActivity
 import com.galou.watchmyback.profile.ProfileActivity
 import com.galou.watchmyback.settings.SettingsActivity
-import com.galou.watchmyback.utils.RC_PROFILE
-import com.galou.watchmyback.utils.RC_SETTINGS
-import com.galou.watchmyback.utils.RC_SIGN_IN
+import com.galou.watchmyback.utils.*
 import com.galou.watchmyback.utils.extension.setupSnackBar
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -42,10 +44,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         AuthUI.IdpConfig.GoogleBuilder().build()
     )
 
+    private lateinit var notificationManager: NotificationManager
+
     private val viewModel: MainActivityViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        createNotificationLateChannel()
+        createNotificationBackLateChannel()
         configureBinding()
         setupObserverViewModel()
         configureFirebase()
@@ -195,6 +202,34 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .build(),
             RC_SIGN_IN
         )
+    }
+
+    //-------------------------
+    //  NOIFICATIONS
+    //-------------------------
+
+    private fun createNotificationLateChannel(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val name = getString(R.string.channel_late_name)
+            val descriptionText = getString(R.string.channel_late_description)
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(CHANNEL_LATE_ID, name, importance).apply {
+                description = descriptionText
+            }
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun createNotificationBackLateChannel(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val name = getString(R.string.channel_back_name)
+            val descriptionText = getString(R.string.channel_back_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_BACK_ID, name, importance).apply {
+                description = descriptionText
+            }
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 
 

@@ -65,7 +65,7 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
     private fun setupMap(){
         mapView.getMapAsync { mapboxMap ->
             mapBox = mapboxMap
-            mapBox?.setStyle(Style.SATELLITE) {style ->
+            mapBox!!.setStyle(Style.SATELLITE) {style ->
                 styleMap = style
                 styleMap.addIconsLocation(activity!!)
                 symbolManager = SymbolManager(mapView, mapBox!!, styleMap).apply {
@@ -90,9 +90,7 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
     private fun setupObserverViewModel(){
         setupCenterCameraObserver()
         setupUserConnected()
-        setupSchedulePointsObserver()
-        setupCheckUpPointsObserver()
-        setupStartEndPointObserver()
+        setupPointCoordinateObserver()
         setupLatestPointObserver()
 
     }
@@ -105,16 +103,8 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
         viewModel.userLD.observe(this, Observer { setupMap() })
     }
 
-    private fun setupSchedulePointsObserver(){
-        viewModel.schedulePointsLD.observe(this, Observer { displaySchedulePoints(it) })
-    }
-
-    private fun setupCheckUpPointsObserver(){
-        viewModel.checkedPointsLD.observe(this, Observer { displayCheckedUpPoint(it) })
-    }
-
-    private fun setupStartEndPointObserver(){
-        viewModel.startEndPointsLD.observe(this, Observer { displayStartEndPoints(it) })
+    private fun setupPointCoordinateObserver(){
+        viewModel.pointsCoordinateLD.observe(this, Observer { displayPointsOnMap(it) })
     }
 
     private fun setupLatestPointObserver(){
@@ -141,18 +131,13 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
         }
     }
 
+    private fun displayPointsOnMap(pointsCoordinate: List<Map<String, Coordinate>>){
+        displayData("$pointsCoordinate")
+        pointsCoordinate[0].displayPointsOnMap(symbolManager, ICON_LOCATION_ACCENT)
+        pointsCoordinate[1].displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY)
+        pointsCoordinate[2].displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY_LIGHT)
+        displayData("${symbolManager?.annotations}")
 
-    private fun displaySchedulePoints(pointData: Map<String, Coordinate>){
-        pointData.displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY)
-    }
-
-    private fun displayCheckedUpPoint(pointData: Map<String, Coordinate>){
-        pointData.displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY_LIGHT)
-    }
-
-    private fun displayStartEndPoints(pointData: Map<String, Coordinate>){
-        displayData("start end: $pointData")
-        pointData.displayPointsOnMap(symbolManager, ICON_LOCATION_ACCENT)
     }
 
     private fun focusCameraOnLatestPoint(pointData: Map<String, Coordinate>){
