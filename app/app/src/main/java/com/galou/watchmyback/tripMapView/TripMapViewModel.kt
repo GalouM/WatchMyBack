@@ -1,10 +1,8 @@
 package com.galou.watchmyback.tripMapView
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.work.WorkManager
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
 import com.galou.watchmyback.base.DetailsTripBaseViewModel
@@ -14,7 +12,6 @@ import com.galou.watchmyback.data.entity.TripWithData
 import com.galou.watchmyback.data.entity.TypePoint
 import com.galou.watchmyback.data.repository.TripRepository
 import com.galou.watchmyback.data.repository.UserRepository
-import com.galou.watchmyback.utils.CHECK_UP_WORKER_TAG
 import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.extension.getCoordinate
 import kotlinx.coroutines.launch
@@ -31,15 +28,18 @@ class TripMapViewModel(
     private val _openAddTripActivity = MutableLiveData<Event<Unit>>()
     val openAddTripActivity: LiveData<Event<Unit>> = _openAddTripActivity
 
+    private val  _cancelCheckUpWorkerLD = MutableLiveData<Event<Unit>>()
+    val  cancelCheckUpWorkerLD: LiveData<Event<Unit>> = _cancelCheckUpWorkerLD
+
     /**
      * Show activity to start a new trip
      *
      */
-    fun clickStartStop(context: Context){
+    fun clickStartStop(){
         if (currentTrip == null){
             startNewTrip()
         } else {
-            stopCurrentTrip(context)
+            stopCurrentTrip()
         }
 
     }
@@ -81,9 +81,9 @@ class TripMapViewModel(
         _openAddTripActivity.value = Event(Unit)
     }
 
-    private fun stopCurrentTrip(context: Context){
+    private fun stopCurrentTrip(){
         _dataLoading.value = true
-        cancelWorkManager(context)
+        _cancelCheckUpWorkerLD.value = Event(Unit)
         viewModelScope.launch {
             currentTrip?.trip?.let { trip ->
                 trip.status = TripStatus.BACK_SAFE
@@ -104,7 +104,4 @@ class TripMapViewModel(
 
     }
 
-    private fun cancelWorkManager(context: Context){
-        WorkManager.getInstance(context).cancelAllWorkByTag(CHECK_UP_WORKER_TAG)
-    }
 }

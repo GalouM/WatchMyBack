@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.work.WorkManager
 import com.galou.watchmyback.BuildConfig
 import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
@@ -71,7 +72,7 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
         binding.lifecycleOwner = this.viewLifecycleOwner
         mapView = binding.tripMapViewMap
 
-        binding.tripMapViewFab.setOnClickListener { viewModel.clickStartStop(activity!!.applicationContext) }
+        binding.tripMapViewFab.setOnClickListener { viewModel.clickStartStop() }
     }
 
     private fun setupObserverViewModel(){
@@ -81,6 +82,7 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
         setupUserConnected()
         setupPointsCoordinateObserver()
         setupShowDetailPointObserver()
+        setupCancelCheckUpWorkerObserver()
 
     }
 
@@ -108,6 +110,10 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
 
     private fun setupShowDetailPointObserver(){
         viewModel.showPointDetailsLD.observe(this, EventObserver { showPointDetails() })
+    }
+
+    private fun setupCancelCheckUpWorkerObserver(){
+        viewModel.cancelCheckUpWorkerLD.observe(this, EventObserver { cancelWorkManager() })
     }
 
     private fun openStartNewTripActivity(){
@@ -182,6 +188,10 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
         with(Intent(activity!!, DetailsPointActivity::class.java)){
             startActivity(this)
         }
+    }
+
+    private fun cancelWorkManager(){
+        WorkManager.getInstance(activity!!.applicationContext).cancelAllWorkByTag(CHECK_UP_WORKER_TAG)
     }
 
     override fun onRequestPermissionsResult(

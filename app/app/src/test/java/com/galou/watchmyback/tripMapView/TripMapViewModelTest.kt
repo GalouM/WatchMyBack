@@ -1,12 +1,7 @@
 package com.galou.watchmyback.tripMapView
 
-import android.content.Context
-import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.galou.watchmyback.R
-import com.galou.watchmyback.WatchMyBackApplication
 import com.galou.watchmyback.data.entity.TypePoint
 import com.galou.watchmyback.data.repository.FakeTripRepositoryImpl
 import com.galou.watchmyback.data.repository.FakeUserRepositoryImpl
@@ -24,22 +19,17 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.koin.core.context.stopKoin
-import org.robolectric.annotation.Config
 
 /**
  * @author galou
  * 2019-11-30
  */
-@Config(sdk = [Build.VERSION_CODES.P])
-@RunWith(AndroidJUnit4::class)
 class TripMapViewModelTest {
 
     private lateinit var viewModel: TripMapViewModel
     private lateinit var tripRepository: FakeTripRepositoryImpl
     private lateinit var userRepository: FakeUserRepositoryImpl
-    private lateinit var context: Context
 
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
 
@@ -50,7 +40,6 @@ class TripMapViewModelTest {
     @Before
     fun setupViewModel(){
         Dispatchers.setMain(mainThreadSurrogate)
-        context = ApplicationProvider.getApplicationContext<WatchMyBackApplication>()
         tripRepository = FakeTripRepositoryImpl()
         userRepository = FakeUserRepositoryImpl()
         userRepository.currentUser.value = mainUser
@@ -67,7 +56,7 @@ class TripMapViewModelTest {
 
     @Test
     fun clickStartTrip_openAddTripActivity(){
-        viewModel.clickStartStop(context)
+        viewModel.clickStartStop()
         val value = LiveDataTestUtil.getValue(viewModel.openAddTripActivity)
         assertThat(value.getContentIfNotHandled()).isNotNull()
     }
@@ -76,7 +65,7 @@ class TripMapViewModelTest {
     fun clickStopTrip_showMessage(){
         viewModel.fetchAndDisplayUserActiveTrip()
         LiveDataTestUtil.getValue(viewModel.tripLD)
-        viewModel.clickStartStop(context)
+        viewModel.clickStartStop()
         val value = LiveDataTestUtil.getValue(viewModel.openAddTripActivity)
         assertThat(value).isNull()
         assertSnackBarMessage(viewModel.snackbarMessage, R.string.back_home_safe)
@@ -141,5 +130,15 @@ class TripMapViewModelTest {
         assertThat(tripRepository.pointSelected).isEqualTo(tripWithData.points[0])
         val value = LiveDataTestUtil.getValue(viewModel.showPointDetailsLD)
         assertThat(value.getContentIfNotHandled()).isNotNull()
+    }
+
+    @Test
+    fun stopTrip_cancelCheckUpWorker(){
+        viewModel.fetchAndDisplayUserActiveTrip()
+        LiveDataTestUtil.getValue(viewModel.pointsCoordinateLD) //wait fro view model to fetch the current trip
+        viewModel.clickStartStop()
+        val value = LiveDataTestUtil.getValue(viewModel.cancelCheckUpWorkerLD)
+        assertThat(value.getContentIfNotHandled()).isNotNull()
+
     }
 }
