@@ -1,7 +1,9 @@
 package com.galou.watchmyback.utils
 
 import androidx.work.*
+import com.galou.watchmyback.backgroundWork.BackHomeWorker
 import com.galou.watchmyback.backgroundWork.CheckUpWorker
+import com.galou.watchmyback.backgroundWork.LateTripWorker
 import com.galou.watchmyback.data.entity.TripWithData
 import java.util.concurrent.TimeUnit
 
@@ -22,4 +24,24 @@ fun createCheckUpWorker(trip: TripWithData): PeriodicWorkRequest{
         .addTag(CHECK_UP_WORKER_TAG)
         .build()
 
+}
+
+fun createLateNotificationWorker(userId: String): PeriodicWorkRequest {
+    val constraints = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED).build()
+    return PeriodicWorkRequestBuilder<LateTripWorker>(15, TimeUnit.MINUTES)
+        .setConstraints(constraints)
+        .setInputData(Data.Builder().putString(USER_ID_DATA, userId).build())
+        .addTag(LATE_NOTIFICATION_WORKER_TAG)
+        .build()
+}
+
+fun createBackNotificationWorker(userId: String): PeriodicWorkRequest {
+    val constraints = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED).build()
+    return PeriodicWorkRequestBuilder<BackHomeWorker>(15, TimeUnit.MINUTES)
+        .setConstraints(constraints)
+        .setInputData(Data.Builder().putString(USER_ID_DATA, userId).build())
+        .addTag(BACK_NOTIFICATION_WORKER_TAG)
+        .build()
 }

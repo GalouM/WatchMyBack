@@ -12,10 +12,7 @@ import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
 import com.galou.watchmyback.data.applicationUse.Coordinate
 import com.galou.watchmyback.databinding.FragmentDetailsTripMapBinding
-import com.galou.watchmyback.utils.ICON_LOCATION_ACCENT
-import com.galou.watchmyback.utils.ICON_LOCATION_PRIMARY
-import com.galou.watchmyback.utils.ICON_LOCATION_PRIMARY_LIGHT
-import com.galou.watchmyback.utils.RC_LOCATION_PERMS
+import com.galou.watchmyback.utils.*
 import com.galou.watchmyback.utils.extension.addIconsLocation
 import com.galou.watchmyback.utils.extension.displayPointsOnMap
 import com.galou.watchmyback.utils.extension.isGPSEnabled
@@ -154,6 +151,7 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
     }
 
     private fun displayStartEndPoints(pointData: Map<String, Coordinate>){
+        displayData("start end: $pointData")
         pointData.displayPointsOnMap(symbolManager, ICON_LOCATION_ACCENT)
     }
 

@@ -14,7 +14,6 @@ import com.galou.watchmyback.data.entity.UserPreferences
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -156,8 +155,7 @@ fun TextInputEditText.displayNameUsers(users: List<User>?) {
 @BindingAdapter(value = ["userPreferences", "date"], requireAll = true)
 fun TextInputEditText.displayDate(userPreferences: UserPreferences?, date: Date?) {
     if(userPreferences != null && date != null){
-        val formatter = SimpleDateFormat(userPreferences.timeDisplay.displayDatePattern)
-        setText(formatter.format(date))
+        setText(date.displayDate(userPreferences))
     }
 }
 
@@ -171,8 +169,7 @@ fun TextInputEditText.displayDate(userPreferences: UserPreferences?, date: Date?
 @BindingAdapter(value = ["userPreferences", "date"], requireAll = true)
 fun TextView.displayDate(userPreferences: UserPreferences?, date: Date?) {
     if(userPreferences != null && date != null){
-        val formatter = SimpleDateFormat(userPreferences.timeDisplay.displayDatePattern)
-        text = formatter.format(date)
+        text = date displayDate userPreferences
     }
 }
 
@@ -230,8 +227,7 @@ fun TextView.displayTemperature(userPreferences: UserPreferences?, temperatureIn
 @BindingAdapter(value = ["userPreferences", "time"], requireAll = true)
 fun TextView.displayTime(userPreferences: UserPreferences?, time: Date?) {
     if(userPreferences != null && time != null){
-        val formatter = SimpleDateFormat(userPreferences.timeDisplay.displayTimePattern)
-        text = formatter.format(time)
+        text = time displayTime userPreferences
     }
 }
 

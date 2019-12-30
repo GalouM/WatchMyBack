@@ -55,7 +55,7 @@ val appModules = module {
         Room.databaseBuilder(
             androidApplication(),
             WatchMyBackDatabase::class.java,
-            "watchMyBack_db_test14.db"
+            "watchMyBack_db_test21.db"
         )
         .build()
     }
@@ -81,7 +81,8 @@ val appModules = module {
     single { TripLocalDataSource(
         tripDao = get<WatchMyBackDatabase>().tripDao(),
         userDao = get<WatchMyBackDatabase>().userDao(),
-        pointTripDao = get<WatchMyBackDatabase>().pointTripDao()
+        pointTripDao = get<WatchMyBackDatabase>().pointTripDao(),
+        notificationSaverDao = get<WatchMyBackDatabase>().notificationSaverDao()
     ) }
     single { TripRemoteDataSource(remoteDB = get()) }
 

@@ -20,10 +20,7 @@ import com.galou.watchmyback.data.entity.TripWithData
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserWithPreferences
 import com.galou.watchmyback.data.repository.*
-import com.galou.watchmyback.utils.CHECK_UP_WORKER_TAG
-import com.galou.watchmyback.utils.RESULT_ACCOUNT_DELETED
-import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.createCheckUpWorker
+import com.galou.watchmyback.utils.*
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 
@@ -208,7 +205,8 @@ class MainActivityViewModel(
      *
      * @param user [User] fetched from the database
      */
-    private fun setupUserInformation(user: UserWithPreferences){
+    private fun setupUserInformation(user: UserWithPreferences, context: Context){
+        configureWatchingNotification(user, context)
         userRepository.currentUser.value = user.user
         userRepository.userPreferences.value = user.preferences
         showSnackBarMessage(R.string.welcome)
@@ -250,7 +248,7 @@ class MainActivityViewModel(
             when(val trip = tripRepository.fetchUserActiveTrip(user.user.id, true)){
                 is Result.Success -> {
                     trip.data?.let { configureCheckUpWorkManager(context, trip.data) }
-                    setupUserInformation(user)
+                    setupUserInformation(user, context)
                 }
                 else -> showSnackBarMessage(R.string.error_fetch_trip)
             }
@@ -288,6 +286,32 @@ class MainActivityViewModel(
             }
         }
     }
+
+    //-----------------------
+    // TRIP WATCHING NOTIFICATION
+    //-----------------------
+
+    private fun configureWatchingNotification(user: UserWithPreferences, context: Context){
+        if (user.preferences?.notificationLate == true){
+            WorkManager.getInstance(context)
+                .enqueueUniquePeriodicWork(
+                    LATE_NOTIFICATION_WORKER_TAG,
+                    ExistingPeriodicWorkPolicy.KEEP,
+                    createLateNotificationWorker(user.user.id)
+                )
+        }
+
+        if (user.preferences?.notificationBackSafe == true){
+            WorkManager.getInstance(context)
+                .enqueueUniquePeriodicWork(
+                    BACK_NOTIFICATION_WORKER_TAG,
+                    ExistingPeriodicWorkPolicy.KEEP,
+                    createBackNotificationWorker(user.user.id)
+                )
+        }
+
+    }
+
 
     //-----------------------
     // OPEN ACTIVITIES

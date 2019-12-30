@@ -18,6 +18,7 @@ const val WEATHER_DATA_TABLE_NAME = "weather_data"
 const val CHECK_LIST_TABLE_NAME = "check_lists"
 const val ITEM_LIST_TABLE_NAME = "items_check_list"
 const val PREFERENCES_TABLE_NAME = "user_preferences"
+const val NOTIFICATION_SAVER_TABLE_NAME = "notification_savers"
 // tables attributes
 // user
 const val USER_TABLE_UUID = "user_uuid"
@@ -71,13 +72,19 @@ const val POINT_TRIP_TIME = "time"
 const val POINT_TRIP_TYPE = "point_type"
 // preferences
 const val PREFERENCES_TABLE_USER_UUID = "preferences_user_id"
-const val PREFERENCES_TABLE_NOTIFICATION_EMERGENCY_STATUS = "notification_friend_emergency_status"
 const val PREFERENCES_TABLE_NOTIFICATION_BACK_SAFE = "notification_friend_back_safe"
 const val PREFERENCES_TABLE_NOTIFICATION_LATE = "notification_friend_late"
-const val PREFERENCES_TABLE_NOTIFICATION_LOCATION_UPDATE = "notification_friend_update_location"
 const val PREFERENCES_TABLE_EMERGENCY_NUMBER = "emergency_number"
 const val PREFERENCES_TABLE_UNIT_SYSTEM = "unit_system"
 const val PREFERENCES_TABLE_TIME_DISPLAY = "time_display"
+
+// notificationSaver
+const val NOTIFICATION_SAVER_USER_UUID = "notification_saver_user_id"
+const val NOTIFICATION_SAVER_TRIP_UUID = "notification_saver_trip_id"
+const val NOTIFICATION_SAVER_LATE_EMITTED = "notification_saver_late_emitted"
+const val NOTIFICATION_SAVER_BACK_EMITTED = "notification_saver_back_emitted"
+
+
 
 
 
@@ -106,6 +113,10 @@ const val RC_ADD_TRIP = 1200
 const val RESULT_ACCOUNT_DELETED = -100
 const val RESULT_CHECKLIST_DELETED = -200
 
+// ------ NOTIFICATION_CHANNEL -------
+const val CHANNEL_LATE_ID = "NotificationLateChannelID"
+const val CHANNEL_BACK_ID = "NotificationBackChannelID"
+
 
 // ------ TAG -------
 const val TRIP_TYPE_TAG = "tripTypeDialog"
@@ -113,6 +124,8 @@ const val UPDATE_HZ_TAG = "updateFrequencyDialog"
 const val CHECKLIST_DIALOG = "checklistsDialog"
 const val WATCHER_DIALOG = "watcherDialog"
 const val CHECK_UP_WORKER_TAG = "checkUpWorkerTag"
+const val LATE_NOTIFICATION_WORKER_TAG = "lateNotificationWorker"
+const val BACK_NOTIFICATION_WORKER_TAG = "backNotificationWorker"
 
 // ------ PERMISSIONS -------
 const val PERMS_EXT_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE

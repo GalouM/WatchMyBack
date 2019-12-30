@@ -25,6 +25,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         configureBinding()
         configureToolbar()
+        configureClickListener()
         configureEmergencyNumberListener()
         setupObserverViewModel()
     }
@@ -51,6 +52,16 @@ class SettingsActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_settings)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
+    }
+
+    private fun configureClickListener(){
+        binding.settingsViewNotificationBackSwitch.apply {
+            setOnClickListener { viewModel.clickNotificationBackHome(isChecked, applicationContext) }
+        }
+        binding.settingsViewNotificationLateSwitch.apply {
+            setOnClickListener { viewModel.clickNotificationLate(isChecked, applicationContext) }
+        }
+
     }
 
     private fun configureEmergencyNumberListener(){

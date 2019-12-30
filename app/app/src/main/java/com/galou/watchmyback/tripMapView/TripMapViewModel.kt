@@ -16,7 +16,6 @@ import com.galou.watchmyback.data.repository.TripRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.utils.CHECK_UP_WORKER_TAG
 import com.galou.watchmyback.utils.Result
-import com.galou.watchmyback.utils.displayData
 import com.galou.watchmyback.utils.extension.getCoordinate
 import kotlinx.coroutines.launch
 
@@ -93,8 +92,6 @@ class TripMapViewModel(
                 trip.active = false
             }
             when(val result = tripRepository.updateTripStatus(currentTrip!!)){
-                is Result.Error -> displayData("${result.exception}")
-                is Result.Canceled -> showSnackBarMessage(R.string.error_update_trip)
                 is Result.Success -> {
                     _tripLD.value = null
                     _schedulePointsLD.value = null
@@ -103,6 +100,7 @@ class TripMapViewModel(
                     currentTrip = null
                     showSnackBarMessage(R.string.back_home_safe)
                 }
+                else -> showSnackBarMessage(R.string.error_update_trip)
                 
             }
             _dataLoading.value = false

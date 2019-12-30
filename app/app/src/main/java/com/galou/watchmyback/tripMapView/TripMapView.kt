@@ -101,7 +101,7 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
     }
 
     private fun setupUserConnected() {
-        viewModel.userLD.observe(this, Observer { setupMap() })
+        viewModel.userLD.observe(this, Observer { if (it != null) setupMap() })
     }
 
     private fun setupSchedulePointsObserver(){

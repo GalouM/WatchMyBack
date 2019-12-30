@@ -136,6 +136,13 @@ class DetailsTripViewModelTest {
     }
 
     @Test
+    fun fetchTrip_emitLatestPointCoordinate(){
+        viewModel.fetchTripInfo(tripWithData.trip.id)
+        assertThat(LiveDataTestUtil.getValue(viewModel.lastPointCoordinate)).isNotNull()
+
+    }
+
+    @Test
     fun fetchTrip_emitIsTripDoneCorrectly(){
         viewModel.fetchTripInfo(tripWithData.trip.id)
         assertThat(LiveDataTestUtil.getValue(viewModel.tripIsDoneLD)).isEqualTo(tripWithData.trip.status == TripStatus.BACK_SAFE)

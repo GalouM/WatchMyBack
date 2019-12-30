@@ -182,4 +182,18 @@ class UserLocalDataSource(
             Result.Error(e)
         }
     }
+
+    /**
+     * Fetch the [UserPreferences] of a specific user
+     *
+     * @param userId ID of the user
+     * @return [Result] of the operation with a [UserPreferences] object
+     */
+    suspend fun fetchUserPreferences(userId: String): Result<UserPreferences?>{
+        return try {
+            Result.Success(userPreferencesDao.getUserPreferences(userId))
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
 }

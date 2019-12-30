@@ -67,27 +67,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
-            <TextView
-                android:id="@+id/settings_view_notification_emergency_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/settings_view_notification_emergency_switch"
-                app:layout_constraintBottom_toBottomOf="@id/settings_view_notification_emergency_switch"
-                app:layout_constraintEnd_toEndOf="@id/settings_view_notification_emergency_switch"
-                android:text="@string/friend_emergency"
-                android:textSize="@dimen/text_title_rv"/>
-
-            <Switch
-                android:id="@+id/settings_view_notification_emergency_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/settings_view_notification_title"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:padding="@dimen/medium_padding"
-                android:layout_marginTop="@dimen/margin_small"
-                android:onClick="@{() -> viewmodel.updateUserPreferences()}"
-                android:checked="@={viewmodel.preferencesLD.notificationEmergency}"/>
 
             <TextView
                 android:id="@+id/settings_view_notification_back_title"
@@ -104,12 +83,11 @@
                 android:id="@+id/settings_view_notification_back_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/settings_view_notification_emergency_switch"
+                app:layout_constraintTop_toBottomOf="@id/settings_view_notification_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:padding="@dimen/medium_padding"
                 android:layout_marginTop="@dimen/margin_small"
-                android:onClick="@{() -> viewmodel.updateUserPreferences()}"
-                android:checked="@={viewmodel.preferencesLD.notificationBackSafe}"/>
+                android:checked="@{viewmodel.preferencesLD.notificationBackSafe}"/>
 
             <TextView
                 android:id="@+id/settings_view_notification_late_title"
@@ -130,30 +108,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:padding="@dimen/medium_padding"
                 android:layout_marginTop="@dimen/margin_small"
-                android:onClick="@{() -> viewmodel.updateUserPreferences()}"
-                android:checked="@={viewmodel.preferencesLD.notificationLate}"/>
+                android:checked="@{viewmodel.preferencesLD.notificationLate}"/>
 
-            <TextView
-                android:id="@+id/settings_view_notification_update_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/settings_view_notification_update_switch"
-                app:layout_constraintBottom_toBottomOf="@id/settings_view_notification_update_switch"
-                app:layout_constraintEnd_toEndOf="@id/settings_view_notification_update_switch"
-                android:text="@string/friend_update"
-                android:textSize="@dimen/text_title_rv"/>
-
-            <Switch
-                android:id="@+id/settings_view_notification_update_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/settings_view_notification_late_switch"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:padding="@dimen/medium_padding"
-                android:layout_marginTop="@dimen/margin_small"
-                android:onClick="@{() -> viewmodel.updateUserPreferences()}"
-                android:checked="@={viewmodel.preferencesLD.notificationLocationUpdate}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -36,4 +36,6 @@ interface UserRepository {
 
     suspend fun fetchTripOwner(ownerId: String): Result<User>
 
+    suspend fun fetchUserPreferences(userId: String): Result<UserPreferences?>
+
 }

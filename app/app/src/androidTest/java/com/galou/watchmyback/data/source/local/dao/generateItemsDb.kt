@@ -17,9 +17,7 @@ val secondFriend = User(idGenerated, "second-friend@gmail.com", "Second Friend",
 val mainUserPreferences = UserPreferences(
     mainUser.id, "112", UnitSystem.METRIC, TimeDisplay.H_12,
     notificationBackSafe = false,
-    notificationEmergency = true,
-    notificationLate = true,
-    notificationLocationUpdate = true
+    notificationLate = true
 )
 
 //friend

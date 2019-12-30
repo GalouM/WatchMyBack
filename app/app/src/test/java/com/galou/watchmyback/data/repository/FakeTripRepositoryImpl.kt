@@ -64,4 +64,15 @@ class FakeTripRepositoryImpl : TripRepository {
     ): Result<Void?> = Result.Success(null)
 
     override suspend fun updatePointsTrip(trip: TripWithData): Result<Void?> = Result.Success(null)
+
+    override suspend fun fetchNotificationEmittedSaver(
+        userId: String,
+        tripId: String
+    ): Result<NotificationEmittedSaver?> = Result.Success(NotificationEmittedSaver(tripId, userId))
+
+    override suspend fun updateNotificationSaver(notificationEmittedSaver: NotificationEmittedSaver): Result<Void?> =
+        Result.Success(null)
+
+    override suspend fun createNotificationSaver(userId: String, tripId: String): Result<Void?> =
+        Result.Success(null)
 }

@@ -121,10 +121,10 @@ abstract class UserDao(private val database: WatchMyBackDatabase) {
     open suspend fun createOrUpdateUserWithData(createUser: Boolean, user: User, preferences: UserPreferences){
         if(createUser){
             createUser(user)
-            database.userPreferencesDao().createUserPreferences(preferences)
         } else {
             updateUser(user)
         }
+        database.userPreferencesDao().createUserPreferences(preferences)
 
     }
 

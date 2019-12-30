@@ -28,7 +28,7 @@ fun List<PointTripWithData>.filterScheduleStage(): MutableList<PointTripWithData
  * @return [PointTripWithData] with the corresponding type
  */
 fun MutableList<PointTripWithData>.filterOrCreateMainPoint(typePoint: TypePoint, tripId: String): PointTripWithData {
-    return when (val point = firstOrNull { it.pointTrip.typePoint == typePoint } ){
+    return when (val point = findMainPoint(typePoint) ){
         null -> {
             PointTripWithData(
                 pointTrip = PointTrip(
@@ -41,6 +41,8 @@ fun MutableList<PointTripWithData>.filterOrCreateMainPoint(typePoint: TypePoint,
         else -> point
     }
 }
+
+fun List<PointTripWithData>.findMainPoint(typePoint: TypePoint) = firstOrNull { it.pointTrip.typePoint == typePoint }
 
 /**
  * Find the most recent check up point in a list of of [PointTripWithData]

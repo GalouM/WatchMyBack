@@ -25,7 +25,8 @@ import com.galou.watchmyback.data.source.local.dao.*
 @Database(
     entities = [
         User::class, Trip::class, PointTrip::class, Location::class, UserPreferences::class,
-        WeatherData::class, CheckList::class, ItemCheckList::class, Friendship::class, TripWatcher::class
+        WeatherData::class, CheckList::class, ItemCheckList::class, Friendship::class, TripWatcher::class,
+        NotificationEmittedSaver::class
     ],
     version = 1,
     exportSchema = false
@@ -44,5 +45,6 @@ abstract class WatchMyBackDatabase : RoomDatabase() {
     abstract fun pointTripDao(): PointTripDao
     abstract fun tripDao(): TripDao
     abstract fun userPreferencesDao(): UserPreferencesDao
+    abstract fun notificationSaverDao(): NotificationSaverDao
 
 }

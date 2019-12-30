@@ -6,8 +6,11 @@ import androidx.room.Relation
 import com.galou.watchmyback.utils.*
 
 /**
- * @author galou
- * 2019-11-29
+ * Represent a [Trip] with all the data attched to it
+ *
+ * @property trip [Trip]
+ * @property points list of [PointTripWithData]
+ * @property watchers list of [User] watching the trip
  */
 data class TripWithData(
     @Embedded val trip: Trip,

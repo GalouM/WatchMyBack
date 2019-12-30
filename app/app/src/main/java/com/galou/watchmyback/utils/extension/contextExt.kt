@@ -4,6 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.PRIORITY_HIGH
+import androidx.core.app.NotificationManagerCompat
 import com.galou.watchmyback.R
 import com.galou.watchmyback.utils.*
 import pub.devrel.easypermissions.AfterPermissionGranted
@@ -62,4 +65,15 @@ fun Activity.requestPermissionStorage(): Boolean {
     }
 
     return true
+}
+
+fun Context.showNotification(message: String, title: String, channel: String, iconNotification: Int){
+    val builder = NotificationCompat.Builder(this, channel)
+        .setContentTitle(title)
+        .setSmallIcon(iconNotification)
+        .setContentText(message)
+        .setPriority(PRIORITY_HIGH)
+    with(NotificationManagerCompat.from(this)){
+        notify(12, builder.build())
+    }
 }

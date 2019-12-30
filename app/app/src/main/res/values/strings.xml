@@ -192,4 +192,12 @@
     <string name="checked_up_point">Checked Up Point</string>
     <string name="error_update_trip">Error while updating your trip status</string>
     <string name="back_home_safe">You are back home safe</string>
+    <string name="channel_late_name">Friend is late</string>
+    <string name="channel_late_description">Send notification when one of my friend is late</string>
+    <string name="channel_back_name">Friend is back safe</string>
+    <string name="channel_back_description">Send notification when one of my friend is back home</string>
+    <string name="notification_late_title">%s is late</string>
+    <string name="last_checkup_time">last checkup at %s</string>
+    <string name="supposed_be_back_at">was supposed to be back at %s</string>
+    <string name="back_home_notification_title">%s is back home!</string>
 </resources>

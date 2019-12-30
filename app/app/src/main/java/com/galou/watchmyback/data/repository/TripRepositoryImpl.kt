@@ -5,10 +5,7 @@ import com.galou.watchmyback.data.api.GeocodingApiService
 import com.galou.watchmyback.data.api.OpenWeatherService
 import com.galou.watchmyback.data.applicationUse.Coordinate
 import com.galou.watchmyback.data.applicationUse.TripDisplay
-import com.galou.watchmyback.data.entity.CheckListWithItems
-import com.galou.watchmyback.data.entity.PointTripWithData
-import com.galou.watchmyback.data.entity.TripWithData
-import com.galou.watchmyback.data.entity.UserPreferences
+import com.galou.watchmyback.data.entity.*
 import com.galou.watchmyback.data.source.local.TripLocalDataSource
 import com.galou.watchmyback.data.source.remote.TripRemoteDataSource
 import com.galou.watchmyback.utils.Result
@@ -280,6 +277,12 @@ class TripRepositoryImpl(
 
     }
 
+    /**
+     * Update the [TripStatus] of a [Trip]
+     *
+     * @param trip [TripWithData] to udpate
+     * @return [Result] of the operation
+     */
     override suspend fun updateTripStatus(trip: TripWithData): Result<Void?> = coroutineScope {
         val localTask = async { localSource.updateTripStatus(trip) }
         val remoteTask = async { remoteSource.updateTripStatus(trip) }
@@ -287,6 +290,13 @@ class TripRepositoryImpl(
 
     }
 
+    /**
+     * Create a [PointTripWithData] of type [TypePoint.CHECKED_UP] for the active trip of the current user
+     *
+     * @param currentUserId Id of the user
+     * @param coordinate [Coordinate] of the point
+     * @return [Result] of the operation
+     */
     override suspend fun createCheckUpPoint(currentUserId: String, coordinate: Coordinate): Result<Void?> {
         return when (val tripFetch = fetchUserActiveTrip(currentUserId, false)){
             is Result.Success -> {
@@ -305,9 +315,50 @@ class TripRepositoryImpl(
         }
     }
 
+    /**
+     * Update the list of [PointTripWithData] of a specific [Trip]
+     *
+     * @param trip [TripWithData] to update
+     * @return [Result] of the operation
+     */
     override suspend fun updatePointsTrip(trip: TripWithData): Result<Void?> = coroutineScope {
         val localTask = async { localSource.updateTripPoints(trip) }
         val remoteTask = async { remoteSource.updateTripPoints(trip) }
         return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
+    }
+
+    /**
+     * Fetch a [NotificationEmittedSaver]
+     *
+     * @param userId Id of the user watching the trip
+     * @param tripId Id of the trip
+     * @return [Result] of the operation with a [NotificationEmittedSaver] object
+     */
+    override suspend fun fetchNotificationEmittedSaver(
+        userId: String,
+        tripId: String
+    ): Result<NotificationEmittedSaver?> {
+        return localSource.fetchTripNotificationEmitter(userId, tripId)
+    }
+
+    /**
+     * Update a [NotificationEmittedSaver] object
+     *
+     * @param notificationEmittedSaver
+     * @return [Result] of the operation
+     */
+    override suspend fun updateNotificationSaver(notificationEmittedSaver: NotificationEmittedSaver): Result<Void?> {
+        return localSource.updateNotificationEmitted(notificationEmittedSaver)
+    }
+
+    /**
+     * Create a [NotificationEmittedSaver]
+     *
+     * @param userId ID of the user watching the trip
+     * @param tripId ID of the trip
+     * @return [Result] of the operation
+     */
+    override suspend fun createNotificationSaver(userId: String, tripId: String): Result<Void?> {
+        return localSource.createNotificationEmitted(NotificationEmittedSaver(tripId, userId))
     }
 }

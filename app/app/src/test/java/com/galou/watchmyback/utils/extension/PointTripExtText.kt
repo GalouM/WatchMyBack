@@ -1,5 +1,6 @@
 package com.galou.watchmyback.utils.extension
 
+import com.galou.watchmyback.data.entity.Location
 import com.galou.watchmyback.data.entity.PointTrip
 import com.galou.watchmyback.data.entity.PointTripWithData
 import com.galou.watchmyback.data.entity.TypePoint
@@ -122,5 +123,27 @@ class PointTripExtText {
             checkUp1, checkUp3, checkUp2
         )
         assertThat(listPoint.findLatestCheckUpPoint()).isEqualTo(checkUp3)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun getCoordinate_generateFromLocationPoint(){
+        val point = PointTripWithData(pointTrip = PointTrip(), location = Location(latitude = 454.545, longitude = 345.54))
+        val coordinate = point.getCoordinate()
+        assertThat(coordinate.latitude).isEqualTo(point.location?.latitude)
+        assertThat(coordinate.longitude).isEqualTo(point.location?.longitude)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun createMapCoordinate_containsIdAndLocationPoint(){
+        val point = PointTripWithData(
+            pointTrip = PointTrip(id = "idPoint"), 
+            location = Location(latitude = 454.545, longitude = 345.54))
+        val map = point.createMapCoordinate()
+        val entry = map.entries.first()
+        assertThat(entry.key).isEqualTo(point.pointTrip.id)
+        assertThat(entry.value.longitude).isEqualTo(point.location?.longitude)
+        assertThat(entry.value.latitude).isEqualTo(point.location?.latitude)
     }
 }

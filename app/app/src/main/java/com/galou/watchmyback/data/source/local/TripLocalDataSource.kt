@@ -1,9 +1,11 @@
 package com.galou.watchmyback.data.source.local
 
 import com.galou.watchmyback.data.entity.CheckListWithItems
+import com.galou.watchmyback.data.entity.NotificationEmittedSaver
 import com.galou.watchmyback.data.entity.TripWithData
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.source.TripDataSource
+import com.galou.watchmyback.data.source.local.dao.NotificationSaverDao
 import com.galou.watchmyback.data.source.local.dao.PointTripDao
 import com.galou.watchmyback.data.source.local.dao.TripDao
 import com.galou.watchmyback.data.source.local.dao.UserDao
@@ -16,7 +18,8 @@ import com.galou.watchmyback.utils.Result
 class TripLocalDataSource(
     private val tripDao: TripDao,
     private val userDao: UserDao,
-    private val pointTripDao: PointTripDao
+    private val pointTripDao: PointTripDao,
+    private val notificationSaverDao: NotificationSaverDao
 ) : TripDataSource {
 
     /**
@@ -47,6 +50,7 @@ class TripLocalDataSource(
      * @return [Result] of the operation
      *
      * @see TripDao.deleteActiveTrips
+     *
      */
     override suspend fun deleteActiveTrip(userId: String): Result<Void?> {
         return try {
@@ -62,6 +66,8 @@ class TripLocalDataSource(
      *
      * @param userId ID of the user
      * @return [Result] of the operation with a [TripWithData]
+     *
+     * @see TripDao.getUserActiveTrip
      */
     override suspend fun fetchActiveTrip(userId: String): Result<TripWithData?> {
         return try {
@@ -76,6 +82,8 @@ class TripLocalDataSource(
      *
      * @param tripId ID of the trip
      * @return [Result] of the operation with a [TripWithData]
+     *
+     * @see TripDao.getTrip
      */
     override suspend fun fetchTrip(tripId: String): Result<TripWithData?> {
         return try {
@@ -90,6 +98,8 @@ class TripLocalDataSource(
      *
      * @param userId ID of the user
      * @return
+     *
+     * @see TripDao.getTripsUserWatching
      */
     override suspend fun fetchTripUserWatching(userId: String): Result<List<TripWithData>> {
         return try {
@@ -104,6 +114,8 @@ class TripLocalDataSource(
      *
      * @param ownerId ID of the user
      * @return [Result] of the operation with a [User] object
+     *
+     * @see UserDao.getUser
      */
     override suspend fun fetchTripOwner(ownerId: String): Result<User> {
         return try {
@@ -122,6 +134,8 @@ class TripLocalDataSource(
      *
      * @param trip trip to update
      * @return [Result] of the operation
+     *
+     * @see TripDao.updateTrip
      */
     override suspend fun updateTripStatus(trip: TripWithData): Result<Void?> {
         return try {
@@ -137,6 +151,8 @@ class TripLocalDataSource(
      *
      * @param trip trip to delete
      * @return [Result] of the operation
+     *
+     * @see TripDao.deleteTrip
      */
     override suspend fun deleteTrip(trip: TripWithData): Result<Void?> {
         return try {
@@ -152,10 +168,63 @@ class TripLocalDataSource(
      *
      * @param trip trip to update
      * @return [ Result of the operation]
+     *
+     * @see PointTripDao.createPointsAndData
      */
     override suspend fun updateTripPoints(trip: TripWithData): Result<Void?> {
         return try {
             pointTripDao.createPointsAndData(*trip.points.toTypedArray())
+            Result.Success(null)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    /**
+     * Fetch the [NotificationEmittedSaver] assigned to a specific trip
+     *
+     * @param userId ID of the user watching
+     * @param tripId ID of the trip
+     * @return [Result] of the operation with a [NotificationEmittedSaver] object
+     *
+     * @see NotificationSaverDao.fetchNotificationForTrip
+     */
+    suspend fun fetchTripNotificationEmitter(userId: String, tripId: String): Result<NotificationEmittedSaver?>{
+        return try {
+            Result.Success(notificationSaverDao.fetchNotificationForTrip(userId, tripId))
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    /**
+     * Update a [NotificationEmittedSaver]
+     *
+     * @param notificationEmittedSaver object to update
+     * @return [Result] of the operation
+     *
+     * @see NotificationSaverDao.updateNotificationSaver
+     */
+    suspend fun updateNotificationEmitted(notificationEmittedSaver: NotificationEmittedSaver): Result<Void?>{
+        return try {
+            notificationSaverDao.updateNotificationSaver(notificationEmittedSaver)
+            Result.Success(null)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    /**
+     * Create a [NotificationEmittedSaver] object
+     *
+     * @param notificationEmittedSaver
+     * @return [Result] of the operation
+     *
+     * @see NotificationSaverDao.createNotificationSaver
+     */
+    suspend fun createNotificationEmitted(notificationEmittedSaver: NotificationEmittedSaver): Result<Void?>{
+        return try {
+            notificationSaverDao.createNotificationSaver(notificationEmittedSaver)
             Result.Success(null)
         } catch (e: Exception) {
             Result.Error(e)

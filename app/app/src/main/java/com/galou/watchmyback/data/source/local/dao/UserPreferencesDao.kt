@@ -22,7 +22,7 @@ interface UserPreferencesDao {
      *
      * @see Insert
      */
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun createUserPreferences(preferences: UserPreferences)
 
     /**

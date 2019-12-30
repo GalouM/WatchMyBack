@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
+import com.galou.watchmyback.data.entity.NotificationEmittedSaver
 import com.galou.watchmyback.data.entity.PointTripWithData
 import com.galou.watchmyback.data.entity.TripStatus
 import com.galou.watchmyback.data.source.database.WatchMyBackDatabase
@@ -37,6 +38,7 @@ class TripLocalSourceTests {
     private lateinit var tripDao: TripDao
     private lateinit var userDao: UserDao
     private lateinit var pointTripDao: PointTripDao
+    private lateinit var notificationSaverDao: NotificationSaverDao
 
     @Before
     fun createDatabase(){
@@ -49,7 +51,8 @@ class TripLocalSourceTests {
         userDao = db.userDao()
         tripDao = db.tripDao()
         pointTripDao = db.pointTripDao()
-        localSource = TripLocalDataSource(tripDao, userDao, pointTripDao)
+        notificationSaverDao = db.notificationSaverDao()
+        localSource = TripLocalDataSource(tripDao, userDao, pointTripDao, notificationSaverDao)
 
         runBlocking {
             userDao.createUser(mainUser)
@@ -175,4 +178,45 @@ class TripLocalSourceTests {
         val trip = tripDao.getTrip(tripWithData1.trip.id)
         assertThat(trip?.points, hasItem(newPoint))
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun createNotificationSaver_returnSuccess() = runBlocking {
+        tripDao.createTripAndData(tripWithData1, itemList1)
+        val notificationSaver = NotificationEmittedSaver(tripWithData1.trip.id, mainUser.id)
+        val task = localSource.createNotificationEmitted(notificationSaver)
+        val result = task is Result.Success
+        assertThat(result, `is`(true))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun updateNotificationSaver_returnSuccess() = runBlocking {
+        tripDao.createTripAndData(tripWithData1, itemList1)
+        val notificationSaver = NotificationEmittedSaver(tripWithData1.trip.id, mainUser.id)
+        notificationSaverDao.createNotificationSaver(notificationSaver)
+        notificationSaver.backSafeNotificationEmitted = true
+        val task = localSource.updateNotificationEmitted(notificationSaver)
+        val result = task is Result.Success
+        assertThat(result, `is`(true))
+
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun fetchNotificationSaver_returnSuccessWithNotificationSaver() = runBlocking {
+        tripDao.createTripAndData(tripWithData1, itemList1)
+        val notificationSaver = NotificationEmittedSaver(tripWithData1.trip.id, mainUser.id)
+        notificationSaverDao.createNotificationSaver(notificationSaver)
+        val task = localSource.fetchTripNotificationEmitter(mainUser.id, tripWithData1.trip.id)
+        val result = task is Result.Success
+        assertThat(result, `is`(true))
+        assertThat((task as Result.Success).data, `is` (notificationSaver))
+
+
+    }
+
+
+
+
 }

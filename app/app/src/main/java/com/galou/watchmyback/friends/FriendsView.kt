@@ -69,7 +69,7 @@ class FriendsView : Fragment() {
     }
 
     private fun setupUserConnectedObserver(){
-        viewModel.userLD.observe(this, Observer { fetchFriends() })
+        viewModel.userLD.observe(this, Observer { if (it != null) fetchFriends() })
     }
 
     private fun setupFriendsList(){

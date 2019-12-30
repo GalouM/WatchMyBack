@@ -14,9 +14,7 @@ import com.galou.watchmyback.utils.*
  * @property unitSystem favorite unit system
  * @property timeDisplay favorite way to display time
  * @property notificationBackSafe get notifications when a friend is back safe
- * @property notificationEmergency get notification when a friend has marked himself/herself in emergency status
  * @property notificationLate get notifications when a friend is late
- * @property notificationLocationUpdate get notification when a friend update is location
  *
  * @see Entity
  * @see User
@@ -39,9 +37,7 @@ data class UserPreferences (
     @ColumnInfo(name = PREFERENCES_TABLE_UNIT_SYSTEM) var unitSystem: UnitSystem = UnitSystem.METRIC,
     @ColumnInfo(name = PREFERENCES_TABLE_TIME_DISPLAY) var timeDisplay: TimeDisplay = TimeDisplay.H_24,
     @ColumnInfo(name = PREFERENCES_TABLE_NOTIFICATION_BACK_SAFE) var notificationBackSafe: Boolean = true,
-    @ColumnInfo(name = PREFERENCES_TABLE_NOTIFICATION_EMERGENCY_STATUS) var notificationEmergency: Boolean = true,
-    @ColumnInfo(name = PREFERENCES_TABLE_NOTIFICATION_LATE) var notificationLate: Boolean = true,
-    @ColumnInfo(name = PREFERENCES_TABLE_NOTIFICATION_LOCATION_UPDATE) var notificationLocationUpdate: Boolean = true
+    @ColumnInfo(name = PREFERENCES_TABLE_NOTIFICATION_LATE) var notificationLate: Boolean = true
 
 )
 

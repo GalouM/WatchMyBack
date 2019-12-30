@@ -64,7 +64,7 @@ class TripsView : Fragment() {
     }
 
     private fun setupUsrConnectedObserver(){
-        viewModel.userLD.observe(this, Observer { fetchTrips() })
+        viewModel.userLD.observe(this, Observer { if (it != null) fetchTrips() })
     }
 
     private fun setupTripsObserver(){

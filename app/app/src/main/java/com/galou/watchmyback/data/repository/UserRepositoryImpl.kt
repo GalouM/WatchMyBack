@@ -107,15 +107,18 @@ class UserRepositoryImpl(
 
         when {
             remoteResult is Result.Success && localResult is Result.Success -> {
-                remoteResult.data?.let { remoteUser ->
-                    when (val updateLocalDbResult = userLocalSource.updateOrCreateUser(
-                            remoteUser, localResult.data
+                with(remoteResult.data){
+                    if(this != null){
+                        when (val updateLocalDbResult = userLocalSource.updateOrCreateUser(
+                            this, localResult.data
                         )) {
-                        is Result.Success -> return@coroutineScope Result.Success(updateLocalDbResult.data)
+                            is Result.Success -> return@coroutineScope Result.Success(updateLocalDbResult.data)
 
-                        else -> return@coroutineScope localResult
+                            else -> return@coroutineScope localResult
+                        }
                     }
                 }
+
             }
 
         }
@@ -260,5 +263,17 @@ class UserRepositoryImpl(
         }
         return Result.Error(Exception("Error while fetching user $ownerId"))
 
+    }
+
+    /**
+     * Fetch the [UserPreferences] of a specific user
+     *
+     * @param userId Id of the user
+     * @return [Result] of the operation with a [UserPreferences] object
+     *
+     * @see UserLocalDataSource.fetchUserPreferences
+     */
+    override suspend fun fetchUserPreferences(userId: String): Result<UserPreferences?> {
+        return userLocalSource.fetchUserPreferences(userId)
     }
 }

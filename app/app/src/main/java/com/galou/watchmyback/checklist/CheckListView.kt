@@ -81,7 +81,7 @@ class CheckListView : Fragment(), CheckListListener {
     }
 
     private fun setupUserConnectedObserver(){
-        viewModel.userLD.observe(this, Observer { fetchCheckList() })
+        viewModel.userLD.observe(this, Observer { if (it != null) fetchCheckList() })
     }
 
     private fun setupCheckLists(){

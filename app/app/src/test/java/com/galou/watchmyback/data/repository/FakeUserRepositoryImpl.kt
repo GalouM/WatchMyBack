@@ -51,5 +51,7 @@ open class FakeUserRepositoryImpl : UserRepository{
             username = mainUser.username,
             phoneNumber = mainUser.phoneNumber
     ))
+
+    override suspend fun fetchUserPreferences(userId: String): Result<UserPreferences?> = Result.Success(preferencesTest)
 }
 

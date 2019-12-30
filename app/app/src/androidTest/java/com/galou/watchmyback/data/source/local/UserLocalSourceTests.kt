@@ -264,5 +264,16 @@ class UserLocalSourceTests{
 
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun fetchUserPreferences_emitUserPreferences() = runBlocking {
+        userDao.createOrUpdateUserWithData(true, mainUser, mainUserPreferences)
+        val task = localSource.fetchUserPreferences(mainUser.id)
+        val taskResult = task is Result.Success
+        assertThat(taskResult, `is` (true))
+        val taskData = (task as Result.Success).data
+        assertThat(taskData, `is` (mainUserPreferences))
+    }
+
 
 }
