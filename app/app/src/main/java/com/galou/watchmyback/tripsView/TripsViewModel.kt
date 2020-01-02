@@ -48,7 +48,12 @@ class TripsViewModel(
         viewModelScope.launch { 
             when(val result = tripRepository.fetchTripUserWatching(userLD.value?.id ?: throw Exception("no user connected ${userLD.value}"))){
                 is Result.Success -> {
-                    fetchTripOwnerInfo(result.data.apply { updateStatus() })
+                    if (result.data.isNotEmpty()){
+                        fetchTripOwnerInfo(result.data.apply { updateStatus() })
+                    } else {
+                        showSnackBarMessage(R.string.no_trips_watching)
+                        _dataLoading.value = false
+                    }
                 }
                 else -> {
                     showSnackBarMessage(R.string.error_fetch_trips_watching)

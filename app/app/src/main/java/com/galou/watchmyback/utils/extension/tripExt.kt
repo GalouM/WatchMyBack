@@ -5,6 +5,7 @@ import com.galou.watchmyback.data.applicationUse.TripDisplay
 import com.galou.watchmyback.data.entity.*
 import com.galou.watchmyback.data.remoteDBObject.TripWithDataRemoteDB
 import com.galou.watchmyback.utils.todaysDate
+import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -117,8 +118,8 @@ infix fun TripWithData.addCheckUpPoint(coordinate: Coordinate): PointTripWithDat
             typePoint = TypePoint.CHECKED_UP,
             time = todaysDate)
     ).apply {
-        location?.newLongitude = coordinate.longitude
-        location?.newLatitude = coordinate.latitude
+        location?.longitude = coordinate.longitude.toBigDecimal().setScale(4, RoundingMode.HALF_UP)?.toDouble()
+        location?.latitude = coordinate.latitude.toBigDecimal().setScale(4, RoundingMode.HALF_UP)?.toDouble()
     }
     points.add(checkUpPoint)
     return checkUpPoint

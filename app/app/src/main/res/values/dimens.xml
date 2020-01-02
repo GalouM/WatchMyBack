@@ -15,7 +15,7 @@
     <dimen name="text_small">10sp</dimen>
     <dimen name="image_small">20dp</dimen>
     <dimen name="text_title_rv">15sp</dimen>
-    <dimen name="text_medium">12sp</dimen>
+    <dimen name="text_medium">14sp</dimen>
     <dimen name="text_title">20sp</dimen>
     <dimen name="image_medium">30dp</dimen>
     <dimen name="cardview_checklist_item">50dp</dimen>

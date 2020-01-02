@@ -14,5 +14,13 @@
         android:layout_height="match_parent"
         tools:listitem="@layout/details_trip_checklist_item"/>
 
+    <TextView
+        android:id="@+id/details_trip_checklist_no_checklist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_checklist_for_this_trip"
+        style="@style/TitleWatchMyBack"
+        android:layout_gravity="center"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

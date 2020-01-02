@@ -19,6 +19,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.mapbox.mapboxsdk.maps.MapView
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:id="@+id/details_trip_map_view_map"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
         <ImageView
             android:id="@+id/details_trip_map_picture_user"
             android:layout_width="@dimen/image_medium"
@@ -39,7 +48,8 @@
             app:layout_constraintStart_toEndOf="@id/details_trip_map_picture_user"
             android:layout_marginStart="@dimen/margin_small"
             android:textSize="@dimen/text_medium"
-            android:text="@{viewmodel.userLD.username}"/>
+            android:text="@{viewmodel.userLD.username}"
+            android:textColor="@color/colorPrimary"/>
 
         <ImageView
             android:id="@+id/details_trip_map_type_trip"
@@ -50,7 +60,7 @@
             app:layout_constraintStart_toEndOf="@id/details_trip_map_username"
             android:layout_marginStart="@dimen/margin_medium"
             app:imageResouce="@{viewmodel.tripLD.type.iconId}"
-            android:contentDescription="@string/trip_type"/>
+            android:contentDescription="@string/trip_type" />
 
         <TextView
             android:id="@+id/details_trip_map_status_trip"
@@ -61,16 +71,8 @@
             app:layout_constraintStart_toEndOf="@id/details_trip_map_type_trip"
             android:layout_marginStart="@dimen/margin_medium"
             android:textSize="@dimen/text_medium"
-            app:textFromResourceId="@{viewmodel.tripLD.status.statusNameId}"/>
+            app:displayStatusWhite="@{viewmodel.tripLD.status}"/>
 
-        <com.mapbox.mapboxsdk.maps.MapView
-            android:layout_height="0dp"
-            android:layout_width="0dp"
-            android:id="@+id/details_trip_map_view_map"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"

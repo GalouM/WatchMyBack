@@ -211,7 +211,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_medium"
-                app:textFromResourceId="@{viewmodel.tripLD.status.statusNameId}"
+                app:displayStatus="@{viewmodel.tripLD.status}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/details_trip_view_status_title"
                 android:layout_marginStart="@dimen/margin_small"/>

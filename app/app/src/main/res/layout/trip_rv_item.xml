@@ -145,7 +145,7 @@
             app:layout_constraintStart_toStartOf="@id/trip_item_username"
             app:layout_constraintTop_toBottomOf="@id/trips_item_type"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:textFromResourceId="@{trip.tripStatus.statusNameId}"
+            app:displayStatus="@{trip.tripStatus}"
             android:textSize="@dimen/text_title_rv"/>
 
 

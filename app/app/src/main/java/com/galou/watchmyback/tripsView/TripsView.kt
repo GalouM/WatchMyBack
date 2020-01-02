@@ -17,7 +17,10 @@ import com.galou.watchmyback.data.applicationUse.TripDisplay
 import com.galou.watchmyback.databinding.FragmentTripsViewBinding
 import com.galou.watchmyback.detailsTrip.DetailsTripActivity
 import com.galou.watchmyback.utils.TRIP_ID
+import com.galou.watchmyback.utils.extension.setupSnackBar
+import com.galou.watchmyback.utils.extension.visibleOrInvisible
 import com.galou.watchmyback.utils.rvAdapter.DisplayTripAdapter
+import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
@@ -61,6 +64,7 @@ class TripsView : Fragment() {
         setupTripsObserver()
         setupOpenDetailsObserver()
         setupUsrConnectedObserver()
+        setupSnackBar()
     }
 
     private fun setupUsrConnectedObserver(){
@@ -79,9 +83,19 @@ class TripsView : Fragment() {
         viewModel.fetchTripsWatching()
     }
 
+    private fun setupSnackBar(){
+        val rooView = binding.tripViewContainer
+        rooView.setupSnackBar(this, viewModel.snackbarMessage, Snackbar.LENGTH_LONG)
+
+    }
+
     private fun displayTrips(trips: List<TripDisplay>){
-        adapterRVTrips.trips = trips
-        adapterRVTrips.notifyDataSetChanged()
+        if (trips.isNotEmpty()){
+            adapterRVTrips.trips = trips
+            adapterRVTrips.notifyDataSetChanged()
+            binding.tripsViewNoTrips.visibleOrInvisible(false)
+        } else binding.tripsViewNoTrips.visibleOrInvisible(true)
+
     }
 
     private fun openTripDetails(tripId: String){

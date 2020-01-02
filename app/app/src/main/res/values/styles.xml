@@ -84,15 +84,9 @@
     </style>
 
 
-    <style name="MyTimePickerDialogTheme" parent="Theme.MaterialComponents.Light.Dialog">
+    <style name="MyTimePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:textColor">@color/colorAccent</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="buttonBarButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
-    </style>
-
-    <style name="ButtonAlertDialog" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">@color/colorAccent</item>
-        <item name="rippleColor">@color/colorAccent</item>
     </style>
 
 

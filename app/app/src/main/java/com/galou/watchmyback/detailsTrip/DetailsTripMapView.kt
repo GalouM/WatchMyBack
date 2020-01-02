@@ -12,7 +12,10 @@ import com.galou.watchmyback.EventObserver
 import com.galou.watchmyback.R
 import com.galou.watchmyback.data.applicationUse.Coordinate
 import com.galou.watchmyback.databinding.FragmentDetailsTripMapBinding
-import com.galou.watchmyback.utils.*
+import com.galou.watchmyback.utils.ICON_LOCATION_ACCENT
+import com.galou.watchmyback.utils.ICON_LOCATION_PRIMARY
+import com.galou.watchmyback.utils.ICON_LOCATION_PRIMARY_LIGHT
+import com.galou.watchmyback.utils.RC_LOCATION_PERMS
 import com.galou.watchmyback.utils.extension.addIconsLocation
 import com.galou.watchmyback.utils.extension.displayPointsOnMap
 import com.galou.watchmyback.utils.extension.isGPSEnabled
@@ -20,6 +23,7 @@ import com.galou.watchmyback.utils.extension.requestPermissionLocation
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
+import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
@@ -73,7 +77,7 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
                     iconPadding = 0.1f
                 }
                 symbolManager?.addClickListener(this)
-                displayUserLocation()
+                displayUserLocation(false)
                 viewModel.reEmitPointLocation()
 
             }
@@ -112,12 +116,12 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
     }
 
     private fun centerCameraOnUser(){
-        displayUserLocation()
+        displayUserLocation(true)
     }
 
-    private fun displayUserLocation() {
+    private fun displayUserLocation(centerOnUser: Boolean) {
         if(activity!!.requestPermissionLocation() && activity!!.isGPSEnabled()) {
-            with(mapBox!!.locationComponent) {
+            val locationComponent = mapBox!!.locationComponent.apply {
                 activateLocationComponent(
                     LocationComponentActivationOptions.builder(
                         activity!!.applicationContext,
@@ -125,6 +129,12 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
                     ).build()
                 )
                 isLocationComponentEnabled = true
+                renderMode = RenderMode.COMPASS
+            }
+            if (centerOnUser){
+                locationComponent.lastKnownLocation?.let {
+                    mapBox?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), 15.0))
+                }
             }
         } else {
             viewModel.gpsNotAvailable()
@@ -132,11 +142,9 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
     }
 
     private fun displayPointsOnMap(pointsCoordinate: List<Map<String, Coordinate>>){
-        displayData("$pointsCoordinate")
         pointsCoordinate[0].displayPointsOnMap(symbolManager, ICON_LOCATION_ACCENT)
         pointsCoordinate[1].displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY)
         pointsCoordinate[2].displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY_LIGHT)
-        displayData("${symbolManager?.annotations}")
 
     }
 
@@ -158,7 +166,7 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
         when (requestCode){
-            RC_LOCATION_PERMS -> displayUserLocation()
+            RC_LOCATION_PERMS -> displayUserLocation(false)
         }
     }
 
@@ -187,7 +195,13 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
         mapView.onLowMemory()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        mapView.onSaveInstanceState(outState)
+    }
 
-
-
+    override fun onStart() {
+        super.onStart()
+        mapView.onStart()
+    }
 }

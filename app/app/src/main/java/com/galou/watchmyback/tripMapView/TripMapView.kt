@@ -172,11 +172,9 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
 
     private fun displayPointsOnMap(pointsCoordinate: List<Map<String, Coordinate>>?){
         if(pointsCoordinate != null){
-            displayData("$pointsCoordinate")
             pointsCoordinate[0].displayPointsOnMap(symbolManager, ICON_LOCATION_ACCENT)
             pointsCoordinate[1].displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY)
             pointsCoordinate[2].displayPointsOnMap(symbolManager, ICON_LOCATION_PRIMARY_LIGHT)
-            displayData("${symbolManager?.annotations}")
         } else {
             symbolManager?.deleteAll()
         }
@@ -236,5 +234,13 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
         mapView.onLowMemory()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        mapView.onSaveInstanceState(outState)
+    }
 
+    override fun onStart() {
+        super.onStart()
+        mapView.onStart()
+    }
 }

@@ -200,4 +200,8 @@
     <string name="last_checkup_time">last checkup at %s</string>
     <string name="supposed_be_back_at">was supposed to be back at %s</string>
     <string name="back_home_notification_title">%s is back home!</string>
+    <string name="no_checklist_for_this_trip">No checklist for this trip</string>
+    <string name="no_trips_watching">You are not watching any trip</string>
+    <string name="no_trips_to_show">No trips to show</string>
+    <string name="no_checklist_to_show">No checklist to show</string>
 </resources>

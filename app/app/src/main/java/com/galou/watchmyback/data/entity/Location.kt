@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.galou.watchmyback.utils.*
-import java.math.RoundingMode
 
 /**
  * Represent a specific Location with its longitude and latitude
@@ -42,16 +41,4 @@ data class Location(
     @ColumnInfo(name = LOCATION_TABLE_CITY) var city: String? = null,
     @ColumnInfo(name = LOCATION_TABLE_COUNTRY) var country: String? = null
 
-){
-
-    var newLatitude = latitude
-        set(value){
-            latitude = value?.toBigDecimal()?.setScale(4, RoundingMode.HALF_UP)?.toDouble()
-            field = value
-        }
-    var newLongitude = longitude
-        set(value){
-            longitude = value?.toBigDecimal()?.setScale(4, RoundingMode.HALF_UP)?.toDouble()
-            field = value
-        }
-}
+)

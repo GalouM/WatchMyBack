@@ -240,4 +240,9 @@ class PickLocationActivity : AppCompatActivity(), MapboxMap.OnMapLongClickListen
         super.onSaveInstanceState(outState, outPersistentState)
         mapView.onSaveInstanceState(outState)
     }
+
+    override fun onStart() {
+        super.onStart()
+        mapView.onStart()
+    }
 }

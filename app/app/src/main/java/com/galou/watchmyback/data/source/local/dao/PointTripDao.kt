@@ -51,6 +51,7 @@ abstract class PointTripDao(private val database: WatchMyBackDatabase) {
             createPoints(it.pointTrip)
             database.locationDao().createLocations(it.location!!)
             database.weatherDataDao().createWeatherData(it.weatherData!!)
+
         }
     }
 

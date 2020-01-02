@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.galou.watchmyback.R
 import com.galou.watchmyback.data.entity.ItemCheckList
 import com.galou.watchmyback.databinding.FragmentDetailsTripCheckListBinding
+import com.galou.watchmyback.utils.extension.visibleOrInvisible
 import com.galou.watchmyback.utils.rvAdapter.DisplayItemCheckListAdapter
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -51,10 +52,15 @@ class DetailsTripCheckListView : Fragment() {
     }
 
     private fun displayCheckListItems(items: List<ItemCheckList>){
-        val recyclerView = binding.detailsTripChecklistRv
-        val adapter = DisplayItemCheckListAdapter(items)
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.adapter = adapter
+        if (items.isNotEmpty()){
+            binding.detailsTripChecklistNoChecklist.visibleOrInvisible(false)
+            val recyclerView = binding.detailsTripChecklistRv
+            val adapter = DisplayItemCheckListAdapter(items)
+            recyclerView.layoutManager = LinearLayoutManager(activity)
+            recyclerView.adapter = adapter
+        } else {
+            binding.detailsTripChecklistNoChecklist.visibleOrInvisible(true)
+        }
     }
 
 

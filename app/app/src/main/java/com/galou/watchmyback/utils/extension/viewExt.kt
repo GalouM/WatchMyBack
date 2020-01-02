@@ -8,6 +8,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.galou.watchmyback.Event
+import com.galou.watchmyback.R
+import com.galou.watchmyback.data.entity.TripStatus
 import com.galou.watchmyback.data.entity.UnitSystem
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
@@ -192,6 +194,30 @@ fun TextView.textFromResourceId(resourceId: Int?){
     } else {
         "N/A"
     }
+}
+
+@BindingAdapter("displayStatus")
+fun TextView.displayStatus(tripStatus: TripStatus?){
+    text = if (tripStatus != null) context.getText(tripStatus.statusNameId) else ""
+    val color = when(tripStatus){
+        TripStatus.LATE_EMITTING, TripStatus.LATE_NO_NEWS -> R.color.colorAccent
+        TripStatus.REALLY_LATE, TripStatus.DISTRESS -> R.color.colorAccentDark
+        else -> R.color.colorOnPrimary
+    }
+    setTextColor(color)
+
+}
+
+@BindingAdapter("displayStatusWhite")
+fun TextView.displayStatusWhite(tripStatus: TripStatus?){
+    text = if (tripStatus != null) context.getText(tripStatus.statusNameId) else ""
+    val color = when(tripStatus){
+        TripStatus.LATE_EMITTING, TripStatus.LATE_NO_NEWS -> R.color.colorAccent
+        TripStatus.REALLY_LATE, TripStatus.DISTRESS -> R.color.colorAccentDark
+        else -> R.color.colorPrimary
+    }
+    setTextColor(ContextCompat.getColor(context, color))
+
 }
 
 /**

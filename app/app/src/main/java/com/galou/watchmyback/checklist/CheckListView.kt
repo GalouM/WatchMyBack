@@ -19,6 +19,7 @@ import com.galou.watchmyback.data.entity.CheckListWithItems
 import com.galou.watchmyback.databinding.FragmentCheckListViewBinding
 import com.galou.watchmyback.utils.RC_ADD_CHECKLIST
 import com.galou.watchmyback.utils.extension.setupSnackBar
+import com.galou.watchmyback.utils.extension.visibleOrInvisible
 import com.galou.watchmyback.utils.rvAdapter.CheckListAdapter
 import com.galou.watchmyback.utils.rvAdapter.CheckListListener
 import com.google.android.material.snackbar.Snackbar
@@ -97,8 +98,12 @@ class CheckListView : Fragment(), CheckListListener {
     }
 
     private fun updateCheckLists(checkLists: List<CheckListWithItems>){
-        adapterRv.checkLists =  checkLists
-        adapterRv.notifyDataSetChanged()
+        if (checkLists.isNotEmpty()){
+            adapterRv.checkLists =  checkLists
+            adapterRv.notifyDataSetChanged()
+            binding.checklistViewNoChecklist.visibleOrInvisible(false)
+        } else binding.checklistViewNoChecklist.visibleOrInvisible(true)
+
     }
 
     private fun openAddModifyCheckList(){
