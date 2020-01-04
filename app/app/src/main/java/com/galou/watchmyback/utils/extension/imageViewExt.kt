@@ -1,10 +1,12 @@
 package com.galou.watchmyback.utils.extension
 
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.galou.watchmyback.R
+import com.galou.watchmyback.data.entity.TripType
 import com.galou.watchmyback.utils.GlideApp
 
 /**
@@ -63,4 +65,17 @@ fun ImageView.imageResource(imageResource: Int?){
     if(imageResource != null && imageResource != 0)
         setImageResource(imageResource)
 
+}
+
+@BindingAdapter("displayTypeTrip")
+fun ImageView.displayTypeTrip(tripType: TripType?){
+    if (tripType != null){
+        when(tripType){
+            TripType.MOUNTAIN_BIKING -> setImageResource(R.drawable.icon_mtb_white)
+            else -> {
+                setImageResource(tripType.iconId)
+                setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary))
+            }
+        }
+    } else setImageResource(android.R.color.transparent)
 }

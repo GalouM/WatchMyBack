@@ -3,15 +3,12 @@ package com.galou.watchmyback.base
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.galou.watchmyback.R
 import com.galou.watchmyback.data.applicationUse.OtherUser
 import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.repository.FriendRepository
 import com.galou.watchmyback.data.repository.UserRepository
-import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.extension.removeCurrentUser
 import com.galou.watchmyback.utils.extension.setIsMyFriend
-import com.galou.watchmyback.utils.extension.toListOtherUser
 import kotlinx.coroutines.launch
 
 /**
@@ -58,31 +55,15 @@ abstract class UserListBaseViewModel(
 
     }
 
-    /**
-     * Determine if an operation was successful and either display its data or show an error
-     *
-     * @param result [Result] of the operation
-     *
-     * @see showUsersList
-     * @see showSnackBarMessage
-     */
-    protected fun fetchResultUsers(result: Result<List<User>>){
-        when (result) {
-            is Result.Success -> showUsersList(result.data.toListOtherUser(false))
-            is Result.Error -> showSnackBarMessage(R.string.no_user)
-            is Result.Canceled -> showSnackBarMessage(R.string.canceled)
-        }
-    }
 
     /**
      * Emit the list of user's the the view
      *
      * @param users lsit of users to display
      */
-    private fun showUsersList(users: List<OtherUser>){
+    fun showUsersList(users: List<OtherUser>){
         users setIsMyFriend userLD.value!!.friendsId
         _usersLD.value = users removeCurrentUser userLD.value!!.id
-        if(users.isEmpty()) showSnackBarMessage(R.string.no_user)
         _dataLoading.value = false
     }
 }

@@ -53,6 +53,10 @@ class TripMapViewModel(
         fetchActiveTrip()
 
     }
+    
+    fun showNeedInternetMessage(){
+        showSnackBarMessage(R.string.need_internet)
+    }
 
     /**
      * Order the points by type and create map to emit ID and coordinate of the points

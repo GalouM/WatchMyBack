@@ -3,6 +3,8 @@ package com.galou.watchmyback.testHelpers
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import androidx.test.core.app.ApplicationProvider
 import com.galou.watchmyback.WatchMyBackApplication
 import org.robolectric.Shadows
@@ -31,5 +33,14 @@ fun grantPermission(granted: Boolean, permissionName: String){
         shadowApp.grantPermissions(permissionName)
     } else {
         shadowApp.denyPermissions(permissionName)
+    }
+}
+
+fun Context.setInternetShadow(enabled: Boolean){
+    val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val shadowConnectivityManager = Shadows.shadowOf(connectivityManager.activeNetworkInfo)
+    when(enabled){
+        true -> shadowConnectivityManager.setConnectionStatus(NetworkInfo.State.CONNECTED)
+        false -> shadowConnectivityManager.setConnectionStatus(NetworkInfo.State.DISCONNECTED)
     }
 }

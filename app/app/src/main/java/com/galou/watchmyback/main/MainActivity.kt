@@ -261,7 +261,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         WorkManager.getInstance(applicationContext)
             .enqueueUniquePeriodicWork(
                 LATE_NOTIFICATION_WORKER_TAG,
-                ExistingPeriodicWorkPolicy.KEEP,
+                ExistingPeriodicWorkPolicy.REPLACE,
                 createLateNotificationWorker(userId)
             )
     }
@@ -270,7 +270,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         WorkManager.getInstance(applicationContext)
             .enqueueUniquePeriodicWork(
                 BACK_NOTIFICATION_WORKER_TAG,
-                ExistingPeriodicWorkPolicy.KEEP,
+                ExistingPeriodicWorkPolicy.REPLACE,
                 createBackNotificationWorker(userId)
             )
     }

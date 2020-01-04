@@ -4,9 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.galou.watchmyback.Event
+import com.galou.watchmyback.R
 import com.galou.watchmyback.base.UserListBaseViewModel
 import com.galou.watchmyback.data.repository.FriendRepository
 import com.galou.watchmyback.data.repository.UserRepository
+import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.extension.toListOtherUser
 import kotlinx.coroutines.launch
 
 /**
@@ -48,11 +51,24 @@ class FriendsViewModel(
      *
      * @param refresh determine if the list should be refreshed or not
      *
-     * @see fetchResultUsers
      * @see FriendRepository.fetchUserFriend
+     * @see showUsersList
      */
     fun fetchFriends(refresh: Boolean = false){
-        viewModelScope.launch { fetchResultUsers(friendRepository.fetchUserFriend(userLD.value!!, refresh)) }
+        viewModelScope.launch {
+            when(val friendsResult = friendRepository.fetchUserFriend(userLD.value!!, refresh)) {
+                is Result.Success -> {
+                    showUsersList(friendsResult.data.toListOtherUser(false))
+                    if (friendsResult.data.isEmpty()){
+                        showSnackBarMessage(R.string.no_friends_yet)
+                    }
+
+                }
+                is Result.Error -> showSnackBarMessage(R.string.no_user)
+                is Result.Canceled -> showSnackBarMessage(R.string.canceled)
+            }
+            _dataLoading.value = false
+        }
     }
 
 

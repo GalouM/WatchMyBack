@@ -14,6 +14,7 @@ import com.galou.watchmyback.R
 import com.galou.watchmyback.data.applicationUse.OtherUser
 import com.galou.watchmyback.databinding.ActivityAddFriendBinding
 import com.galou.watchmyback.utils.extension.setupSnackBar
+import com.galou.watchmyback.utils.extension.visibleOrInvisible
 import com.galou.watchmyback.utils.rvAdapter.UsersListAdapter
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -94,5 +95,7 @@ class AddFriendActivity : AppCompatActivity() {
 
     private fun updateUsersList(users: List<OtherUser>){
         adapterRv.update(users)
+        binding.addFriendsFriendsViewNoUser.visibleOrInvisible(users.isEmpty())
+
     }
 }

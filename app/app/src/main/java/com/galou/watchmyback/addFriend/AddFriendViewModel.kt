@@ -3,11 +3,15 @@ package com.galou.watchmyback.addFriend
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.galou.watchmyback.R
 import com.galou.watchmyback.addFriend.FetchType.EMAIL_ADDRESS
 import com.galou.watchmyback.addFriend.FetchType.USERNAME
 import com.galou.watchmyback.base.UserListBaseViewModel
+import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.repository.FriendRepository
 import com.galou.watchmyback.data.repository.UserRepository
+import com.galou.watchmyback.utils.Result
+import com.galou.watchmyback.utils.extension.toListOtherUser
 import kotlinx.coroutines.launch
 
 /**
@@ -70,7 +74,7 @@ class AddFriendViewModel(
      * @see UserRepository.fetchAllUsers
      *
      */
-    private fun fetchAllUsers(){
+    private fun fetchAllUsers() {
         _dataLoading.value = true
         viewModelScope.launch { fetchResultUsers(userRepository.fetchAllUsers()) }
     }
@@ -99,6 +103,26 @@ class AddFriendViewModel(
         _dataLoading.value = true
         _fetchType.value = EMAIL_ADDRESS
         viewModelScope.launch { fetchResultUsers(userRepository.fetchUserByEmailAddress(searchPattern.value!!)) }
+    }
+
+    /**
+     * Determine if an operation was successful and either display its data or show an error
+     *
+     * @param result [Result] of the operation
+     *
+     * @see showUsersList
+     * @see showSnackBarMessage
+     */
+    private fun fetchResultUsers(result: Result<List<User>>){
+        when (result) {
+            is Result.Success -> {
+                showUsersList(result.data.toListOtherUser(false))
+                if (result.data.isEmpty()) showSnackBarMessage(R.string.no_user)
+
+            }
+            is Result.Error -> showSnackBarMessage(R.string.no_user)
+            is Result.Canceled -> showSnackBarMessage(R.string.canceled)
+        }
     }
 
 

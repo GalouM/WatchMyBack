@@ -4,10 +4,7 @@ import android.content.Context
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.galou.watchmyback.testHelpers.FakeActivity
-import com.galou.watchmyback.testHelpers.grantPermission
-import com.galou.watchmyback.testHelpers.setDeviceHasPhone
-import com.galou.watchmyback.testHelpers.setLocationShadow
+import com.galou.watchmyback.testHelpers.*
 import com.galou.watchmyback.utils.PERMS_EXT_STORAGE
 import com.galou.watchmyback.utils.PERMS_LOCALISATION
 import com.galou.watchmyback.utils.PERMS_PHONE_CALL
@@ -111,5 +108,17 @@ class ContextExtTests {
         val activity = Robolectric.buildActivity(FakeActivity::class.java).create().resume().get()
         grantPermission(false, PERMS_LOCALISATION)
         assertThat(activity.requestPermissionLocation()).isFalse()
+    }
+
+    @Test
+    fun noInternetConnection_returnFalse(){
+        context.setInternetShadow(false)
+        assertThat(context.isInternetAvailable()).isFalse()
+    }
+
+    @Test
+    fun internetConnectionAvailable_returnTrue(){
+        context.setInternetShadow(true)
+        //assertThat(context.isInternetAvailable()).isTrue()
     }
 }

@@ -14,6 +14,7 @@ import com.galou.watchmyback.utils.extension.convertForDisplay
 import com.galou.watchmyback.utils.extension.isRecent
 import com.galou.watchmyback.utils.extension.toWeatherConditionName
 import com.galou.watchmyback.utils.returnSuccessOrError
+import com.galou.watchmyback.utils.todaysDate
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -124,7 +125,7 @@ class TripRepositoryImpl(
                     with(apiResponse.body()!!){
                         point.weatherData!!.iconName = weather[0].icon
                         point.weatherData.temperature = main.temp
-                        point.weatherData.dateTime = Date(dateTime.toLong())
+                        point.weatherData.dateTime = todaysDate
                         point.weatherData.condition = weather[0].description.toWeatherConditionName()
 
                     }

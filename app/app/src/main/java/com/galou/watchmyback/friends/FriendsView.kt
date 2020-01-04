@@ -18,6 +18,7 @@ import com.galou.watchmyback.data.applicationUse.OtherUser
 import com.galou.watchmyback.databinding.FragmentFriendsViewBinding
 import com.galou.watchmyback.utils.RC_ADD_FRIEND
 import com.galou.watchmyback.utils.extension.setupSnackBar
+import com.galou.watchmyback.utils.extension.visibleOrInvisible
 import com.galou.watchmyback.utils.rvAdapter.UsersListAdapter
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -41,6 +42,13 @@ class FriendsView : Fragment() {
         setupObserverViewModel()
 
         return binding.root
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode){
+            RC_ADD_FRIEND -> viewModel.refreshFriendList()
+        }
     }
 
     private fun configureBinding(inflater: LayoutInflater, container: ViewGroup?){
@@ -92,6 +100,8 @@ class FriendsView : Fragment() {
 
     private fun updateFriendsList(friends: List<OtherUser>){
         adapterRv.update(friends)
+        binding.friendsViewNoFriends.visibleOrInvisible(friends.isEmpty())
+
     }
 
     private fun openAddFriendActivity(){

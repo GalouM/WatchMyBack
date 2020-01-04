@@ -74,6 +74,10 @@ class DetailsTripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSy
                 styleMap.addIconsLocation(activity!!)
                 symbolManager = SymbolManager(mapView, mapBox!!, styleMap).apply {
                     iconAllowOverlap = true
+                    iconIgnorePlacement = true
+                    symbolAvoidEdges = true
+                    textAllowOverlap = true
+                    textIgnorePlacement = true
                     iconPadding = 0.1f
                 }
                 symbolManager?.addClickListener(this)

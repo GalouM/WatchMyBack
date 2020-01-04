@@ -87,7 +87,7 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
     }
 
     private fun setupSnackBar(){
-        val rooView = binding.mapViewContainer
+        val rooView = binding.mapViewSnackbarContainer
         rooView.setupSnackBar(this, viewModel.snackbarMessage, Snackbar.LENGTH_LONG)
 
     }
@@ -117,9 +117,12 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
     }
 
     private fun openStartNewTripActivity(){
-        with(Intent(activity!!, AddTripActivity::class.java)){
-            startActivityForResult(this, RC_ADD_TRIP)
-        }
+        if (activity!!.isInternetAvailable()){
+            with(Intent(activity!!, AddTripActivity::class.java)){
+                startActivityForResult(this, RC_ADD_TRIP)
+            }
+        } else viewModel.showNeedInternetMessage()
+
     }
 
     private fun setupMap(){
@@ -130,6 +133,10 @@ class TripMapView : Fragment(), EasyPermissions.PermissionCallbacks, OnSymbolCli
                 styleMap.addIconsLocation(activity!!)
                 symbolManager = SymbolManager(mapView, mapBox, styleMap).apply {
                     iconAllowOverlap = true
+                    iconIgnorePlacement = true
+                    symbolAvoidEdges = true
+                    textAllowOverlap = true
+                    textIgnorePlacement = true
                     iconPadding = 0.1f
                 }
                 symbolManager?.addClickListener(this)

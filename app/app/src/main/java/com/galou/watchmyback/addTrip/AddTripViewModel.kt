@@ -508,11 +508,8 @@ class AddTripViewModel(
             }
         }
         _dataLoading.value = true
-        if (!checkErrors()){
-            fetchPointLocationInformation()
-        } else {
-            _dataLoading.value = false
-        }
+        if (!checkErrors())fetchPointLocationInformation()
+        else _dataLoading.value = false
     }
 
     /**

@@ -15,6 +15,7 @@
     android:layout_height="match_parent"
     tools:context=".tripMapView.TripMapView">
 
+
     <com.mapbox.mapboxsdk.maps.MapView
         android:layout_height="0dp"
         android:layout_width="0dp"
@@ -23,6 +24,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/map_view_snackbar_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <ImageView
         android:id="@+id/details_trip_map_picture_user"
@@ -42,9 +50,8 @@
         app:layout_constraintBottom_toBottomOf="@id/details_trip_map_picture_user"
         app:layout_constraintStart_toEndOf="@id/details_trip_map_username"
         android:layout_marginStart="@dimen/margin_medium"
-        app:imageResouce="@{viewmodel.tripLD.type.iconId}"
-        android:contentDescription="@string/trip_type_icon"
-        android:backgroundTint="@color/colorPrimary"/>
+        app:displayTypeTrip="@{viewmodel.tripLD.type}"
+        android:contentDescription="@string/trip_type_icon"/>
 
     <TextView
         android:id="@+id/details_trip_map_status_trip"

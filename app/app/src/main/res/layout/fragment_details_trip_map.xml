@@ -59,7 +59,7 @@
             app:layout_constraintBottom_toBottomOf="@id/details_trip_map_picture_user"
             app:layout_constraintStart_toEndOf="@id/details_trip_map_username"
             android:layout_marginStart="@dimen/margin_medium"
-            app:imageResouce="@{viewmodel.tripLD.type.iconId}"
+            app:displayTypeTrip="@{viewmodel.tripLD.type}"
             android:contentDescription="@string/trip_type" />
 
         <TextView

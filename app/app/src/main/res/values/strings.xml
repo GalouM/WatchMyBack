@@ -31,7 +31,7 @@
     <string name="status">Status</string>
     <string name="last_update">Last update: &#160;</string>
     <string name="last_known_position">Last known location: &#160;</string>
-    <string name="separator"> &#160; - &#160; </string>
+    <string name="separator"> &#160; </string>
     <string name="type">type: &#160;</string>
     <string name="details_trip">Trip Details</string>
     <string name="checklist_name">Checklist Name</string>
@@ -204,4 +204,6 @@
     <string name="no_trips_watching">You are not watching any trip</string>
     <string name="no_trips_to_show">No trips to show</string>
     <string name="no_checklist_to_show">No checklist to show</string>
+    <string name="no_friends_to_show">No friends to show</string>
+    <string name="need_internet">You need an internet connetion</string>
 </resources>
