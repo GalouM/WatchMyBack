@@ -29,4 +29,6 @@ interface TripDataSource {
     suspend fun updateTripPoints(trip: TripWithData): Result<Void?>
 
     suspend fun deleteTrip(trip: TripWithData): Result<Void?>
+
+    suspend fun deleteUserTrips(userId: String): Result<Void?>
 }

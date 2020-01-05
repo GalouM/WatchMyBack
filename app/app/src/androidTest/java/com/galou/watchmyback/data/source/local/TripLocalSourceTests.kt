@@ -216,6 +216,15 @@ class TripLocalSourceTests {
 
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun deleteUserTrips_returnSuccess() = runBlocking {
+        tripDao.createTripAndData(tripWithData1, itemList1)
+        val task = localSource.deleteUserTrips(mainUser.id)
+        val result = task is Result.Success
+        assertThat(result, `is`(true))
+    }
+
 
 
 

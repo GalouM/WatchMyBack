@@ -38,4 +38,6 @@ interface TripRepository {
     suspend fun updateNotificationSaver(notificationEmittedSaver: NotificationEmittedSaver): Result<Void?>
 
     suspend fun createNotificationSaver(userId: String, tripId: String): Result<Void?>
+
+    suspend fun deleteUserTrips(userId: String): Result<Void?>
 }

@@ -230,4 +230,19 @@ class TripLocalDataSource(
             Result.Error(e)
         }
     }
+
+    /**
+     * Delete all the trips of a specific user from the database
+     *
+     * @param userId Id of the user
+     * @return [Result] of the operation
+     */
+    override suspend fun deleteUserTrips(userId: String): Result<Void?> {
+        return try {
+            tripDao.deleteUserTrips(userId)
+            Result.Success(null)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
 }

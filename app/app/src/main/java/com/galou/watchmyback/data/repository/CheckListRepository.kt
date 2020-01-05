@@ -22,4 +22,6 @@ interface CheckListRepository {
     suspend fun updateCheckList(checkList: CheckList, items: List<ItemCheckList>): Result<Void?>
 
     suspend fun deleteCheckList(checkList: CheckListWithItems): Result<Void?>
+
+    suspend fun deleteUserCheckList(userId: String): Result<Void?>
 }

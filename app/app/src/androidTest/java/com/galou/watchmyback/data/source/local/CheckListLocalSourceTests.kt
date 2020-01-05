@@ -147,5 +147,19 @@ class CheckListLocalSourceTests {
 
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun deleteUserCheckList_returnSuccess() = runBlocking {
+        val checkList = CheckListWithItems(
+            checkList1, itemList1
+        )
+        val task = localSource.deleteUserChecklists(mainUser.id)
+        //check operation was successful
+        val result = task as? Result.Success
+        assertThat(result, `is` (notNullValue()))
+
+
+    }
+
 
 }

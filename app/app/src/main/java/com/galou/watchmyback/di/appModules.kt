@@ -119,7 +119,11 @@ val appModules = module {
         friendRepository = get()
         ) }
     viewModel { ProfileViewModel(userRepository = get()) }
-    viewModel { SettingsViewModel(userRepository = get()) }
+    viewModel { SettingsViewModel(
+        userRepository = get(),
+        tripRepository = get(),
+        checkListRepository = get()
+    ) }
     viewModel { FriendsViewModel(userRepository = get(), friendRepository = get()) }
     viewModel { AddFriendViewModel(userRepository = get(), friendRepository = get()) }
     viewModel { CheckListViewModel(userRepository = get(), checkListRepository = get()) }

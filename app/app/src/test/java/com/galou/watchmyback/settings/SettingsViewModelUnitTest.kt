@@ -1,11 +1,10 @@
 package com.galou.watchmyback.settings
 
-import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.work.Configuration
-import androidx.work.impl.utils.SynchronousExecutor
 import com.galou.watchmyback.R
 import com.galou.watchmyback.data.entity.User
+import com.galou.watchmyback.data.repository.FakeCheckListRepository
+import com.galou.watchmyback.data.repository.FakeTripRepositoryImpl
 import com.galou.watchmyback.data.repository.FakeUserRepositoryImpl
 import com.galou.watchmyback.testHelpers.*
 import com.google.common.truth.Truth.assertThat
@@ -40,16 +39,11 @@ class SettingsViewModelUnitTest : KoinTest {
     fun setupViewModel(){
         Dispatchers.setMain(mainThreadSurrogate)
 
-        val config = Configuration.Builder()
-            .setMinimumLoggingLevel(Log.DEBUG)
-            .setExecutor(SynchronousExecutor())
-            .build()
-
         userRepository = FakeUserRepositoryImpl()
         fakeUser = generateTestUser(TEST_UID)
         userRepository.currentUser.value = fakeUser
         userRepository.userPreferences.value = preferencesTest
-        viewModel = SettingsViewModel(userRepository)
+        viewModel = SettingsViewModel(userRepository, FakeCheckListRepository(), FakeTripRepositoryImpl())
 
     }
 

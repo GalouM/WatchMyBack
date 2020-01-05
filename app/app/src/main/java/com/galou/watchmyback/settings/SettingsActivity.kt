@@ -80,6 +80,8 @@ class SettingsActivity : AppCompatActivity() {
         setupDataDeleted()
         setupLateNotificationEnableObserver()
         setupBackHomeNotificationEnableObserver()
+        setupLateNotificationDisableObserver()
+        setupBackHomeNotificationDisableObserver()
     }
 
     private fun setupSnackBar(){

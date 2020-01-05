@@ -87,6 +87,9 @@ abstract class DetailsTripBaseViewModel(
                         emitTripInfo(trip.data.apply { updateStatus() })
                     }
                     else {
+                        _tripLD.value = null
+                        _pointsCoordinateLD.value = null
+                        currentTrip = null
                         showSnackBarMessage(R.string.no_current_active_trip)
                         _dataLoading.value = false
                     }

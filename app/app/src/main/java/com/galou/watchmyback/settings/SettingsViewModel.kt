@@ -7,13 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.galou.watchmyback.Event
 import com.galou.watchmyback.R
 import com.galou.watchmyback.base.BaseViewModel
+import com.galou.watchmyback.data.entity.User
 import com.galou.watchmyback.data.entity.UserPreferences
+import com.galou.watchmyback.data.repository.CheckListRepository
+import com.galou.watchmyback.data.repository.TripRepository
 import com.galou.watchmyback.data.repository.UserRepository
 import com.galou.watchmyback.data.repository.UserRepositoryImpl
 import com.galou.watchmyback.utils.Result
 import com.galou.watchmyback.utils.extension.onClickTimeDisplay
 import com.galou.watchmyback.utils.extension.onClickUnitSystem
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 /**
@@ -26,7 +28,11 @@ import kotlinx.coroutines.launch
  *
  * @property userRepository [UserRepositoryImpl] reference
  */
-open class SettingsViewModel(private val userRepository: UserRepository) : BaseViewModel() {
+open class SettingsViewModel(
+    private val userRepository: UserRepository,
+    private val checkListRepository: CheckListRepository,
+    private val tripRepository: TripRepository
+) : BaseViewModel() {
 
     private val _dataDeleted = MutableLiveData<Event<Unit>>()
     val dataDeleted: LiveData<Event<Unit>> = _dataDeleted
@@ -48,9 +54,6 @@ open class SettingsViewModel(private val userRepository: UserRepository) : BaseV
     private val _disableBackHomeNotificationLD = MutableLiveData<Event<Unit>>()
     val disableBackHomeNotificationLD: LiveData<Event<Unit>> = _disableBackHomeNotificationLD
 
-    private var updatePreferencesJob: Job? = null
-    private var deleteUserJob: Job? = null
-
     init {
         _dataLoading.value = true
         fetchPreferences()
@@ -64,8 +67,7 @@ open class SettingsViewModel(private val userRepository: UserRepository) : BaseV
      */
     fun updateUserPreferences(){
         _dataLoading.value = true
-        if(updatePreferencesJob?.isActive == true) updatePreferencesJob?.cancel()
-        updatePreferencesJob = viewModelScope.launch {
+        viewModelScope.launch {
             when(userRepository.updateUserPreferences(preferencesLD.value!!)){
                 is Result.Success -> _dataSaved.value = Event(Unit)
                 is Result.Error -> showSnackBarMessage(R.string.fail_not_saved)
@@ -84,16 +86,47 @@ open class SettingsViewModel(private val userRepository: UserRepository) : BaseV
      *
      */
     fun deleteUserData(){
-        _dataLoading.value = true
-        if(deleteUserJob?.isActive == true) deleteUserJob?.cancel()
-        deleteUserJob = viewModelScope.launch { 
-            when(userRepository.deleteUser(userRepository.currentUser.value!!)){
-                is Result.Success -> _dataDeleted.value = Event(Unit)
-                is Result.Error -> showSnackBarMessage(R.string.error_delete_account)
-                is Result.Canceled -> showSnackBarMessage(R.string.canceled)
+
+        fun deleteUser(user: User){
+            viewModelScope.launch {
+                when(val task = userRepository.deleteUser(user)){
+                    is Result.Success -> _dataDeleted.value = Event(Unit)
+                    else -> showSnackBarMessage(R.string.error_delete_account)
+                }
+                _dataLoading.value = false
             }
-            _dataLoading.value = false
         }
+
+        fun deleteUserCheckList(user: User){
+            viewModelScope.launch {
+                viewModelScope.launch {
+                    when(val task = checkListRepository.deleteUserCheckList(user.id)){
+                        is Result.Success -> deleteUser(user)
+                        else -> {
+                            showSnackBarMessage(R.string.error_delete_account)
+                            _dataLoading.value = false
+                        }
+                    }
+                }
+            }
+        }
+
+        fun deleteUserTrip(user: User){
+            viewModelScope.launch {
+                when(val task = tripRepository.deleteUserTrips(user.id)){
+                    is Result.Success -> deleteUserCheckList(user)
+                    else -> {
+                        showSnackBarMessage(R.string.error_delete_account)
+                        _dataLoading.value = false
+                    }
+                }
+            }
+        }
+
+        _dataLoading.value = true
+        deleteUserTrip(userRepository.currentUser.value ?: throw Exception("No user set"))
+
+
         
     }
 
@@ -127,7 +160,7 @@ open class SettingsViewModel(private val userRepository: UserRepository) : BaseV
     }
 
     /**
-     * Emit error message if the deletetion of the user 's data didn't happened
+     * Emit error message if the deletion of the user 's data didn't happened
      *
      */
     fun errorDeletion(){

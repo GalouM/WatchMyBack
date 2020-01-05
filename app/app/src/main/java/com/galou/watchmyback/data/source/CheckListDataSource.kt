@@ -20,4 +20,6 @@ interface CheckListDataSource {
     suspend fun updateCheckList(checkList: CheckList, items: List<ItemCheckList>): Result<Void?>
 
     suspend fun deleteCheckList(checkList: CheckListWithItems): Result<Void?>
+
+    suspend fun deleteUserChecklists(userId: String): Result<Void?>
 }

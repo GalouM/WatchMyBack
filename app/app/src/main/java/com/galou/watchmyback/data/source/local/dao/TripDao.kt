@@ -110,6 +110,14 @@ abstract class TripDao(private val database: WatchMyBackDatabase) {
     abstract suspend fun deleteTrip(trip: Trip)
 
     /**
+     * Delete all the [Trip] of a specific user
+     *
+     * @param userId ID of the user
+     */
+    @Query("DELETE FROM $TRIP_TABLE_NAME WHERE $TRIP_TABLE_USER_UUID = :userId" )
+    abstract suspend fun deleteUserTrips(userId: String)
+
+    /**
      * Create a [Trip] and all its data in the database
      *
      * @param trip [TripWithData] to create

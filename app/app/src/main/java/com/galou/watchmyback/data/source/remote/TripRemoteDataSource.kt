@@ -109,6 +109,22 @@ class TripRemoteDataSource(
     }
 
     /**
+     * Fetch all the trips of a specific user
+     *
+     * @param userId ID of the user
+     * @return [Result] of the operation with a List of [TripWithDataRemoteDB]
+     */
+    private suspend fun fetchUserTripFromDB(userId: String): Result<List<TripWithDataRemoteDB>> = withContext(ioDispatcher){
+        return@withContext when(val result = tripCollection
+            .whereEqualTo("trip.userId", userId)
+            .get().await()) {
+            is Result.Success -> Result.Success(result.data.toObjects(TripWithDataRemoteDB::class.java))
+            is Result.Error -> Result.Error(result.exception)
+            is Result.Canceled -> Result.Canceled(result.exception)
+        }
+    }
+
+    /**
      * Fetch all the watcher of a trip
      *
      * In the remote Database each trip has a list of userID corresponding to the ID of the users that are watching the trip.
@@ -289,5 +305,19 @@ class TripRemoteDataSource(
         return@withContext tripCollection.document(trip.trip.id).update(
             "points", trip.points
         ).await()
+    }
+
+    /**
+     * Delete all the trips of a specific user from the database
+     *
+     * @param userId Id of the user
+     * @return [Result] of the operation
+     */
+    override suspend fun deleteUserTrips(userId: String): Result<Void?> {
+        return when(val fetchTripTask = fetchUserTripFromDB(userId)){
+            is Result.Success -> deleteTrips(fetchTripTask.data)
+            is Result.Error -> Result.Error(fetchTripTask.exception)
+            is Result.Canceled -> Result.Canceled(fetchTripTask.exception)
+        }
     }
 }

@@ -99,4 +99,13 @@ class CheckListDaoTest {
         assertThat(checkListFromDB, `is` (nullValue()))
     }
 
+    @Test
+    @Throws(Exception::class)
+
+    fun deleteUserCheckList() = runBlocking {
+        checkListDao.deleteUserCheckList(mainUser.id)
+        val checkLists = checkListDao.getUserCheckList(mainUser.id)
+        assertThat(checkLists, `is` (emptyList()))
+    }
+
 }

@@ -41,4 +41,7 @@ class FakeCheckListRepository : CheckListRepository {
     ): Result<Void?> = Result.Success(null)
 
     override suspend fun deleteCheckList(checkList: CheckListWithItems): Result<Void?> = Result.Success(null)
+
+    override suspend fun deleteUserCheckList(userId: String): Result<Void?> =
+        Result.Success(null)
 }

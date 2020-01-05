@@ -73,6 +73,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        displayData("result $requestCode $resultCode")
         when(requestCode){
             RC_SIGN_IN -> viewModel.handleSignIngActivityResult(resultCode, data, authFirebase.currentUser)
             RC_PROFILE ->  viewModel.handleResultAfterProfileActivityClosed(resultCode)
@@ -186,7 +187,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun openSettingsActivity(){
         navController?.saveState()
         val intent = Intent(this, SettingsActivity::class.java)
-        startActivity(intent)
+        startActivityForResult(intent, RC_SETTINGS)
     }
 
     private fun openProfileActivity(){

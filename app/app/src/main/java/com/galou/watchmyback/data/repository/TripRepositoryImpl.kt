@@ -362,4 +362,16 @@ class TripRepositoryImpl(
     override suspend fun createNotificationSaver(userId: String, tripId: String): Result<Void?> {
         return localSource.createNotificationEmitted(NotificationEmittedSaver(tripId, userId))
     }
+
+    /**
+     * Delete all the user's trips
+     *
+     * @param userId ID of the user
+     * @return [Result] of the operation
+     */
+    override suspend fun deleteUserTrips(userId: String): Result<Void?> = coroutineScope {
+        val localTask = async { localSource.deleteUserTrips(userId) }
+        val remoteTask = async { remoteSource.deleteUserTrips(userId) }
+        return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
+    }
 }

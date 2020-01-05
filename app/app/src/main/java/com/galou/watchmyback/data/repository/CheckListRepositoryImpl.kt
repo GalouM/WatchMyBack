@@ -137,4 +137,16 @@ class CheckListRepositoryImpl(
         val remoteTask = async { remoteSource.deleteCheckList(checkList) }
         return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
     }
+
+    /**
+     * Delete all the user's checklist from the databases
+     *
+     * @param userId ID of the user
+     * @return [Result] of the operation
+     */
+    override suspend fun deleteUserCheckList(userId: String): Result<Void?> = coroutineScope {
+        val localTask = async { localSource.deleteUserChecklists(userId) }
+        val remoteTask = async { remoteSource.deleteUserChecklists(userId) }
+        return@coroutineScope returnSuccessOrError(localTask.await(), remoteTask.await())
+    }
 }

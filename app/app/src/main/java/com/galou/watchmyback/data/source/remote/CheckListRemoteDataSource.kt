@@ -123,4 +123,34 @@ class CheckListRemoteDataSource(
         return@withContext checkListCollection.document(checkList.checkList.id).delete().await()
 
     }
+
+    /**
+     * Delete all the checklist of a specific user from the database
+     *
+     * @param userId
+     * @return [Result] of the operation
+     */
+    override suspend fun deleteUserChecklists(userId: String): Result<Void?> {
+        return when (val fetchChecklistsTask = fetchUserCheckLists(userId)){
+            is Result.Success -> deleteCheckLists(fetchChecklistsTask.data)
+            is Result.Error -> Result.Error(fetchChecklistsTask.exception)
+            is Result.Canceled -> Result.Canceled(fetchChecklistsTask.exception)
+        }
+    }
+
+    private suspend fun deleteCheckLists(checklists: List<CheckListWithItems>): Result<Void?> = coroutineScope {
+        var error = false
+        checklists.forEach {
+           launch {
+               when(val deleteTask = deleteCheckList(it)){
+                   is Result.Error, is Result.Canceled -> error = true
+               }
+           }
+        }
+
+        return@coroutineScope when(error){
+            true -> Result.Error(Exception("error while deleting checklist"))
+            false -> Result.Success(null)
+        }
+    }
 }

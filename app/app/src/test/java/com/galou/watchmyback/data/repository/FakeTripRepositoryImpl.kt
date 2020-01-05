@@ -75,4 +75,7 @@ class FakeTripRepositoryImpl : TripRepository {
 
     override suspend fun createNotificationSaver(userId: String, tripId: String): Result<Void?> =
         Result.Success(null)
+
+    override suspend fun deleteUserTrips(userId: String): Result<Void?> =
+        Result.Success(null)
 }
