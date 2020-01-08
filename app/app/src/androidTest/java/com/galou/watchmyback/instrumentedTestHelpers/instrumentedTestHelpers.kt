@@ -53,9 +53,7 @@ val preferencesTest = UserPreferences(
     timeDisplay = TEST_TIME_DISPLAY,
     unitSystem = TEST_UNIT_SYSTEM,
     notificationBackSafe = TEST_NOTIFICATION_BACK,
-    notificationLate = TEST_NOTIFICATION_LATE,
-    notificationEmergency = TEST_NOTIFICATION_EMERGENCY,
-    notificationLocationUpdate = TEST_NOTIFICATION_UPDATE
+    notificationLate = TEST_NOTIFICATION_LATE
 
 )
 
