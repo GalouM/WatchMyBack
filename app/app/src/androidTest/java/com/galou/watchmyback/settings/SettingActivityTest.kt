@@ -63,12 +63,6 @@ class SettingActivityTest : KoinTest {
         onView(withId(R.id.settings_view_notification_back_switch))
             .perform(closeSoftKeyboard(), scrollTo())
             .check(matches(isDisplayed()))
-        onView(withId(R.id.settings_view_notification_emergency_switch))
-            .perform(closeSoftKeyboard(), scrollTo())
-            .check(matches(isDisplayed()))
-        onView(withId(R.id.settings_view_notification_update_switch))
-            .perform(closeSoftKeyboard(), scrollTo())
-            .check(matches(isDisplayed()))
         onView(withId(R.id.settings_view_notification_late_switch))
             .perform(closeSoftKeyboard(), scrollTo())
             .check(matches(isDisplayed()))
@@ -100,10 +94,6 @@ class SettingActivityTest : KoinTest {
 
         onView(withId(R.id.settings_view_notification_late_switch))
             .check(matches(hasCorrectValue(TEST_NOTIFICATION_LATE)))
-        onView(withId(R.id.settings_view_notification_update_switch))
-            .check(matches(hasCorrectValue(TEST_NOTIFICATION_UPDATE)))
-        onView(withId(R.id.settings_view_notification_emergency_switch))
-            .check(matches(hasCorrectValue(TEST_NOTIFICATION_EMERGENCY)))
         onView(withId(R.id.settings_view_notification_back_switch))
             .check(matches(hasCorrectValue(TEST_NOTIFICATION_BACK)))
 
@@ -136,12 +126,6 @@ class SettingActivityTest : KoinTest {
     fun onClickNotifications_update_preferences(){
         val preferences = activityTestResult.activity.viewModel<SettingsViewModel>().value.preferencesLD
 
-        if(preferences.value?.notificationEmergency == false){
-            onView(withId(R.id.settings_view_notification_emergency_switch))
-                .perform(click())
-        }
-        assertEquals(preferences.value?.notificationEmergency, true)
-
         if(preferences.value?.notificationBackSafe == true){
             onView(withId(R.id.settings_view_notification_back_switch))
                 .perform(click())
@@ -153,12 +137,6 @@ class SettingActivityTest : KoinTest {
                 .perform(click())
         }
         assertEquals(preferences.value?.notificationLate, false)
-
-        if(preferences.value?.notificationLocationUpdate == true){
-            onView(withId(R.id.settings_view_notification_update_switch))
-                .perform(click())
-        }
-        assertEquals(preferences.value?.notificationLocationUpdate, false)
 
     }
 
