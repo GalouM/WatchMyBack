@@ -18,6 +18,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.context.stopKoin
+import java.util.*
 
 /**
  * @author galou
@@ -420,6 +421,23 @@ class AddTripViewModelTest {
         viewModel.startTrip()
         val value = LiveDataTestUtil.getValue(viewModel.tripSavedWithNotificationLD)
         assertThat(value.getContentIfNotHandled()).isEqualTo(viewModel.tripLD.value)
+
+    }
+
+    @Test
+    fun noGpsShowMessage(){
+        viewModel.gpsNotAvailable()
+        assertSnackBarMessage(viewModel.snackbarMessage, R.string.turn_on_gps)
+    }
+
+    @Test
+    fun modifyTimeSchedulePoint_emitNewValue(){
+        viewModel.addStagePoint()
+        val schedulePoint = LiveDataTestUtil.getValue(viewModel.stagePointsLD)
+        val calendar = Calendar.getInstance()
+        viewModel.setTimeSchedulePoint(schedulePoint[0], calendar)
+        val newSchedulePoint = LiveDataTestUtil.getValue(viewModel.stagePointsLD)
+        assertThat(newSchedulePoint[0].pointTrip.time).isEquivalentAccordingToCompareTo(calendar.time)
 
     }
 

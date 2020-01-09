@@ -141,4 +141,10 @@ class TripMapViewModelTest {
         assertThat(value.getContentIfNotHandled()).isNotNull()
 
     }
+
+    @Test
+    fun noInternet_showMessage(){
+        viewModel.showNeedInternetMessage()
+        assertSnackBarMessage(viewModel.snackbarMessage, R.string.need_internet)
+    }
 }
